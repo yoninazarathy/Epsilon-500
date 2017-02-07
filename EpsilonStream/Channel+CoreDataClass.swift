@@ -1,0 +1,15 @@
+//
+//  Channel+CoreDataClass.swift
+//  EpsilonStreamPrototype
+//
+//  Created by Yoni Nazarathy on 25/12/16.
+//  Copyright © 2016 Yoni Nazarathy. All rights reserved.
+//
+
+import Foundation
+import CoreData
+
+@objc(Channel)
+public class Channel: NSManagedObject {
+
+}

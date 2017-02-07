@@ -1,0 +1,621 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		200FDB491E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */; };
+		2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */; };
+		20306A3B1E1A283900E6B5D9 /* WebViewingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */; };
+		2030B7E01E10BC1B001E2237 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7DF1E10BC1B001E2237 /* AppDelegate.swift */; };
+		2030B7E21E10BC1B001E2237 /* MathObjectMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7E11E10BC1B001E2237 /* MathObjectMasterViewController.swift */; };
+		2030B7E71E10BC1B001E2237 /* EpsilonAdmin.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2030B7E51E10BC1B001E2237 /* EpsilonAdmin.storyboard */; };
+		2030B7E91E10BC1B001E2237 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2030B7E81E10BC1B001E2237 /* Assets.xcassets */; };
+		2030B7EC1E10BC1B001E2237 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2030B7EA1E10BC1B001E2237 /* LaunchScreen.storyboard */; };
+		2030B7FC1E10BC52001E2237 /* Video+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7F41E10BC52001E2237 /* Video+CoreDataClass.swift */; };
+		2030B7FD1E10BC52001E2237 /* Video+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7F51E10BC52001E2237 /* Video+CoreDataProperties.swift */; };
+		2030B7FE1E10BC52001E2237 /* MathObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7F61E10BC52001E2237 /* MathObject+CoreDataClass.swift */; };
+		2030B7FF1E10BC52001E2237 /* MathObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7F71E10BC52001E2237 /* MathObject+CoreDataProperties.swift */; };
+		2030B8001E10BC52001E2237 /* Channel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7F81E10BC52001E2237 /* Channel+CoreDataClass.swift */; };
+		2030B8011E10BC52001E2237 /* Channel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7F91E10BC52001E2237 /* Channel+CoreDataProperties.swift */; };
+		2030B8021E10BC52001E2237 /* FeaturedURL+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7FA1E10BC52001E2237 /* FeaturedURL+CoreDataClass.swift */; };
+		2030B8031E10BC52001E2237 /* FeaturedURL+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7FB1E10BC52001E2237 /* FeaturedURL+CoreDataProperties.swift */; };
+		2030B8051E10BC61001E2237 /* EpsilonStreamDataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 2030B8041E10BC61001E2237 /* EpsilonStreamDataModel.xcdatamodel */; };
+		203B866E1E14B66A00BAF08C /* EpsilonStreamSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */; };
+		203B86701E14B94000BAF08C /* SearchResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B866F1E14B94000BAF08C /* SearchResultItem.swift */; };
+		203B86721E14C07900BAF08C /* PlayVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B86711E14C07900BAF08C /* PlayVideoViewController.swift */; };
+		204186581E1288980067679E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204186571E1288980067679E /* SettingsTableViewController.swift */; };
+		2041865C1E12962F0067679E /* VideoMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2041865B1E12962F0067679E /* VideoMasterViewController.swift */; };
+		2041865E1E1296760067679E /* FeatureMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2041865D1E1296760067679E /* FeatureMasterViewController.swift */; };
+		204186641E1297400067679E /* ChannelMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204186631E1297400067679E /* ChannelMasterViewController.swift */; };
+		204380F91E11CAA500ABBAD6 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204380F81E11CAA500ABBAD6 /* DetailViewController.swift */; };
+		204380FB1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204380FA1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift */; };
+		204381201E11ED3400ABBAD6 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2043811F1E11ED3400ABBAD6 /* MasterViewController.swift */; };
+		206992641E3E01C600EBC614 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 206992631E3E01C600EBC614 /* GoogleService-Info.plist */; };
+		20704A691E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */; };
+		2080C2551E14726C00723F3B /* EpsilonClient.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2080C2541E14726C00723F3B /* EpsilonClient.storyboard */; };
+		2080C2591E1474CD00723F3B /* ClientSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */; };
+		2080C25B1E14769B00723F3B /* EpsilonStreamGlobals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */; };
+		2080C25D1E14955500723F3B /* ClientSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080C25C1E14955500723F3B /* ClientSettingsViewController.swift */; };
+		20B6952B1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6952A1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift */; };
+		20B771111E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */; };
+		20C25C511E18C34A00CE046E /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C25C501E18C34A00CE046E /* ImageManager.swift */; };
+		20CD8A881E345CAD0034CED1 /* VersionInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CD8A861E345CAD0034CED1 /* VersionInfo+CoreDataClass.swift */; };
+		20CD8A891E345CAD0034CED1 /* VersionInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CD8A871E345CAD0034CED1 /* VersionInfo+CoreDataProperties.swift */; };
+		20EE413B1E10E502002F78F9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20EE413A1E10E502002F78F9 /* CloudKit.framework */; };
+		20EE413D1E10EF56002F78F9 /* VideoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EE413C1E10EF56002F78F9 /* VideoDetailViewController.swift */; };
+		20EE413F1E10EF74002F78F9 /* MathObjectDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EE413E1E10EF74002F78F9 /* MathObjectDetailViewController.swift */; };
+		20EE41411E10EF81002F78F9 /* ChannelDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EE41401E10EF81002F78F9 /* ChannelDetailViewController.swift */; };
+		20EE41431E10EF91002F78F9 /* FeatureDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EE41421E10EF91002F78F9 /* FeatureDetailViewController.swift */; };
+		8B3D27D8BA516FFBA790A595 /* Pods_EpsilonStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8365442A59822C0F1455CBAB /* Pods_EpsilonStream.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamAdminDataModel.swift; sourceTree = "<group>"; };
+		2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPrefetcher.swift; sourceTree = "<group>"; };
+		20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewingViewController.swift; sourceTree = "<group>"; };
+		2030B7DC1E10BC1B001E2237 /* EpsilonStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpsilonStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2030B7DF1E10BC1B001E2237 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2030B7E11E10BC1B001E2237 /* MathObjectMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathObjectMasterViewController.swift; sourceTree = "<group>"; };
+		2030B7E61E10BC1B001E2237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EpsilonAdmin.storyboard; sourceTree = "<group>"; };
+		2030B7E81E10BC1B001E2237 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2030B7EB1E10BC1B001E2237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2030B7ED1E10BC1B001E2237 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2030B7F41E10BC52001E2237 /* Video+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Video+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2030B7F51E10BC52001E2237 /* Video+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Video+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2030B7F61E10BC52001E2237 /* MathObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MathObject+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2030B7F71E10BC52001E2237 /* MathObject+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MathObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2030B7F81E10BC52001E2237 /* Channel+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Channel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2030B7F91E10BC52001E2237 /* Channel+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Channel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2030B7FA1E10BC52001E2237 /* FeaturedURL+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FeaturedURL+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2030B7FB1E10BC52001E2237 /* FeaturedURL+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FeaturedURL+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2030B8041E10BC61001E2237 /* EpsilonStreamDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EpsilonStreamDataModel.xcdatamodel; sourceTree = "<group>"; };
+		203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamSearch.swift; sourceTree = "<group>"; };
+		203B866F1E14B94000BAF08C /* SearchResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultItem.swift; sourceTree = "<group>"; };
+		203B86711E14C07900BAF08C /* PlayVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayVideoViewController.swift; sourceTree = "<group>"; };
+		204186571E1288980067679E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		2041865B1E12962F0067679E /* VideoMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMasterViewController.swift; sourceTree = "<group>"; };
+		2041865D1E1296760067679E /* FeatureMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureMasterViewController.swift; sourceTree = "<group>"; };
+		204186631E1297400067679E /* ChannelMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMasterViewController.swift; sourceTree = "<group>"; };
+		204380F81E11CAA500ABBAD6 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		204380FA1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamDataModel.swift; sourceTree = "<group>"; };
+		2043811F1E11ED3400ABBAD6 /* MasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		206992631E3E01C600EBC614 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeAPICommunicator.swift; sourceTree = "<group>"; };
+		2080C2541E14726C00723F3B /* EpsilonClient.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EpsilonClient.storyboard; sourceTree = "<group>"; };
+		2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSearchViewController.swift; sourceTree = "<group>"; };
+		2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamGlobals.swift; sourceTree = "<group>"; };
+		2080C25C1E14955500723F3B /* ClientSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSettingsViewController.swift; sourceTree = "<group>"; };
+		20B6952A1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteTableDelegate.swift; sourceTree = "<group>"; };
+		20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamBackgroundFetch.swift; sourceTree = "<group>"; };
+		20C25C501E18C34A00CE046E /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		20CD8A861E345CAD0034CED1 /* VersionInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VersionInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		20CD8A871E345CAD0034CED1 /* VersionInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VersionInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		20EE41381E10E4FD002F78F9 /* EpsilonStream.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EpsilonStream.entitlements; sourceTree = "<group>"; };
+		20EE413A1E10E502002F78F9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		20EE413C1E10EF56002F78F9 /* VideoDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoDetailViewController.swift; sourceTree = "<group>"; };
+		20EE413E1E10EF74002F78F9 /* MathObjectDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathObjectDetailViewController.swift; sourceTree = "<group>"; };
+		20EE41401E10EF81002F78F9 /* ChannelDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelDetailViewController.swift; sourceTree = "<group>"; };
+		20EE41421E10EF91002F78F9 /* FeatureDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureDetailViewController.swift; sourceTree = "<group>"; };
+		5A1D6AF38DFD4957AEA58554 /* Pods-EpsilonStream.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpsilonStream.release.xcconfig"; path = "Pods/Target Support Files/Pods-EpsilonStream/Pods-EpsilonStream.release.xcconfig"; sourceTree = "<group>"; };
+		6DE21DF73C11C8FBE6A57E56 /* Pods-EpsilonStream.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpsilonStream.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EpsilonStream/Pods-EpsilonStream.debug.xcconfig"; sourceTree = "<group>"; };
+		8365442A59822C0F1455CBAB /* Pods_EpsilonStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EpsilonStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2030B7D91E10BC1B001E2237 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20EE413B1E10E502002F78F9 /* CloudKit.framework in Frameworks */,
+				8B3D27D8BA516FFBA790A595 /* Pods_EpsilonStream.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2030B7D31E10BC1B001E2237 = {
+			isa = PBXGroup;
+			children = (
+				2030B7DE1E10BC1B001E2237 /* EpsilonStream */,
+				2030B7DD1E10BC1B001E2237 /* Products */,
+				20EE41391E10E502002F78F9 /* Frameworks */,
+				AD9E9A375916FACE19012318 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		2030B7DD1E10BC1B001E2237 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2030B7DC1E10BC1B001E2237 /* EpsilonStream.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2030B7DE1E10BC1B001E2237 /* EpsilonStream */ = {
+			isa = PBXGroup;
+			children = (
+				2080C2571E14747B00723F3B /* ClientUI */,
+				2080C2561E14743A00723F3B /* SupportingFiles */,
+				204380FA1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift */,
+				2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */,
+				200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */,
+				20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */,
+				20C25C501E18C34A00CE046E /* ImageManager.swift */,
+				20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */,
+				2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */,
+				204186571E1288980067679E /* SettingsTableViewController.swift */,
+				20EE41441E10EFA1002F78F9 /* AdminUI */,
+				2030B7F31E10BC35001E2237 /* CoreDataFiles */,
+				2030B7E81E10BC1B001E2237 /* Assets.xcassets */,
+			);
+			path = EpsilonStream;
+			sourceTree = "<group>";
+		};
+		2030B7F31E10BC35001E2237 /* CoreDataFiles */ = {
+			isa = PBXGroup;
+			children = (
+				2030B7F41E10BC52001E2237 /* Video+CoreDataClass.swift */,
+				2030B7F51E10BC52001E2237 /* Video+CoreDataProperties.swift */,
+				2030B7F61E10BC52001E2237 /* MathObject+CoreDataClass.swift */,
+				2030B7F71E10BC52001E2237 /* MathObject+CoreDataProperties.swift */,
+				2030B7F81E10BC52001E2237 /* Channel+CoreDataClass.swift */,
+				2030B7F91E10BC52001E2237 /* Channel+CoreDataProperties.swift */,
+				2030B7FA1E10BC52001E2237 /* FeaturedURL+CoreDataClass.swift */,
+				2030B7FB1E10BC52001E2237 /* FeaturedURL+CoreDataProperties.swift */,
+				20CD8A861E345CAD0034CED1 /* VersionInfo+CoreDataClass.swift */,
+				20CD8A871E345CAD0034CED1 /* VersionInfo+CoreDataProperties.swift */,
+				2030B8041E10BC61001E2237 /* EpsilonStreamDataModel.xcdatamodel */,
+			);
+			name = CoreDataFiles;
+			sourceTree = "<group>";
+		};
+		2041865F1E1296BE0067679E /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				2041865B1E12962F0067679E /* VideoMasterViewController.swift */,
+				20EE413C1E10EF56002F78F9 /* VideoDetailViewController.swift */,
+			);
+			name = Video;
+			sourceTree = "<group>";
+		};
+		204186601E1296C90067679E /* MathObject */ = {
+			isa = PBXGroup;
+			children = (
+				2030B7E11E10BC1B001E2237 /* MathObjectMasterViewController.swift */,
+				20EE413E1E10EF74002F78F9 /* MathObjectDetailViewController.swift */,
+			);
+			name = MathObject;
+			sourceTree = "<group>";
+		};
+		204186611E1296D10067679E /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				2041865D1E1296760067679E /* FeatureMasterViewController.swift */,
+				20EE41421E10EF91002F78F9 /* FeatureDetailViewController.swift */,
+			);
+			name = Feature;
+			sourceTree = "<group>";
+		};
+		204186621E1296D90067679E /* Channel */ = {
+			isa = PBXGroup;
+			children = (
+				20EE41401E10EF81002F78F9 /* ChannelDetailViewController.swift */,
+				204186631E1297400067679E /* ChannelMasterViewController.swift */,
+			);
+			name = Channel;
+			sourceTree = "<group>";
+		};
+		2080C2561E14743A00723F3B /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				206992631E3E01C600EBC614 /* GoogleService-Info.plist */,
+				203B866F1E14B94000BAF08C /* SearchResultItem.swift */,
+				20B6952A1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift */,
+				203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */,
+				2030B7DF1E10BC1B001E2237 /* AppDelegate.swift */,
+				2030B7EA1E10BC1B001E2237 /* LaunchScreen.storyboard */,
+				2030B7ED1E10BC1B001E2237 /* Info.plist */,
+				20EE41381E10E4FD002F78F9 /* EpsilonStream.entitlements */,
+			);
+			name = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		2080C2571E14747B00723F3B /* ClientUI */ = {
+			isa = PBXGroup;
+			children = (
+				2080C2541E14726C00723F3B /* EpsilonClient.storyboard */,
+				20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */,
+				2080C25C1E14955500723F3B /* ClientSettingsViewController.swift */,
+				2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */,
+				203B86711E14C07900BAF08C /* PlayVideoViewController.swift */,
+			);
+			name = ClientUI;
+			sourceTree = "<group>";
+		};
+		20EE41391E10E502002F78F9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				20EE413A1E10E502002F78F9 /* CloudKit.framework */,
+				8365442A59822C0F1455CBAB /* Pods_EpsilonStream.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		20EE41441E10EFA1002F78F9 /* AdminUI */ = {
+			isa = PBXGroup;
+			children = (
+				2030B7E51E10BC1B001E2237 /* EpsilonAdmin.storyboard */,
+				204380F81E11CAA500ABBAD6 /* DetailViewController.swift */,
+				2043811F1E11ED3400ABBAD6 /* MasterViewController.swift */,
+				204186621E1296D90067679E /* Channel */,
+				204186611E1296D10067679E /* Feature */,
+				204186601E1296C90067679E /* MathObject */,
+				2041865F1E1296BE0067679E /* Video */,
+			);
+			name = AdminUI;
+			sourceTree = "<group>";
+		};
+		AD9E9A375916FACE19012318 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6DE21DF73C11C8FBE6A57E56 /* Pods-EpsilonStream.debug.xcconfig */,
+				5A1D6AF38DFD4957AEA58554 /* Pods-EpsilonStream.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2030B7DB1E10BC1B001E2237 /* EpsilonStream */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2030B7F01E10BC1B001E2237 /* Build configuration list for PBXNativeTarget "EpsilonStream" */;
+			buildPhases = (
+				DC5C72E431E8063D877C7B1F /* [CP] Check Pods Manifest.lock */,
+				2030B7D81E10BC1B001E2237 /* Sources */,
+				2030B7D91E10BC1B001E2237 /* Frameworks */,
+				2030B7DA1E10BC1B001E2237 /* Resources */,
+				1C275C97A2B84825138DA625 /* [CP] Embed Pods Frameworks */,
+				4F7FCF78C376CF7A279B0D34 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EpsilonStream;
+			productName = EpsilonStream;
+			productReference = 2030B7DC1E10BC1B001E2237 /* EpsilonStream.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2030B7D41E10BC1B001E2237 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Yoni Nazarathy";
+				TargetAttributes = {
+					2030B7DB1E10BC1B001E2237 = {
+						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = 4G9VZ63NB7;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 0;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 2030B7D71E10BC1B001E2237 /* Build configuration list for PBXProject "EpsilonStream" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2030B7D31E10BC1B001E2237;
+			productRefGroup = 2030B7DD1E10BC1B001E2237 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2030B7DB1E10BC1B001E2237 /* EpsilonStream */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2030B7DA1E10BC1B001E2237 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2080C2551E14726C00723F3B /* EpsilonClient.storyboard in Resources */,
+				2030B7EC1E10BC1B001E2237 /* LaunchScreen.storyboard in Resources */,
+				206992641E3E01C600EBC614 /* GoogleService-Info.plist in Resources */,
+				2030B7E91E10BC1B001E2237 /* Assets.xcassets in Resources */,
+				2030B7E71E10BC1B001E2237 /* EpsilonAdmin.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1C275C97A2B84825138DA625 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EpsilonStream/Pods-EpsilonStream-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4F7FCF78C376CF7A279B0D34 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EpsilonStream/Pods-EpsilonStream-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DC5C72E431E8063D877C7B1F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2030B7D81E10BC1B001E2237 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2030B8031E10BC52001E2237 /* FeaturedURL+CoreDataProperties.swift in Sources */,
+				20EE41411E10EF81002F78F9 /* ChannelDetailViewController.swift in Sources */,
+				20EE413D1E10EF56002F78F9 /* VideoDetailViewController.swift in Sources */,
+				2030B7E21E10BC1B001E2237 /* MathObjectMasterViewController.swift in Sources */,
+				20B6952B1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift in Sources */,
+				2030B8051E10BC61001E2237 /* EpsilonStreamDataModel.xcdatamodel in Sources */,
+				2030B7FE1E10BC52001E2237 /* MathObject+CoreDataClass.swift in Sources */,
+				2030B8021E10BC52001E2237 /* FeaturedURL+CoreDataClass.swift in Sources */,
+				2080C25B1E14769B00723F3B /* EpsilonStreamGlobals.swift in Sources */,
+				2080C2591E1474CD00723F3B /* ClientSearchViewController.swift in Sources */,
+				20C25C511E18C34A00CE046E /* ImageManager.swift in Sources */,
+				204380F91E11CAA500ABBAD6 /* DetailViewController.swift in Sources */,
+				203B866E1E14B66A00BAF08C /* EpsilonStreamSearch.swift in Sources */,
+				20B771111E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift in Sources */,
+				200FDB491E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift in Sources */,
+				2041865C1E12962F0067679E /* VideoMasterViewController.swift in Sources */,
+				203B86721E14C07900BAF08C /* PlayVideoViewController.swift in Sources */,
+				2030B8001E10BC52001E2237 /* Channel+CoreDataClass.swift in Sources */,
+				2030B7FD1E10BC52001E2237 /* Video+CoreDataProperties.swift in Sources */,
+				2030B7E01E10BC1B001E2237 /* AppDelegate.swift in Sources */,
+				20EE413F1E10EF74002F78F9 /* MathObjectDetailViewController.swift in Sources */,
+				20704A691E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift in Sources */,
+				2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */,
+				20306A3B1E1A283900E6B5D9 /* WebViewingViewController.swift in Sources */,
+				204380FB1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift in Sources */,
+				204186641E1297400067679E /* ChannelMasterViewController.swift in Sources */,
+				2030B7FF1E10BC52001E2237 /* MathObject+CoreDataProperties.swift in Sources */,
+				204381201E11ED3400ABBAD6 /* MasterViewController.swift in Sources */,
+				20CD8A881E345CAD0034CED1 /* VersionInfo+CoreDataClass.swift in Sources */,
+				203B86701E14B94000BAF08C /* SearchResultItem.swift in Sources */,
+				2030B7FC1E10BC52001E2237 /* Video+CoreDataClass.swift in Sources */,
+				2041865E1E1296760067679E /* FeatureMasterViewController.swift in Sources */,
+				204186581E1288980067679E /* SettingsTableViewController.swift in Sources */,
+				20CD8A891E345CAD0034CED1 /* VersionInfo+CoreDataProperties.swift in Sources */,
+				2080C25D1E14955500723F3B /* ClientSettingsViewController.swift in Sources */,
+				20EE41431E10EF91002F78F9 /* FeatureDetailViewController.swift in Sources */,
+				2030B8011E10BC52001E2237 /* Channel+CoreDataProperties.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2030B7E51E10BC1B001E2237 /* EpsilonAdmin.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2030B7E61E10BC1B001E2237 /* Base */,
+			);
+			name = EpsilonAdmin.storyboard;
+			sourceTree = "<group>";
+		};
+		2030B7EA1E10BC1B001E2237 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2030B7EB1E10BC1B001E2237 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2030B7EE1E10BC1B001E2237 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2030B7EF1E10BC1B001E2237 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2030B7F11E10BC1B001E2237 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6DE21DF73C11C8FBE6A57E56 /* Pods-EpsilonStream.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = EpsilonStream/EpsilonStream.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4G9VZ63NB7;
+				INFOPLIST_FILE = EpsilonStream/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = oneonepsilon.com.EpsilonStream;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		2030B7F21E10BC1B001E2237 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A1D6AF38DFD4957AEA58554 /* Pods-EpsilonStream.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = EpsilonStream/EpsilonStream.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4G9VZ63NB7;
+				INFOPLIST_FILE = EpsilonStream/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = oneonepsilon.com.EpsilonStream;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2030B7D71E10BC1B001E2237 /* Build configuration list for PBXProject "EpsilonStream" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2030B7EE1E10BC1B001E2237 /* Debug */,
+				2030B7EF1E10BC1B001E2237 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2030B7F01E10BC1B001E2237 /* Build configuration list for PBXNativeTarget "EpsilonStream" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2030B7F11E10BC1B001E2237 /* Debug */,
+				2030B7F21E10BC1B001E2237 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2030B7D41E10BC1B001E2237 /* Project object */;
+}
