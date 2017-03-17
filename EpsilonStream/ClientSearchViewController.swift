@@ -356,24 +356,22 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         let share = UITableViewRowAction(style: .normal, title: "Share"){(action, index) in
             switch self.searchResultItems[index.row].type{
             case SearchResultItemType.video:
-                print("share!!!!!!!!!!!!! the joy....")
-                
                 let video = self.searchResultItems[index.row] as! VideoSearchResultItem
                 
-                
-                let shareString = "Check out this video: https://youtu.be/\(video.youtubeId), shared using Epsilon Stream, https://www.epsilonstream.com."
+                let shareString = "Check out this video: https://youtu.be/\(video.youtubeId), shared using Epsilon Stream Beta, https://www.epsilonstream.com."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
                 
                 
                 /*
+                 //QQQQ not doing this - delte?
                 if let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook){
-                    vc.setInitialText("I watch this on Epsilon Stream (https://www.epsilonstream.com):")
-                    vc.add(URL(string: "https://youtu.be/\(video.youtubeId)"))
+                    vc.setInitialText("I watch this on Epsilon Stream (https:www.epsilonstream.com):")
+                    vc.add(URL(string: "https:youtu.be/\(video.youtubeId)"))
                     self.present(vc,animated:true)
                 }
- */
+                 */
 
                 
             /////////////////////////
@@ -389,10 +387,19 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             /////////////////////////
             /////////////////////////
             case SearchResultItemType.blogWebPage:
-                print("need to implement share of blog.... QQQQ")
+                let webPage = self.searchResultItems[index.row] as! BlogWebPageSearchResultItem
+                
+                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream Beta, https://www.epsilonstream.com."
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
             }
+            
+            //Make it disappear
+            tableView.setEditing(false, animated: true)
         }
         share.backgroundColor = .green
+        
         
         if allowsAdminMode == false{
             return [share]
@@ -403,41 +410,28 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         let edit = UITableViewRowAction(style: .normal, title: "Edit"){(action, index) in
             switch self.searchResultItems[index.row].type{
             case SearchResultItemType.video:
-                print("share!!!!!!!!!!!!! the joy....")
-                
-                let video = self.searchResultItems[index.row] as! VideoSearchResultItem
-                
-                
-                let shareString = "Check out this video: https://youtu.be/\(video.youtubeId), shared using Epsilon Stream, https://www.epsilonstream.com."
-                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
-                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
-                self.present(vc, animated:  true)
-                
-                
-                /*
-                 if let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook){
-                 vc.setInitialText("I watch this on Epsilon Stream (https://www.epsilonstream.com):")
-                 vc.add(URL(string: "https://youtu.be/\(video.youtubeId)"))
-                 self.present(vc,animated:true)
-                 }
-                 */
-                
+    
+                isInAdminMode = true
+                let youTubeIdToEdit = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
+                (UIApplication.shared.delegate as! AppDelegate).loadAdmin(withVideo: youTubeIdToEdit)
                 
                 /////////////////////////
             /////////////////////////
             case SearchResultItemType.iosApp:
-                print("need to implement share of ios App.... QQQQ")
+                print("need to implement edit of blog")
                 
                 /////////////////////////
             /////////////////////////
             case SearchResultItemType.gameWebPage:
-                print("need to implement share of game web page.... QQQQ")
+                print("need to implement edit of webpage")
                 
                 /////////////////////////
             /////////////////////////
             case SearchResultItemType.blogWebPage:
-                print("need to implement share of blog.... QQQQ")
+                print("need to implement edit of blog")
             }
+            //Make it disappear
+            tableView.setEditing(false, animated: true)
         }
 
         edit.backgroundColor = .red

@@ -15,7 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     var window: UIWindow?
     
-    func loadAdmin(){
+    func loadAdmin(withVideo videoId: String = ""){
+        if videoId != ""{
+            EpsilonStreamAdminModel.setCurrentVideo(withVideo: videoId)
+        }
         let sb = UIStoryboard(name: "EpsilonAdmin", bundle: nil)
         let vc = sb.instantiateViewController(withIdentifier: "epsilonAdminTabBar")
         vc.view.frame = UIScreen.main.bounds

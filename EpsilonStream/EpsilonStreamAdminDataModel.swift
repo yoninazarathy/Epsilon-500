@@ -337,4 +337,29 @@ class EpsilonStreamAdminModel{
         
         newVideo.bufferIndex = 0
     }
+    
+    /////////////////////////////
+    // Set Objects
+    /////////////////////////////
+    
+    class func setCurrentVideo(withVideo videoId: String){
+        let videoRequest = Video.createFetchRequest()
+        
+        let request = Video.createFetchRequest()
+        request.predicate = NSPredicate(format: "youtubeVideoId == %@", videoId)
+       
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        
+        do{
+            let videos = try container.viewContext.fetch(request)
+            if videos.count != 1{
+                print("error!!!!")
+            }
+            EpsilonStreamAdminModel.currentVideo = videos[0]
+        }catch{
+            print("Fetch failed")
+        }
+
+    }
+    
 }
