@@ -20,7 +20,7 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
     var searchResultItem: SearchResultItem! = nil
     
     override func awakeFromNib() {
-        print("awakeFromNib(): \(videoIdToPlay)") //QQQQ remove this function
+        //print("awakeFromNib(): \(videoIdToPlay)") //QQQQ remove this function
     }
     
     override func loadView() {

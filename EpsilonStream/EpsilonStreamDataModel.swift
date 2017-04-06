@@ -28,6 +28,10 @@ class EpsilonStreamDataModel{
     class func setUpAutoCompleteLists(){
         //QQQQ can improve implementation...
         
+        hashTagAutoCompleteList = []
+        titleAutoCompleteList = []
+        channelAutoCompleteList = []
+        
         let request = MathObject.createFetchRequest()
         let sort = NSSortDescriptor(key: "hashTag", ascending: true)
         request.sortDescriptors = [sort]
@@ -44,7 +48,7 @@ class EpsilonStreamDataModel{
                     var titleGroup: [String] = []
                     for tit in titles{
                         if tit.characters.first != "$" || tit.characters.last != "$"{
-                            print("Error with title: \(tit)")
+                            print("Error with title: \(tit) in \(titles)")
                         }else{
                             let start = tit.index(tit.startIndex, offsetBy: 1)
                             let end = tit.index(tit.endIndex, offsetBy: -1)
@@ -53,7 +57,7 @@ class EpsilonStreamDataModel{
                             if stripTit.contains("$") || stripTit.contains(",") || stripTit.contains("~"){
                                 print("Error with title: \(stripTit)")
                             }else{
-                                print(stripTit)
+                                //print(stripTit)
                                 titleGroup.append(stripTit)
                             }
                         }
@@ -70,23 +74,6 @@ class EpsilonStreamDataModel{
             print("Fetch failed")
         }
         
-        //print(EpsilonStreamDataModel.titleAutoCompleteList)
-        
-        let request2 = Channel.createFetchRequest()
-        let sort2 = NSSortDescriptor(key: "ourChannelHashtag", ascending: true)
-        request.sortDescriptors = [sort2]
-        
-        do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let channels = try container.viewContext.fetch(request2)
-            
-            for ch in channels{
-                EpsilonStreamDataModel.channelAutoCompleteList.append(ch.ourChannelHashtag)
-            }
-        }catch{
-            print("Fetch failed")
-        }
-        //print("CHANNEL INDEXING STILL NOT IMPLEMENTED")
     }
     
     /// Returns an array of strings that starts with the provided text
@@ -129,7 +116,7 @@ class EpsilonStreamDataModel{
     }
 
     class func search(withQuery query: EpsilonStreamSearch) -> [SearchResultItem]{
-        var searchResult: [SearchResultItem] = []
+        var videoSearchResult: [SearchResultItem] = []
         
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         
@@ -137,7 +124,7 @@ class EpsilonStreamDataModel{
         let hts = hashTags(ofString: query.searchString)
         
         let predicateColl = NSPredicate(format: "isInVideoCollection == %@", NSNumber(booleanLiteral: true))
-        let predicateBuffer = NSPredicate(format: "bufferIndex == %@", currentDBBuffer as NSNumber)
+        //let predicateBuffer = NSPredicate(format: "bufferIndex == %@", currentDBBuffer as NSNumber)
 
         var predicateOther: NSPredicate! = nil
         var predicateHashTags: NSPredicate! = nil
@@ -158,10 +145,10 @@ class EpsilonStreamDataModel{
             predicateOther = predicateHashTags
         }
         
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateBuffer, predicateColl, predicateOther])
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, predicateOther])
         
         if query.searchString == "#allall"{
-            request.predicate = predicateBuffer
+            request.predicate = NSPredicate(format: "TRUEPREDICATE")
         }
         
         do{
@@ -176,44 +163,25 @@ class EpsilonStreamDataModel{
                 item.durationString = "\(( Int(round(Float(videos[i].durationSec)/60))) == 0 ? 1 : Int(round(Float(videos[i].durationSec)/60)))" //QQQQ make neat repres
                 item.percentWatched = videos[i].percentWatched
                 
+                item.image = ImageManager.getImage(forKey: videos[i].youtubeVideoId)
                 
-                if let urlString = videos[i].imageURLlocal{
-                    do{
-                        // NOT WORKING - QQQQ let url = URL(fileURLWithPath: urlString)
-                        
-                        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                        let url2 = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(videos[i].youtubeVideoId).appendingPathExtension("png")
-
-                        //QQQQ no idea - why url is not working - as a workaround reconstructing path here...
-
-                        //print("THIS IS URL (not working): \(url) \n AND THIS IS ULR2 (working): \(url2)")
-                        
-                        let data = try Data(contentsOf: url2)//try Data(contentsOf: URL(string: urlString)!)
-                        item.image = UIImage(data: data)
-                    }catch{
-                        print("err with image on search: \(urlString)")
-                    }
-                }else{
-                    item.image = UIImage(named: "oneOnEpsilonLogo3") //QQQQ
-                }
-
-                searchResult.append(item)
+                videoSearchResult.append(item)
                 
                 penaltyList[i] = penaltyFunction(ofVideo: videos[i], withSearch: query)
             }
             
             // use zip to combine the two arrays and sort that based on the first
-            let combined = zip(penaltyList, searchResult).sorted {$0.0 < $1.0}
+            let combined = zip(penaltyList, videoSearchResult).sorted {$0.0 < $1.0}
             
             // use map to extract the individual arrays
-            searchResult = combined.map {$0.1}
+            videoSearchResult = combined.map {$0.1}
         }catch{
             print("Fetch failed")
         }
         
         //QQQQ WTF
-        let len = min(searchResult.count,maxVideosToShow)
-        var ret = [SearchResultItem](searchResult[0..<len])
+        var appSearchResult: [SearchResultItem] = []
+        var blogSearchResult: [SearchResultItem] = []
         
         let featureRequest = FeaturedURL.createFetchRequest()
         
@@ -233,25 +201,29 @@ class EpsilonStreamDataModel{
                     let item = IOsAppSearchResultItem()
                     item.appId = feature.urlOfItem
                     item.title = feature.ourTitle
-                    item.channel = "One on Epsilon" //QQQQ
-                    item.image =  UIImage(named: "SRMroundIcon1024") //QQQQ
+                    item.channel = feature.provider
+                    item.image = ImageManager.getImage(forKey: feature.imageKey!)
+
                     item.type = SearchResultItemType.iosApp
-                    ret.append(item)
+                    appSearchResult.append(item)
                 }else{
                     //QQQQ the third option is GameWebPageSearchResultItem
                     let item = BlogWebPageSearchResultItem()
                     item.url = feature.urlOfItem
                     item.title = feature.ourTitle
-                    item.channel = "One on Epsilon" //QQQQ
-                    item.image = UIImage(named: "SRMroundIcon1024") //QQQQ
+                    item.channel = feature.provider
+                    item.image = ImageManager.getImage(forKey: feature.imageKey!)
                     item.type = SearchResultItemType.blogWebPage
-                    ret.append(item)
+                    blogSearchResult.append(item)
                 }
             }
         }catch{
             print("Fetch failed")
         }
-        
+        let len = min(videoSearchResult.count,maxVideosToShow)
+        var ret = [SearchResultItem](videoSearchResult[0..<len])
+        ret.append(contentsOf: blogSearchResult)
+        ret.append(contentsOf: appSearchResult)
         return ret
     }
     
@@ -367,7 +339,7 @@ class EpsilonStreamDataModel{
 
             if videos.count == 0{
                 latestVideoDate = Date(timeIntervalSince1970: 0.0)
-                //print("found no videos - setting video date to 1970")
+                print("found no videos - setting video date to 1970")
             }else{
                 latestVideoDate = videos[0].oneOnEpsilonTimeStamp
                 print("setting video date to \(latestVideoDate) ")
@@ -384,10 +356,9 @@ class EpsilonStreamDataModel{
             
             if mathObjects.count == 0{
                 latestMathObjectDate = Date(timeIntervalSince1970: 0.0)
-                //print("found no math objects - setting math object date to 1970")
+                print("found no math objects - setting math object date to 1970")
             }else{
                 latestMathObjectDate = mathObjects[0].oneOnEpsilonTimeStamp
-                //print("setting math object date to \(latestMathObjectDate) ")
             }
         }catch{
             print("Fetch failed")
@@ -401,10 +372,9 @@ class EpsilonStreamDataModel{
             
             if featuredURLs.count == 0{
                 latestFeatureDate = Date(timeIntervalSince1970: 0.0)
-                //print("found no featured urls - setting featured url datedate to 1970")
+                print("found no featured urls - setting featured url datedate to 1970")
             }else{
                 latestFeatureDate = featuredURLs[0].oneOnEpsilonTimeStamp
-                //print("setting featured urls date to \(latestFeatureDate) ")
             }
         }catch{
             print("Fetch failed")
@@ -418,10 +388,9 @@ class EpsilonStreamDataModel{
             
             if channels.count == 0{
                 latestChannelDate = Date(timeIntervalSince1970: 0.0)
-                //print("found no channels - setting channel date to 1970")
+                print("found no channels - setting channel date to 1970")
             }else{
                 latestChannelDate = channels[0].oneOnEpsilonTimeStamp
-                //print("setting channels date to \(latestChannelDate) ")
             }
         }catch{
             print("Fetch failed")
@@ -444,11 +413,9 @@ class EpsilonStreamDataModel{
     }
     
     //QQQQ use generic to merge three methods
-    class func numVideos(onBuffer buffer: Int) -> Int{
+    class func numVideos() -> Int{
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
-        let predicateBuffer = NSPredicate(format: "bufferIndex == %@", buffer as NSNumber)
-        request.predicate = predicateBuffer
         
         var retVal = -1
         
@@ -462,11 +429,9 @@ class EpsilonStreamDataModel{
         return retVal
     }
     
-    class func numMathObjects(onBuffer buffer: Int) -> Int{
+    class func numMathObjects() -> Int{
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = MathObject.createFetchRequest()
-        let predicateBuffer = NSPredicate(format: "bufferIndex == %@", buffer as NSNumber)
-        request.predicate = predicateBuffer
         
         var retVal = -1
         
@@ -480,11 +445,9 @@ class EpsilonStreamDataModel{
         return retVal
     }
     
-    class func numFeaturedURLs(onBuffer buffer: Int) -> Int{
+    class func numFeaturedURLs() -> Int{
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = FeaturedURL.createFetchRequest()
-        let predicateBuffer = NSPredicate(format: "bufferIndex == %@", buffer as NSNumber)
-        request.predicate = predicateBuffer
         
         var retVal = -1
         
@@ -538,45 +501,23 @@ class EpsilonStreamDataModel{
         return max
     }
 
-    
-    //These three functions can be merged (maybe) into 1
-    class func deleteAllVideos(ofBuffer buffer: Int){
+    class func deleteAllEntities(withName name: String){//ofBuffer buffer: Int){
         let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Video")
-        request.predicate = NSPredicate(format: "bufferIndex == %@", buffer as NSNumber)
-        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+        request.predicate = NSPredicate(format: "TRUEPREDICATE")
         let delRequest = NSBatchDeleteRequest(fetchRequest: request)
-        
-        EpsilonStreamDataModel.saveViewContext()
-    }
-    
-    class func deleteAllMathObjects(ofBuffer buffer: Int){
-        let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "MathObject")
-        request.predicate = NSPredicate(format: "bufferIndex == %@", buffer as NSNumber)
-        
-        let delRequest = NSBatchDeleteRequest(fetchRequest: request)
-        
-        EpsilonStreamDataModel.saveViewContext()
-    }
-    
-    class func deleteAllFeaturedURLs(ofBuffer buffer: Int){
-        let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "FeaturedURL")
-        request.predicate = NSPredicate(format: "bufferIndex == %@", buffer as NSNumber)
-        
-        let delRequest = NSBatchDeleteRequest(fetchRequest: request)
-        
+        do {
+            try managedObjectContext.execute(delRequest)
+        } catch {
+            fatalError("Failed to execute request: \(error)")
+        }
         EpsilonStreamDataModel.saveViewContext()
     }
     
     
     class func resetAllViewed(){
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        
+        //let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        print("need to implement")
     }
 
 }

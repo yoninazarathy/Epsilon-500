@@ -37,7 +37,4 @@ extension Video {
     @NSManaged public var hashTags: String
     @NSManaged public var durationSec: Int32
     @NSManaged public var percentWatched: Float
-    
-    @NSManaged public var bufferIndex: Int64
-    
 }

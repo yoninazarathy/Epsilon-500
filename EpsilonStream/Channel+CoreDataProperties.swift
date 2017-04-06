@@ -26,7 +26,4 @@ extension Channel {
     @NSManaged public var imagePic: NSData?
     @NSManaged public var imageURL: String
     @NSManaged public var ourChannelHashtag: String
-
-    @NSManaged public var bufferIndex: Int64
-
 }

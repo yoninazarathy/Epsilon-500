@@ -17,7 +17,7 @@ protocol YoutubeAPIDelegate {
 }
 
 extension String{
-    //http://stackoverflow.com/questions/37048139/how-to-convert-duration-form-youtube-api-in-swift
+    //https://stackoverflow.com/questions/37048139/how-to-convert-duration-form-youtube-api-in-swift
     func getYoutubeFormattedDuration() -> String {
         
         let formattedDuration = self.replacingOccurrences(of: "PT", with: "").replacingOccurrences(of: "H", with:":").replacingOccurrences(of: "M", with: ":").replacingOccurrences(of: "S", with: "")

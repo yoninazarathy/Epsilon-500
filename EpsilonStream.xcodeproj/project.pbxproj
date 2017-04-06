@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		200FDB491E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */; };
 		2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */; };
+		202BC6E71E840379003CF122 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202BC6E61E840379003CF122 /* SplashScreenViewController.swift */; };
 		20306A3B1E1A283900E6B5D9 /* WebViewingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */; };
 		2030B7E01E10BC1B001E2237 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7DF1E10BC1B001E2237 /* AppDelegate.swift */; };
 		2030B7E21E10BC1B001E2237 /* MathObjectMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7E11E10BC1B001E2237 /* MathObjectMasterViewController.swift */; };
@@ -27,7 +28,7 @@
 		203B866E1E14B66A00BAF08C /* EpsilonStreamSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */; };
 		203B86701E14B94000BAF08C /* SearchResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B866F1E14B94000BAF08C /* SearchResultItem.swift */; };
 		203B86721E14C07900BAF08C /* PlayVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B86711E14C07900BAF08C /* PlayVideoViewController.swift */; };
-		204186581E1288980067679E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204186571E1288980067679E /* SettingsTableViewController.swift */; };
+		204186581E1288980067679E /* AdminSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204186571E1288980067679E /* AdminSettingsViewController.swift */; };
 		2041865C1E12962F0067679E /* VideoMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2041865B1E12962F0067679E /* VideoMasterViewController.swift */; };
 		2041865E1E1296760067679E /* FeatureMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2041865D1E1296760067679E /* FeatureMasterViewController.swift */; };
 		204186641E1297400067679E /* ChannelMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204186631E1297400067679E /* ChannelMasterViewController.swift */; };
@@ -36,6 +37,8 @@
 		204381201E11ED3400ABBAD6 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2043811F1E11ED3400ABBAD6 /* MasterViewController.swift */; };
 		206992641E3E01C600EBC614 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 206992631E3E01C600EBC614 /* GoogleService-Info.plist */; };
 		20704A691E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */; };
+		2077E8EE1E8D1C9D00C2A49B /* ImageThumbnail+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2077E8EC1E8D1C9C00C2A49B /* ImageThumbnail+CoreDataClass.swift */; };
+		2077E8EF1E8D1C9D00C2A49B /* ImageThumbnail+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2077E8ED1E8D1C9C00C2A49B /* ImageThumbnail+CoreDataProperties.swift */; };
 		2080C2551E14726C00723F3B /* EpsilonClient.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2080C2541E14726C00723F3B /* EpsilonClient.storyboard */; };
 		2080C2591E1474CD00723F3B /* ClientSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */; };
 		2080C25B1E14769B00723F3B /* EpsilonStreamGlobals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */; };
@@ -56,6 +59,7 @@
 /* Begin PBXFileReference section */
 		200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamAdminDataModel.swift; sourceTree = "<group>"; };
 		2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPrefetcher.swift; sourceTree = "<group>"; };
+		202BC6E61E840379003CF122 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewingViewController.swift; sourceTree = "<group>"; };
 		2030B7DC1E10BC1B001E2237 /* EpsilonStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpsilonStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2030B7DF1E10BC1B001E2237 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,7 +80,7 @@
 		203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamSearch.swift; sourceTree = "<group>"; };
 		203B866F1E14B94000BAF08C /* SearchResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultItem.swift; sourceTree = "<group>"; };
 		203B86711E14C07900BAF08C /* PlayVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayVideoViewController.swift; sourceTree = "<group>"; };
-		204186571E1288980067679E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		204186571E1288980067679E /* AdminSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminSettingsViewController.swift; sourceTree = "<group>"; };
 		2041865B1E12962F0067679E /* VideoMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMasterViewController.swift; sourceTree = "<group>"; };
 		2041865D1E1296760067679E /* FeatureMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureMasterViewController.swift; sourceTree = "<group>"; };
 		204186631E1297400067679E /* ChannelMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMasterViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 		2043811F1E11ED3400ABBAD6 /* MasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
 		206992631E3E01C600EBC614 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeAPICommunicator.swift; sourceTree = "<group>"; };
+		2077E8EC1E8D1C9C00C2A49B /* ImageThumbnail+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImageThumbnail+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2077E8ED1E8D1C9C00C2A49B /* ImageThumbnail+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImageThumbnail+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2080C2541E14726C00723F3B /* EpsilonClient.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EpsilonClient.storyboard; sourceTree = "<group>"; };
 		2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSearchViewController.swift; sourceTree = "<group>"; };
 		2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamGlobals.swift; sourceTree = "<group>"; };
@@ -148,7 +154,6 @@
 				20C25C501E18C34A00CE046E /* ImageManager.swift */,
 				20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */,
 				2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */,
-				204186571E1288980067679E /* SettingsTableViewController.swift */,
 				20EE41441E10EFA1002F78F9 /* AdminUI */,
 				2030B7F31E10BC35001E2237 /* CoreDataFiles */,
 				2030B7E81E10BC1B001E2237 /* Assets.xcassets */,
@@ -159,6 +164,8 @@
 		2030B7F31E10BC35001E2237 /* CoreDataFiles */ = {
 			isa = PBXGroup;
 			children = (
+				2077E8EC1E8D1C9C00C2A49B /* ImageThumbnail+CoreDataClass.swift */,
+				2077E8ED1E8D1C9C00C2A49B /* ImageThumbnail+CoreDataProperties.swift */,
 				2030B7F41E10BC52001E2237 /* Video+CoreDataClass.swift */,
 				2030B7F51E10BC52001E2237 /* Video+CoreDataProperties.swift */,
 				2030B7F61E10BC52001E2237 /* MathObject+CoreDataClass.swift */,
@@ -229,6 +236,7 @@
 			isa = PBXGroup;
 			children = (
 				2080C2541E14726C00723F3B /* EpsilonClient.storyboard */,
+				202BC6E61E840379003CF122 /* SplashScreenViewController.swift */,
 				20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */,
 				2080C25C1E14955500723F3B /* ClientSettingsViewController.swift */,
 				2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */,
@@ -252,6 +260,7 @@
 				2030B7E51E10BC1B001E2237 /* EpsilonAdmin.storyboard */,
 				204380F81E11CAA500ABBAD6 /* DetailViewController.swift */,
 				2043811F1E11ED3400ABBAD6 /* MasterViewController.swift */,
+				204186571E1288980067679E /* AdminSettingsViewController.swift */,
 				204186621E1296D90067679E /* Channel */,
 				204186611E1296D10067679E /* Feature */,
 				204186601E1296C90067679E /* MathObject */,
@@ -423,6 +432,7 @@
 				2030B8001E10BC52001E2237 /* Channel+CoreDataClass.swift in Sources */,
 				2030B7FD1E10BC52001E2237 /* Video+CoreDataProperties.swift in Sources */,
 				2030B7E01E10BC1B001E2237 /* AppDelegate.swift in Sources */,
+				2077E8EF1E8D1C9D00C2A49B /* ImageThumbnail+CoreDataProperties.swift in Sources */,
 				20EE413F1E10EF74002F78F9 /* MathObjectDetailViewController.swift in Sources */,
 				20704A691E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift in Sources */,
 				2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */,
@@ -430,12 +440,14 @@
 				204380FB1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift in Sources */,
 				204186641E1297400067679E /* ChannelMasterViewController.swift in Sources */,
 				2030B7FF1E10BC52001E2237 /* MathObject+CoreDataProperties.swift in Sources */,
+				2077E8EE1E8D1C9D00C2A49B /* ImageThumbnail+CoreDataClass.swift in Sources */,
 				204381201E11ED3400ABBAD6 /* MasterViewController.swift in Sources */,
 				20CD8A881E345CAD0034CED1 /* VersionInfo+CoreDataClass.swift in Sources */,
 				203B86701E14B94000BAF08C /* SearchResultItem.swift in Sources */,
+				202BC6E71E840379003CF122 /* SplashScreenViewController.swift in Sources */,
 				2030B7FC1E10BC52001E2237 /* Video+CoreDataClass.swift in Sources */,
 				2041865E1E1296760067679E /* FeatureMasterViewController.swift in Sources */,
-				204186581E1288980067679E /* SettingsTableViewController.swift in Sources */,
+				204186581E1288980067679E /* AdminSettingsViewController.swift in Sources */,
 				20CD8A891E345CAD0034CED1 /* VersionInfo+CoreDataProperties.swift in Sources */,
 				2080C25D1E14955500723F3B /* ClientSettingsViewController.swift in Sources */,
 				20EE41431E10EF91002F78F9 /* FeatureDetailViewController.swift in Sources */,

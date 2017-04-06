@@ -20,8 +20,4 @@ extension MathObject {
     
     @NSManaged public var hashTag: String
     @NSManaged public var associatedTitles: String
-
-    @NSManaged public var bufferIndex: Int64
-
-    
 }

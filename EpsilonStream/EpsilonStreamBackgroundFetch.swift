@@ -32,42 +32,43 @@ class EpsilonStreamBackgroundFetch{
         operation.resultsLimit = 1
         
         operation.recordFetchedBlock = { record in
-            DispatchQueue.main.async {//In which context to run it?
+       //     DispatchQueue.main.async {//In which context to run it?
                 updateEpsilonStreamInfoInDB(fromDataSource: record)
-            }
+       //     }
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
             //print("readVideoMetaDataFromCloud OPERATION COMPLETE BLOCK")
-            DispatchQueue.main.async{
+        //    DispatchQueue.main.async{
                 if error == nil{
                     //print("no error")
                 }
                 else{
                     print("\(error!.localizedDescription)")
                 }
-            }
+         //   }
         }
         
         operation.completionBlock = {
-            DispatchQueue.main.async {
+       //     DispatchQueue.main.async {
                 EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress = false
-            }
+                infoReadyToGo = true
+         //   }
         }
         
-        if EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress == false{
-            EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress = true
+      if EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress == false{
+        EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress = true
             CKContainer.default().publicCloudDatabase.add(operation)
-        }else{
+      }else{
             print("Tried to pull Cloud DB Version info while pull already in progress - aborted")
-        }
+      }
     }
     
     class func updateEpsilonStreamInfoInDB(fromDataSource cloudSource: CKRecord){
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = VersionInfo.createFetchRequest()
-        let otherBuffer = 1-currentDBBuffer
-        request.predicate = NSPredicate(format: "bufferIndex == %@", otherBuffer as NSNumber)
+        //let otherBuffer = 1-currentDBBuffer
+        request.predicate = NSPredicate(format:"TRUEPREDICATE")//NSPredicate(format: "bufferIndex == %@", otherBuffer as NSNumber)
         
         do{
             let results = try container.viewContext.fetch(request)
@@ -102,58 +103,9 @@ class EpsilonStreamBackgroundFetch{
         
         versionInfo.numberOfTimesLeftToShowMessage = versionInfo.numberOfTimesToShowMessage
         
-        versionInfo.bufferIndex = Int64(otherBuffer)
+        //versionInfo.bufferIndex = Int64(otherBuffer)
         
         EpsilonStreamDataModel.saveViewContext()
-    }
-    
-    //check locally for updates
-    class func checkForUpdates(){
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let request = VersionInfo.createFetchRequest()
-        let otherBuffer = 1-currentDBBuffer
-        let sort = NSSortDescriptor(key: "bufferIndex", ascending: true)
-        request.sortDescriptors = [sort]
-
-        do{
-            let versionInfo = try container.viewContext.fetch(request)
-            if versionInfo.count > 2{
-                print("error - too many version info objects")
-            }else if versionInfo.count == 0{
-                //nothing to do - need to wait for version
-            }else if versionInfo.count == 1{
-                (UIApplication.shared.delegate as! AppDelegate).flipCurrentDBBuffer()
-                DispatchQueue.main.async {
-                    EpsilonStreamBackgroundFetch.pullEpsilonStreamInfo()//QQQQ could interfere with background one...
-                }
-                //This should be the "case" when just installing
-                //check if need update
-                //print("VERSION NUMBER: \(versionInfo[0].contentVersionNumber)")
-            }else{
-                let lv = EpsilonStreamDataModel.latestVersion()
-                let llv = EpsilonStreamDataModel.latestLoadedVersion()
-                let numVidBuff0 = EpsilonStreamDataModel.numVideos(onBuffer: 0)
-                let numVidBuff1 = EpsilonStreamDataModel.numVideos(onBuffer: 1)
-                let numMOBuff0 = EpsilonStreamDataModel.numMathObjects(onBuffer: 0)
-                let numMOBuff1 = EpsilonStreamDataModel.numMathObjects(onBuffer: 1)
-                let numFUBuff0 = EpsilonStreamDataModel.numFeaturedURLs(onBuffer: 0)
-                let numFUBuff1 = EpsilonStreamDataModel.numFeaturedURLs(onBuffer: 1)
-
-                print("-------------------")
-                print("DBindex: \(currentDBBuffer).\n Vinfo[0]: \(versionInfo[0].contentVersionNumber). Vinfo[0].loaded: \(versionInfo[0].loaded).  Vinfo[1]: \(versionInfo[1].contentVersionNumber). Vinfo[1].loaded: \(versionInfo[1].loaded).\n latest: \(lv). latestLoaded: \(llv).\n numVid_0: \(numVidBuff0). numVid_1: \(numVidBuff1). numMO_0: \(numMOBuff0). numMO_1: \(numMOBuff1). numFU_0: \(numFUBuff0). numFU_1: \(numFUBuff1)")
-                print("-------------------")
-
-                
-                if lv > llv{
-                    //(versionInfo[otherBuffer].loaded == false && versionInfo[otherBuffer].contentVersionNumber > lv) ||
-                    //(versionInfo[otherBuffer].loaded == false && versionInfo[currentDBBuffer].loaded == false){
-                    runUpdate(onBuffer: otherBuffer, withVersion: versionInfo[otherBuffer].contentVersionNumber)
-                }
-                
-            }
-        }catch{
-            print("Fetch failed")
-        }
     }
     
     static var isUpdatingNow = false
@@ -161,67 +113,34 @@ class EpsilonStreamBackgroundFetch{
     static var finishedMathObjects = false
     static var finishedFeaturedURLs = false
     
-    class func runUpdate(onBuffer buffer: Int, withVersion version: Int64){
-        if isUpdatingNow == true{
-            return
-        }else{
-            isUpdatingNow = true
+    class func runUpdate(){//onBuffer buffer: Int, withVersion version: Int64){
+        
+        DispatchQueue.main.async(){
+            EpsilonStreamBackgroundFetch.pullEpsilonStreamInfo()
         }
-        print("runUpdate onBuffer: \(buffer)")
         
-        //The delete here is needed for cases where update operation is aborted in process
-        EpsilonStreamDataModel.deleteAllMathObjects(ofBuffer: 1-currentDBBuffer)
-        EpsilonStreamDataModel.deleteAllVideos(ofBuffer: 1-currentDBBuffer)
-        EpsilonStreamDataModel.deleteAllFeaturedURLs(ofBuffer: 1-currentDBBuffer)
+        DispatchQueue.main.async(){
+            while infoReadyToGo == false{
+                sleep(1)
+                print("waiting for infoReadyToGo")
+            }
+
+            finishedMathObjects = false
+            readMathObjectsFromCloud()
         
-        finishedMathObjects = false
-        readMathObjectsFromCloud(withVersion: version)
+            finishedVideos = false
+            readVideoDataFromCloud()
         
-        finishedVideos = false
-        readVideoDataFromCloud(withVersion: version)
-        
-        finishedFeaturedURLs = false
-        readFeaturedURLsFromCloud(withVersion: version)
-        
-        
-        
+            finishedFeaturedURLs = false
+            readFeaturedURLsFromCloud()
+        }
     }
     
     class func onFinish(){
-        if finishedVideos && finishedMathObjects && finishedFeaturedURLs{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let request = VersionInfo.createFetchRequest()
-            request.predicate = NSPredicate(format: "bufferIndex == %@", 1-currentDBBuffer as NSNumber)
-            
-            do{
-                let results = try container.viewContext.fetch(request)
-                if results.count != 1 {
-                    print("error with number of VersionInfos")
-                }else{
-                    for result in results{ //this should loop only once
-                        result.loaded = true
-                    }
-                }
-            }catch{
-                print("Fetch failed")
-            }
-
-            EpsilonStreamDataModel.saveViewContext()
-            
-            (UIApplication.shared.delegate as! AppDelegate).flipCurrentDBBuffer()
-            
-            EpsilonStreamDataModel.deleteAllMathObjects(ofBuffer: 1-currentDBBuffer)
-            EpsilonStreamDataModel.deleteAllVideos(ofBuffer: 1-currentDBBuffer)
-            EpsilonStreamDataModel.deleteAllFeaturedURLs(ofBuffer: 1-currentDBBuffer)
-            
-            DispatchQueue.main.async {
-                searcherUI.refreshSearch()
-            }
-            
-            isUpdatingNow = false
-            print("FINISHED UPDATE AND SWITCH.")
-        }else{
-            print("onFinish() but still not finished")
+        dbReadyToGo = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects
+        
+        if dbReadyToGo{
+            EpsilonStreamDataModel.setUpAutoCompleteLists()
         }
     }
     
@@ -233,7 +152,7 @@ class EpsilonStreamBackgroundFetch{
     
         let newVideo = Video(context: container.viewContext)
 
-        newVideo.oneOnEpsilonTimeStamp = cloudSource["oneOnEpsilonTimeStamp"] as! Date
+        newVideo.oneOnEpsilonTimeStamp = cloudSource["modificationDate"] as! Date
         newVideo.age8Rating = cloudSource["age8Rating"] as! Float
         newVideo.age10Rating = cloudSource["age10Rating"] as! Float
         newVideo.age12Rating = cloudSource["age12Rating"] as! Float
@@ -250,8 +169,6 @@ class EpsilonStreamBackgroundFetch{
         newVideo.youtubeVideoId = videoID
         newVideo.hashTags = cloudSource["hashTags"] as! String
         
-        let otherBuffer = Int64(1-currentDBBuffer)
-        newVideo.bufferIndex = otherBuffer //QQQQ a bit messy here
 
         //QQQQ why aren't all fields treated this way?
         // -- currently it is with caution since just added duration
@@ -263,69 +180,112 @@ class EpsilonStreamBackgroundFetch{
         
         newVideo.imageURL = cloudSource["imageURL"] as! String
         
-        storeImage(fromRecord: cloudSource, withVideo: newVideo, withKey: newVideo.youtubeVideoId)
+        ImageManager.pushImageToGet(withKey: videoID,newVideo.isAwesome )
     }
     
-    
-    //QQQQ doc and factor
-    class func storeImage(fromRecord record: CKRecord, withVideo video: Video, withKey key: String){
-        if let asset = record["imagePic"] as? CKAsset{
-            do{
-                let data = try Data(contentsOf: asset.fileURL)
-                let image = UIImage(data: data)
-                video.imageURLlocal = ImageManager.store(image!, withKey: key)
-                //print("STORING URL: \(video.imageURLlocal)")
-            }catch{
-                print("err with image")
-            }
-        }else{
-            print("NO ASSET - with image")
-            video.imageURLlocal = nil
-        }
-    }
-
     
     class func createDBMathObject(fromDataSource cloudSource: CKRecord){
         //unique key
-        let hashTag = cloudSource["hashTag"] as! String
-            
+        
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
             
         let newMathObject = MathObject(context: container.viewContext)
         
-        newMathObject.oneOnEpsilonTimeStamp = cloudSource["oneOnEpsilonTimeStamp"] as! Date
+        newMathObject.oneOnEpsilonTimeStamp = cloudSource["modificationDate"] as! Date
         newMathObject.hashTag = cloudSource["hashTag"] as! String
         newMathObject.associatedTitles = cloudSource["associatedTitles"] as! String
-        
-        let otherBuffer = Int64(1-currentDBBuffer)
-        newMathObject.bufferIndex = otherBuffer //QQQQ a bit messy here
     }
     
     class func createDBFeaturedURL(fromDataSource cloudSource: CKRecord){
         let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let newFeaturedURL = FeaturedURL(context: managedObjectContext)
 
-        newFeaturedURL.oneOnEpsilonTimeStamp = cloudSource["oneOnEpsilonTimeStamp"] as! Date
-        newFeaturedURL.urlOfItem = cloudSource["urlOfItem"] as! String
-        newFeaturedURL.hashTags = cloudSource["hashTags"] as! String
-        newFeaturedURL.imageURL = cloudSource["imageURL"] as! String
-        newFeaturedURL.imageURLlocal = nil //QQQQ //cloudSource["imagePic"]  nil //QQQQ
-        newFeaturedURL.ourTitle = cloudSource["ourTitle"] as! String
-        newFeaturedURL.ourDescription = cloudSource["ourDescription"] as! String
-        newFeaturedURL.ourFeaturedURLHashtag = cloudSource["ourFeaturedURLHashtag"] as! String
-        newFeaturedURL.isAppStoreApp = cloudSource["isAppStoreApp"] as! Bool
+        if let oneOnEpsilonTimeStamp = cloudSource["modificationDate"] as? Date{
+            newFeaturedURL.oneOnEpsilonTimeStamp = oneOnEpsilonTimeStamp
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+
+        if let hashTags = cloudSource["hashTags"] as? String{
+            newFeaturedURL.hashTags = hashTags
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
         
-        let otherBuffer = Int64(1-currentDBBuffer)
-        newFeaturedURL.bufferIndex = otherBuffer //QQQQ a bit messy here
+        if let urlOfItem = cloudSource["urlOfItem"] as? String{
+            newFeaturedURL.urlOfItem = urlOfItem
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+
+        if let imageKey = cloudSource["imageKey"] as? String{
+            newFeaturedURL.imageKey = imageKey
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+        if let imageURL = cloudSource["imageURL"] as? String{
+            newFeaturedURL.imageURL = imageURL
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
         
+        if let ourTitle = cloudSource["ourTitle"] as? String{
+            newFeaturedURL.ourTitle = ourTitle
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+        
+        if let ourDescription = cloudSource["ourDescription"] as? String{
+            newFeaturedURL.ourDescription = ourDescription
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+        
+        if let ourFeaturedURLHashtag = cloudSource["ourFeaturedURLHashtag"] as? String{
+            newFeaturedURL.ourFeaturedURLHashtag = ourFeaturedURLHashtag
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+        
+        if let isAppStoreApp = cloudSource["isAppStoreApp"] as? Bool{
+            newFeaturedURL.isAppStoreApp = isAppStoreApp
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+        
+        if let provider = cloudSource["provider"] as? String{
+            newFeaturedURL.provider = provider
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+        
+        ImageManager.pushImageToGet(withKey: newFeaturedURL.imageKey!)
     }
     
     static var videoNum = 0
     
-    class func readVideoDataFromCloud(withVersion version: Int64){
-        //print("UPON READ VIDEO FETCH REQUEST latestVideoDate: \(latestVideoDate)")
-        //let datePredicate = NSPredicate(format: "oneOnEpsilonTimeStamp > %@", latestVideoDate! as NSDate)
-        let pred = NSPredicate(format: "contentVersionNumber <= %@", version as NSNumber)
+    class func readVideoDataFromCloud(){//withVersion version: Int64){
+        let pred = NSPredicate(format: "modificationDate > %@", latestVideoDate! as NSDate)
         let query = CKQuery(recordType: "Video", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
@@ -361,7 +321,7 @@ class EpsilonStreamBackgroundFetch{
     class func populate(withVideoRecord record: CKRecord){
         print("Video - RECORD FETCHED BLOCK -- \(videoNum)")
         videoNum = videoNum + 1 //QQQQ handle cursurs???
-        print("Got Video with timestamp: \(record["oneOnEpsilonTimeStamp"] as! Date)")
+        print("Got Video with timestamp: \(record["modificationDate"] as! Date)")
         createDBVideo(fromDataSource: record)
     }
     
@@ -384,8 +344,8 @@ class EpsilonStreamBackgroundFetch{
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
-    class func readMathObjectsFromCloud(withVersion version: Int64){
-        let pred = NSPredicate(format: "contentVersionNumber <= %@", version as NSNumber)
+    class func readMathObjectsFromCloud(){
+        let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectDate! as NSDate)
         let query = CKQuery(recordType: "MathObject", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
@@ -395,15 +355,15 @@ class EpsilonStreamBackgroundFetch{
         operation.recordFetchedBlock = { record in
             print("MathObject - RECORD FETCHED BLOCK -- \(num)")
             num = num + 1 //QQQQ handle cursurs???
+            //print(record.recordChangeTag)
+            print(record.modificationDate)
             
             createDBMathObject(fromDataSource: record)
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
-            //print("readMathObjectsDataFromCloud OPERATION COMPLETE BLOCK")
             DispatchQueue.main.async{
                 if error == nil{
-                    EpsilonStreamDataModel.setUpAutoCompleteLists()
                 }
                 else{
                     print("\(error!.localizedDescription)")
@@ -412,10 +372,6 @@ class EpsilonStreamBackgroundFetch{
         }
         
         operation.completionBlock = {
-            //print("readMathObjectsDataFromCloud COMPLETION BLOCK")
-//            DispatchQueue.main.async {
-//                EpsilonStreamDataModel.setLatestDates() //QQQQ not clear if best here --
-//            }
             finishedMathObjects = true
             onFinish() //QQQQ should this be in a mutex?
         }
@@ -423,8 +379,8 @@ class EpsilonStreamBackgroundFetch{
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
-    class func readFeaturedURLsFromCloud(withVersion version: Int64){
-        let pred = NSPredicate(format: "contentVersionNumber <= %@", version as NSNumber)
+    class func readFeaturedURLsFromCloud(){
+        let pred = NSPredicate(format: "modificationDate > %@", latestFeatureDate! as NSDate)
         let query = CKQuery(recordType: "FeaturedURL", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
@@ -455,6 +411,64 @@ class EpsilonStreamBackgroundFetch{
 //            }
             finishedFeaturedURLs = true
             onFinish() //QQQQ should this be in a mutex?
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
+    
+    class func readImageListFromCloud(withKeys keyArray: [String]){
+        var arr:[Any] = []
+        for i in 0..<keyArray.count{
+            arr.append(keyArray[i])
+        }
+        let pred = NSPredicate(format: "keyName IN %@",  arr )
+        let query = CKQuery(recordType: "ImageThumbNail", predicate: pred)
+
+        print("SENDING PREDICATE TO CLOUD FOR IMAGES: \(pred)")
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = keyArray.count
+        
+        operation.recordFetchedBlock = { record in
+            let obtainedKey = record["keyName"] as! String
+            print("GOT IMAGE: ----- \(obtainedKey)")
+            ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            if error == nil{
+            }else{
+                print("\(error!.localizedDescription)")
+            }
+        }
+        
+        operation.completionBlock = {
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+
+    
+    class func readImageFromCloud(withKey key: String){
+        let pred = NSPredicate(format: "keyName == %@", key)
+        let query = CKQuery(recordType: "ImageThumbNail", predicate: pred)
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = 1
+        
+        operation.recordFetchedBlock = { record in
+                ImageManager.storeImage(fromRecord: record, withKey: key)
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            if error == nil{
+            }else{
+                print("\(error!.localizedDescription)")
+            }
+        }
+        
+        operation.completionBlock = {
         }
         
         CKContainer.default().publicCloudDatabase.add(operation)

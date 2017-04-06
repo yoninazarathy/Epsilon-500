@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import CloudKit
 
-class SettingsTableViewController: UITableViewController {
-    @IBAction func settingsSwitchChange(_ sender: UISwitch) {
+class AdminSettingsViewController: UIViewController {
+    
+    @IBAction func leaveAdminModeAction(_ sender: UIButton) {
         if allowsAdminMode{
-            (UIApplication.shared.delegate as! AppDelegate).setInAdminMode(sender.isOn)
+            (UIApplication.shared.delegate as! AppDelegate).setInAdminMode(false)
             let alert = UIAlertController(title: "One on Epsilon Development", message: "You are \(isInAdminMode ? "entering" : "leaving") manage mode", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
                 if isInAdminMode{
@@ -23,21 +25,78 @@ class SettingsTableViewController: UITableViewController {
             self.present(alert, animated: true, completion: nil)
         }
     }
-    //QQQQ this is bad as it is linked to a reusable cell
-    @IBOutlet weak var settingsSwitch: UISwitch!
-    
-    //QQQQ this is bad as it is linked to a reusable cell
-    @IBAction func buttonCellClick(_ sender: UIButton) {
-        print("click...")
+
+    @IBAction func reloadFromCloudAction(_ sender: UIButton) {
+        EpsilonStreamBackgroundFetch.runUpdate()
     }
+    
+    @IBAction func deleteLocalInfoAction(_ sender: Any) {
+        EpsilonStreamDataModel.deleteAllEntities(withName: "VersionInfo")
+        EpsilonStreamDataModel.deleteAllEntities(withName: "Video")
+        EpsilonStreamDataModel.deleteAllEntities(withName: "MathObject")
+        EpsilonStreamDataModel.deleteAllEntities(withName: "FeaturedURL")
+        EpsilonStreamDataModel.deleteAllEntities(withName: "Channel")
+        EpsilonStreamDataModel.deleteAllEntities(withName: "ImageThumbnail")
+        
+        ImageManager.deleteAllImageFiles()
+        
+        refreshDataView()
+    }
+    
+    @IBAction func pushToCloudAction(_ sender: UIButton) {
+        
+        print("no action at this moment")
+        
+       // EpsilonStreamAdminModel.storeAllImages()
+        
+     }
+
+    @IBOutlet var versionNumberLabel: UILabel!
+    @IBOutlet var numberMathObjectLabel: UILabel!
+    @IBOutlet var numberVideosLabel: UILabel!
+    @IBOutlet var numberFeaturesLabel: UILabel!
+    
+    @IBOutlet var numImagesFilesLabel: UILabel!
+    
+    @IBOutlet var textViewOutlet: UITextView!
+    
+
+    func refreshDataView(){
+        versionNumberLabel.text = "version: \(EpsilonStreamDataModel.latestVersion())"
+        numberMathObjectLabel.text = "numMathObjects \(EpsilonStreamDataModel.numMathObjects()) "
+        numberVideosLabel.text = "numVideos: \(EpsilonStreamDataModel.numVideos())"
+        numberFeaturesLabel.text = "numFeatures: \(EpsilonStreamDataModel.numFeaturedURLs())"
+        numImagesFilesLabel.text = "numImages: CoreData = \(ImageManager.numImagesInCoreData()), File = \(ImageManager.numImagesOnFile())"
+    }
+
+    var isInScreen = true
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        isInScreen = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("view did appear")
+        refreshDataView()
+        
+        isInScreen = true
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            while(self.isInScreen){
+                DispatchQueue.main.sync {
+                    //print("refresh view")
+                    self.refreshDataView()
+                }
+                sleep(1)
+            }
+        }
+
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if allowsAdminMode{
-            settingsSwitch.isOn = isInAdminMode
-        }
-        
-        
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -53,32 +112,6 @@ class SettingsTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 2
-    }
-
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell! = nil
-        switch indexPath.row{
-        case 0:
-            cell = tableView.dequeueReusableCell(withIdentifier: "settingsCellSwitch", for: indexPath)
-            
-        case 1:
-            cell = tableView.dequeueReusableCell(withIdentifier: "settingsCellButton", for: indexPath)
-        case 2:
-            cell = tableView.dequeueReusableCell(withIdentifier: "settingsCellSwitch", for: indexPath)
-        default:
-            break
-        }
-        return cell
-    }
     
 
     /*

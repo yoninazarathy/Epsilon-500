@@ -333,7 +333,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         /////////////////////////
         /////////////////////////
         case SearchResultItemType.iosApp:
-            jumpToSquareRootMarbles() //QQQQ
+            jumpToIosApp(withCode: (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId) //QQQQ
         /////////////////////////
         /////////////////////////
         case SearchResultItemType.gameWebPage:
@@ -343,13 +343,6 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         case SearchResultItemType.blogWebPage:
             jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url)
         }
-//        }else{ //section 1
-//            if indexPath.row == 0{
-//                jumpToSquareRootMarbles()
-//            }else{
-//                jumpToBlogEntry(withURLstring: "http://www.oneonepsilon.com/single-post/2016/11/02/Two-Plus-Two-Equals-Two-Times-Two")
-//            }
-//        }
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -446,11 +439,13 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
-    func jumpToSquareRootMarbles() {
+    func jumpToIosApp(withCode code:String) {
         let storeViewController = SKStoreProductViewController()
         storeViewController.delegate = self
         
-        let parameters = [SKStoreProductParameterITunesItemIdentifier : NSNumber(value: 1156046711)]
+        //let codeAsInt = Int(code)
+        //let codeAsNSNumber = NSNumber(value:codeAsInt)
+        let parameters = [SKStoreProductParameterITunesItemIdentifier : NSNumber(value: Int(code)!)]
         
         storeViewController.loadProduct(withParameters: parameters)
             {result, error in

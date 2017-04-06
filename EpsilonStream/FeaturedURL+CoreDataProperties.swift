@@ -23,11 +23,10 @@ extension FeaturedURL {
     @NSManaged public var urlOfItem: String
     @NSManaged public var hashTags: String
     @NSManaged public var imageURL: String
-    @NSManaged public var imageURLlocal: String?
+    @NSManaged public var imageKey: String?
     @NSManaged public var ourTitle: String
     @NSManaged public var ourDescription: String
     @NSManaged public var ourFeaturedURLHashtag: String
+    @NSManaged public var provider: String
     
-    @NSManaged public var bufferIndex: Int64
-
 }

@@ -14,10 +14,15 @@ let allowsAdminMode = true
 //general flag indicating if in admin mode or not
 var isInAdminMode = true
 
+var infoReadyToGo = false
+
+//When false then db is still not updated and searching can't be used
+var dbReadyToGo = false
+
 //For putting a contentVersionNumber when submitting a video entry
 var tempCurrentVersionForSubmit = 1
 
-var currentDBBuffer: Int = 0 //either 0 or 1 indicating which buffer is used
+//var currentDBBuffer: Int = 0 //either 0 or 1 indicating which buffer is used
 
 let float4Picker: [Float] = [0.0, 0.3, 0.6, 1.0]
 let floatToIndex4: [Float: Int] = [0.0:0, 0.3:1, 0.6:2, 1.0:3]
@@ -27,10 +32,10 @@ let floatToIndex3: [Float:Int] = [0.0:0, 0.5:1, 1.0:2]
 
 var runningCloudRetrieve = true
 
-var sleepTimeCloudRetrieve: UInt32 = 30
+var sleepTimeCloudRetrieve: UInt32 = 5
 var sleepTimeCheckForUpdates: UInt32 = 1
 
-var sleepTimeImageRetrieve: UInt32 = 5 //QQQQ currently not used 
+var sleepTimeImageRetrieve: UInt32 = 120 //QQQQ currently not used
 
 let maxVideosToShow = 5
 let maxAppsToShow = 1

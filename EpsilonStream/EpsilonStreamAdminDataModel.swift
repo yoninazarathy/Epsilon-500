@@ -28,9 +28,10 @@ class EpsilonStreamAdminModel{
     class func submitVideo(){
         let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
-        EpsilonStreamDataModel.saveViewContext()
+        //EpsilonStreamDataModel.saveViewContext()
         
         let video = CKRecord(recordType: "Video")
+        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
         video["oneOnEpsilonTimeStamp"] = EpsilonStreamAdminModel.currentVideo.oneOnEpsilonTimeStamp as CKRecordValue
         video["age8Rating"] = EpsilonStreamAdminModel.currentVideo.age8Rating as CKRecordValue
         video["age10Rating"] = EpsilonStreamAdminModel.currentVideo.age10Rating as CKRecordValue
@@ -58,7 +59,8 @@ class EpsilonStreamAdminModel{
             //QQQQ no idea - why url is not working - as a workaround reconstructing path here...
             
             
-            video["imagePic"] = CKAsset(fileURL: url2)//QQQQ
+            video["imagePic"] = nil //CKAsset(fileURL: url2)//QQQQ
+            //QQQQ submit it as ImageThumbNail 
         }else{
             video["imagePic"] = nil
             print("No local URL for image - will try to cloud it without")
@@ -79,6 +81,7 @@ class EpsilonStreamAdminModel{
         EpsilonStreamDataModel.saveViewContext()
         
         let mathObject = CKRecord(recordType: "MathObject")
+        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
         mathObject["oneOnEpsilonTimeStamp"] = EpsilonStreamAdminModel.currentMathObject.oneOnEpsilonTimeStamp as CKRecordValue
         mathObject["hashTag"] = EpsilonStreamAdminModel.currentMathObject.hashTag as CKRecordValue
         mathObject["associatedTitles"] = EpsilonStreamAdminModel.currentMathObject.associatedTitles as CKRecordValue
@@ -93,6 +96,7 @@ class EpsilonStreamAdminModel{
         EpsilonStreamDataModel.saveViewContext()
         
         let featuredURL = CKRecord(recordType: "FeaturedURL")
+        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
         featuredURL["oneOnEpsilonTimeStamp"] = EpsilonStreamAdminModel.currentFeature.oneOnEpsilonTimeStamp as CKRecordValue
         featuredURL["isAppStoreApp"] = EpsilonStreamAdminModel.currentFeature.isAppStoreApp as CKRecordValue
         featuredURL["urlOfItem"] = EpsilonStreamAdminModel.currentFeature.urlOfItem as CKRecordValue
@@ -101,6 +105,7 @@ class EpsilonStreamAdminModel{
         featuredURL["ourTitle"] = EpsilonStreamAdminModel.currentFeature.ourTitle as CKRecordValue
         featuredURL["ourDescription"] = EpsilonStreamAdminModel.currentFeature.ourDescription as CKRecordValue
         featuredURL["ourFeaturedURLHashtag"] = EpsilonStreamAdminModel.currentFeature.ourFeaturedURLHashtag as CKRecordValue
+        featuredURL["provider"] = EpsilonStreamAdminModel.currentFeature.provider as CKRecordValue
         
         
         //QQQQ do a spinner thing with a dirty .... etc..
@@ -296,21 +301,19 @@ class EpsilonStreamAdminModel{
         newFeaturedURL.urlOfItem = "URL OF ITEM - FILL IN"
         newFeaturedURL.hashTags = "#needsTag"
         newFeaturedURL.imageURL = "URL OF IMAGE - fill in"
-        newFeaturedURL.imageURLlocal = nil
+        newFeaturedURL.imageKey = nil
         newFeaturedURL.ourFeaturedURLHashtag = "#ourFeaturedURLHashtag"
         newFeaturedURL.ourTitle = "EMPTY TITLE"
         newFeaturedURL.ourDescription = "OUR DESCRIPTION - FILL IN"
-        newFeaturedURL.bufferIndex = 0
+        newFeaturedURL.provider = "PROVIDER - FILL IN"
     }
     
     class func makeNewMathObject(_ context: NSManagedObjectContext){
         let newMathObject = MathObject(context: context)
         
-        // If appropriate, configure the new managed object.
         newMathObject.oneOnEpsilonTimeStamp = Date()
         newMathObject.associatedTitles = "ASSOCIATED TITLES - FILL IN"
         newMathObject.hashTag = "#NEW-MATH-OBJECT"
-        newMathObject.bufferIndex = 0
     }
     
     class func makeNewVideo(_ context: NSManagedObjectContext){
@@ -334,8 +337,6 @@ class EpsilonStreamAdminModel{
         newVideo.youtubeVideoId = "NO-YOUTUBE-ID-YET"
         newVideo.hashTags = "#needsTag"
         newVideo.oneOnEpsilonTimeStamp = Date()
-        
-        newVideo.bufferIndex = 0
     }
     
     /////////////////////////////
@@ -343,11 +344,9 @@ class EpsilonStreamAdminModel{
     /////////////////////////////
     
     class func setCurrentVideo(withVideo videoId: String){
-        let videoRequest = Video.createFetchRequest()
-        
         let request = Video.createFetchRequest()
         request.predicate = NSPredicate(format: "youtubeVideoId == %@", videoId)
-       
+
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         
         do{
@@ -359,7 +358,87 @@ class EpsilonStreamAdminModel{
         }catch{
             print("Fetch failed")
         }
-
     }
+    
+    /////////////////////////////
+    // Mass Store to DB
+    /////////////////////////////
+
+    class func storeAllVideos(){
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = Video.createFetchRequest()
+        request.predicate = NSPredicate(format:"TRUEPREDICATE")
+        do{
+            let videos = try container.viewContext.fetch(request)
+            for v in videos{
+                EpsilonStreamAdminModel.currentVideo = v
+                EpsilonStreamAdminModel.submitVideo()
+            }
+
+        }catch{
+            print("Fetch failed")
+        }
+    }
+    
+    class func storeAllMathObjects(){
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = MathObject.createFetchRequest()
+        request.predicate = NSPredicate(format:"TRUEPREDICATE")
+        do{
+            let mathObjects = try container.viewContext.fetch(request)
+            for mo in mathObjects{
+                EpsilonStreamAdminModel.currentMathObject = mo
+                EpsilonStreamAdminModel.submitMathObject()
+            }
+            
+        }catch{
+            print("Fetch failed")
+        }
+    }
+
+    class func storeAllImages(){
+        //The code below was used to push all the images stored on file to the cloud
+        print("PUSHING IMAGES TO CLOUD")
+        let fd = FileManager.default
+        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
+        
+        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
+            let url = e as! URL
+            let record = CKRecord(recordType: "ImageThumbNail")
+            let asset = CKAsset(fileURL: url)
+            record["imagePic"] = asset
+            record["keyName"] = url.lastPathComponent.replacingOccurrences(of: ".png", with: "") as CKRecordValue
+            
+            CKContainer.default().publicCloudDatabase.save(record){
+                record, error in
+                DispatchQueue.main.async{
+                    if let error = error{
+                        print("error on publicCloudDataBase.save: \(error.localizedDescription)")
+                    }else{
+                        print("image Record Saved on public cloud")
+                    }
+                }
+            }
+        })
+    }
+
+    class func storeAllFeatures(){
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = FeaturedURL.createFetchRequest()
+        request.predicate = NSPredicate(format:"TRUEPREDICATE")
+        do{
+            let features = try container.viewContext.fetch(request)
+            for f in features{
+                EpsilonStreamAdminModel.currentFeature = f
+                EpsilonStreamAdminModel.submitFeaturedURL()
+            }
+            
+        }catch{
+            print("Fetch failed")
+        }
+    }
+
+    
     
 }

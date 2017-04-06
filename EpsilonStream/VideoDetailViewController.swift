@@ -146,7 +146,8 @@ class VideoDetailViewController: DetailViewController, YouTubePlayerDelegate, UI
             EpsilonStreamAdminModel.currentVideo.imageURL = url
         }
         if let image = imageOfSelectedIndex{
-            EpsilonStreamAdminModel.currentVideo.imageURLlocal = ImageManager.store(image, withKey: EpsilonStreamAdminModel.currentVideo.youtubeVideoId)
+            EpsilonStreamAdminModel.currentVideo.imageURLlocal = "" //QQQQ
+            ImageManager.store(image, withKey: EpsilonStreamAdminModel.currentVideo.youtubeVideoId)
         }
         
         EpsilonStreamAdminModel.submitVideo()

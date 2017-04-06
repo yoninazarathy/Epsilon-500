@@ -27,7 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func loadClient(){
         let sb = UIStoryboard(name: "EpsilonClient", bundle: nil)
-        let vc = sb.instantiateViewController(withIdentifier: "epsilonStreamClientNav")
+        
+        let vc = sb.instantiateViewController(withIdentifier: "clientNavViewController")
         vc.view.frame = UIScreen.main.bounds
         UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve, animations: {self.window!.rootViewController = vc}, completion: nil)
     }
@@ -35,10 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func setGlobalsFromUserDefaults(){
         let bm = UserDefaults.standard.bool(forKey: "inAdmin")
         isInAdminMode = bm
-        
-        //returns 0 if the value is absent
-        let cdb = UserDefaults.standard.integer(forKey: "currentDBBuffer")
-        currentDBBuffer = cdb
     }
     
     func setInAdminMode(_ isAdmin: Bool){
@@ -46,17 +43,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         UserDefaults.standard.set(isInAdminMode, forKey: "inAdmin")
     }
     
-    func flipCurrentDBBuffer(){
-        currentDBBuffer = 1 - currentDBBuffer
-        UserDefaults.standard.set(currentDBBuffer, forKey: "currentDBBuffer")
-    }
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         FIRApp.configure()
 
         setGlobalsFromUserDefaults()
-        EpsilonStreamDataModel.setUpAutoCompleteLists()
+        
         
         if allowsAdminMode && isInAdminMode{
             loadAdmin()
@@ -97,46 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         EpsilonStreamDataModel.setLatestDates()
         
-        ImageManager.setup()
-        
-        DispatchQueue.global(qos: .background).async{
-//            var count = 0
-            while true{
-                if runningCloudRetrieve{
-                    EpsilonStreamBackgroundFetch.pullEpsilonStreamInfo()
-//                    switch count%4{
-//                        case 0:
-//                        EpsilonStreamBackgroundFetch.readVideoMetaDataFromCloud()
-//
-//                        case 1:
-//                        EpsilonStreamBackgroundFetch.readMathObjectsFromCloud()
-//
-//                        case 2:
-//                        EpsilonStreamBackgroundFetch.readFeaturedURLsFromCloud()
-//                        
-//                        case 3:
-//                        EpsilonStreamBackgroundFetch.readFeaturedURLsFromCloud()
-//                        
-//                        default:
-//                        break
-//                    }
-//                    count = count + 1
-                }
-                sleep(sleepTimeCloudRetrieve)
-            }
-        }
-        
-        DispatchQueue.global(qos: .background).async{
-            //            var count = 0
-            while true{
-                if runningCloudRetrieve{
-                    EpsilonStreamBackgroundFetch.checkForUpdates()
-                }
-                sleep(sleepTimeCheckForUpdates)
-            }
-        }
-
-        
+        ImageManager.setup()        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

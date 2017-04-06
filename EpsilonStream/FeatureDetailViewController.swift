@@ -44,7 +44,7 @@ class FeatureDetailViewController: DetailViewController, UITextViewDelegate, UIT
         EpsilonStreamAdminModel.currentFeature.urlOfItem = urlTextField.text!
         EpsilonStreamAdminModel.currentFeature.hashTags = ourTitleHashTags.text!
         EpsilonStreamAdminModel.currentFeature.imageURL = imageURLTextField.text!
-        EpsilonStreamAdminModel.currentFeature.imageURLlocal = nil //QQQQ
+        EpsilonStreamAdminModel.currentFeature.imageKey = nil //QQQQ
         EpsilonStreamAdminModel.currentFeature.ourTitle = ourTitleHashTags.text! //QQQQ
         EpsilonStreamAdminModel.currentFeature.ourDescription = ourDescriptionTextView.text!
         EpsilonStreamAdminModel.currentFeature.ourFeaturedURLHashtag = ourFeaturedURLHashTag.text!
