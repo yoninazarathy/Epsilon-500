@@ -18,19 +18,71 @@ class EpsilonStreamDataModel{
         
     //QQQQ these are currently just updated on boot
     static var hashTagAutoCompleteList: Array<String> = []
+    static var hashTagListSortedByTotalContent: Array<String> = []
     static var titleAutoCompleteList: Array<[String]> = []
     static var channelAutoCompleteList: Array<String> = []
+    
+    static var hashTagOfTitle = [String:String]()
+    static var fullTitles: Array<String> = []
+    static var rawTitleOfHashTag = [String:String]()
+    
+    static var videosOfHashTag = [String:Array<String>]()
+    static var articlesOfHashTag = [String:Array<String>]()
+    static var gamesOfHashTag = [String:Array<String>]()
+    
+     static var curatorOfHashTag = [String:String]()
+     static var reviewerOfHashTag = [String:String]()
+    
+    
+    static var searchStack: [EpsilonStreamSearch] = []
+    static var searchStackIndex = 0
     
     ///////////////////////////////////////////////////
     // Searching and autocomplete
     ///////////////////////////////////////////////////
     
+    class func printMathObjects(){
+        let request = MathObject.createFetchRequest()
+        let sort = NSSortDescriptor(key: "hashTag", ascending: true)
+        request.sortDescriptors = [sort]
+        
+        do{
+            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+            let mathObjects = try container.viewContext.fetch(request)
+            
+            var i = 1
+            for mo in mathObjects{
+                print("\(i)\t\(mo.hashTag): \(mo.associatedTitles), \(mo.curator) - \(mo.reviewer)")
+                i = i + 1
+            }
+        }catch{
+            print("Fetch failed")
+        }
+    
+    }
+    
+    
+    
+    //QQQQ rename to "set-local memory"
     class func setUpAutoCompleteLists(){
         //QQQQ can improve implementation...
         
         hashTagAutoCompleteList = []
         titleAutoCompleteList = []
         channelAutoCompleteList = []
+        
+        hashTagOfTitle = [:]
+        fullTitles = []
+        rawTitleOfHashTag = [:]
+        
+        videosOfHashTag = [:]
+        articlesOfHashTag = [:]
+        gamesOfHashTag = [:]
+        
+        curatorOfHashTag = [:]
+        reviewerOfHashTag = [:]
+        
+        hashTagListSortedByTotalContent = []
         
         let request = MathObject.createFetchRequest()
         let sort = NSSortDescriptor(key: "hashTag", ascending: true)
@@ -42,6 +94,17 @@ class EpsilonStreamDataModel{
             
             for mo in mathObjects{
                 EpsilonStreamDataModel.hashTagAutoCompleteList.append(mo.hashTag) //QQQQ not lowercased ?
+                
+                rawTitleOfHashTag[mo.hashTag] = mo.associatedTitles
+                
+                videosOfHashTag[mo.hashTag] = videos(ofHashTag: mo.hashTag)
+                articlesOfHashTag[mo.hashTag] = articles(ofHashTag: mo.hashTag)
+                gamesOfHashTag[mo.hashTag] = games(ofHashTag: mo.hashTag)
+
+                curatorOfHashTag[mo.hashTag] = mo.curator
+                reviewerOfHashTag[mo.hashTag] = mo.reviewer
+
+                
                 let titleGroups = mo.associatedTitles.components(separatedBy: "~")
                 for grp in titleGroups{
                     let titles = grp.components(separatedBy: ",")
@@ -59,6 +122,8 @@ class EpsilonStreamDataModel{
                             }else{
                                 //print(stripTit)
                                 titleGroup.append(stripTit)
+                                hashTagOfTitle[stripTit] = mo.hashTag
+                                fullTitles.append(stripTit)
                             }
                         }
                     }
@@ -74,6 +139,13 @@ class EpsilonStreamDataModel{
             print("Fetch failed")
         }
         
+        
+        /////////////////
+        /////////////////
+        /////////////////
+        
+        //QQQQ
+        hashTagListSortedByTotalContent = hashTagAutoCompleteList
     }
     
     /// Returns an array of strings that starts with the provided text
@@ -115,6 +187,82 @@ class EpsilonStreamDataModel{
         return titleAutoCompleteList[index][0]
     }
 
+    class func videos(ofHashTag hashTag: String) -> [String]{
+        let request = Video.createFetchRequest()
+        let pred = NSPredicate(format: "hashTags CONTAINS[cd] %@", hashTag)
+        request.predicate = pred
+        
+        var videoStrings:[String]=[]
+        
+        do{
+            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+            
+            let videos = try container.viewContext.fetch(request)
+            
+            for vid in videos{
+                videoStrings.append(vid.youtubeVideoId)
+            }
+            
+        }catch{
+            print("Fetch failed")
+        }
+
+        return videoStrings
+    }
+    
+    
+    class func articles(ofHashTag hashTag: String) -> [String]{
+        let request = FeaturedURL.createFetchRequest()
+        let pred = NSPredicate(format: "hashTags CONTAINS[cd] %@", hashTag)
+        request.predicate = pred
+        
+        var articleStrings:[String]=[]
+        
+        do{
+            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+            
+            let featuredURLs = try container.viewContext.fetch(request)
+            
+            for fu in featuredURLs{
+                if fu.typeOfFeature == "article"{
+                    articleStrings.append(fu.ourFeaturedURLHashtag)
+                }
+            }
+            
+        }catch{
+            print("Fetch failed")
+        }
+        
+        return articleStrings
+    }
+    
+    
+    class func games(ofHashTag hashTag: String) -> [String]{
+        let request = FeaturedURL.createFetchRequest()
+        let pred = NSPredicate(format: "hashTags CONTAINS[cd] %@", hashTag)
+        request.predicate = pred
+        
+        var gameStrings:[String]=[]
+        
+        do{
+            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+            
+            let featuredURLs = try container.viewContext.fetch(request)
+            
+            for fu in featuredURLs{
+                if fu.isAppStoreApp == true{
+                    gameStrings.append(fu.ourFeaturedURLHashtag)
+                }
+            }
+            
+        }catch{
+            print("Fetch failed")
+        }
+        
+        return gameStrings
+    }
+    
+    
     class func search(withQuery query: EpsilonStreamSearch) -> [SearchResultItem]{
         var videoSearchResult: [SearchResultItem] = []
         
@@ -131,7 +279,7 @@ class EpsilonStreamDataModel{
         
         if hts.count == 0{
             if query.searchString == ""{ //QQQQ allow spaces etc...
-                predicateOther = NSPredicate(format: "isAwesome == %@", NSNumber(booleanLiteral: true))
+                predicateOther = NSPredicate(value: false)//NSPredicate(format: "isAwesome == %@", NSNumber(booleanLiteral: true))
             }else{
                 predicateOther = NSPredicate(value: false)
             }
@@ -147,7 +295,7 @@ class EpsilonStreamDataModel{
         
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, predicateOther])
         
-        if query.searchString == "#allall"{
+        if query.searchString == ".all"{
             request.predicate = NSPredicate(format: "TRUEPREDICATE")
         }
         
@@ -206,15 +354,33 @@ class EpsilonStreamDataModel{
 
                     item.type = SearchResultItemType.iosApp
                     appSearchResult.append(item)
+                    
+                    //QQQQ assert here type is game and not article
+                    
                 }else{
-                    //QQQQ the third option is GameWebPageSearchResultItem
-                    let item = BlogWebPageSearchResultItem()
-                    item.url = feature.urlOfItem
-                    item.title = feature.ourTitle
-                    item.channel = feature.provider
-                    item.image = ImageManager.getImage(forKey: feature.imageKey!)
-                    item.type = SearchResultItemType.blogWebPage
-                    blogSearchResult.append(item)
+                    if feature.typeOfFeature == "game"{
+                        //This is a game on a web-page
+                        let item = GameWebPageSearchResultItem()
+                        item.url = feature.urlOfItem
+                        item.title = feature.ourTitle
+                        item.channel = feature.provider
+                        item.image = ImageManager.getImage(forKey: feature.imageKey!)
+                        item.type = SearchResultItemType.gameWebPage
+                        blogSearchResult.append(item)
+                        //QQQQ continue here
+                    }else{ //is article
+                        //QQQQ the third option is GameWebPageSearchResultItem
+                        let item = BlogWebPageSearchResultItem()
+                        item.url = feature.urlOfItem
+                        item.title = feature.ourTitle
+                        item.channel = feature.provider
+                        item.image = ImageManager.getImage(forKey: feature.imageKey!)
+                        item.type = SearchResultItemType.blogWebPage
+                        blogSearchResult.append(item)
+                        
+                        //QQQQ assert here type is article
+
+                    }
                 }
             }
         }catch{
@@ -327,6 +493,8 @@ class EpsilonStreamDataModel{
     }
     
      class func setLatestDates(){
+        //////////////////////
+        //////////////////////
         let request = Video.createFetchRequest()
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         request.fetchLimit = 1
@@ -347,6 +515,9 @@ class EpsilonStreamDataModel{
         }catch{
             print("Fetch failed")
         }
+        
+        //////////////////////
+        //////////////////////
         let request2 = MathObject.createFetchRequest()
         request2.fetchLimit = 1
         request2.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
@@ -363,6 +534,9 @@ class EpsilonStreamDataModel{
         }catch{
             print("Fetch failed")
         }
+        
+        //////////////////////
+        //////////////////////
         let request3 = FeaturedURL.createFetchRequest()
         request3.fetchLimit = 1
         request3.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
@@ -379,18 +553,21 @@ class EpsilonStreamDataModel{
         }catch{
             print("Fetch failed")
         }
-        let request4 = Channel.createFetchRequest()
+        
+        //////////////////////
+        //////////////////////
+        let request4 = ImageThumbnail.createFetchRequest()
         request4.fetchLimit = 1
         request4.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let channels = try container.viewContext.fetch(request4)
+            let imageThumbNails = try container.viewContext.fetch(request4)
             
-            if channels.count == 0{
-                latestChannelDate = Date(timeIntervalSince1970: 0.0)
-                print("found no channels - setting channel date to 1970")
+            if imageThumbNails.count == 0{
+                latestImageDate = Date(timeIntervalSince1970: 0.0)
+                print("found no images - setting image date to 1970")
             }else{
-                latestChannelDate = channels[0].oneOnEpsilonTimeStamp
+                latestImageDate = imageThumbNails[0].oneOnEpsilonTimeStamp
             }
         }catch{
             print("Fetch failed")

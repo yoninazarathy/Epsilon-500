@@ -44,6 +44,12 @@ class ClientSettingsViewController: UIViewController {
     @IBAction func feedbackAction(_ sender: Any) {
         jumpToWebPage(withURLstring: "https://www.oneonepsilon.com/contact")
     }
+    @IBAction func termListAction(_ sender: Any) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "termListViewController") as? TermListViewController{
+            navigationController?.pushViewController(vc, animated: true)
+        }
+
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

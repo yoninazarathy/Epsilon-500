@@ -37,13 +37,13 @@ var sleepTimeCheckForUpdates: UInt32 = 1
 
 var sleepTimeImageRetrieve: UInt32 = 120 //QQQQ currently not used
 
-let maxVideosToShow = 5
-let maxAppsToShow = 1
-let maxBlogsToShow = 2
+let maxVideosToShow = 10000
+let maxAppsToShow = 10000
+let maxBlogsToShow = 10000
 
 var queryOperationResultLimit = 500
 
+var latestImageDate: Date? = nil
 var latestVideoDate: Date? = nil
 var latestMathObjectDate: Date? = nil
 var latestFeatureDate: Date? = nil
-var latestChannelDate: Date? = nil

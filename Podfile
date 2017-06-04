@@ -7,4 +7,5 @@ target 'EpsilonStream' do
     pod 'YouTubePlayer'
     pod 'SwiftyJSON'
     pod 'Firebase/Core'
+    pod 'Toucan'
 end

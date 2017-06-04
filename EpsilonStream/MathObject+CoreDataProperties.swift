@@ -20,4 +20,8 @@ extension MathObject {
     
     @NSManaged public var hashTag: String
     @NSManaged public var associatedTitles: String
+    
+    @NSManaged public var curator: String
+    @NSManaged public var reviewer: String
+
 }

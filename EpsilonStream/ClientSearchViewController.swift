@@ -14,12 +14,17 @@ import YouTubePlayer
 import Firebase
 import Social
 
+//QQQQ see if time efficient
+import Toucan
+
 protocol SearcherUI {
     func refreshSearch()
 }
 
 
 class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate, SKStoreProductViewControllerDelegate, YouTubePlayerDelegate, SearcherUI{
+    
+    
     
     @IBAction func supriseButtonAction(_ sender: UIButton) {
         let newText = EpsilonStreamDataModel.surpriseText()
@@ -116,6 +121,27 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         autoCompleteTable.isHidden = true
         
         EpsilonStreamBackgroundFetch.searcherUI = self
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+        self.view.addGestureRecognizer(swipeLeft)
+    }
+    
+    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.right:
+                print("Swiped right")
+            case UISwipeGestureRecognizerDirection.left:
+                print("Swiped left")
+            default:
+                break
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,10 +177,31 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         default:
             break//QQQQ
         }
-        currentSearch.setAgeWeights(basedOn: ageSegmentedControl.selectedSegmentIndex*2 + 8)
-            
+        
+        switch ageSegmentedControl.selectedSegmentIndex{
+        case 0:
+            currentSearch.setAgeWeights(basedOn: 8)
+        case 1:
+            currentSearch.setAgeWeights(basedOn: 12)
+        case 2:
+            currentSearch.setAgeWeights(basedOn: 16)
+        default:
+            break//QQQQ
+        }
+
+        //if at top of stack
+        //QQQQ implement this - but it requires care to choose what is a search and what isn't
+      //  if EpsilonStreamDataModel.searchStackIndex == EpsilonStreamDataModel.searchStack.count{
+      //      EpsilonStreamDataModel.searchStack.append(currentSearch)
+      //      EpsilonStreamDataModel.searchStackIndex += 1
+      //  }else{
+      //      EpsilonStreamDataModel.searchStack[EpsilonStreamDataModel.searchStackIndex] = currentSearch
+      //      EpsilonStreamDataModel.searchStack.removeSubrange(EpsilonStreamDataModel.searchStackIndex+1..<EpsilonStreamDataModel.searchStack.count)
+       // }
+        
         searchResultItems = EpsilonStreamDataModel.search(withQuery: currentSearch)
 
+        /*
         //loop on results for prefetching
         for it in searchResultItems{
             switch it.type{
@@ -184,6 +231,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             // playerBank.append(playerView)
         }
         
+        */
         
         resultsTable.reloadData()
     }
@@ -269,13 +317,17 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath)
             
             let title = cell.viewWithTag(2) as! UILabel
-            title.text = iosAppItem.title
+            title.text = "\(iosAppItem.title)   (App Store)"
             
             let org = cell.viewWithTag(3) as! UILabel
             org.text = iosAppItem.channel
             
             let im = cell.viewWithTag(1) as! UIImageView
-            im.image = iosAppItem.image
+  
+            var img = iosAppItem.image!
+            img = Toucan(image: img).resize(CGSize(width: 100, height: 100), fitMode: Toucan.Resize.FitMode.crop).image
+            img = Toucan(image: img).maskWithRoundedRect(cornerRadius: 30).image
+            im.image = img
             
             return cell
             
@@ -283,18 +335,22 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         /////////////////////////
         case SearchResultItemType.gameWebPage:
             //QQQQ this isn't implement well yet
-            let iosAppItem = searchResultItems[indexPath.row] as! IOsAppSearchResultItem
+            let iosAppItem = searchResultItems[indexPath.row] as! GameWebPageSearchResultItem
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath)
             
             let title = cell.viewWithTag(2) as! UILabel
-            title.text = iosAppItem.title
+            title.text = "\(iosAppItem.title)   (Web Page)"
             
             let org = cell.viewWithTag(3) as! UILabel
             org.text = iosAppItem.channel
             
             let im = cell.viewWithTag(1) as! UIImageView
-            im.image = iosAppItem.image
+            var img = iosAppItem.image!
+            img = Toucan(image: img).resize(CGSize(width: 100, height: 100), fitMode: Toucan.Resize.FitMode.crop).image
+            img = Toucan(image: img).maskWithRoundedRect(cornerRadius: 30).image
+            im.image = img
+
             
             return cell
             
@@ -312,7 +368,11 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             org.text = blogWebItem.channel
             
             let im = cell.viewWithTag(1) as! UIImageView
-            im.image = blogWebItem.image
+            var img = blogWebItem.image!
+            img = Toucan(image: img).resize(CGSize(width: 100, height: 100), fitMode: Toucan.Resize.FitMode.crop).image
+            img = Toucan(image: img).maskWithEllipse().image
+            im.image = img
+
             
             return cell
         }
@@ -435,7 +495,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 105 //QQQQ
+        return 100 //QQQQ
     }
     
     

@@ -47,7 +47,7 @@ class AdminSettingsViewController: UIViewController {
         
         print("no action at this moment")
         
-       // EpsilonStreamAdminModel.storeAllImages()
+       //EpsilonStreamAdminModel.storeAllImages()
         
      }
 

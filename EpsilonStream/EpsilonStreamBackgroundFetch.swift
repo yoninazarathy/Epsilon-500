@@ -112,6 +112,7 @@ class EpsilonStreamBackgroundFetch{
     static var finishedVideos = false
     static var finishedMathObjects = false
     static var finishedFeaturedURLs = false
+    static var finishedImages = false
     
     class func runUpdate(){//onBuffer buffer: Int, withVersion version: Int64){
         
@@ -124,6 +125,9 @@ class EpsilonStreamBackgroundFetch{
                 sleep(1)
                 print("waiting for infoReadyToGo")
             }
+            
+            finishedImages = false
+            readAllImagesFromCloud()
 
             finishedMathObjects = false
             readMathObjectsFromCloud()
@@ -137,7 +141,7 @@ class EpsilonStreamBackgroundFetch{
     }
     
     class func onFinish(){
-        dbReadyToGo = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects
+        dbReadyToGo = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedImages
         
         if dbReadyToGo{
             EpsilonStreamDataModel.setUpAutoCompleteLists()
@@ -180,7 +184,8 @@ class EpsilonStreamBackgroundFetch{
         
         newVideo.imageURL = cloudSource["imageURL"] as! String
         
-        ImageManager.pushImageToGet(withKey: videoID,newVideo.isAwesome )
+        //QQQQ not using it now
+        //ImageManager.pushImageToGet(withKey: videoID,newVideo.isAwesome )
     }
     
     
@@ -194,6 +199,18 @@ class EpsilonStreamBackgroundFetch{
         newMathObject.oneOnEpsilonTimeStamp = cloudSource["modificationDate"] as! Date
         newMathObject.hashTag = cloudSource["hashTag"] as! String
         newMathObject.associatedTitles = cloudSource["associatedTitles"] as! String
+        if let cr = cloudSource["curator"]{
+            newMathObject.curator = cr as! String;
+        }else{
+            newMathObject.curator = "None";
+        }
+        
+        if let rv = cloudSource["reviewer"]{
+            newMathObject.reviewer = rv as! String;
+        }else{
+            newMathObject.reviewer = "None";
+        }
+
     }
     
     class func createDBFeaturedURL(fromDataSource cloudSource: CKRecord){
@@ -273,6 +290,14 @@ class EpsilonStreamBackgroundFetch{
         
         if let provider = cloudSource["provider"] as? String{
             newFeaturedURL.provider = provider
+        }else{
+            //QQQQ report error
+            print("DB error with \(cloudSource)")
+            return
+        }
+        
+        if let typeOfFeature = cloudSource["typeOfFeature"] as? String{
+            newFeaturedURL.typeOfFeature = typeOfFeature
         }else{
             //QQQQ report error
             print("DB error with \(cloudSource)")
@@ -379,6 +404,53 @@ class EpsilonStreamBackgroundFetch{
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
+    
+    class func readAllImagesFromCloud(){
+        
+        //QQQQ shortcirciut this
+        finishedImages = true
+        return;
+        
+        let pred = NSPredicate(format: "TRUEPREDICATE")// "modificationDate > %@", latestMathObjectDate! as NSDate)
+        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = queryOperationResultLimit
+        
+        var num = 0
+        operation.recordFetchedBlock = { record in
+            print("LightImageThumbNail - RECORD FETCHED BLOCK -- \(num)")
+            num = num + 1 //QQQQ handle cursurs???
+            //print(record.recordChangeTag)
+            let obtainedKey = record["keyName"] as! String
+
+            print(record.modificationDate, obtainedKey)
+            
+            
+            ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
+
+            
+            //createDBMathObject(fromDataSource: record)
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            DispatchQueue.main.async{
+                if error == nil{
+                }
+                else{
+                    print("\(error!.localizedDescription)")
+                }
+            }
+        }
+        
+        operation.completionBlock = {
+            finishedImages = true
+            onFinish() //QQQQ should this be in a mutex?
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
     class func readFeaturedURLsFromCloud(){
         let pred = NSPredicate(format: "modificationDate > %@", latestFeatureDate! as NSDate)
         let query = CKQuery(recordType: "FeaturedURL", predicate: pred)
@@ -423,7 +495,7 @@ class EpsilonStreamBackgroundFetch{
             arr.append(keyArray[i])
         }
         let pred = NSPredicate(format: "keyName IN %@",  arr )
-        let query = CKQuery(recordType: "ImageThumbNail", predicate: pred)
+        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
 
         print("SENDING PREDICATE TO CLOUD FOR IMAGES: \(pred)")
         
@@ -452,7 +524,7 @@ class EpsilonStreamBackgroundFetch{
     
     class func readImageFromCloud(withKey key: String){
         let pred = NSPredicate(format: "keyName == %@", key)
-        let query = CKQuery(recordType: "ImageThumbNail", predicate: pred)
+        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
         operation.resultsLimit = 1

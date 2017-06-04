@@ -28,5 +28,6 @@ extension FeaturedURL {
     @NSManaged public var ourDescription: String
     @NSManaged public var ourFeaturedURLHashtag: String
     @NSManaged public var provider: String
+    @NSManaged public var typeOfFeature: String
     
 }

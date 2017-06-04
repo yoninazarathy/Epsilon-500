@@ -9,11 +9,35 @@
 import Foundation
 import UIKit
 import CloudKit
+import Toucan
 
 enum ImageStatus{
     case UrgentlyNeeded
     case NormallyNeeded
     case Loaded
+}
+
+//taken from: https://stackoverflow.com/questions/39677330/how-does-string-substring-work-in-swift-3
+extension String {
+    func index(from: Int) -> Index {
+        return self.index(startIndex, offsetBy: from)
+    }
+
+    func substring(from: Int) -> String {
+        let fromIndex = index(from: from)
+        return substring(from: fromIndex)
+    }
+
+    func substring(to: Int) -> String {
+        let toIndex = index(from: to)
+        return substring(to: toIndex)
+    }
+
+    func substring(with r: Range<Int>) -> String {
+        let startIndex = index(from: r.lowerBound)
+        let endIndex = index(from: r.upperBound)
+        return substring(with: startIndex..<endIndex)
+    }
 }
 
 class ImageManager{
@@ -32,6 +56,7 @@ class ImageManager{
     }
     
     class func pushImageToGet(withKey key: String,_ isUrgent: Bool = false){
+        return //QQQQ
         let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         DispatchQueue.main.sync {
                 
@@ -52,6 +77,9 @@ class ImageManager{
         imageDBMangedObjects[key]?.hasFile = true
     }
     
+    
+    
+    
     class func setup(){
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
@@ -60,6 +88,22 @@ class ImageManager{
             try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
         } catch let error as NSError {
             print("Error creating directory: \(error.localizedDescription)")
+        }
+       
+        let bundlePath = Bundle.main.resourcePath!
+        let fileManager = FileManager.default
+        do {
+            let filesFromBundle = try fileManager.contentsOfDirectory(atPath: bundlePath)
+            
+            for f in filesFromBundle{
+                if f.hasPrefix("PreThumb_"){
+                    let name = f.substring(from:9)
+                    print("FOUND IMAGE IN BUNDLE: \(name)")
+                    moveImageFromBundleToDocuments(withKey: name)
+                }
+            }
+        } catch {
+            print("Error with searching images in bundle")
         }
         
         DispatchQueue.global(qos: .background).async{
@@ -73,7 +117,7 @@ class ImageManager{
                 let request = ImageThumbnail.createFetchRequest()
                 request.predicate = NSPredicate(format:"hasFile = %@ AND cloudRequestSent = %@", NSNumber(value: false),NSNumber(value: false))
                 request.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: false)]
-                request.fetchLimit = 20
+                request.fetchLimit = 100
                 do{
                     let imageList = try container.viewContext.fetch(request)
                     
@@ -97,6 +141,24 @@ class ImageManager{
                 
                 sleep(5)//QQQQ!
             }
+        }
+    }
+   
+    
+    class func moveImageFromBundleToDocuments(withKey key: String){
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key)
+        
+        var bundlePath = Bundle.main.url(forResource: "PreThumb_\(key)", withExtension: nil)
+
+        do{
+            let source = bundlePath!.path
+            let dest = dataPath.path
+            //print("COPYING: \(source) TO \(dest)")
+            try FileManager.default.copyItem(atPath: source, toPath: dest)
+        }catch{
+            print("\n")
+            print(error)
         }
     }
     
@@ -123,7 +185,22 @@ class ImageManager{
                 let data = try Data(contentsOf: asset.fileURL)
                 if let image = UIImage(data: data){
                     //print("storing Image with key: \(key)")
+                    //print("SIZE: \(image.size)")
+                    //let resizedImage = Toucan.Resize.resizeImage(image, size: CGSize(width: 72, height: 40),fitMode: Toucan.Resize.FitMode.clip)
+                    //print("SIZE: \(resizedImage.size)")
+
+                    //let oldData = UIImageJPEGRepresentation(image, 1)
+                    //let oldImageSize = oldData?.count
+                
+                    //let newData = UIImageJPEGRepresentation(resizedImage, 1)
+                  //  let newImageSize = newData?.count
+                    
+                //    let savings = 1-Double(newImageSize!)/Double(oldImageSize!)
+                    
+              //      print("old: (\(image.size), \(oldImageSize)),  new:(\(resizedImage.size), \(newImageSize)), savings: \(savings)" )
+            //        ImageManager.store(resizedImage, withKey: key)
                     ImageManager.store(image, withKey: key)
+
                     setImageAsStored(withKey: key)
                 }else{
                     print("error with image")

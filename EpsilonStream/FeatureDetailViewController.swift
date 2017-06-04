@@ -49,6 +49,8 @@ class FeatureDetailViewController: DetailViewController, UITextViewDelegate, UIT
         EpsilonStreamAdminModel.currentFeature.ourDescription = ourDescriptionTextView.text!
         EpsilonStreamAdminModel.currentFeature.ourFeaturedURLHashtag = ourFeaturedURLHashTag.text!
         
+        EpsilonStreamAdminModel.currentFeature.typeOfFeature = "article"//QQQQ
+        
         
         print("submitting....")
         

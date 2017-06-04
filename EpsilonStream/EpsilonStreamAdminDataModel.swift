@@ -86,6 +86,10 @@ class EpsilonStreamAdminModel{
         mathObject["hashTag"] = EpsilonStreamAdminModel.currentMathObject.hashTag as CKRecordValue
         mathObject["associatedTitles"] = EpsilonStreamAdminModel.currentMathObject.associatedTitles as CKRecordValue
         
+        mathObject["curator"] = EpsilonStreamAdminModel.currentMathObject.curator as CKRecordValue
+        mathObject["reviewer"] = EpsilonStreamAdminModel.currentMathObject.reviewer as CKRecordValue
+
+        
         //QQQQ do a spinner thing with a dirty .... etc..
         deleteCloudMathRecordsAndReplace(withHashTag: EpsilonStreamAdminModel.currentMathObject.hashTag, withNewRecord: mathObject)
     }
@@ -106,6 +110,8 @@ class EpsilonStreamAdminModel{
         featuredURL["ourDescription"] = EpsilonStreamAdminModel.currentFeature.ourDescription as CKRecordValue
         featuredURL["ourFeaturedURLHashtag"] = EpsilonStreamAdminModel.currentFeature.ourFeaturedURLHashtag as CKRecordValue
         featuredURL["provider"] = EpsilonStreamAdminModel.currentFeature.provider as CKRecordValue
+        
+        featuredURL["typeOfFeature"] = EpsilonStreamAdminModel.currentFeature.typeOfFeature as CKRecordValue
         
         
         //QQQQ do a spinner thing with a dirty .... etc..
@@ -306,6 +312,7 @@ class EpsilonStreamAdminModel{
         newFeaturedURL.ourTitle = "EMPTY TITLE"
         newFeaturedURL.ourDescription = "OUR DESCRIPTION - FILL IN"
         newFeaturedURL.provider = "PROVIDER - FILL IN"
+        newFeaturedURL.typeOfFeature = "article"
     }
     
     class func makeNewMathObject(_ context: NSManagedObjectContext){
@@ -314,6 +321,8 @@ class EpsilonStreamAdminModel{
         newMathObject.oneOnEpsilonTimeStamp = Date()
         newMathObject.associatedTitles = "ASSOCIATED TITLES - FILL IN"
         newMathObject.hashTag = "#NEW-MATH-OBJECT"
+        newMathObject.reviewer = "guest"
+        newMathObject.curator = "guest"
     }
     
     class func makeNewVideo(_ context: NSManagedObjectContext){
@@ -398,14 +407,14 @@ class EpsilonStreamAdminModel{
 
     class func storeAllImages(){
         //The code below was used to push all the images stored on file to the cloud
-        print("PUSHING IMAGES TO CLOUD")
+        print("PUSHING LIGHT IMAGES TO CLOUD")
         let fd = FileManager.default
         let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
         
         fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
             let url = e as! URL
-            let record = CKRecord(recordType: "ImageThumbNail")
+            let record = CKRecord(recordType: "LightImageThumbNail")
             let asset = CKAsset(fileURL: url)
             record["imagePic"] = asset
             record["keyName"] = url.lastPathComponent.replacingOccurrences(of: ".png", with: "") as CKRecordValue
