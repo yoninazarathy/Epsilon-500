@@ -54,7 +54,7 @@ class FeatureDetailViewController: DetailViewController, UITextViewDelegate, UIT
         
         print("submitting....")
         
-        EpsilonStreamAdminModel.submitFeaturedURL()
+        //QQQQ EpsilonStreamAdminModel.submitFeaturedURL()
     }
     override func configureView() {
         ourTitleHashTags.delegate = self

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tsQ-GI-iKu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tsQ-GI-iKu">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -43,66 +43,73 @@
                             <stackView opaque="NO" contentMode="top" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Yi0-7E-yFp">
                                 <rect key="frame" x="16" y="20" width="343" height="598"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="51y-W1-p8e">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="60"/>
-                                        <state key="normal" title="Leave Admin Mode"/>
-                                        <connections>
-                                            <action selector="leaveAdminModeAction:" destination="dBV-C3-3Zc" eventType="touchUpInside" id="EQJ-KU-MlA"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EdI-Gy-Lq1">
-                                        <rect key="frame" x="0.0" y="60" width="343" height="59.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="54.5"/>
                                         <state key="normal" title="Reload From Cloud"/>
                                         <connections>
                                             <action selector="reloadFromCloudAction:" destination="dBV-C3-3Zc" eventType="primaryActionTriggered" id="a8b-k8-f5A"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YIt-x1-ttT">
-                                        <rect key="frame" x="0.0" y="119.5" width="343" height="60"/>
+                                        <rect key="frame" x="0.0" y="54.5" width="343" height="54"/>
                                         <state key="normal" title="Delete Local Info"/>
                                         <connections>
                                             <action selector="deleteLocalInfoAction:" destination="dBV-C3-3Zc" eventType="primaryActionTriggered" id="G2a-cz-YCS"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4pM-3E-n7I">
-                                        <rect key="frame" x="0.0" y="179.5" width="343" height="59.5"/>
-                                        <state key="normal" title="Special Function"/>
+                                        <rect key="frame" x="0.0" y="108.5" width="343" height="54.5"/>
+                                        <state key="normal" title="Refresh From YouTube"/>
                                         <connections>
-                                            <action selector="pushToCloudAction:" destination="dBV-C3-3Zc" eventType="primaryActionTriggered" id="TEZ-0Y-s88"/>
+                                            <action selector="refreshFromYoutubeAction:" destination="dBV-C3-3Zc" eventType="primaryActionTriggered" id="JnM-KP-YZa"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8i-3E-3SE">
+                                        <rect key="frame" x="0.0" y="163" width="343" height="54.5"/>
+                                        <state key="normal" title="Update To Cloud"/>
+                                        <connections>
+                                            <action selector="pushToCloudAction:" destination="dBV-C3-3Zc" eventType="primaryActionTriggered" id="lOy-Vh-b1G"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TFy-6S-Xc0">
+                                        <rect key="frame" x="0.0" y="217.5" width="343" height="54.5"/>
+                                        <state key="normal" title="Update Images"/>
+                                        <connections>
+                                            <action selector="updateImagesAction:" destination="dBV-C3-3Zc" eventType="primaryActionTriggered" id="VGw-3Q-hub"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VersionNumber" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vzd-sX-l6p">
-                                        <rect key="frame" x="0.0" y="239" width="343" height="60"/>
+                                        <rect key="frame" x="0.0" y="272" width="343" height="54"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number Math Objects" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d3v-8S-FVA">
-                                        <rect key="frame" x="0.0" y="299" width="343" height="60"/>
+                                        <rect key="frame" x="0.0" y="326" width="343" height="54.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number Videos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6CR-K0-xfS">
-                                        <rect key="frame" x="0.0" y="359" width="343" height="59.5"/>
+                                        <rect key="frame" x="0.0" y="380.5" width="343" height="54.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number Features" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVv-jc-PXR">
-                                        <rect key="frame" x="0.0" y="418.5" width="343" height="60"/>
+                                        <rect key="frame" x="0.0" y="435" width="343" height="54.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number Image Files" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQd-B3-wwj">
-                                        <rect key="frame" x="0.0" y="478.5" width="343" height="59.5"/>
+                                        <rect key="frame" x="0.0" y="489.5" width="343" height="54"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="wZC-TC-VnI">
-                                        <rect key="frame" x="0.0" y="538" width="343" height="60"/>
+                                        <rect key="frame" x="0.0" y="543.5" width="343" height="54.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

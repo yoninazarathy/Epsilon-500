@@ -11,26 +11,13 @@ import CloudKit
 
 class AdminSettingsViewController: UIViewController {
     
-    @IBAction func leaveAdminModeAction(_ sender: UIButton) {
-        if allowsAdminMode{
-            (UIApplication.shared.delegate as! AppDelegate).setInAdminMode(false)
-            let alert = UIAlertController(title: "One on Epsilon Development", message: "You are \(isInAdminMode ? "entering" : "leaving") manage mode", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
-                if isInAdminMode{
-                    (UIApplication.shared.delegate as! AppDelegate).loadAdmin()
-                }else{
-                    (UIApplication.shared.delegate as! AppDelegate).loadClient()
-                }
-            }))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-
     @IBAction func reloadFromCloudAction(_ sender: UIButton) {
         EpsilonStreamBackgroundFetch.runUpdate()
     }
     
     @IBAction func deleteLocalInfoAction(_ sender: Any) {
+        //QQQQ put spinner
+        
         EpsilonStreamDataModel.deleteAllEntities(withName: "VersionInfo")
         EpsilonStreamDataModel.deleteAllEntities(withName: "Video")
         EpsilonStreamDataModel.deleteAllEntities(withName: "MathObject")
@@ -40,17 +27,112 @@ class AdminSettingsViewController: UIViewController {
         
         ImageManager.deleteAllImageFiles()
         
+        EpsilonStreamDataModel.resetDates()
+        
+        sleep(2)
+        
         refreshDataView()
+    }
+    
+    @IBAction func refreshFromYoutubeAction(_ sender: UIButton) {
+        let alert = UIAlertController(title: "One on Epsilon Development", message: "Do you want to pull all known channels from youtube?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Enter Safety Code"
+        }
+        let textField = alert.textFields![0] as UITextField
+        textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
+        
+        
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
+            EpsilonStreamAdminModel.refreshVideosFromResources()
+        }))
+        okAction = alert.actions[0]
+        okAction.isEnabled = false
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func updateImagesAction(_ sender: UIButton) {
+        let alert = UIAlertController(title: "One on Epsilon Development", message: "Do you want to push all images to cloud?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Enter Safety Code"
+        }
+        let textField = alert.textFields![0] as UITextField
+        textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
+        
+        
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
+            EpsilonStreamAdminModel.storeAllImages()
+        }))
+        okAction = alert.actions[0]
+        okAction.isEnabled = false
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
+        }))
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func textFieldChange(_ sender: UITextField) {
+        if sender.text! == "6955"{
+            okAction.isEnabled = true
+        }else{
+            okAction.isEnabled = false
+        }
+    }
+    
+    var okAction: UIAlertAction! = nil
+    
+    @IBAction func viewReportButton(_ sender: UIButton) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "viewReportViewController") as? ViewReportViewController{
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     @IBAction func pushToCloudAction(_ sender: UIButton) {
         
-        print("no action at this moment")
+        let alert = UIAlertController(title: "One on Epsilon Development", message: "Do you want to push local db to cloud?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Enter Safety Code"
+        }
+        let textField = alert.textFields![0] as UITextField
+        textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
+
         
-       //EpsilonStreamAdminModel.storeAllImages()
-        
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
+            EpsilonStreamAdminModel.storeAllVideos()
+        }))
+        okAction = alert.actions[0]
+        okAction.isEnabled = false
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
+        }))
+        self.present(alert, animated: true, completion: nil)
      }
 
+    @IBAction func refreshImagesFromYoutube(_ sender: UIButton) {
+        
+        //QQQQ refactor this alert
+        let alert = UIAlertController(title: "One on Epsilon Development", message: "Do you want to pull images from youtube?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Enter Safety Code"
+        }
+        let textField = alert.textFields![0] as UITextField
+        textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
+        
+        
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
+            ImageManager.refreshAllImagesFromURL()
+        }))
+        okAction = alert.actions[0]
+        okAction.isEnabled = false
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
+        }))
+
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
     @IBOutlet var versionNumberLabel: UILabel!
     @IBOutlet var numberMathObjectLabel: UILabel!
     @IBOutlet var numberVideosLabel: UILabel!
@@ -63,10 +145,10 @@ class AdminSettingsViewController: UIViewController {
 
     func refreshDataView(){
         versionNumberLabel.text = "version: \(EpsilonStreamDataModel.latestVersion())"
-        numberMathObjectLabel.text = "numMathObjects \(EpsilonStreamDataModel.numMathObjects()) "
+        numberMathObjectLabel.text = "numMathObjects: \(EpsilonStreamDataModel.numMathObjects()) "
         numberVideosLabel.text = "numVideos: \(EpsilonStreamDataModel.numVideos())"
         numberFeaturesLabel.text = "numFeatures: \(EpsilonStreamDataModel.numFeaturedURLs())"
-        numImagesFilesLabel.text = "numImages: CoreData = \(ImageManager.numImagesInCoreData()), File = \(ImageManager.numImagesOnFile())"
+        numImagesFilesLabel.text = "numImages: CD: \(ImageManager.numImagesInCoreData()), F: \(ImageManager.numImagesOnFile()), B: \(ImageManager.numImagesInBundle())"
     }
 
     var isInScreen = true
@@ -74,6 +156,7 @@ class AdminSettingsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         isInScreen = false
+        AppUtility.lockOrientation(.all)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,6 +166,7 @@ class AdminSettingsViewController: UIViewController {
         
         isInScreen = true
         
+        //QQQQ more and more of these tasks born on every visit
         DispatchQueue.global(qos: .userInteractive).async {
             while(self.isInScreen){
                 DispatchQueue.main.sync {
@@ -92,7 +176,8 @@ class AdminSettingsViewController: UIViewController {
                 sleep(1)
             }
         }
-
+        
+        AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     
     override func viewDidLoad() {
@@ -104,6 +189,8 @@ class AdminSettingsViewController: UIViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

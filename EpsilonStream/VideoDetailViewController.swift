@@ -19,6 +19,12 @@ class YouTubeSearchResultItem{
 }
 
 class YouTubeVideoListResultItem{
+    var videoId: String = ""
+    var channel: String = ""
+    var title: String = ""
+    var imageURLdef: String = ""
+    var imageURLmed: String = ""
+    var imageURLhigh: String = ""
     var durationString: String = ""
     var durationInt: Int32 = 0
 }
@@ -61,7 +67,6 @@ class VideoDetailViewController: DetailViewController, YouTubePlayerDelegate, UI
     
     @IBAction func channelEditChange(_ sender: UITextField) {
         print("channel edit: \(sender.text!)")
-        
     }
 
     func textViewShouldBeginEditing(_ textView: UITextView){
@@ -98,6 +103,8 @@ class VideoDetailViewController: DetailViewController, YouTubePlayerDelegate, UI
         }
     }
     
+    func videoIdsOfChannelDone(withVideos videos: [String]){}
+
     
     
     @IBAction func submitButtonAction(_ sender: UIButton) {
@@ -130,7 +137,7 @@ class VideoDetailViewController: DetailViewController, YouTubePlayerDelegate, UI
         EpsilonStreamAdminModel.currentVideo.commentAndReview = commentsAndReviewTextView.text!
         
         EpsilonStreamAdminModel.currentVideo.isAwesome = awesomeSwitch!.isOn
-        EpsilonStreamAdminModel.currentVideo.isInVideoCollection = inCollectionSwitch.isOn
+        EpsilonStreamAdminModel.currentVideo.isInCollection = inCollectionSwitch.isOn
         EpsilonStreamAdminModel.currentVideo.whyVsHow = float4Picker[whyHowSegmentedControl.selectedSegmentIndex]
         EpsilonStreamAdminModel.currentVideo.exploreVsUnderstand = float4Picker[exploreUnderstandSegmentedControl.selectedSegmentIndex]
         EpsilonStreamAdminModel.currentVideo.age8Rating = float3Picker[age8SegmentedControl.selectedSegmentIndex]
@@ -150,7 +157,7 @@ class VideoDetailViewController: DetailViewController, YouTubePlayerDelegate, UI
             ImageManager.store(image, withKey: EpsilonStreamAdminModel.currentVideo.youtubeVideoId)
         }
         
-        EpsilonStreamAdminModel.submitVideo()
+        EpsilonStreamAdminModel.submitVideo(withDBVideo: EpsilonStreamAdminModel.currentVideo)
         
         //QQQQ copy for next time
         VideoDetailViewController.persistYouTubeSearchResultItems = youTubeSearchResultItems
@@ -278,7 +285,7 @@ class VideoDetailViewController: DetailViewController, YouTubePlayerDelegate, UI
             }
 
             if let icSwitch = inCollectionSwitch{
-                icSwitch.isOn = vid.isInVideoCollection
+                icSwitch.isOn = vid.isInCollection
             }
             
             if let view = viewForPlayer{
@@ -349,7 +356,7 @@ class VideoDetailViewController: DetailViewController, YouTubePlayerDelegate, UI
         if let image = youTubeSearchResultItems[indexPath.row].image{
             imageView.image = image
         }else{
-            imageView.image = UIImage(named: "OneOnEpsilonLogo3")
+            imageView.image = UIImage(named: "eStreamIcon")
         }
         
         let titleView = cell.viewWithTag(2) as! UILabel

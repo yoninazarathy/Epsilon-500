@@ -34,7 +34,6 @@ class AutoCompleteTableDelegate: NSObject, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       print("Selected row at \(indexPath.row)")
         if let del = delegate{
             del.selected(autoCompleteOptions[indexPath.row])
         }

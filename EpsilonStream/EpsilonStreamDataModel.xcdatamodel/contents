@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16F73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Channel" representedClassName="Channel" syncable="YES">
         <attribute name="channelId" attributeType="String" syncable="YES"/>
         <attribute name="channelTitle" attributeType="String" syncable="YES"/>
@@ -12,31 +12,57 @@
         <attribute name="ourChannelStringDescription" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="FeaturedURL" representedClassName="FeaturedURL" syncable="YES">
+        <attribute name="displaySearchPriority" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hashTagPriorities" attributeType="String" syncable="YES"/>
         <attribute name="hashTags" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="imageKey" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageURL" attributeType="String" syncable="YES"/>
         <attribute name="isAppStoreApp" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isExternal" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="ourDescription" attributeType="String" syncable="YES"/>
         <attribute name="ourFeaturedURLHashtag" attributeType="String" indexed="YES" syncable="YES"/>
-        <attribute name="ourTitle" attributeType="String" syncable="YES"/>
+        <attribute name="ourTitle" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="provider" attributeType="String" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
         <attribute name="typeOfFeature" attributeType="String" syncable="YES"/>
         <attribute name="urlOfItem" attributeType="String" syncable="YES"/>
+        <attribute name="whyVsHow" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="ImageThumbnail" representedClassName="ImageThumbnail" syncable="YES">
         <attribute name="cloudRequestSent" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="hasFile" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="imageURL" attributeType="String" syncable="YES"/>
         <attribute name="keyName" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="primarySourceIsCloud" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="priority" attributeType="Integer 64" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
+        <attribute name="webRequestSent" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="MathObject" representedClassName="MathObject" syncable="YES">
         <attribute name="associatedTitles" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="curator" attributeType="String" syncable="YES"/>
         <attribute name="hashTag" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="reviewer" attributeType="String" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
+        <attribute name="supportsWhyVsHow" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="MathObjectLink" representedClassName="MathObjectLink" syncable="YES">
+        <attribute name="cellImageKey" attributeType="String" syncable="YES"/>
+        <attribute name="displaySearchPriority" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hashTagPriorities" attributeType="String" syncable="YES"/>
+        <attribute name="hashTags" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="imageKey" attributeType="String" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="ourMathObjectLinkHashTag" attributeType="String" syncable="YES"/>
+        <attribute name="ourTitle" attributeType="String" syncable="YES"/>
+        <attribute name="ourTitleDetail" attributeType="String" syncable="YES"/>
+        <attribute name="searchTitle" attributeType="String" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="VersionInfo" representedClassName="VersionInfo" syncable="YES">
         <attribute name="contentVersionNumber" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -56,28 +82,31 @@
         <attribute name="age12Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="age14Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="age16Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="channelKey" attributeType="String" syncable="YES"/>
+        <attribute name="channelKey" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="commentAndReview" attributeType="String" syncable="YES"/>
+        <attribute name="displaySearchPriority" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="durationSec" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="exploreVsUnderstand" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hashTagPriorities" attributeType="String" syncable="YES"/>
         <attribute name="hashTags" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="imageURL" attributeType="String" syncable="YES"/>
         <attribute name="imageURLlocal" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isAwesome" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="isInVideoCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="ourTitle" attributeType="String" syncable="YES"/>
-        <attribute name="percentWatched" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
         <attribute name="whyVsHow" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="youtubeTitle" attributeType="String" syncable="YES"/>
-        <attribute name="youtubeVideoId" attributeType="String" syncable="YES"/>
+        <attribute name="youtubeTitle" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="youtubeVideoId" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
     <elements>
         <element name="Channel" positionX="-180" positionY="78" width="128" height="180"/>
-        <element name="FeaturedURL" positionX="-29" positionY="108" width="128" height="210"/>
-        <element name="ImageThumbnail" positionX="-108" positionY="-36" width="128" height="120"/>
-        <element name="MathObject" positionX="-173" positionY="-189" width="128" height="120"/>
+        <element name="FeaturedURL" positionX="-29" positionY="108" width="128" height="300"/>
+        <element name="ImageThumbnail" positionX="-108" positionY="-36" width="128" height="165"/>
+        <element name="MathObject" positionX="-173" positionY="-189" width="128" height="165"/>
+        <element name="MathObjectLink" positionX="-108" positionY="-36" width="128" height="225"/>
         <element name="VersionInfo" positionX="-108" positionY="-36" width="128" height="195"/>
-        <element name="Video" positionX="-29" positionY="-189" width="128" height="345"/>
+        <element name="Video" positionX="-29" positionY="-189" width="128" height="375"/>
     </elements>
 </model>

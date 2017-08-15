@@ -12,18 +12,26 @@ import CoreData
 import UIKit
 import Alamofire
 
-
 //QQQQ need to organize so this class is more for cloud and the other class is more for core data...?
 
 class EpsilonStreamBackgroundFetch{
     
     static var searcherUI: SearcherUI! = nil
-    
     static var needUpdate: Bool? = nil
-    
     static var pullEpsilonStreamInfoInProgress = false
     static var epsilonStreamInfoRecord: CKRecord? = nil
     
+    static var isUpdatingNow = false
+    static var finishedVideos = false
+    static var finishedMathObjects = false
+    static var finishedFeaturedURLs = false
+    static var finishedImages = false
+    static var finishedMathObjectLinks = false
+
+    static var videoNum = 0
+
+    /*
+    QQQQ - EpsilonStreamInfo not used now
     class func pullEpsilonStreamInfo(){
         let predicate = NSPredicate(format: "TRUEPREDICATE")
         let query = CKQuery(recordType: "EpsilonStreamInfo", predicate: predicate)
@@ -107,210 +115,120 @@ class EpsilonStreamBackgroundFetch{
         
         EpsilonStreamDataModel.saveViewContext()
     }
+ */
     
-    static var isUpdatingNow = false
-    static var finishedVideos = false
-    static var finishedMathObjects = false
-    static var finishedFeaturedURLs = false
-    static var finishedImages = false
-    
-    class func runUpdate(){//onBuffer buffer: Int, withVersion version: Int64){
-        
-        DispatchQueue.main.async(){
-            EpsilonStreamBackgroundFetch.pullEpsilonStreamInfo()
-        }
-        
-        DispatchQueue.main.async(){
-            while infoReadyToGo == false{
-                sleep(1)
-                print("waiting for infoReadyToGo")
-            }
-            
-            finishedImages = false
-            readAllImagesFromCloud()
+    class func runUpdate(){
+        finishedImages = false
+        finishedMathObjects = false
+        finishedVideos = false
+        finishedFeaturedURLs = false
 
-            finishedMathObjects = false
-            readMathObjectsFromCloud()
+        readAllImagesFromCloud()
+        readMathObjectsFromCloud() //QQQQ implement for collection
+        readMathObjectLinksFromCloud()
         
-            finishedVideos = false
-            readVideoDataFromCloud()
-        
-            finishedFeaturedURLs = false
-            readFeaturedURLsFromCloud()
-        }
+        //if not in admin mode only read videos in collection
+        //otherwise (inAdminMode) read all videos
+        readVideoDataFromCloud(true)//QQQQ currently all NEED: (isInAdminMode == false)
+        readFeaturedURLsFromCloud()
     }
     
     class func onFinish(){
-        dbReadyToGo = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedImages
+        var isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedImages && finishedMathObjectLinks
         
-        if dbReadyToGo{
-            EpsilonStreamDataModel.setUpAutoCompleteLists()
+        if isReady{
+            EpsilonStreamDataModel.saveViewContext()
+            
+            DispatchQueue.main.sync{
+                EpsilonStreamDataModel.setUpAutoCompleteLists()
+                EpsilonStreamDataModel.setLatestDates()
+                ImageManager.refreshImageManager()
+                //finishedVideos = false
+                //readVideoDataFromCloud(false) //read videos not in the collection
+            }
+            dbReadyToGo = true
         }
     }
     
     class func createDBVideo(fromDataSource cloudSource: CKRecord){
         //unique key
         let videoID = cloudSource["youtubeVideoId"] as! String
-        
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    
         let newVideo = Video(context: container.viewContext)
-
-        newVideo.oneOnEpsilonTimeStamp = cloudSource["modificationDate"] as! Date
-        newVideo.age8Rating = cloudSource["age8Rating"] as! Float
-        newVideo.age10Rating = cloudSource["age10Rating"] as! Float
-        newVideo.age12Rating = cloudSource["age12Rating"] as! Float
-        newVideo.age14Rating = cloudSource["age14Rating"] as! Float
-        newVideo.age16Rating = cloudSource["age16Rating"] as! Float
-        newVideo.exploreVsUnderstand = cloudSource["exploreVsUnderstand"] as! Float
-        newVideo.isAwesome = cloudSource["isAwesome"] as! Bool
-        newVideo.isInVideoCollection = cloudSource["isInVideoCollection"] as! Bool
-        newVideo.ourTitle = cloudSource["ourTitle"] as! String
-        newVideo.commentAndReview = cloudSource["commentAndReview"] as! String
-        newVideo.channelKey = cloudSource["channelKey"] as! String
-        newVideo.whyVsHow = cloudSource["whyVsHow"] as! Float
-        newVideo.youtubeTitle = cloudSource["youtubeTitle"] as! String
-        newVideo.youtubeVideoId = videoID
-        newVideo.hashTags = cloudSource["hashTags"] as! String
-        
-
-        //QQQQ why aren't all fields treated this way?
-        // -- currently it is with caution since just added duration
-        if let ds = cloudSource["durationSec"] as? Int32{
-            newVideo.durationSec = ds
-        }else{
-            print("--- FOUND NO DURATION ---")
-        }
-        
-        newVideo.imageURL = cloudSource["imageURL"] as! String
-        
-        //QQQQ not using it now
-        //ImageManager.pushImageToGet(withKey: videoID,newVideo.isAwesome )
+        newVideo.update(fromCloudRecord: cloudSource)
     }
-    
-    
-    class func createDBMathObject(fromDataSource cloudSource: CKRecord){
-        //unique key
+
+    class func createOrUpdateDBMathObject(fromDataSource cloudSource: CKRecord){
+        
+        let hashTag = cloudSource["hashTag"] as! String
         
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            
-        let newMathObject = MathObject(context: container.viewContext)
-        
-        newMathObject.oneOnEpsilonTimeStamp = cloudSource["modificationDate"] as! Date
-        newMathObject.hashTag = cloudSource["hashTag"] as! String
-        newMathObject.associatedTitles = cloudSource["associatedTitles"] as! String
-        if let cr = cloudSource["curator"]{
-            newMathObject.curator = cr as! String;
-        }else{
-            newMathObject.curator = "None";
+        let request = MathObject.createFetchRequest()
+        request.predicate = NSPredicate(format: "hashTag == %@", hashTag)
+        do{
+            let mo = try container.viewContext.fetch(request)
+            if mo.count == 0{
+                let newMathObject = MathObject(context: container.viewContext)
+                newMathObject.update(fromCloudRecord: cloudSource)
+            }else if mo.count == 1{
+                mo[0].update(fromCloudRecord: cloudSource)
+            }else{
+                print("error - too many MathObjects \(hashTag) -- \(mo.count)")
+            }
+        }catch{
+            print("Fetch failed")
         }
-        
-        if let rv = cloudSource["reviewer"]{
-            newMathObject.reviewer = rv as! String;
-        }else{
-            newMathObject.reviewer = "None";
-        }
-
     }
     
     class func createDBFeaturedURL(fromDataSource cloudSource: CKRecord){
         let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let newFeaturedURL = FeaturedURL(context: managedObjectContext)
 
-        if let oneOnEpsilonTimeStamp = cloudSource["modificationDate"] as? Date{
-            newFeaturedURL.oneOnEpsilonTimeStamp = oneOnEpsilonTimeStamp
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
+        let ourFeaturedURLHashtag = cloudSource["ourFeaturedURLHashtag"] as! String
 
-        if let hashTags = cloudSource["hashTags"] as? String{
-            newFeaturedURL.hashTags = hashTags
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = FeaturedURL.createFetchRequest()
+        request.predicate = NSPredicate(format: "ourFeaturedURLHashtag == %@", ourFeaturedURLHashtag)
+        do{
+            let furl = try container.viewContext.fetch(request)
+            if furl.count == 0{
+                let newFeature = FeaturedURL(context: container.viewContext)
+                newFeature.update(fromCloudRecord: cloudSource)
+            }else if furl.count == 1{
+                furl[0].update(fromCloudRecord: cloudSource)
+            }else{
+                print("error - too many featuredURLS \(ourFeaturedURLHashtag) -- \(furl.count)")
+            }
+        }catch{
+            print("Fetch failed")
         }
-        
-        if let urlOfItem = cloudSource["urlOfItem"] as? String{
-            newFeaturedURL.urlOfItem = urlOfItem
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-
-        if let imageKey = cloudSource["imageKey"] as? String{
-            newFeaturedURL.imageKey = imageKey
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        if let imageURL = cloudSource["imageURL"] as? String{
-            newFeaturedURL.imageURL = imageURL
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        
-        if let ourTitle = cloudSource["ourTitle"] as? String{
-            newFeaturedURL.ourTitle = ourTitle
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        
-        if let ourDescription = cloudSource["ourDescription"] as? String{
-            newFeaturedURL.ourDescription = ourDescription
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        
-        if let ourFeaturedURLHashtag = cloudSource["ourFeaturedURLHashtag"] as? String{
-            newFeaturedURL.ourFeaturedURLHashtag = ourFeaturedURLHashtag
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        
-        if let isAppStoreApp = cloudSource["isAppStoreApp"] as? Bool{
-            newFeaturedURL.isAppStoreApp = isAppStoreApp
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        
-        if let provider = cloudSource["provider"] as? String{
-            newFeaturedURL.provider = provider
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        
-        if let typeOfFeature = cloudSource["typeOfFeature"] as? String{
-            newFeaturedURL.typeOfFeature = typeOfFeature
-        }else{
-            //QQQQ report error
-            print("DB error with \(cloudSource)")
-            return
-        }
-        
-        ImageManager.pushImageToGet(withKey: newFeaturedURL.imageKey!)
     }
     
-    static var videoNum = 0
+    class func createOrUpdateDBMathObjectLinks(fromDataSource cloudSource: CKRecord){
+        let ourMathObjectLinkHashTag = cloudSource["ourMathObjectLinkHashTag"] as! String
+        
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = MathObjectLink.createFetchRequest() //QQQQ name of object is singular or plural?
+        request.predicate = NSPredicate(format: "ourMathObjectLinkHashTag == %@", ourMathObjectLinkHashTag)
+        do{
+            let mol = try container.viewContext.fetch(request)
+            if mol.count == 0{
+                let newMathObjectLink = MathObjectLink(context: container.viewContext)
+                newMathObjectLink.update(fromCloudRecord: cloudSource)
+            }else if mol.count == 1{
+                mol[0].update(fromCloudRecord: cloudSource)
+            }else{
+                print("error - too many MathObjectLinks \(ourMathObjectLinkHashTag) -- \(mol.count)")
+            }
+        }catch{
+            print("Fetch failed")
+        }
+    }
     
-    class func readVideoDataFromCloud(){//withVersion version: Int64){
-        let pred = NSPredicate(format: "modificationDate > %@", latestVideoDate! as NSDate)
+    class func readVideoDataFromCloud(_ inCollection: Bool){
+        let pred1 = NSPredicate(format: "modificationDate > %@", latestVideoDate! as NSDate)
+        let pred2 = NSPredicate(format: "isInVideoCollection = %@", NSNumber(booleanLiteral: inCollection))
+        let pred = inCollection ? NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2]) : pred1
+        
         let query = CKQuery(recordType: "Video", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
@@ -320,10 +238,13 @@ class EpsilonStreamBackgroundFetch{
         videoNum = 0
         operation.recordFetchedBlock = populate(withVideoRecord:)
         
+        var gotCursor = false
+        
         operation.queryCompletionBlock = { (cursor, error) in
             if error == nil{
                 //print("no error")
                 if cursor != nil{
+                    gotCursor = true
                     fetchVideoRecords(withCursor: cursor!)
                 }
             }else{
@@ -332,12 +253,14 @@ class EpsilonStreamBackgroundFetch{
         }
         
         operation.completionBlock = {
-            print("readVideoMetaDataFromCloud COMPLETION BLOCK")
+//            print("readVideoMetaDataFromCloud COMPLETION BLOCK")
 //            DispatchQueue.main.async {
 //                EpsilonStreamDataModel.setLatestDates() //QQQQ not clear if best here --
 //            }
-            finishedVideos = true
-            onFinish() //QQQQ should this be in a mutex?
+            if gotCursor == false{
+                finishedVideos = true
+                onFinish() //QQQQ should this be in a mutex?
+            }//otherwise will be set by fetchVideoRecords()
         }
         
         CKContainer.default().publicCloudDatabase.add(operation)
@@ -346,8 +269,10 @@ class EpsilonStreamBackgroundFetch{
     class func populate(withVideoRecord record: CKRecord){
         print("Video - RECORD FETCHED BLOCK -- \(videoNum)")
         videoNum = videoNum + 1 //QQQQ handle cursurs???
-        print("Got Video with timestamp: \(record["modificationDate"] as! Date)")
-        createDBVideo(fromDataSource: record)
+        //print("Got Video with timestamp: \(record["modificationDate"] as! Date)")
+        DispatchQueue.main.async{
+            createDBVideo(fromDataSource: record)
+        }
     }
     
     class func fetchVideoRecords(withCursor cursor: CKQueryCursor){
@@ -360,6 +285,9 @@ class EpsilonStreamBackgroundFetch{
                 //print("no error")
                 if cursor != nil{
                     fetchVideoRecords(withCursor: cursor!)
+                }else{
+                    finishedVideos = true
+                    onFinish() //QQQQ should this be in a mutex?
                 }
             }else{
                 print("\(error!.localizedDescription)")
@@ -369,6 +297,7 @@ class EpsilonStreamBackgroundFetch{
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
+    //QQQQ add inCollectionFilter (also to Features and MathObjectLinks)
     class func readMathObjectsFromCloud(){
         let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectDate! as NSDate)
         let query = CKQuery(recordType: "MathObject", predicate: pred)
@@ -381,9 +310,10 @@ class EpsilonStreamBackgroundFetch{
             print("MathObject - RECORD FETCHED BLOCK -- \(num)")
             num = num + 1 //QQQQ handle cursurs???
             //print(record.recordChangeTag)
-            print(record.modificationDate)
-            
-            createDBMathObject(fromDataSource: record)
+            //print(record.modificationDate)
+            DispatchQueue.main.async{
+                createOrUpdateDBMathObject(fromDataSource: record)
+            }
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
@@ -404,7 +334,43 @@ class EpsilonStreamBackgroundFetch{
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
+    class func readMathObjectLinksFromCloud(){
+        let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectDate! as NSDate)
+        let query = CKQuery(recordType: "MathObjectLinks", predicate: pred)
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = queryOperationResultLimit
+        
+        var num = 0
+        operation.recordFetchedBlock = { record in
+            print("MathObjectLinks - RECORD FETCHED BLOCK -- \(num)")
+            num = num + 1 //QQQQ handle cursurs???
+            DispatchQueue.main.async{
+                createOrUpdateDBMathObjectLinks(fromDataSource: record)
+            }
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            DispatchQueue.main.async{
+                if error == nil{
+                }
+                else{
+                    print("\(error!.localizedDescription)")
+                }
+            }
+        }
+        
+        operation.completionBlock = {
+            finishedMathObjectLinks = true
+            onFinish() //QQQQ should this be in a mutex?
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+
     
+    
+    //QQQQ currently not used
     class func readAllImagesFromCloud(){
         
         //QQQQ shortcirciut this
@@ -423,14 +389,8 @@ class EpsilonStreamBackgroundFetch{
             num = num + 1 //QQQQ handle cursurs???
             //print(record.recordChangeTag)
             let obtainedKey = record["keyName"] as! String
-
-            print(record.modificationDate, obtainedKey)
-            
             
             ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
-
-            
-            //createDBMathObject(fromDataSource: record)
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
@@ -460,8 +420,9 @@ class EpsilonStreamBackgroundFetch{
         operation.recordFetchedBlock = { record in
             print("Featured URL - RECORD FETCHED BLOCK -- \(num)")
             num = num + 1 //QQQQ handle cursurs???
-            
-            createDBFeaturedURL(fromDataSource: record)
+            DispatchQueue.main.async{
+                createDBFeaturedURL(fromDataSource: record)
+            }
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
@@ -488,7 +449,6 @@ class EpsilonStreamBackgroundFetch{
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
-    
     class func readImageListFromCloud(withKeys keyArray: [String]){
         var arr:[Any] = []
         for i in 0..<keyArray.count{
@@ -504,7 +464,7 @@ class EpsilonStreamBackgroundFetch{
         
         operation.recordFetchedBlock = { record in
             let obtainedKey = record["keyName"] as! String
-            print("GOT IMAGE: ----- \(obtainedKey)")
+            //print("GOT IMAGE: ----- \(obtainedKey)")
             ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
         }
         
@@ -544,5 +504,44 @@ class EpsilonStreamBackgroundFetch{
         }
         
         CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
+    class func backgroundScan(){
+        return //QQQQ don't do this for now.
+        while true{
+            sleep(15)
+            print("Running background scan...")
+                        
+            DispatchQueue.main.async { //QQQQ this could take some time???
+                ImageManager.refreshImageManager()
+            }
+            
+            EpsilonStreamDataModel.saveViewContext()
+        }
+    }
+    
+    //QQQQ temp - delete this
+    class func mathObjectLinkDummyMake(){
+        
+        //create a dummy MathObjectLink if one doesn't exist.
+        let request = MathObjectLink.createFetchRequest()
+        do{
+            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+            let mathObjectLinks = try container.viewContext.fetch(request)
+            if mathObjectLinks.count == 0{
+                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+                let mol = MathObjectLink(context: container.viewContext)
+                mol.hashTags = "#binary"
+                mol.imageKey = "NO IMAGE"
+                mol.ourTitle = "Binary on Exploding Dots"
+                mol.searchTitle = "ED-Binary" //QQQQ Emoji
+
+               // EpsilonStreamDataModel.saveViewContext()
+
+            }
+        
+        }catch{
+            print("Fetch failed")
+        }
     }
 }

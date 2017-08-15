@@ -8,6 +8,30 @@
 
 import UIKit
 
+//https://stackoverflow.com/questions/38435308/swift-get-lighter-and-darker-color-variations-for-a-given-uicolor
+extension UIColor {
+    
+    func lighter(by percentage:CGFloat=30.0) -> UIColor? {
+        return self.adjust(by: abs(percentage) )
+    }
+    
+    func darker(by percentage:CGFloat=30.0) -> UIColor? {
+        return self.adjust(by: -1 * abs(percentage) )
+    }
+    
+    func adjust(by percentage:CGFloat=30.0) -> UIColor? {
+        var r:CGFloat=0, g:CGFloat=0, b:CGFloat=0, a:CGFloat=0;
+        if(self.getRed(&r, green: &g, blue: &b, alpha: &a)){
+            return UIColor(red: min(r + percentage/100, 1.0),
+                           green: min(g + percentage/100, 1.0),
+                           blue: min(b + percentage/100, 1.0),
+                           alpha: a)
+        }else{
+            return nil
+        }
+    }
+}
+
 class TermListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var hashTagsToShow: [String] = []
@@ -23,7 +47,7 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet var termTable: UITableView!
     
-    let editorOptions: [String] = ["All","None","Coco","Inna","Yoni","Yousuf"]
+    let editorOptions: [String] = ["All","None","Coco","Inna","Phil","Yoni","Yousuf"]
     
     @IBAction func curateSegmentChanged(_ sender: UISegmentedControl) {
         curator = editorOptions[sender.selectedSegmentIndex]
@@ -37,7 +61,7 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
     
     func updateData(){
         hashTagsToShow = []
-        for ht in EpsilonStreamDataModel.hashTagAutoCompleteList{
+        for ht in EpsilonStreamDataModel.fullHashTagList{
             var matchCurate = false
             var matchReview = false
             if curator == "All"{
@@ -64,6 +88,7 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
                 hashTagsToShow.append(ht)
             }
         }
+        hashTagsToShow.sort()
         termTable.reloadData()
     }
     
@@ -134,7 +159,7 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
     
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "termListCell", for: indexPath)
-        cell.isUserInteractionEnabled = false
+        cell.isUserInteractionEnabled = true
 
         switch termType.selectedSegmentIndex{
         case 0:
@@ -157,32 +182,46 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
             let reviewerHere = EpsilonStreamDataModel.reviewerOfHashTag[tag]!
             
             cell.textLabel!.text = "\(tag): (V: \(numVideos), A: \(numArticles), G: \(numGames)), Curator: \(curatorHere), Reviewer: \(reviewerHere)"
-            cell.detailTextLabel!.text = "\(indexPath.row+1)  \(EpsilonStreamDataModel.rawTitleOfHashTag[tag])"
+            cell.detailTextLabel!.text = "\(indexPath.row+1)  \(EpsilonStreamDataModel.rawTitleOfHashTag[tag]!)"
             cell.detailTextLabel!.numberOfLines = 1
             cell.sizeToFit()
             
             switch totalContent{
             case 0:
-                cell.backgroundColor = UIColor.red
+                cell.backgroundColor = UIColor.red.lighter(by: 70)
             case 1..<9:
-                cell.backgroundColor = UIColor.orange
+                cell.backgroundColor = UIColor.orange.lighter(by: 70)
             case 9..<17:
-                cell.backgroundColor = UIColor.yellow
+                cell.backgroundColor = UIColor.yellow.lighter(by: 70)
             default:
-                cell.backgroundColor = UIColor.green
+                cell.backgroundColor = UIColor.green.lighter(by: 70)
+            }
+            
+            if EpsilonStreamDataModel.hashTagInCollection[tag]! == false{
+                cell.backgroundColor = UIColor.purple
             }
             
         case 1:
             let tit = EpsilonStreamDataModel.fullTitles[indexPath.row]
             cell.textLabel!.text = tit
              cell.detailTextLabel!.text = "\(indexPath.row+1)  \(EpsilonStreamDataModel.hashTagOfTitle[tit]!)"
-            cell.backgroundColor = UIColor.blue
+            cell.backgroundColor = UIColor.blue.lighter(by: 70)
         default:
             break//QQQQ
         }
         
 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let tag = hashTagsToShow[indexPath.row]
+        
+        EpsilonStreamAdminModel.setCurrentMathObject(withMathObject: tag)
+        
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "EditMathObject") as? EditMathObjectViewController{
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
 

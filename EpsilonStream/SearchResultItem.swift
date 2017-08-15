@@ -14,6 +14,8 @@ enum SearchResultItemType{
     case iosApp
     case gameWebPage
     case blogWebPage
+    case mathObjectLink
+    case specialItem
 }
 
 class SearchResultItem{
@@ -21,6 +23,11 @@ class SearchResultItem{
     var channel: String = ""
     var image: UIImage? = nil
     var type: SearchResultItemType = SearchResultItemType.video
+    var inCollection: Bool = true
+    var hashTagPriorities: String = ""
+    var rawPriority: Float = -1.0
+    var foundPriority: Float = 0.5
+    var splashKey: String = "none"
 }
 
 class VideoSearchResultItem: SearchResultItem{
@@ -29,14 +36,29 @@ class VideoSearchResultItem: SearchResultItem{
     var percentWatched: Float = 0.0
 }
 
-class IOsAppSearchResultItem: SearchResultItem{
+class FeatureSearchResultItem: SearchResultItem{
+    var ourFeaturedURLHashtag: String = ""
+    var isExternal: Bool = false
+}
+
+class IOsAppSearchResultItem: FeatureSearchResultItem{
     var appId: String = ""
 }
 
-class GameWebPageSearchResultItem: SearchResultItem{
+class GameWebPageSearchResultItem: FeatureSearchResultItem{
     var url: String = ""
 }
 
-class BlogWebPageSearchResultItem: SearchResultItem{
+class BlogWebPageSearchResultItem: FeatureSearchResultItem{
     var url: String = ""
+}
+
+class MathObjectLinkSearchResultItem: SearchResultItem{
+    var hashTags: String = "" //QQQQ note sure that need this
+    var searchTitle: String = ""
+    var titleDetail: String = ""
+    var imageKey: String = ""
+}
+
+class SpecialSearchResultItem: SearchResultItem{
 }

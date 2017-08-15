@@ -6,13 +6,17 @@
 //  Copyright © 2016 Yoni Nazarathy. All rights reserved.
 //
 
+import UIKit
 import Foundation
 
-//DebugConstants
-let allowsAdminMode = true
+//flag for indicating a backgroundAction
+var backgroundActionInProgress = false
 
 //general flag indicating if in admin mode or not
-var isInAdminMode = true
+var isInAdminMode = false
+
+//string id of current user
+var currentUserId: String? = nil
 
 var infoReadyToGo = false
 
@@ -37,13 +41,49 @@ var sleepTimeCheckForUpdates: UInt32 = 1
 
 var sleepTimeImageRetrieve: UInt32 = 120 //QQQQ currently not used
 
-let maxVideosToShow = 10000
-let maxAppsToShow = 10000
-let maxBlogsToShow = 10000
+let maxVideosToShow = 100
+let maxAppsToShow = 100
+let maxBlogsToShow = 100
 
-var queryOperationResultLimit = 500
+var queryOperationResultLimit = 500 //QQQQ cursor for mathobjects and features.
 
 var latestImageDate: Date? = nil
 var latestVideoDate: Date? = nil
 var latestMathObjectDate: Date? = nil
 var latestFeatureDate: Date? = nil
+//QQQQ MathObjectLink needs this
+
+//Red
+let ES_watch1 = 0xFF4646
+let ES_watch2 = 0xFF9999
+let ES_watch3 = 0xCC3838
+
+//Green
+let ES_play1 = 0x46CCA1
+let ES_play2 = 0xADE6D4
+let ES_play3 = 0x3DB38D
+
+//Yellow
+let ES_explore1 = 0xFFC864
+let ES_explore2 = 0xFFE483
+let ES_explore3 = 0xCCA050
+
+//Grey
+let ES_gray1 = 0x999999
+let ES_gray2 = 0xCCCCCC
+let ES_gray3 = 0x666666
+
+func versionNumber() -> String{
+    if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+        return version
+    }else{
+        return "V??"
+    }
+}
+
+var curatorPasswords:[String:String] = ["coco":"940322",
+                                        "yoni":"695569",
+                                        "inna":"239239",
+                                        "phil":"123456",
+                                        "miriam":"123456",
+                                        "yousuf":"123456"]

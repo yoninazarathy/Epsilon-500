@@ -8,4 +8,5 @@ target 'EpsilonStream' do
     pod 'SwiftyJSON'
     pod 'Firebase/Core'
     pod 'Toucan'
+    pod 'BetterSegmentedControl', '~> 0.8'
 end

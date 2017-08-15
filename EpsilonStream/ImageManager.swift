@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 import CloudKit
-import Toucan
+import Alamofire
+ import Toucan
 
 enum ImageStatus{
     case UrgentlyNeeded
@@ -42,82 +43,205 @@ extension String {
 
 class ImageManager{
     
-    static var imageDBMangedObjects = Dictionary<String,ImageThumbnail>()
-    
-    class func makeImageUrgent(withKey key: String){
-        if let imageThumbnail = imageDBMangedObjects[key]{
-            print("Making urgent: \(imageThumbnail)")
-            //DispatchQueue.main.sync {
-                imageThumbnail.priority = 2
-            //}
-        }else{
-            print("error no such image: \(key)")
+    class func refreshImageManager(){
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let videoRequset = Video.createFetchRequest()
+        videoRequset.predicate = NSPredicate(value: true)
+        videoRequset.fetchLimit = 10000 //QQQQ
+        do{
+            let videoList = try container.viewContext.fetch(videoRequset)
+            for v in videoList{
+                refreshImage(withKey: v.youtubeVideoId,withURL: v.imageURL,primarySourceIsCloud: false)
+                //QQQQ make this imageKey (inDB)
+            }
+        }catch{
+            print("Fetch failed")
         }
-    }
-    
-    class func pushImageToGet(withKey key: String,_ isUrgent: Bool = false){
-        return //QQQQ
-        let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        DispatchQueue.main.sync {
-                
-            let newImage = ImageThumbnail(context: managedObjectContext)
-            
-            newImage.hasFile = false //QQQQ check if file there
-            newImage.priority = isUrgent ? 2 : 0
-            newImage.cloudRequestSent = false
-            newImage.keyName = key
-            newImage.oneOnEpsilonTimeStamp = Date() //QQQQ not clear what here
-            
-            imageDBMangedObjects[key] = newImage
+
+        let featureRequset = FeaturedURL.createFetchRequest()
+        featureRequset.predicate = NSPredicate(value: true)
+        featureRequset.fetchLimit = 100000
+        do{
+            let featureList = try container.viewContext.fetch(featureRequset)
+            for f in featureList{
+                refreshImage(withKey: f.imageKey!, withURL: "",primarySourceIsCloud: true)//QQQQ note features don't have imageURL yet in cloud
+            }
+        }catch{
+            print("Fetch failed")
         }
-        // QQQQ EpsilonStreamDataModel.saveViewContext() ????
-    }
-    
-    class func setImageAsStored(withKey key: String){
-        imageDBMangedObjects[key]?.hasFile = true
-    }
-    
-    
-    
-    
-    class func setup(){
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
         
-        do {
-            try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
-        } catch let error as NSError {
-            print("Error creating directory: \(error.localizedDescription)")
+        EpsilonStreamDataModel.saveViewContext()
+        
+        //QQQQ
+        return
+        
+        let request = ImageThumbnail.createFetchRequest()
+        request.predicate = NSPredicate(value: true)
+        request.fetchLimit = 100000
+        do{
+            let imageList = try container.viewContext.fetch(request)
+            print(imageList.count)
+        }catch{
+            print("Fetch failed")
         }
-       
+
+    }
+    
+    class func refreshImage(withKey imageKey: String,withURL urlString: String,primarySourceIsCloud pCloud: Bool){
+        //print("DISCOVER IMAGE \(imageKey)")
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let imageRequest = ImageThumbnail.createFetchRequest()
+        imageRequest.predicate = NSPredicate(format: "keyName == %@", imageKey)
+        imageRequest.fetchLimit = 2
+        
+        
+        do{
+            let imageList = try container.viewContext.fetch(imageRequest)
+            switch imageList.count{
+            case 0:
+                print("ADDING IMAGE \(imageKey) to DB")
+                let newImage = ImageThumbnail(context: container.viewContext)
+                
+                newImage.hasFile = false //QQQQ check if file there
+                newImage.priority = 0//QQQQQ
+                newImage.cloudRequestSent = false
+                newImage.keyName = imageKey
+                newImage.oneOnEpsilonTimeStamp = Date() //QQQQ not clear what here
+                newImage.imageURL = urlString
+                newImage.primarySourceIsCloud = pCloud
+                newImage.webRequestSent = false
+            case 1:
+                let image = imageList[0]
+                if haveFile(forImageKey: image.keyName) == false{
+                    image.hasFile = false
+                    image.cloudRequestSent = false
+                    image.webRequestSent = false
+                    print("reseting image \(image.keyName)")
+                }
+            default:
+                print("error - too many images with key \(imageKey). There are \(imageList.count).")
+            }
+        }catch{
+            print("Fetch failed")
+        }
+    }
+    
+    
+    //QQQQ not implemented
+    class func makeImageUrgent(withKey key: String){
+        print("makeImageUrgent \(key)")
+    }
+    
+    class func numImagesInBundle() -> Int{
         let bundlePath = Bundle.main.resourcePath!
         let fileManager = FileManager.default
+        var retVal = 0
         do {
             let filesFromBundle = try fileManager.contentsOfDirectory(atPath: bundlePath)
             
             for f in filesFromBundle{
                 if f.hasPrefix("PreThumb_"){
-                    let name = f.substring(from:9)
-                    print("FOUND IMAGE IN BUNDLE: \(name)")
-                    moveImageFromBundleToDocuments(withKey: name)
+                    retVal += 1
                 }
             }
         } catch {
             print("Error with searching images in bundle")
         }
+        return retVal
+    }
+   
+    class func numImagesOnFile() -> Int{
+        let fd = FileManager.default
+        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
         
+        var numImages = 0
+        
+        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
+            numImages += 1
+        })
+        return numImages
+    }
+    
+    class func numImagesInCoreData() -> Int{
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = ImageThumbnail.createFetchRequest()
+        
+        var retVal = -1
+        
+        do{
+            let result = try container.viewContext.fetch(request)
+            retVal = result.count
+        }catch{
+            print("Fetch failed")
+        }
+        
+        return retVal
+    }
+    
+
+    
+    
+    class func setup(){
+
+        if numImagesOnFile() == 0{
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
+            
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+            } catch let error as NSError {
+                print("Error creating directory: \(error.localizedDescription)")
+            }
+           
+            let bundlePath = Bundle.main.resourcePath!
+            let fileManager = FileManager.default
+            do {
+                let filesFromBundle = try fileManager.contentsOfDirectory(atPath: bundlePath)
+                
+                for f in filesFromBundle{
+                    if f.hasPrefix("PreThumb_"){
+                        let name = f.substring(from:9)
+                        //print("FOUND IMAGE IN BUNDLE: \(name)")
+                        moveImageFromBundleToDocuments(withKey: name)
+                    }
+                }
+            } catch {
+                print("Error with searching images in bundle")
+            }
+        }
+            
         DispatchQueue.global(qos: .background).async{
             while dbReadyToGo == false{
                 sleep(1)
             }
             
-            
-            while true{
+            DispatchQueue.global(qos: .background).async{
+                backgroundImageLoadCloud()
+            }
+            DispatchQueue.global(qos: .background).async{
+                backgroundImageLoadWeb()
+            }
+        }
+    }
+   
+    static var backgroundImageOn = true
+    
+    class func backgroundImageLoadCloud(){
+        
+        return //QQQQ ignore
+        
+        while true{
+            sleep(1)
+            if backgroundImageOn == false{
+                continue
+            }
+            DispatchQueue.main.sync{
                 let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
                 let request = ImageThumbnail.createFetchRequest()
-                request.predicate = NSPredicate(format:"hasFile = %@ AND cloudRequestSent = %@", NSNumber(value: false),NSNumber(value: false))
+                request.predicate = NSPredicate(format:"hasFile = %@ AND primarySourceIsCloud == %@ AND cloudRequestSent = %@", NSNumber(value: false),NSNumber(value: true),NSNumber(value:false))
                 request.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: false)]
-                request.fetchLimit = 100
+                request.fetchLimit = 50
                 do{
                     let imageList = try container.viewContext.fetch(request)
                     
@@ -125,25 +249,73 @@ class ImageManager{
                     
                     for im in imageList{
                         keys.append(im.keyName)
-                        DispatchQueue.main.sync(){
-                            im.cloudRequestSent = true
-                        }
+                        im.cloudRequestSent = true //QQQQ may crash???
                     }
+                    
                     if keys.count > 0{
                         print("Send Cloud Request for images: \(keys)")
                         EpsilonStreamBackgroundFetch.readImageListFromCloud(withKeys: keys)
-                    }else{
-                        print("no keys for image search")
                     }
                 }catch{
                     print("Fetch failed")
                 }
-                
-                sleep(5)//QQQQ!
             }
         }
     }
-   
+    
+    
+    class func backgroundImageLoadWeb(){
+        
+        return //QQQQ
+        
+        while true{
+            sleep(5)
+            if backgroundImageOn == false{
+                continue
+            }
+            
+            DispatchQueue.main.sync{
+                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+                let request = ImageThumbnail.createFetchRequest()
+                request.predicate = NSPredicate(format:"hasFile = %@ AND primarySourceIsCloud == %@ AND webRequestSent = %@", NSNumber(value: false),NSNumber(value: false),NSNumber(value:false))
+                request.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: false)]
+                request.fetchLimit = 50
+                do{
+                    let imageList = try container.viewContext.fetch(request)
+                    
+                    for im in imageList{
+                        im.webRequestSent = true //QQQQ may crash???
+                    }
+
+                    for im in imageList{
+                        Alamofire.request(im.imageURL).responseData{
+                            response in
+                            DispatchQueue.main.async {
+                                switch response.result {
+                                case .success(let data):
+                                    //print("SIZE OF IMAGE IS : \(data)")
+                                    if let img = UIImage(data: data){
+                                        //print("DOWNLOADED SIZE: \(img.size)") //QQQQ image sizes
+                                        let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
+                                        store(image, withKey: im.keyName)
+                                    }else{
+                                        print("nil in image")
+                                    }
+                                case .failure(let error):
+                                    print("Request failed with error: \(error)")
+                                    im.webRequestSent = false //QQQQ may crash???
+                                }
+                            }
+                        }
+                    }
+                }catch{
+                    print("Fetch failed")
+                }
+            }
+        }
+    }
+
+    
     
     class func moveImageFromBundleToDocuments(withKey key: String){
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -169,14 +341,38 @@ class ImageManager{
         //QQQQ consider saving JPEG.
         //QQQQ consider saving with file extension
         
+        var imageWriteOK = true
+        
         if let data = UIImagePNGRepresentation(image) {
             do{
                 try data.write(to: dataPath)
+                print("saving image with key \(key)")// to \(dataPath)")
             }catch let error as NSError{
                 print(error)
+                imageWriteOK = false
             }
         }
-        print("saving image with key \(key) to \(dataPath)")    
+        
+        if imageWriteOK{
+            DispatchQueue.main.async {
+                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+                let imageRequest = ImageThumbnail.createFetchRequest()
+                imageRequest.predicate = NSPredicate(format: "keyName == %@", key)
+                imageRequest.fetchLimit = 2
+                        
+                do{
+                    let imageList = try container.viewContext.fetch(imageRequest)
+                    if imageList.count == 1{
+                        imageList[0].hasFile = true
+                    }else{
+                        print("error - bad number of  images in db with key \(key) -- \(imageList.count)")
+                    }
+                    
+                }catch{
+                    print("Fetch failed")
+                }
+            }
+        }
     }
     
     class func storeImage(fromRecord record: CKRecord, withKey key: String){
@@ -184,24 +380,7 @@ class ImageManager{
             do{
                 let data = try Data(contentsOf: asset.fileURL)
                 if let image = UIImage(data: data){
-                    //print("storing Image with key: \(key)")
-                    //print("SIZE: \(image.size)")
-                    //let resizedImage = Toucan.Resize.resizeImage(image, size: CGSize(width: 72, height: 40),fitMode: Toucan.Resize.FitMode.clip)
-                    //print("SIZE: \(resizedImage.size)")
-
-                    //let oldData = UIImageJPEGRepresentation(image, 1)
-                    //let oldImageSize = oldData?.count
-                
-                    //let newData = UIImageJPEGRepresentation(resizedImage, 1)
-                  //  let newImageSize = newData?.count
-                    
-                //    let savings = 1-Double(newImageSize!)/Double(oldImageSize!)
-                    
-              //      print("old: (\(image.size), \(oldImageSize)),  new:(\(resizedImage.size), \(newImageSize)), savings: \(savings)" )
-            //        ImageManager.store(resizedImage, withKey: key)
                     ImageManager.store(image, withKey: key)
-
-                    setImageAsStored(withKey: key)
                 }else{
                     print("error with image")
                 }
@@ -212,35 +391,6 @@ class ImageManager{
             print("NO ASSET - with image")
             //video.imageURLlocal = nil
         }
-    }
-    
-    class func numImagesOnFile() -> Int{
-        let fd = FileManager.default
-        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
-
-        var numImages = 0
-        
-        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
-            numImages += 1
-        })
-        return numImages
-    }
-    
-    class func numImagesInCoreData() -> Int{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let request = ImageThumbnail.createFetchRequest()
-        
-        var retVal = -1
-        
-        do{
-            let result = try container.viewContext.fetch(request)
-            retVal = result.count
-        }catch{
-            print("Fetch failed")
-        }
-        
-        return retVal
     }
     
     class func deleteAllImageFiles(){
@@ -258,7 +408,19 @@ class ImageManager{
         })
     }
     
-    class func getImage(forKey key: String) -> UIImage{
+    class func haveFile(forImageKey key: String) -> Bool{
+        do{
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let url = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key).appendingPathExtension("png")
+            
+            let _ = try Data(contentsOf: url)
+            return true
+        }catch{
+            return false
+        }
+    }
+    
+    class func getImage(forKey key: String, withDefault imageName:String = "eStreamIcon") -> UIImage{
         var retVal: UIImage! = nil
         do{
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -267,31 +429,82 @@ class ImageManager{
             let data = try Data(contentsOf: url)
             retVal = UIImage(data: data)
         }catch{
-            print("Could not find image with key \(key)")
+            //print("Could not find image with key \(key)")
             makeImageUrgent(withKey: key)
         }
         if retVal == nil{
-            retVal = UIImage(named: "OneOnEpsilonLogo3") //QQQQ
+            retVal = UIImage(named: imageName) //QQQQ
         }
         return retVal!
     }
     
-    class func loadedIndex() -> Double{
-        var totalPriority: Int64 = 0
-        var totalPriorityLoaded: Int64 = 0
+    
+    //This one is used in admin mode
+    class func refreshAllImagesFromURL(){
+ 
+        //QQQQ need spinner for action....
+
         
-        print("loadedIndex()")
-        
-        for (_,im) in imageDBMangedObjects{
-            totalPriority += im.priority
-            if im.hasFile{
-                totalPriorityLoaded += im.priority
+        DispatchQueue.main.async{
+            ImageManager.backgroundImageOn = false //QQQQ stop background image
+            
+            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+            let request = ImageThumbnail.createFetchRequest()
+            request.predicate = NSPredicate(value: true)
+            request.fetchLimit = 100000
+            var alamoFires = 0
+            do{
+                let imageList = try container.viewContext.fetch(request)
+                
+                for im in imageList{
+    //                if(alamoFires % 100 == 0 ){
+    //                    sleep(1)
+    //                }
+                    //print("Gonna get \(im.imageURL)")
+                    if im.imageURL != ""{
+                        alamoFires += 1
+                        
+                        Alamofire.request(im.imageURL).responseData{
+                            response in
+                            DispatchQueue.main.async {
+                                switch response.result {
+                                case .success(let data):
+                                    print("SIZE OF IMAGE IS : \(data)")
+                                    if let image = UIImage(data: data){
+                                        store(image, withKey: im.keyName)
+                                    }else{
+                                        print("nil in image")
+                                    }
+                                case .failure(let error):
+                                    print("Request failed with error: \(error)")
+                                }
+                            }
+                        }
+                    }
+
+                    
+                    
+                }
+                
+            }catch{
+                print("Fetch failed")
             }
         }
-        let loadedIndex = Double(totalPriorityLoaded)/Double(totalPriority)
-        print("totalPriority: \(totalPriority), totalPriorityLoaded: \(totalPriorityLoaded),loadedIndex \(loadedIndex)" )
-        return 0.3
-        //return loadedIndex
     }
     
+    //generate a random 6 char (image) key 
+    //QQQQ need to check for clashes and improve
+    class func generateKey() -> String{
+        let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let len = UInt32(letters.length)
+        var randomString = ""
+        
+        for _ in 0 ..< 6 {
+            let rand = arc4random_uniform(len)
+            var nextChar = letters.character(at: Int(rand))
+            randomString += NSString(characters: &nextChar, length: 1) as String
+        }
+        
+        return randomString
+    }
 }

@@ -10,10 +10,36 @@ import UIKit
 import CoreData
 import Firebase
 
+//https://stackoverflow.com/questions/28938660/how-to-lock-orientation-of-one-view-controller-to-portrait-mode-only-in-swift/41811798#41811798
+struct AppUtility {
+    static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+        
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            delegate.orientationLock = orientation
+        }
+    }
+    
+    /// OPTIONAL Added method to adjust lock and rotate to the desired orientation
+    static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        
+        self.lockOrientation(orientation)
+        
+        UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
+    }
+    
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
     var window: UIWindow?
+
+    /// set orientations you want to be allowed in this property by default
+    var orientationLock = UIInterfaceOrientationMask.all
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return self.orientationLock
+    }
     
     func loadAdmin(withVideo videoId: String = ""){
         if videoId != ""{
@@ -28,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func loadClient(){
         let sb = UIStoryboard(name: "EpsilonClient", bundle: nil)
         
-        let vc = sb.instantiateViewController(withIdentifier: "clientNavViewController")
+        let vc = sb.instantiateViewController(withIdentifier: "epsilonStreamSplash")
         vc.view.frame = UIScreen.main.bounds
         UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve, animations: {self.window!.rootViewController = vc}, completion: nil)
     }
@@ -36,25 +62,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func setGlobalsFromUserDefaults(){
         let bm = UserDefaults.standard.bool(forKey: "inAdmin")
         isInAdminMode = bm
+                
+        let user = UserDefaults.standard.string(forKey: "userId")
+        currentUserId = user
     }
     
-    func setInAdminMode(_ isAdmin: Bool){
-        isInAdminMode = isAdmin
-        UserDefaults.standard.set(isInAdminMode, forKey: "inAdmin")
-    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
+        //QQQQ temp
+        //QQQQ - delete this EpsilonStreamBackgroundFetch.mathObjectLinkDummyMake()
+        
         FIRApp.configure()
 
         setGlobalsFromUserDefaults()
         
+        WebViewPrefetcher.setUp()
         
-        if allowsAdminMode && isInAdminMode{
-            loadAdmin()
-        }else{
-            loadClient()
+        EpsilonStreamDataModel.setLatestDates()
+        
+        ImageManager.setup()
+        
+        DispatchQueue.global(qos: .background).async{
+            EpsilonStreamBackgroundFetch.backgroundScan()
         }
+        
+        loadClient()
         
         return true
     }
@@ -85,11 +118,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         //QQQQ all these maybe don't need to be here
         
-        WebViewPrefetcher.setUp()        
-        
-        EpsilonStreamDataModel.setLatestDates()
-        
-        ImageManager.setup()        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -110,7 +138,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     // MARK: - Core Data stack
     
-    lazy var persistentContainer: NSPersistentContainer = {
+    //lazy QQQQ
+    var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
