@@ -17,14 +17,11 @@ class GameItemTableViewCell: UITableViewCell {
     
     func configureWith(iosAppSearchResult result: IOsAppSearchResultItem){
         //IMAGE
-        if let image = result.image{
-            var img = Toucan(image: image).resize(CGSize(width: 160, height: 160), fitMode: Toucan.Resize.FitMode.crop).image
-            img = Toucan(image: img).maskWithRoundedRect(cornerRadius: 30).image
-            gameImage.image = img
-        }else{
-            print("error - using default image")
-            gameImage.image = UIImage(named: "eStreamIcon")
-        }
+        
+        let image = ImageManager.getImage(forKey: result.imageName, withDefault: "Play_icon")
+        var img = Toucan(image: image).resize(CGSize(width: 160, height: 160), fitMode: Toucan.Resize.FitMode.crop).image
+        img = Toucan(image: img).maskWithRoundedRect(cornerRadius: 30).image
+        gameImage.image = img
         
         //TITLE
         gameTitle.text = result.title
@@ -35,14 +32,12 @@ class GameItemTableViewCell: UITableViewCell {
 
     func configureWith(gameWebSearchResult result: GameWebPageSearchResultItem){
         //IMAGE
-        if let image = result.image{
-            var img = Toucan(image: image).resize(CGSize(width: 160, height: 160), fitMode: Toucan.Resize.FitMode.crop).image
-            img = Toucan(image: img).maskWithRoundedRect(cornerRadius: 30).image
-            gameImage.image = img
-        }else{
-            print("error - using default image")
-            gameImage.image = UIImage(named: "eStreamIcon")
-        }
+        
+        let image = ImageManager.getImage(forKey: result.imageName, withDefault: "Play_icon")
+
+        var img = Toucan(image: image).resize(CGSize(width: 160, height: 160), fitMode: Toucan.Resize.FitMode.crop).image
+        img = Toucan(image: img).maskWithRoundedRect(cornerRadius: 30).image
+        gameImage.image = img
         
         //TITLE
         gameTitle.text = result.title

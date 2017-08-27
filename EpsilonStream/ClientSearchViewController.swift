@@ -21,6 +21,29 @@ import SafariServices
 import Toucan
 
 
+
+//https://stackoverflow.com/questions/27761557/shuffling-a-string-in-swift
+extension Array {
+    var shuffled: Array {
+        var array = self
+        indices.dropLast().forEach {
+            guard case let index = Int(arc4random_uniform(UInt32(count - $0))) + $0, index != $0 else { return }
+            swap(&array[$0], &array[index])
+        }
+        return array
+    }
+    var chooseOne: Element {
+        return self[Int(arc4random_uniform(UInt32(count)))]
+    }
+    
+}
+extension String {
+    var jumble: String {
+        return String(Array(characters).shuffled)
+    }
+}
+
+
 //from here https://stackoverflow.com/questions/24263007/how-to-use-hex-colour-values-in-swift-ios
 extension UIColor {
     convenience init(red: Int, green: Int, blue: Int) {
@@ -48,22 +71,76 @@ protocol SearcherUI {
 
 
 
-class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate, SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI{
+class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate, SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI,ImageLoadedDelegate{
     
     @IBOutlet weak var autoCompleteTableViewHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var mainTopStack: UIStackView!
     @IBOutlet weak var mainSegmentView: UIView!
     
-    @IBAction func surpriseTouchDown(_ sender: UIButton) {
-        sender.imageView?.image = UIImage(named: "Surprise_Icon_Active")
-        //QQQQ this doesn't work
-    }
+    
+    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var forwardButton: UIButton!
     
     var audioPlayer: AVAudioPlayer!
     
-    @IBAction func supriseButtonAction(_ sender: UIButton) {
+    @IBOutlet weak var homeButton: UIButton!
+    
+    @IBAction func homeButtonAction(_ sender: Any) {
+        if let prevText = searchTextField.text{
+            FIRAnalytics.logEvent(withName: "home_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            FIRAnalytics.logEvent(withName: "home_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
+        searchTextField.text = "" //QQQQ or home?
+        refreshSearch()
+    }
+    
+    @IBAction func backButtonAction(_ sender: UIButton) {
+        if let prevText = searchTextField.text{
+            FIRAnalytics.logEvent(withName: "back_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            FIRAnalytics.logEvent(withName: "back_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
         
+        let newSearchText = BrowseStackManager.moveBack().searchString
+        print(newSearchText)
+        searchTextField.text = newSearchText
+        refreshSearch()
+    }
+    
+    
+    @IBAction func forwardButtonAction(_ sender: UIButton) {
+        if let prevText = searchTextField.text{
+            FIRAnalytics.logEvent(withName: "forward_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            FIRAnalytics.logEvent(withName: "forward_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
+        searchTextField.text = BrowseStackManager.moveForward().searchString
+        refreshSearch()
+    }
+    
+    var textShuffleTimer: Timer! = nil
+    
+    @IBAction func supriseButtonAction(_ sender: UIButton) {
+        surpriseButton.isEnabled = false
+        surpriseButton.imageView!.startAnimating()
+        let newText = EpsilonStreamDataModel.surpriseText()
+        searchTextField.text = newText.lowercased().jumble
+        textShuffleTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true){timer in
+            self.searchTextField.text = newText.lowercased().jumble
+        }
+
+        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false){timer in
+            self.surpriseButton.imageView!.stopAnimating()
+            self.surpriseButton.imageView!.isHighlighted = false
+            FIRAnalytics.logEvent(withName: "surprise_button", parameters: ["newText" : newText as NSObject])
+            self.selected(newText)
+            if let timer = self.textShuffleTimer{
+                timer.invalidate()
+            }
+            self.surpriseButton.isEnabled = true
+        }
         let url = ClientSearchViewController.getSoundURL()
         do{
             audioPlayer = try AVAudioPlayer(contentsOf: url)
@@ -73,15 +150,13 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             print("error playing sound")
         }
 
+        
+        
         autoCompleteTable.isHidden = true
-
         
-        
-        let newText = EpsilonStreamDataModel.surpriseText()
-        FIRAnalytics.logEvent(withName: "surprise_button", parameters: ["newText" : newText as NSObject])
-        searchTextField.text = newText
-        refreshSearch()
-        self.view.endEditing(true)
+        //searchTextField.text = newText
+        //refreshSearch()
+        //self.view.endEditing(true)
     }
     func playerStateChanged(_ videoPlayer: YouTubePlayerView, playerState: YouTubePlayerState){
         print("PLAYER STATE in search: \(playerState)")
@@ -162,9 +237,19 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         refreshSearch()
     }
     
+    func imagesUpdate(){
+        print("imagesUpdate()")
+        resultsTable.reloadData()
+
+    }
+    
+    var surpriseButton: UIButton! = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        ImageManager.imageLoadedDelegate = self
+        
         title = "Search Epsilon Stream"
         searchTextField.delegate = self
         resultsTable.delegate = self
@@ -176,14 +261,32 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         resultsTable.separatorStyle = .none
         resultsTable.keyboardDismissMode = .onDrag
         
+        surpriseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
+        surpriseButton.imageView!.animationImages = [UIImage(named: "Surprise4")!, UIImage(named: "Surprise1")!, UIImage(named: "Surprise2")!, UIImage(named: "Surprise5")!, UIImage(named: "Surprise3")!, UIImage(named: "Surprise6")!]
+        surpriseButton.imageView!.animationDuration = 0.4
+        
+        
+        surpriseButton.addTarget(self, action: #selector(supriseButtonAction), for: .touchUpInside)
+
+        
+        searchTextField.rightViewMode = .always
+        searchTextField.rightView = surpriseButton
+        
+        
         
         searchTextField.text = ""
+        var search = EpsilonStreamSearch()
+        search.searchString = ""
+        BrowseStackManager.pushNew(search: search)
+
         //view.sendSubview(toBack: autoCompleteTable)
         autoCompleteTable.isHidden = true
         autoCompleteTable.separatorStyle = .none
         
         EpsilonStreamBackgroundFetch.searcherUI = self
-        
+      
+        /*
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
         swipeRight.direction = UISwipeGestureRecognizerDirection.right
         self.view.addGestureRecognizer(swipeRight)
@@ -191,8 +294,10 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.left
         self.view.addGestureRecognizer(swipeLeft)
+         */
         view.backgroundColor = UIColor(rgb: ES_watch1)
         view.alpha = 1.0
+ 
         
         //        mainTopStack.removeArrangedSubview(mainSegmentView)
         //        mainSegmentView.removeFromSuperview()
@@ -267,10 +372,14 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func selected(_ string: String){
+        var search = EpsilonStreamSearch()
+        search.searchString = string
+        BrowseStackManager.pushNew(search: search)
         searchTextField.text = string
         autoCompleteTable.isHidden = true
         refreshSearch()
         self.view.endEditing(true)
+        FIRAnalytics.logEvent(withName: "item_selected", parameters: ["string" : string as NSObject])
     }
     
     
@@ -281,7 +390,16 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     var currentSearch = EpsilonStreamSearch()
     
+    var goingToTop = true
+    
     func refreshSearch(){
+        
+        if searchTextField.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == ""{
+            homeButton.isEnabled = false
+        }else{
+            homeButton.isEnabled = true
+        }
+        
         currentSearch.searchString = searchTextField.text!
 
         currentSearch.whyHow = 0.5
@@ -351,11 +469,17 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         */
-                
-
+        
+        
+        forwardButton.isEnabled = BrowseStackManager.canForward()
+        backButton.isEnabled = BrowseStackManager.canBack()
+        
         resultsTable.reloadData()
-        let top = NSIndexPath(row: Foundation.NSNotFound, section: 0)
-        resultsTable.scrollToRow(at: top as IndexPath, at: .top, animated: false)
+        if goingToTop == true{
+            let top = NSIndexPath(row: Foundation.NSNotFound, section: 0)
+            resultsTable.scrollToRow(at: top as IndexPath, at: .top, animated: false)
+        }
+        goingToTop = true //QQQ super nasty hack
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -448,15 +572,13 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             return
         }
 
-        
-        
         switch searchResultItems[indexPath.row].type{
         case SearchResultItemType.video:
             if let vc = storyboard?.instantiateViewController(withIdentifier: "PlayVideo") as? PlayVideoViewController{
                 // QQQQ - delete vc.videoPlayer = playerBank[indexPath.row]
                 vc.isExplodingDots = false //QQQQ read type of video display here
                 let videoItem = searchResultItems[indexPath.row] as! VideoSearchResultItem
-                
+                FIRAnalytics.logEvent(withName: "video_play", parameters: ["videoId" : videoItem.youtubeId as NSObject])
                 vc.videoIdToPlay = videoItem.youtubeId
                 navigationController?.pushViewController(vc, animated: true)
             }
@@ -464,20 +586,25 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         /////////////////////////
         /////////////////////////
         case SearchResultItemType.iosApp:
+            FIRAnalytics.logEvent(withName: "appStore_go", parameters: ["appId" :  (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId as NSObject])
             jumpToIosApp(withCode: (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId) //QQQQ
         /////////////////////////
         /////////////////////////
         case SearchResultItemType.gameWebPage:
+            FIRAnalytics.logEvent(withName: "gameWeb_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url as NSObject])
             jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url, withSplashKey: "gameQQQQ")
         /////////////////////////
         /////////////////////////
         case SearchResultItemType.blogWebPage:
+            FIRAnalytics.logEvent(withName: "web_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url as NSObject])
             jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url,inSafariMode: (searchResultItems[indexPath.row]as! BlogWebPageSearchResultItem).isExternal, withSplashKey: searchResultItems[indexPath.row].splashKey)
         /////////////////////////
         /////////////////////////
         case SearchResultItemType.mathObjectLink:
             //QQQQ implement math object link search result item
             let molItem = searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem
+     
+            FIRAnalytics.logEvent(withName: "mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
             
             var imageView: UIImageView? = nil
             //QQQQ move elsewhere and allow other splashes.
@@ -513,6 +640,9 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let share = UITableViewRowAction(style: .normal, title: "Share"){(action, index) in
+            
+            FIRAnalytics.logEvent(withName: "share",parameters:  [:])
+            
             switch self.searchResultItems[index.row].type{
             case SearchResultItemType.video:
                 let video = self.searchResultItems[index.row] as! VideoSearchResultItem
@@ -629,26 +759,66 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         
         //if got down to here then allowing admin mode
         
+        
         let pushDown = UITableViewRowAction(style: .normal, title: "Down"){(action, index) in
+            
+            /*
+            for i in 0..<self.searchResultItems.count{
+                print("PRI - \(self.searchResultItems[i].foundPriority)")
+            }
+            */
+            
+            var newPriority: Float = 0.0
+            
+            let lastIndex = self.searchResultItems.count - 1
+            if index.row == lastIndex || index.row == lastIndex - 1{
+                newPriority = self.searchResultItems[lastIndex].foundPriority * 10
+                print(newPriority)
+            }else{
+                let nextPri = self.searchResultItems[index.row+1].foundPriority
+                let nextAfterPri =  self.searchResultItems[index.row + 2].foundPriority
+                newPriority = (nextPri + nextAfterPri)/2
+                print("next: \(nextPri), nextAfter: \(nextAfterPri), new: \(newPriority)")
+            }
+            
             switch self.searchResultItems[index.row].type{
             case SearchResultItemType.video:
                 //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
                 let youTubeIdToPushDown = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
                 EpsilonStreamAdminModel.setCurrentVideo(withVideo: youTubeIdToPushDown)
-                let newPriority = (self.searchResultItems[index.row+1].foundPriority + self.searchResultItems[index.row + 2].foundPriority)/2
-                print(newPriority)
-                EpsilonStreamAdminModel.currentVideo.hashTagPriorities = "#homePage\(newPriority)"
-                print("push down")
-               
-                /////////////////////////
+                EpsilonStreamAdminModel.currentVideo.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentVideo.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
+                
+                print(EpsilonStreamAdminModel.currentVideo.hashTagPriorities)
+                
+                //QQQQ still not updating to cloud
+                
+            /////////////////////////
             /////////////////////////
             case SearchResultItemType.iosApp, SearchResultItemType.gameWebPage, SearchResultItemType.blogWebPage:
-                print("need to handle")
-                /////////////////////////
+                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
+                let id = (self.searchResultItems[index.row] as! FeatureSearchResultItem).ourFeaturedURLHashtag
+                EpsilonStreamAdminModel.setCurrentFeature(withFeature: id)
+                EpsilonStreamAdminModel.currentFeature.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentFeature.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
+                
+                print(EpsilonStreamAdminModel.currentFeature.hashTagPriorities)
+                
+                EpsilonStreamAdminModel.submitFeaturedURL(withDBFeature: EpsilonStreamAdminModel.currentFeature)
+
+                
+            /////////////////////////
             /////////////////////////
             case SearchResultItemType.mathObjectLink:
-                print("need to handle")
-                /////////////////////////
+                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
+                let id = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).ourMathObjectLinkHashTag
+                EpsilonStreamAdminModel.setCurrentMathObjectLink(withHashTag: id)
+                EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
+                
+                print(EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities)
+
+                //QQQQ still not updating to cloud
+
+                
+            /////////////////////////
             /////////////////////////
             case SearchResultItemType.specialItem:
                 print("need to handle")
@@ -656,13 +826,13 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             }
             //Make it disappear
             tableView.setEditing(false, animated: true)
+            self.goingToTop = false
+            self.refreshSearch()
+
         }
         
         pushDown.backgroundColor = .orange
-
-        
         return [share, edit, pushDown]
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat

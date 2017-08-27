@@ -122,7 +122,8 @@ class AdminSettingsViewController: UIViewController {
         
         
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
-            ImageManager.refreshAllImagesFromURL()
+            //ImageManager.refreshAllImagesFromURL()
+            print("currently disabled")
         }))
         okAction = alert.actions[0]
         okAction.isEnabled = false
@@ -146,7 +147,7 @@ class AdminSettingsViewController: UIViewController {
     func refreshDataView(){
         versionNumberLabel.text = "version: \(EpsilonStreamDataModel.latestVersion())"
         numberMathObjectLabel.text = "numMathObjects: \(EpsilonStreamDataModel.numMathObjects()) "
-        numberVideosLabel.text = "numVideos: \(EpsilonStreamDataModel.numVideos())"
+        numberVideosLabel.text = "numVideos: \(EpsilonStreamDataModel.numVideos()), inColl: \(EpsilonStreamDataModel.numVideos(inCollection: true))"
         numberFeaturesLabel.text = "numFeatures: \(EpsilonStreamDataModel.numFeaturedURLs())"
         numImagesFilesLabel.text = "numImages: CD: \(ImageManager.numImagesInCoreData()), F: \(ImageManager.numImagesOnFile()), B: \(ImageManager.numImagesInBundle())"
     }

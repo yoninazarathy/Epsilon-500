@@ -21,7 +21,8 @@ enum SearchResultItemType{
 class SearchResultItem{
     var title: String = ""
     var channel: String = ""
-    var image: UIImage? = nil
+    //var image: UIImage? = nil //QQQQ delete
+    var imageName: String = ""
     var type: SearchResultItemType = SearchResultItemType.video
     var inCollection: Bool = true
     var hashTagPriorities: String = ""
@@ -58,6 +59,7 @@ class MathObjectLinkSearchResultItem: SearchResultItem{
     var searchTitle: String = ""
     var titleDetail: String = ""
     var imageKey: String = ""
+    var ourMathObjectLinkHashTag: String = ""
 }
 
 class SpecialSearchResultItem: SearchResultItem{

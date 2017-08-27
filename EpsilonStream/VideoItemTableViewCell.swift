@@ -21,23 +21,19 @@ class VideoItemTableViewCell: UITableViewCell {
     
     func configureWith(videoSearchResult result: VideoSearchResultItem){
         //IMAGE
-        if let image = result.image{
+        
+        let image = ImageManager.getImage(forKey: result.imageName, withDefault: "Watch_icon")
+        
+        //QQQQ perfromance: move this resizing offline?
+        let height = image.size.height
+        let width = image.size.width
+        
+        let newHeight = height*0.75 //has to do with black lines on youtube videos QQQQ configure
+        let newWidth = width
             
-            //QQQQ perfromance: move this resizing offline?
+        let img = Toucan(image: image).resize(CGSize(width: newWidth, height: newHeight), fitMode: Toucan.Resize.FitMode.crop).image
             
-            let height = image.size.height
-            let width = image.size.width
-            
-            let newHeight = height*0.75 //has to do with black lines on youtube videos QQQQ configure
-            let newWidth = width
-            
-            let img = Toucan(image: image).resize(CGSize(width: newWidth, height: newHeight), fitMode: Toucan.Resize.FitMode.crop).image
-            
-            videoImage.image = img
-        }else{
-            print("error - using default image")
-            videoImage.image = UIImage(named: "eStreamIcon")
-        }
+        videoImage.image = img
         
         //TITLE
         videoTitle.text = result.title

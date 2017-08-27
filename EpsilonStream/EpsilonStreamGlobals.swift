@@ -84,6 +84,7 @@ func versionNumber() -> String{
 var curatorPasswords:[String:String] = ["coco":"940322",
                                         "yoni":"695569",
                                         "inna":"239239",
-                                        "phil":"123456",
-                                        "miriam":"123456",
-                                        "yousuf":"123456"]
+                                        "phil":"919828",
+                                        "miriam":"695569",
+                                        "yousuf":"291456"]
+

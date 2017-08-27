@@ -114,6 +114,7 @@ extension Video {
         durationSec = item.durationInt
         imageURL = item.imageURLdef //QQQQ
         splashKey = ""
+        hashTagPriorities = ""
         displaySearchPriority = Float(arc4random()) / 0xFFFFFFFF
     }
     

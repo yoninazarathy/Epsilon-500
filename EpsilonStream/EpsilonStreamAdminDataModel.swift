@@ -19,10 +19,14 @@ class EpsilonStreamAdminModel{
     static var currentVideo: Video!
     static var currentMathObject: MathObject!
     static var currentFeature: FeaturedURL!
-    static var currentChannel: Channel!
+    static var currentChannel: Channel!  //QQQQ don't have such an object
+    static var currentMathObjectLink: MathObjectLink!
     
     //QQQQ used for term selector view controller
     static var selectedHashTagList: String! = nil
+    
+    //The current selected HashTag
+    static var currentHashTag: String = ""
     
     ////////////////////////
     // Submit
@@ -46,6 +50,11 @@ class EpsilonStreamAdminModel{
         video["commentAndReview"] = dbVideo.commentAndReview as CKRecordValue
         video["channelKey"] = dbVideo.channelKey as CKRecordValue
         video["durationSec"] = dbVideo.durationSec as CKRecordValue
+        
+        video["displaySearchPriority"] = dbVideo.displaySearchPriority as CKRecordValue
+        video["hashTagPriorities"] = dbVideo.hashTagPriorities as CKRecordValue
+        video["splashKey"] = dbVideo.splashKey as CKRecordValue
+        
         
         video["contentVersionNumber"] = tempCurrentVersionForSubmit as CKRecordValue//QQQQ temp - have in settings app
         
@@ -84,6 +93,8 @@ class EpsilonStreamAdminModel{
         featuredURL["hashTags"] = EpsilonStreamAdminModel.currentFeature.hashTags as CKRecordValue
         featuredURL["imageURL"] = EpsilonStreamAdminModel.currentFeature.imageURL as CKRecordValue
         
+        featuredURL["hashTagPriorities"] = EpsilonStreamAdminModel.currentFeature.hashTagPriorities as CKRecordValue
+        
         if let ik = EpsilonStreamAdminModel.currentFeature.imageKey{
             featuredURL["imageKey"] = ik as CKRecordValue
         }else{
@@ -102,8 +113,12 @@ class EpsilonStreamAdminModel{
         //QQQQ do a spinner thing with a dirty .... etc..
         deleteCloudFeaturedURLRecordsAndReplace(withHashTag: dbFeature.ourFeaturedURLHashtag, withNewRecord: featuredURL)
     }
-
     
+    //QQQQ need
+    // class func submitMathObjectLink(){
+    //}
+
+
     class func submitMathObject(){
         let mathObject = CKRecord(recordType: "MathObject")
         //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
@@ -402,6 +417,24 @@ class EpsilonStreamAdminModel{
             print("Fetch failed")
         }
     }
+    
+    class func setCurrentMathObjectLink(withHashTag molHashTag: String){
+        let request = MathObjectLink.createFetchRequest()
+        request.predicate = NSPredicate(format: "ourMathObjectLinkHashTag == %@", molHashTag)
+        
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        
+        do{
+            let links = try container.viewContext.fetch(request)
+            if links.count != 1{
+                print("error too many videos of id \(molHashTag) -- \(links.count)")
+            }
+            EpsilonStreamAdminModel.currentMathObjectLink = links[0]
+        }catch{
+            print("Fetch failed")
+        }
+    }
+
 
     
     class func setCurrentMathObject(withMathObject hashTag: String){
@@ -426,14 +459,22 @@ class EpsilonStreamAdminModel{
     /////////////////////////////
 
     class func storeAllVideos(){
+        //QQQQ just to be safe this is commented out
+        return
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         do{
             let videos = try container.viewContext.fetch(request)
             for v in videos{
-                EpsilonStreamAdminModel.currentVideo = v
-                EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
+                if (v.hashTags == "" || v.hashTags == "#noTag") && v.isInCollection == false && v.ourTitle == v.youtubeTitle{
+                    print("WILL SUBMIT VIDEO \(v.youtubeVideoId)")
+                    EpsilonStreamAdminModel.currentVideo = v
+                    EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
+                }else{
+                    print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags)")
+
+                }
             }
         }catch{
             print("Fetch failed")
@@ -535,10 +576,12 @@ class EpsilonStreamAdminModel{
             if videos.count > 1{
                 print("error - more than 1 video with same id: \(videos)")
             }else{
-                videos[0].update(withYouTube: item)
-                print("Updated video \(item.videoId)")
+                //QQQQ need to handle updating of video without overriding curated stuff
+                //videos[0].update(withYouTube: item)
+                //print("Updated video \(item.videoId)")
             }
         }else{
+            print("New \(item.channel) -- \(item.title)")
             let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
             let newVideo = Video(context: container.viewContext)
             newVideo.update(withYouTube: item)
@@ -579,5 +622,54 @@ class EpsilonStreamAdminModel{
         
         return report
     }
+    
+    
+    
+    class func deleteSingleCloudVideoRecord(withVideoId videoId: String){
+        let pred = NSPredicate(format: "youtubeVideoId == %@", videoId)
+        let query = CKQuery(recordType: "Video", predicate: pred)
+        
+        var idsToKill: [CKRecordID] = []
+        
+        let operation = CKQueryOperation(query: query)
+        operation.recordFetchedBlock = { record in
+            print("fetched: \(record)")
+            idsToKill.append(record.recordID)
+        }
+        
+        //It is importantToHave1 here.
+        operation.resultsLimit = 1
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            
+            DispatchQueue.main.async{
+                if error == nil{
+                    //                    print("no error")
+                }
+                else{
+                    print("\(error!.localizedDescription)")
+                }
+            }
+        }
+        
+        operation.completionBlock = {
+            if idsToKill.count != 1{
+                print("error - not a single id to kill \(idsToKill.count) - \(videoId)")
+            }else{
+                CKContainer.default().publicCloudDatabase.delete(withRecordID: idsToKill[0]){ (id, error) in
+                    print("completion handler for delete of \(id)")
+                    if let error = error{
+                        print("\(error)")
+                    }
+                    DispatchQueue.main.sync{
+                        backgroundActionInProgress = false
+                    }
+                }
+            }
+            
+        }
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
     
 }

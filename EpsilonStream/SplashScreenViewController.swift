@@ -53,7 +53,6 @@ class SplashScreenViewController: UIViewController {
         splashLabel.isHidden = false
         spinner.isHidden = true
         
-
         EpsilonStreamBackgroundFetch.runUpdate()
         
         

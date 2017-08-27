@@ -12,6 +12,15 @@ import UIKit
 
 class UserDataManager{
     
+    
+    class func crash(){
+        var variable:Int! = nil
+        var variable2 = 0
+        variable2 += variable
+        print("never gonna get here: \(variable2)")
+    }
+    
+    
     /////////////
     // Setters //
     /////////////
@@ -24,6 +33,13 @@ class UserDataManager{
         currentUserId = user
         UserDefaults.standard.set(user, forKey: "userId")
         print("changing userId to: \(user)")
+        
+        EpsilonStreamDataModel.deleteAllEntities(withName: "Video")
+        
+        sleep(5)
+        
+        crash()
+        
     }
     
     class func deletedAllSecondsWatched(){

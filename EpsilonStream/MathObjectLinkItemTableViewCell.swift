@@ -57,22 +57,7 @@ class MathObjectLinkItemTableViewCell: UITableViewCell {
 
         
         //IMAGE
-        if let image = result.image{
-            //QQQQ too small
-            // QQQQ do it
-      //      let img = Toucan(image: image).resize(CGSize(width: 50, height: 50), fitMode: Toucan.Resize.FitMode.crop).image
-        //    articleImage.image = Toucan(image: img).maskWithEllipse().image
-        }else{
-            print("error - using default image")
-            //articleImage.image = UIImage(named: "OneOnEpsilonLogo3")
-        }
-        
-        //TITLE
-       // articleTitle.text = result.title
-        
-        //CHANNEL
-      //  articleProducer.text = result.channel
-      
+        let image = ImageManager.getImage(forKey: result.imageName, withDefault: "eStreamIcon")
     }
     
     

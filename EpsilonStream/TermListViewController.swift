@@ -168,20 +168,36 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
             if let num = EpsilonStreamDataModel.videosOfHashTag[tag]?.count{
                     numVideos = num
             }
+            var numVideosInCollection = 0
+            if let num = EpsilonStreamDataModel.videosOfHashTagInColl[tag]?.count{
+                numVideosInCollection = num
+            }
             var numArticles = 0
             if let num = EpsilonStreamDataModel.articlesOfHashTag[tag]?.count{
                 numArticles = num
+            }
+            var numArticlesInCollection = 0
+            if let num = EpsilonStreamDataModel.articlesOfHashTagInColl[tag]?.count{
+                numArticlesInCollection = num
             }
             var numGames = 0
             if let num = EpsilonStreamDataModel.gamesOfHashTag[tag]?.count{
                 numGames = num
             }
+            var numGamesInCollection = 0
+            if let num = EpsilonStreamDataModel.gamesOfHashTagInColl[tag]?.count{
+                numGamesInCollection = num
+            }
+
+            
+            
             let totalContent = numVideos + numArticles + numGames
+            let totalContentInColl = numVideosInCollection + numArticlesInCollection + numGamesInCollection
             
             let curatorHere = EpsilonStreamDataModel.curatorOfHashTag[tag]!
             let reviewerHere = EpsilonStreamDataModel.reviewerOfHashTag[tag]!
             
-            cell.textLabel!.text = "\(tag): (V: \(numVideos), A: \(numArticles), G: \(numGames)), Curator: \(curatorHere), Reviewer: \(reviewerHere)"
+            cell.textLabel!.text = "\(tag): \(totalContentInColl,totalContent) (V: \(numVideosInCollection,numVideos), A: \(numArticlesInCollection,numArticles), G: \(numGamesInCollection,numGames)), Curator: \(curatorHere), Reviewer: \(reviewerHere)"
             cell.detailTextLabel!.text = "\(indexPath.row+1)  \(EpsilonStreamDataModel.rawTitleOfHashTag[tag]!)"
             cell.detailTextLabel!.numberOfLines = 1
             cell.sizeToFit()

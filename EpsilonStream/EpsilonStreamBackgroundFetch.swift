@@ -11,6 +11,8 @@ import CloudKit
 import CoreData
 import UIKit
 import Alamofire
+import Firebase
+
 
 //QQQQ need to organize so this class is more for cloud and the other class is more for core data...?
 
@@ -129,9 +131,10 @@ class EpsilonStreamBackgroundFetch{
         
         //if not in admin mode only read videos in collection
         //otherwise (inAdminMode) read all videos
-        readVideoDataFromCloud(true)//QQQQ currently all NEED: (isInAdminMode == false)
+        readVideoDataFromCloud(isInAdminMode == false)
         readFeaturedURLsFromCloud()
     }
+    
     
     class func onFinish(){
         var isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedImages && finishedMathObjectLinks
@@ -142,7 +145,7 @@ class EpsilonStreamBackgroundFetch{
             DispatchQueue.main.sync{
                 EpsilonStreamDataModel.setUpAutoCompleteLists()
                 EpsilonStreamDataModel.setLatestDates()
-                ImageManager.refreshImageManager()
+                //ImageManager.refreshImageManager()
                 //finishedVideos = false
                 //readVideoDataFromCloud(false) //read videos not in the collection
             }
@@ -499,24 +502,52 @@ class EpsilonStreamBackgroundFetch{
                 print("\(error!.localizedDescription)")
             }
         }
-        
-        operation.completionBlock = {
-        }
-        
+        operation.completionBlock = {}
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
     class func backgroundScan(){
-        return //QQQQ don't do this for now.
+   
+        var counter = 0
+        
         while true{
-            sleep(15)
-            print("Running background scan...")
-                        
-            DispatchQueue.main.async { //QQQQ this could take some time???
-                ImageManager.refreshImageManager()
+            sleep(10)
+            switch counter % 9{
+            case 0:
+                print("refresh images")
+             //   DispatchQueue.main.async { //QQQQ this could take some time???
+             //   ImageManager.refreshImageManager()
+             //   }
+                EpsilonStreamDataModel.saveViewContext()
+            case 1:
+                print("clean videos")
+                DispatchQueue.main.async {
+                    EpsilonStreamDataModel.videoIntegrityCheck()
+                }
+            case 2:
+                print("clean features")
+            case 3:
+                print("clean math objects")
+            case 3:
+                print("clean math math object links")
+            case 4:
+                print("fetch videos")
+            case 5:
+                print("fetch math objects")
+            case 6:
+                print("fetch math object links")
+            case 7:
+                print("fetch epsilon stream info")
+            case 8:
+                print("fetch features")
+                //readFeaturedURLsFromCloud()
+            default:
+                break
             }
-            
-            EpsilonStreamDataModel.saveViewContext()
+            counter += 1
+            if counter % 100 == 0{
+                FIRAnalytics.logEvent(withName: "background_long_cycle", parameters: ["counter" : counter as NSObject])
+            }
         }
     }
     

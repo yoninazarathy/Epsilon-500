@@ -117,6 +117,66 @@ class YoutubeAPICommunicator{
         YoutubeResource(
             channelName: "",
             channelId: "",
+            playListId: "PLANMHOrJaFxPCjR2enLZBRgtZgjtXJ0MJ",
+            comment: "PatrickJMT The Fundamentals of Logic")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLANMHOrJaFxMobwlFyaSZdxoh-nl6-o1X",
+            comment: "PatrickJMT Puzzle Problems - Fun Problems!")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLANMHOrJaFxM2UbRPM9YNQ1YT3s4gX4Rp",
+            comment: "PatrickJMT Inverse Trigonometric Functions")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLANMHOrJaFxN4Ny3jqaPvTeZpxkZlxRa5",
+            comment: "PatrickJMT Game Theory")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLF1E94C1948483103",
+            comment: "PatrickJMT - Optimization Problem #1")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PL4098211B87018422",
+            comment: "PatrickJMT Combinations - Counting Using Combinations")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PL7DA48E186D1D8049",
+            comment: "PatrickJMT - Logarithms")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLDDDAA7E0D61A5CFA",
+            comment: "PatrickJMT - Conic Sections")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLAC5EA62150BD3A5A",
+            comment: "PatrickJMT - Complex Numbers")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PL9F8908A958AF7DC9",
+            comment: "PatrickJMT -  Functions : The basics")
+        , //QQQQ Note still missing many playlists of PatrickJMT
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
             playListId: "PL7AF1C14AF1B05894",
             comment: "Khan Acemdy Algebra")
         ,
@@ -239,8 +299,118 @@ class YoutubeAPICommunicator{
             channelId: "UCXZIDlJ_DgzrEwYop2s3JOQ",
             playListId: "",
             comment: "National Museum of Mathematics")
-    ]
-    
+        ,
+        YoutubeResource(
+            channelName: "ArtOfTheProblem",
+            channelId: "",
+            playListId: "",
+            comment: "Art of the Problem")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PL1C537F4A57B3F09B",
+            comment: "Brightstorm - Geometry"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLD286B3F281B219D4",
+            comment: "Brightstorm - Algebra 1"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLB2606C762CF0B898",
+            comment: "Brightstorm - Precalculus"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PL2EC6AA23B1563190",
+            comment: "Brightstorm - Algebra 2"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PL8FE0AF517D088CB8",
+            comment: "Brightstorm - Trigonometry"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLlssSNhNZaPPpwByvVFNqCRr6T57JtODr",
+            comment: "Brightstorm - Pre-Algebra"),
+        YoutubeResource(
+            channelName: "Computerphile",
+            channelId: "",
+            playListId: "",
+            comment: "Computerphile")
+        ,
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCiTjCIT_9EXV1Wp1cY0zaUA",
+            playListId: "",
+            comment: "Don't Memorise"),
+        YoutubeResource(
+            channelName: "MindYourDecisions",
+            channelId: "",
+            playListId: "",
+            comment: "MindYourDecisions")
+        ,
+        YoutubeResource(
+            channelName: "minutephysics",
+            channelId: "",
+            playListId: "",
+            comment: "minutephysics")
+        ,
+   /*     YoutubeResource( //QQQQ not clear the problem - it pullls a huge number of vids...
+            channelName: "singingbanana",
+            channelId: "",
+            playListId: "",
+            comment: "singingbanana")
+        ,*/
+        YoutubeResource(
+            channelName: "MathTV",
+            channelId: "",
+            playListId: "",
+            comment: "Math TV")
+        ,
+        YoutubeResource(
+            channelName: "spoonfulofmaths",
+            channelId: "",
+            playListId: "",
+            comment: "Spoonful of Maths")
+        ,
+        YoutubeResource(
+            channelName: "DrSaradaHerke",
+            channelId: "",
+            playListId: "",
+            comment: "Sarada Herke")
+        ,
+        YoutubeResource(
+            channelName: "StudyPug",
+            channelId: "",
+            playListId: "",
+            comment: "StudyPug")
+        ,
+        YoutubeResource(
+            channelName: "Vsauce",
+            channelId: "",
+            playListId: "",
+            comment: "Vsauce")
+        ,
+        YoutubeResource(
+            channelName: "Taylorns34",
+            channelId: "",
+            playListId: "",
+            comment: "Welch Labs")
+        ,
+        YoutubeResource(
+            channelName: "MathMammoth",
+            channelId: "",
+            playListId: "",
+            comment: "Math Mammoth"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCLo4jBc9fQkVPbmdnSL4IRg",
+            playListId: "",
+            comment: "The Global Math Project")]
     
     static func fetchResource(_ resource: YoutubeResource){
         resourceQueryCount += 1
@@ -370,7 +540,7 @@ class YoutubeAPICommunicator{
     
     static func finishedFetch(){
         resourceQueryCount -= 1
-        //print("finished fetch: \(resourceQueryCount)")
+        print("finished fetch: \(resourceQueryCount)")
         if resourceQueryCount == 0{
             print("FINISHED ALL FETCHES")
             delegate.videoIdsOfChannelDone(withVideos: videoIdList)

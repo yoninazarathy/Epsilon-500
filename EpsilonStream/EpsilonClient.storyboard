@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="KAj-u0-0Hv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="KAj-u0-0Hv">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -197,25 +197,38 @@
                                     <view opaque="NO" tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iUj-E0-gjR">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="gB3-dw-jor">
+                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gB3-dw-jor">
                                                 <rect key="frame" x="10" y="10" width="355" height="50"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rZQ-8r-T2S">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                        <rect key="contentStretch" x="0.0" y="0.0" width="0.20000000000000001" height="0.20000000000000001"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="50" id="252-qV-xk0" userLabel="width = 35"/>
-                                                            <constraint firstAttribute="height" constant="50" id="T4X-Ot-hQ7"/>
-                                                        </constraints>
-                                                        <state key="normal" title="xx" image="surprise1"/>
-                                                        <connections>
-                                                            <action selector="supriseButtonAction:" destination="Usf-DR-MlD" eventType="primaryActionTriggered" id="yQy-bB-xxK"/>
-                                                            <action selector="surpriseTouchDown:" destination="Usf-DR-MlD" eventType="touchDown" id="P3a-zL-574"/>
-                                                            <action selector="surpriseTouchUpOutside:" destination="Usf-DR-MlD" eventType="touchUpOutside" id="kBg-h2-Av8"/>
-                                                        </connections>
-                                                    </button>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="-10" translatesAutoresizingMaskIntoConstraints="NO" id="0mL-ww-KXX">
+                                                        <rect key="frame" x="0.0" y="7.5" width="60" height="35"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zs9-tB-nF5" userLabel="Back">
+                                                                <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="35" id="R17-ZJ-aTa"/>
+                                                                    <constraint firstAttribute="width" constant="35" id="cp7-ji-vx4"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button" image="Navigation_Icon_Left_Passive"/>
+                                                                <connections>
+                                                                    <action selector="backButtonAction:" destination="Usf-DR-MlD" eventType="primaryActionTriggered" id="XJr-pJ-CTI"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EMP-TV-ezD" userLabel="Forward">
+                                                                <rect key="frame" x="25" y="0.0" width="35" height="35"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="35" id="qHz-Qk-tOl"/>
+                                                                    <constraint firstAttribute="width" constant="35" id="tTb-pU-N91"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button" image="Navigation_Icon_Right_Passive"/>
+                                                                <connections>
+                                                                    <action selector="forwardButtonAction:" destination="Usf-DR-MlD" eventType="primaryActionTriggered" id="PNU-hI-ibV"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Search" borderStyle="roundedRect" placeholder="Your Search Here" textAlignment="natural" minimumFontSize="18" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="DyB-Sa-Uf4">
-                                                        <rect key="frame" x="70" y="10" width="230" height="30"/>
+                                                        <rect key="frame" x="70" y="10" width="217" height="30"/>
                                                         <color key="backgroundColor" red="0.80000000000000004" green="0.2196078431372549" blue="0.2196078431372549" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -224,14 +237,25 @@
                                                             <action selector="searchEditChange:" destination="Usf-DR-MlD" eventType="editingChanged" id="IuW-JK-wGj"/>
                                                         </connections>
                                                     </textField>
-                                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yu8-oX-gUi">
-                                                        <rect key="frame" x="320" y="0.0" width="35" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ky-1a-wB1" userLabel="Home">
+                                                        <rect key="frame" x="297" y="11" width="28" height="28"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="28" id="0ph-oQ-AtQ"/>
+                                                            <constraint firstAttribute="height" constant="28" id="M3v-KT-eLf"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button" image="home2"/>
+                                                        <connections>
+                                                            <action selector="homeButtonAction:" destination="Usf-DR-MlD" eventType="primaryActionTriggered" id="G91-BA-zaW"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yu8-oX-gUi">
+                                                        <rect key="frame" x="335" y="7.5" width="20" height="35"/>
                                                         <rect key="contentStretch" x="0.0" y="0.0" width="0.20000000000000001" height="0.20000000000000001"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="50" id="SFu-ti-yjg"/>
-                                                            <constraint firstAttribute="width" constant="35" id="nGr-Ah-pEl"/>
+                                                            <constraint firstAttribute="height" constant="35" id="SK5-YX-a7B"/>
+                                                            <constraint firstAttribute="width" constant="20" id="nGr-Ah-pEl"/>
                                                         </constraints>
-                                                        <state key="normal" title="yy" image="settings1"/>
+                                                        <state key="normal" title="yy" image="3dotsMenu"/>
                                                         <connections>
                                                             <action selector="settingsButtonAction:" destination="Usf-DR-MlD" eventType="primaryActionTriggered" id="ROe-r3-hFf"/>
                                                         </connections>
@@ -630,6 +654,9 @@
                     <connections>
                         <outlet property="autoCompleteTable" destination="QGS-2M-yFu" id="oLG-Oq-cm7"/>
                         <outlet property="autoCompleteTableViewHeightConstraint" destination="OUs-lQ-ulX" id="bFV-vc-eOP"/>
+                        <outlet property="backButton" destination="zs9-tB-nF5" id="hKP-v4-EnF"/>
+                        <outlet property="forwardButton" destination="EMP-TV-ezD" id="amk-r3-gZ8"/>
+                        <outlet property="homeButton" destination="5ky-1a-wB1" id="c5A-fG-X8w"/>
                         <outlet property="mainTopStack" destination="dTa-dx-kMW" id="JyZ-jt-WJv"/>
                         <outlet property="resultsTable" destination="ldx-pV-1wQ" id="axN-70-6Zp"/>
                         <outlet property="searchTextField" destination="DyB-Sa-Uf4" id="VDz-cG-moX"/>
@@ -1820,7 +1847,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="3dotsMenu" width="512" height="512"/>
         <image name="Assets_Button_Long_Passive" width="225" height="45"/>
+        <image name="Navigation_Icon_Left_Passive" width="36" height="36"/>
+        <image name="Navigation_Icon_Right_Passive" width="36" height="36"/>
         <image name="OneOnEpsilonLogo3" width="236" height="176"/>
         <image name="Splash_Screen_Condition_12" width="627" height="1107"/>
         <image name="Splash_Screen_Condition_22" width="627" height="1107"/>
@@ -1828,7 +1858,6 @@
         <image name="Splash_Screen_Condition_42" width="627" height="1107"/>
         <image name="eStreamIcon" width="180" height="180"/>
         <image name="gmp_balloon_gray" width="601" height="601"/>
-        <image name="settings1" width="97" height="97"/>
-        <image name="surprise1" width="97" height="97"/>
+        <image name="home2" width="2000" height="2000"/>
     </resources>
 </document>

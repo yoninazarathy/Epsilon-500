@@ -10,7 +10,11 @@ import Foundation
 import UIKit
 import CloudKit
 import Alamofire
- import Toucan
+import Toucan
+
+protocol ImageLoadedDelegate{
+    func imagesUpdate()
+}
 
 enum ImageStatus{
     case UrgentlyNeeded
@@ -43,6 +47,65 @@ extension String {
 
 class ImageManager{
     
+    //The data model of the image manager is now the hashtables associated with image Keys.
+    //Image keys are eitehr 10 characters (youtube style) or 6 characters for features.
+    //Images can be on the:
+    // 1) The bundle - then they are copied to the document directory on (first) startup.
+    // 2) In the cloudkit envionrment - this is for 6 char images of features.
+    // 3) In the youtube severs (using urls).
+    
+    //Indicates the status of images (urgent, normal, loaded - or not there if hash empty).
+    static var statusHash:[String:ImageStatus] = [:]
+    
+    //records the url of the image (if such a thing exists)
+    static var urlHash:[String:String] = [:]
+    
+    //records (by use redundantly true) that an image is in the cloud. Youtube images can be both in cloud and in url.
+    static var inCloudHash:[String:Bool] = [:]
+    
+    //indicates if an image is needed by the delagate. This would come with urgent and then once delegate would be activated.
+    static var neededByDelagate:[String:Bool] = [:]
+
+    static var imageLoadedDelegate: ImageLoadedDelegate? = nil
+    
+    class func updateImageMetaDBFromVideos(){
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = Video.createFetchRequest()
+        
+        do{
+            let result = try container.viewContext.fetch(request)
+            for v in result{
+                urlHash[v.youtubeVideoId] = v.imageURL
+            }
+        }catch{
+            print("Fetch failed")
+        }
+        
+        let request2 = FeaturedURL.createFetchRequest()
+        
+        do{
+            let result = try container.viewContext.fetch(request2)
+            for f in result{
+                inCloudHash[f.imageKey!] = true
+            }
+        }catch{
+            print("Fetch failed")
+        }
+
+        
+    }
+
+    class func updateImageMetaDBFromFeatures(){
+        
+    }
+    
+    class func updateImageMetaDBFromMathObjectLinks(){
+        //QQQQ implement
+    }
+    
+    
+    
+    /*
     class func refreshImageManager(){
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let videoRequset = Video.createFetchRequest()
@@ -86,7 +149,9 @@ class ImageManager{
         }
 
     }
+ */
     
+    /*
     class func refreshImage(withKey imageKey: String,withURL urlString: String,primarySourceIsCloud pCloud: Bool){
         //print("DISCOVER IMAGE \(imageKey)")
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -125,11 +190,28 @@ class ImageManager{
             print("Fetch failed")
         }
     }
-    
+    */
     
     //QQQQ not implemented
     class func makeImageUrgent(withKey key: String){
         print("makeImageUrgent \(key)")
+       
+        //QQQQ this is so not to have mulitple loads.... consider
+        if statusHash[key] == ImageStatus.UrgentlyNeeded{
+            print("image \(key) already urgently needed - returning")
+            return
+        }
+        
+        statusHash[key] = ImageStatus.UrgentlyNeeded
+        neededByDelagate[key] = true
+        if let url = urlHash[key]{
+            loadImage(forKey: key, fromUrl: url)
+        }
+        
+        if let _ = inCloudHash[key]{
+            //QQQQ can make more efficient with list
+            EpsilonStreamBackgroundFetch.readImageFromCloud(withKey: key)
+        }
     }
     
     class func numImagesInBundle() -> Int{
@@ -180,8 +262,6 @@ class ImageManager{
     }
     
 
-    
-    
     class func setup(){
 
         if numImagesOnFile() == 0{
@@ -204,18 +284,25 @@ class ImageManager{
                         let name = f.substring(from:9)
                         //print("FOUND IMAGE IN BUNDLE: \(name)")
                         moveImageFromBundleToDocuments(withKey: name)
+                        statusHash[name] = ImageStatus.Loaded
+                        neededByDelagate[name] = false
                     }
                 }
             } catch {
                 print("Error with searching images in bundle")
             }
         }
-            
+   
+        updateImageMetaDBFromVideos()
+        
+        
+        /*
+        
         DispatchQueue.global(qos: .background).async{
             while dbReadyToGo == false{
                 sleep(1)
             }
-            
+         
             DispatchQueue.global(qos: .background).async{
                 backgroundImageLoadCloud()
             }
@@ -223,10 +310,14 @@ class ImageManager{
                 backgroundImageLoadWeb()
             }
         }
+        */
     }
    
     static var backgroundImageOn = true
     
+    
+    /*
+     //QQQQ - currently not used
     class func backgroundImageLoadCloud(){
         
         return //QQQQ ignore
@@ -262,8 +353,35 @@ class ImageManager{
             }
         }
     }
+ */
     
     
+    class func loadImage(forKey key: String, fromUrl url: String){
+        Alamofire.request(url).responseData{
+            response in
+            DispatchQueue.main.async {
+                switch response.result {
+                case .success(let data):
+                    //print("SIZE OF IMAGE IS : \(data)")
+                    if let img = UIImage(data: data){
+                        //print("DOWNLOADED SIZE: \(img.size)") //QQQQ image sizes
+                        //let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
+                        store(img, withKey: key)
+                        DispatchQueue.main.async { //QQQQ maybe only do if needed by Delagate
+                            self.imageLoadedDelegate?.imagesUpdate()
+                        }
+                    }else{
+                        print("nil in image")
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                }
+            }
+        }
+    }
+    
+    /*
+     QQQQ - currently not used
     class func backgroundImageLoadWeb(){
         
         return //QQQQ
@@ -296,8 +414,8 @@ class ImageManager{
                                     //print("SIZE OF IMAGE IS : \(data)")
                                     if let img = UIImage(data: data){
                                         //print("DOWNLOADED SIZE: \(img.size)") //QQQQ image sizes
-                                        let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
-                                        store(image, withKey: im.keyName)
+                                        //let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
+                                        store(img, withKey: im.keyName)
                                     }else{
                                         print("nil in image")
                                     }
@@ -314,7 +432,7 @@ class ImageManager{
             }
         }
     }
-
+    */
     
     
     class func moveImageFromBundleToDocuments(withKey key: String){
@@ -347,12 +465,21 @@ class ImageManager{
             do{
                 try data.write(to: dataPath)
                 print("saving image with key \(key)")// to \(dataPath)")
+                statusHash[key] = ImageStatus.Loaded
+                if let nk = neededByDelagate[key]{
+                    if nk == true{
+                        //QQQQ imageLoadedDelegate?.imagesUpdate()
+                        neededByDelagate[key] = false
+                    }
+                }
+                
             }catch let error as NSError{
                 print(error)
                 imageWriteOK = false
             }
         }
         
+        /*
         if imageWriteOK{
             DispatchQueue.main.async {
                 let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -373,6 +500,7 @@ class ImageManager{
                 }
             }
         }
+         */
     }
     
     class func storeImage(fromRecord record: CKRecord, withKey key: String){
@@ -381,6 +509,9 @@ class ImageManager{
                 let data = try Data(contentsOf: asset.fileURL)
                 if let image = UIImage(data: data){
                     ImageManager.store(image, withKey: key)
+                    DispatchQueue.main.async { //QQQQ maybe only do if needed by Delagate
+                        self.imageLoadedDelegate?.imagesUpdate()
+                    }
                 }else{
                     print("error with image")
                 }
@@ -420,7 +551,7 @@ class ImageManager{
         }
     }
     
-    class func getImage(forKey key: String, withDefault imageName:String = "eStreamIcon") -> UIImage{
+    class func getImage(forKey key: String, withDefault defaultName:String = "eStreamIcon") -> UIImage{
         var retVal: UIImage! = nil
         do{
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -433,18 +564,20 @@ class ImageManager{
             makeImageUrgent(withKey: key)
         }
         if retVal == nil{
-            retVal = UIImage(named: imageName) //QQQQ
+            retVal = UIImage(named: defaultName)
+            makeImageUrgent(withKey: key)
         }
         return retVal!
     }
     
-    
-    //This one is used in admin mode
+
+    /*
+    //This one is used in admin mode 
+    //QQQQ - turned off for now
     class func refreshAllImagesFromURL(){
  
         //QQQQ need spinner for action....
 
-        
         DispatchQueue.main.async{
             ImageManager.backgroundImageOn = false //QQQQ stop background image
             
@@ -491,9 +624,11 @@ class ImageManager{
             }
         }
     }
-    
+    */
+ 
+ 
     //generate a random 6 char (image) key 
-    //QQQQ need to check for clashes and improve
+    //QQQQ need to check for clashes and improve - STILL NOT USED
     class func generateKey() -> String{
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let len = UInt32(letters.length)

@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import CloudKit
 import UIKit
+import Firebase
 
 //https://stackoverflow.com/questions/28445917/what-is-the-most-succinct-way-to-remove-the-first-character-from-a-string-in-swi
 extension String {
@@ -86,7 +87,24 @@ class EpsilonStreamDataModel{
         ".wootube":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Eddie Woo"),NSPredicate(value:false)),
         ".tippingpoint":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Tipping Point"),NSPredicate(value:false)),
         ".jamestanton":(NSPredicate(format:"channelKey CONTAINS[cd] %@","DrJamesTanton"),NSPredicate(value:false)),
-        ".nationalmuseum":(NSPredicate(format:"channelKey CONTAINS[cd] %@","National Museum of Mathematics"),NSPredicate(value:false))]
+        ".nationalmuseum":(NSPredicate(format:"channelKey CONTAINS[cd] %@","National Museum of Mathematics"),NSPredicate(value:false)),
+        ".artoftheproblem":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Art of the Problem"),NSPredicate(value:false)),
+        ".brightstorm":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Brightstorm"),NSPredicate(value:false)),
+        ".computerphile":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Computerphile"),NSPredicate(value:false)),
+        ".dontmemorise":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Don't Memorise"),NSPredicate(value:false)),
+        ".mathtv":(NSPredicate(format:"channelKey CONTAINS[cd] %@","MathTV"),NSPredicate(value:false)),
+        ".mindyourdecisions":(NSPredicate(format:"channelKey CONTAINS[cd] %@","MindYourDecisions"),NSPredicate(value:false)),
+        ".minutephysics":(NSPredicate(format:"channelKey CONTAINS[cd] %@","minutephysics"),NSPredicate(value:false)),
+        ".singingbanana":(NSPredicate(format:"channelKey CONTAINS[cd] %@","singingbanana"),NSPredicate(value:false)),
+        ".spoonfullofmath":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Spoonful of Maths"),NSPredicate(value:false)),
+        ".saradaherke":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Sarada Herke"),NSPredicate(value:false)),
+        ".studypug":(NSPredicate(format:"channelKey CONTAINS[cd] %@","StudyPug"),NSPredicate(value:false)),
+        ".vsauce":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Vsauce"),NSPredicate(value:false)),
+        ".welchlabs":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Welch Labs"),NSPredicate(value:false)),
+        ".mathmammoth":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Math Mammoth"),NSPredicate(value:false)),
+        ".globalmathproject":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Global Math Project"),NSPredicate(value:false))
+
+    ]
     
     //QQQQ these are currently just updated on boot
     static var fullHashTagList: Array<String> = []
@@ -104,9 +122,13 @@ class EpsilonStreamDataModel{
     static var videosOfHashTag = [String:Array<String>]()
     static var articlesOfHashTag = [String:Array<String>]()
     static var gamesOfHashTag = [String:Array<String>]()
+
+    static var videosOfHashTagInColl = [String:Array<String>]()
+    static var articlesOfHashTagInColl = [String:Array<String>]()
+    static var gamesOfHashTagInColl = [String:Array<String>]()
     
-     static var curatorOfHashTag = [String:String]()
-     static var reviewerOfHashTag = [String:String]()
+    static var curatorOfHashTag = [String:String]()
+    static var reviewerOfHashTag = [String:String]()
     
     static var hashTagInCollection = [String:Bool]()
     
@@ -176,6 +198,11 @@ class EpsilonStreamDataModel{
                 articlesOfHashTag[mo.hashTag] = articles(ofHashTag: mo.hashTag)
                 gamesOfHashTag[mo.hashTag] = games(ofHashTag: mo.hashTag)
 
+                videosOfHashTagInColl[mo.hashTag] = videos(ofHashTag: mo.hashTag,inCollection: true)
+                articlesOfHashTagInColl[mo.hashTag] = articles(ofHashTag: mo.hashTag)
+                gamesOfHashTagInColl[mo.hashTag] = games(ofHashTag: mo.hashTag)
+
+                
                 curatorOfHashTag[mo.hashTag] = mo.curator
                 reviewerOfHashTag[mo.hashTag] = mo.reviewer
 
@@ -294,10 +321,16 @@ class EpsilonStreamDataModel{
     }
 
     
-    class func videos(ofHashTag hashTag: String) -> [String]{
+    class func videos(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [String]{
         let request = Video.createFetchRequest()
-        let pred = NSPredicate(format: "hashTags CONTAINS[cd] %@", hashTag)
-        request.predicate = pred
+        let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
+        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
+        if let ic = inColl{
+            let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred, pred2])
+        }else{
+            request.predicate = pred
+        }
         
         var videoStrings:[String]=[]
         
@@ -318,10 +351,16 @@ class EpsilonStreamDataModel{
     }
     
     
-    class func articles(ofHashTag hashTag: String) -> [String]{
+    class func articles(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [String]{
         let request = FeaturedURL.createFetchRequest()
-        let pred = NSPredicate(format: "hashTags CONTAINS[cd] %@", hashTag)
-        request.predicate = pred
+        let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
+        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
+        if let ic = inColl{
+            let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred, pred2])
+        }else{
+            request.predicate = pred
+        }
         
         var articleStrings:[String]=[]
         
@@ -344,10 +383,16 @@ class EpsilonStreamDataModel{
     }
     
     
-    class func games(ofHashTag hashTag: String) -> [String]{
+    class func games(ofHashTag hashTag: String,inCollection inColl: Bool? = nil) -> [String]{
         let request = FeaturedURL.createFetchRequest()
-        let pred = NSPredicate(format: "hashTags CONTAINS[cd] %@", hashTag)
-        request.predicate = pred
+        let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
+        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
+        if let ic = inColl{
+            let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred, pred2])
+        }else{
+            request.predicate = pred
+        }
         
         var gameStrings:[String]=[]
         
@@ -369,71 +414,6 @@ class EpsilonStreamDataModel{
         return gameStrings
     }
     
-    class func getFeaturedURLSearchItem(withHashTag hashTag: String) -> SearchResultItem?{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let featureRequest = FeaturedURL.createFetchRequest()
-        featureRequest.predicate = NSPredicate(format: "ourFeaturedURLHashtag == %@",hashTag)
-
-        var retVal:FeatureSearchResultItem? = nil
-        
-        do{
-            let features = try container.viewContext.fetch(featureRequest)
-           
-            if features.count == 0{
-                retVal = nil
-            }else if features.count == 1{
-                let feature = features[0]
-                if feature.isAppStoreApp{
-                    let item = IOsAppSearchResultItem()
-                    item.appId = feature.urlOfItem
-                    item.title = feature.ourTitle
-                    item.channel = feature.provider
-                    item.image = ImageManager.getImage(forKey: feature.imageKey!)
-                    item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                    item.inCollection = feature.isInCollection
-                    item.type = SearchResultItemType.iosApp
-                    //QQQQ assert here type is game and not article
-                    retVal = item
-                }else{
-                    if feature.typeOfFeature == "game" || feature.typeOfFeature == "Game"{//QQQQ cleanup
-                        //This is a game on a web-page
-                        let item = GameWebPageSearchResultItem()
-                        item.url = feature.urlOfItem
-                        item.title = feature.ourTitle
-                        item.channel = feature.provider
-                        item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        item.image = ImageManager.getImage(forKey: feature.imageKey!)
-                        item.type = SearchResultItemType.gameWebPage
-                        retVal = item
-
-                    }else{ //is article
-                        //QQQQ the third option is GameWebPageSearchResultItem
-                        let item = BlogWebPageSearchResultItem()
-                        item.url = feature.urlOfItem
-                        item.title = feature.ourTitle
-                        item.channel = feature.provider
-                        item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        item.image = ImageManager.getImage(forKey: feature.imageKey!)
-                        item.type = SearchResultItemType.blogWebPage
-                        retVal = item
-                        //QQQQ assert here type is article
-                    }
-                }
-            }else if features.count > 1{
-                print("error too many features with hashtag \(hashTag)")
-                retVal = nil
-            }
-            /*
-             
-            */
-        }catch{
-            print("Fetch failed")
-        }
-        return retVal
-    }
-    
-    
-    
     
     class func search(withQuery query: EpsilonStreamSearch) -> [SearchResultItem]{
         
@@ -443,6 +423,7 @@ class EpsilonStreamDataModel{
         if searchString == ""{
             searchString = "#homePage"
             hashTag = "#homePage"
+            EpsilonStreamAdminModel.currentHashTag = hashTag //QQQQ just for admin (set priority)
         }
         
         var videosPredicate: NSPredicate!
@@ -562,7 +543,8 @@ class EpsilonStreamDataModel{
                 item.durationString = "\(( Int(round(Float(videos[i].durationSec)/60))) == 0 ? 1 : Int(round(Float(videos[i].durationSec)/60)))" //QQQQ make neat repres
                 item.percentWatched = UserDataManager.getPercentWatched(forKey: videos[i].youtubeVideoId)
                 item.inCollection = videos[i].isInCollection
-                item.image = ImageManager.getImage(forKey: videos[i].youtubeVideoId)
+                //item.image = ImageManager.getImage(forKey: videos[i].youtubeVideoId, withDefault: "Watch_icon")
+                item.imageName = videos[i].youtubeVideoId
                 item.hashTagPriorities = videos[i].hashTagPriorities
                 
                 item.rawPriority = videos[i].displaySearchPriority
@@ -586,7 +568,8 @@ class EpsilonStreamDataModel{
                     item.appId = feature.urlOfItem
                     item.title = feature.ourTitle
                     item.channel = feature.provider
-                    item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Play_icon")
+                    //item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Play_icon")
+                    item.imageName = feature.imageKey!
                     item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
                     item.inCollection = feature.isInCollection
                     item.hashTagPriorities = feature.hashTagPriorities
@@ -605,7 +588,8 @@ class EpsilonStreamDataModel{
                         item.title = feature.ourTitle
                         item.channel = feature.provider
                         item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Play_icon")
+                        //item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Play_icon")
+                        item.imageName = feature.imageKey!
                         item.type = SearchResultItemType.gameWebPage
                         item.hashTagPriorities = feature.hashTagPriorities
                         item.rawPriority = feature.displaySearchPriority
@@ -619,7 +603,8 @@ class EpsilonStreamDataModel{
                         item.title = feature.ourTitle
                         item.channel = feature.provider
                         item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Explore_icon")
+                        //item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Explore_icon")
+                        item.imageName = feature.imageKey!
                         item.type = SearchResultItemType.blogWebPage
                         item.hashTagPriorities = feature.hashTagPriorities
                         item.rawPriority = feature.displaySearchPriority
@@ -656,6 +641,7 @@ class EpsilonStreamDataModel{
                 item.rawPriority = mol.displaySearchPriority
                 item.titleDetail = mol.ourTitleDetail
                 item.splashKey = mol.splashKey
+                item.ourMathObjectLinkHashTag = mol.ourMathObjectLinkHashTag
                 mathObjectLinkSearchResult.append(item)
             }
         }catch{
@@ -678,7 +664,28 @@ class EpsilonStreamDataModel{
             ret[i].foundPriority = priorityList[i]
         }
         
+        
+        //QQQQ horrible code to handle ties
+        if priorityList.count > 1{
+            var sortedList = priorityList.sorted()
+            var minDelta = Float.infinity
+            for i in 1..<sortedList.count{
+                var delta = sortedList[i]-sortedList[i-1]
+                if delta > 0{
+                    if delta < minDelta{
+                        minDelta = delta
+                    }
+                }else{
+                    print("error - delta 0")
+                }
+            }
         print(priorityList)
+        
+        //    for i in 0..<priorityList.count{
+        //        priorityList[i] += 0.5*minDelta*(Float(arc4random()) / 0xFFFFFFFF)
+        //    }
+        }
+        
         
         // use zip to combine the two arrays and sort that based on the first
         let combined = zip(priorityList, ret).sorted {$0.0 < $1.0}
@@ -696,14 +703,12 @@ class EpsilonStreamDataModel{
         }
     }
     
+    //QQQQ Consolidate with code in newPriorityString
     class func findPriority(inHashTagPriorityString priorityString:String,forHashTag tag:String, withRawPriority rawPriority: Float) ->Float{
         
-        print("\(tag): PRIORITY STRING: \(priorityString)")
-        
-        //this is horrible code!!!! QQQQ swift strings are hard
         let cmp: [String] = priorityString.components(separatedBy: "#")
         for c in cmp{
-            let tagFree = tag.substring(from: 1)
+            let tagFree = "\(tag.substring(from: 1)):"
             if c.hasPrefix(tagFree){
                 let rem = c.substring(from: tagFree.characters.count)
                 if let val = NumberFormatter().number(from: rem){
@@ -711,12 +716,21 @@ class EpsilonStreamDataModel{
                 }
             }
         }
-        
-        return rawPriority
-        
-    }
- 
     
+        return rawPriority
+    }
+    
+    class func newPriorityString(oldHashTagPriorityString oldString:String,forHashTag tag:String, withRawPriority rawPriority: Float) ->String{
+        let cmp: [String] = oldString.components(separatedBy: "#")
+        let hashFree = tag.substring(from: 1)
+        let withoutList = cmp.filter{st in return st.hasPrefix("\(hashFree):") == false}
+        let withoutJoined = withoutList.joined(separator: "#")
+        let retVal = "\(withoutJoined)\(tag):\(rawPriority)"
+        return retVal
+    }
+    
+    /*
+ QQQQ remove
     class func penaltyFunction(ofVideo vid: Video, withSearch query: EpsilonStreamSearch) -> Float{
         var penalty = Float(0.0)
         penalty += 2.0 * abs(vid.whyVsHow - query.whyHow)
@@ -732,7 +746,7 @@ class EpsilonStreamDataModel{
         
         return penalty
     }
-    
+    */
   
     class func getDuration(forVideo videoId: String) -> Int?{
         let request = Video.createFetchRequest()
@@ -791,6 +805,11 @@ class EpsilonStreamDataModel{
             print("Fetch failed")
         }
 
+        //QQQQ give this some thought - it is only used for curation (pushing down priority)
+        if retValue.count>0{
+            EpsilonStreamAdminModel.currentHashTag = retValue[0]
+        }
+        
         return retValue
     }
     
@@ -901,9 +920,12 @@ class EpsilonStreamDataModel{
     }
     
     //QQQQ use generic to merge three methods
-    class func numVideos() -> Int{
+    class func numVideos(inCollection inCol: Bool? = nil) -> Int{
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
+        if let ic = inCol{
+            request.predicate = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
+        }
         
         var retVal = -1
         
@@ -1002,4 +1024,40 @@ class EpsilonStreamDataModel{
         }
         EpsilonStreamDataModel.saveViewContext()
     }
+    
+    class func videoIntegrityCheck(){
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = Video.createFetchRequest()
+        
+        var idHash:[String:Int] = [:]
+        
+        do{
+            let result = try container.viewContext.fetch(request)
+            for v in result{
+                if let vcount = idHash[v.youtubeVideoId]{
+                    idHash[v.youtubeVideoId] = vcount + 1
+                    container.viewContext.delete(v)
+                    FIRAnalytics.logEvent(withName: "data_exception", parameters: ["type": "too many videos" as NSObject, "id": v.youtubeVideoId as NSObject, "count": idHash[v.youtubeVideoId]! as NSObject])
+                    //QQQQ - used to clean cloud - keep commented.
+                    //if isInAdminMode && currentUserId == "yoni"{
+                    //    print("XXXX - deleting single record in cloud")
+                    //   EpsilonStreamAdminModel.deleteSingleCloudVideoRecord(withVideoId: v.youtubeVideoId)
+                    //}
+                }else{
+                    idHash[v.youtubeVideoId] = 1
+                }
+            }
+        }catch{
+            print("Fetch failed")
+        }
+        
+        EpsilonStreamDataModel.saveViewContext()
+
+        for (k,v) in idHash{
+            if v > 1{
+                print("MULTIPLE COPIES: \(k) -- \(v)")
+            }
+        }
+    }
+    
 }
