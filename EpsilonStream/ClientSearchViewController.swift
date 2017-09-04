@@ -73,6 +73,9 @@ protocol SearcherUI {
 
 class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate, SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI,ImageLoadedDelegate{
     
+    var coverImageView: UIImageView! = nil
+    
+    
     @IBOutlet weak var autoCompleteTableViewHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var mainTopStack: UIStackView!
@@ -93,8 +96,37 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             FIRAnalytics.logEvent(withName: "home_button", parameters: ["prevText" : "EMPTY" as NSObject])
         }
         searchTextField.text = "" //QQQQ or home?
+        BrowseStackManager.reset(withBaseSearch: EpsilonStreamSearch())
         refreshSearch()
+        showXButton = false
+        //QQQQ duplicated
+        surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
     }
+    
+    @IBAction func searchFieldEditBegin(_ sender: Any) {
+        if searchTextField.text! != ""{
+        
+            showXButton = true
+            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+        }
+        
+
+        
+    }
+    func clearButtonAction() {
+        if let prevText = searchTextField.text{
+            FIRAnalytics.logEvent(withName: "clear_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            FIRAnalytics.logEvent(withName: "clear_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
+        searchTextField.text = "" //QQQQ or home?
+        refreshSearch()
+        showXButton = false
+        //QQQQ duplicated
+            surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
+        
+    }
+
     
     @IBAction func backButtonAction(_ sender: UIButton) {
         if let prevText = searchTextField.text{
@@ -122,42 +154,53 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     var textShuffleTimer: Timer! = nil
     
+    var showXButton = false
+    
     @IBAction func supriseButtonAction(_ sender: UIButton) {
-        surpriseButton.isEnabled = false
-        surpriseButton.imageView!.startAnimating()
-        let newText = EpsilonStreamDataModel.surpriseText()
-        searchTextField.text = newText.lowercased().jumble
-        textShuffleTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true){timer in
-            self.searchTextField.text = newText.lowercased().jumble
-        }
-
-        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false){timer in
-            self.surpriseButton.imageView!.stopAnimating()
-            self.surpriseButton.imageView!.isHighlighted = false
-            FIRAnalytics.logEvent(withName: "surprise_button", parameters: ["newText" : newText as NSObject])
-            self.selected(newText)
-            if let timer = self.textShuffleTimer{
-                timer.invalidate()
+        
+        //QQQQ cleanup
+        
+        if showXButton{
+            clearButtonAction()
+        }else{
+            surpriseButton.isEnabled = false
+            surpriseButton.imageView!.startAnimating()
+            let newText = EpsilonStreamDataModel.surpriseText()
+            searchTextField.text = newText.lowercased().jumble
+            textShuffleTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true){timer in
+                self.searchTextField.text = newText.lowercased().jumble
             }
-            self.surpriseButton.isEnabled = true
-        }
-        let url = ClientSearchViewController.getSoundURL()
-        do{
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer.volume = 0.15
-            audioPlayer.play()
-        }catch{
-            print("error playing sound")
-        }
 
-        
-        
+            Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false){timer in
+                self.surpriseButton.imageView!.stopAnimating()
+                self.surpriseButton.imageView!.isHighlighted = false
+                FIRAnalytics.logEvent(withName: "surprise_button", parameters: ["newText" : newText as NSObject])
+                self.selected(newText)
+                if let timer = self.textShuffleTimer{
+                    timer.invalidate()
+                }
+                self.surpriseButton.isEnabled = true
+            }
+            let url = ClientSearchViewController.getSoundURL()
+            do{
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer.volume = 0.15
+                audioPlayer.play()
+            }catch{
+                print("error playing sound")
+            }
+
+            
+            
+            
+            //searchTextField.text = newText
+            //refreshSearch()
+            //self.view.endEditing(true)
+        }
         autoCompleteTable.isHidden = true
-        
-        //searchTextField.text = newText
-        //refreshSearch()
-        //self.view.endEditing(true)
     }
+    
+    
     func playerStateChanged(_ videoPlayer: YouTubePlayerView, playerState: YouTubePlayerState){
         print("PLAYER STATE in search: \(playerState)")
         switch playerState{
@@ -206,6 +249,15 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBAction func searchEditChange(_ sender: UITextField) {
         let searchString = sender.text!.lowercased().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        
+        //QQQQ duplicated
+        if searchString == ""{
+            showXButton = false
+            surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
+        }else{
+            showXButton = true
+            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+        }
         
         
         let firstChar = searchString.characters.first
@@ -278,7 +330,6 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         searchTextField.text = ""
         var search = EpsilonStreamSearch()
         search.searchString = ""
-        BrowseStackManager.pushNew(search: search)
 
         //view.sendSubview(toBack: autoCompleteTable)
         autoCompleteTable.isHidden = true
@@ -374,7 +425,9 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     func selected(_ string: String){
         var search = EpsilonStreamSearch()
         search.searchString = string
-        BrowseStackManager.pushNew(search: search)
+        if string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != ""{//QQQQ user can enter "home"
+            BrowseStackManager.pushNew(search: search)
+        }
         searchTextField.text = string
         autoCompleteTable.isHidden = true
         refreshSearch()
@@ -399,6 +452,14 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         }else{
             homeButton.isEnabled = true
         }
+        
+        //QQQQ this is duplicated elsewhere
+        if  showXButton{
+            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+        }else{
+            surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
+        }
+        
         
         currentSearch.searchString = searchTextField.text!
 
@@ -489,6 +550,8 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         
+        
+        
         /*
         let transition = CATransition()
         transition.type = kCATransitionReveal
@@ -506,8 +569,8 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView,numberOfRowsInSection section: Int) -> Int {
         //QQQQ this is a horrible hack - make cleaner
-        if searchResultItems.count == 1 && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
-            return 2
+        if searchResultItems.count == 0{// && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
+            return 1
         }else{
             return searchResultItems.count
         }
@@ -516,8 +579,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
 
     func tableView(_ tableView: UITableView,cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //QQQQ rough code in case of no search
-        if searchResultItems.count == 1 && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
+        if searchResultItems.count == 0{// && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
             if indexPath.row == 0{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
                 cell.mainLabel.text = "No match for \"\(currentSearch.searchString)\""
@@ -562,13 +624,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        //QQQQ rough code in case of no search
         if searchResultItems.count == 1{
-            if indexPath.row == 0{
-                print("select 0")
-            }else{
-                selected("")
-            }
             return
         }
 
@@ -606,20 +662,19 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
      
             FIRAnalytics.logEvent(withName: "mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
             
-            var imageView: UIImageView? = nil
             //QQQQ move elsewhere and allow other splashes.
             if molItem.splashKey == "gmp-splash"{
-                imageView = UIImageView(image: UIImage(named: "ed_background1"))
-                imageView!.contentMode = .scaleAspectFill
+                coverImageView = UIImageView(image: UIImage(named: "ed_background1"))
+                coverImageView!.contentMode = .scaleAspectFill
             }else if molItem.splashKey == "youtube-splash"{
-                imageView = UIImageView(image: UIImage(named: "youTubeSplash"))
-                imageView!.contentMode = .scaleAspectFill
+                coverImageView = UIImageView(image: UIImage(named: "youTubeSplash"))
+                coverImageView!.contentMode = .scaleAspectFill
             }else if molItem.splashKey == "OoE-splash"{
-                imageView = UIImageView(image: UIImage(named: "oneOnEpsilonSplash"))
-                imageView!.contentMode = .scaleAspectFill
+                coverImageView = UIImageView(image: UIImage(named: "oneOnEpsilonSplash"))
+                coverImageView!.contentMode = .scaleAspectFill
             }
         
-            if let iv = imageView{
+            if let iv = coverImageView{
                 let window = UIApplication.shared.keyWindow!
                 iv.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
                 window.addSubview(iv)
@@ -850,11 +905,12 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         let parameters = [SKStoreProductParameterITunesItemIdentifier : NSNumber(value: Int(code)!)]
         
         let window = UIApplication.shared.keyWindow!
-        let imageView = UIImageView(image: UIImage(named: "Screen_About_Play"))
-        imageView.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
-        window.addSubview(imageView)
+        coverImageView = UIImageView(image: UIImage(named: "Screen_About_Play"))
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
+        window.addSubview(coverImageView)
         UIView.animate(withDuration: 2.0, animations: {
-            imageView.alpha = 0.2
+            self.coverImageView.alpha = 0.2
         }, completion:
             {_ in })
 
@@ -864,26 +920,61 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
                 if result {
                     self.present(storeViewController,
                                  animated: false, completion: {
-                                    print("here")
-                                    imageView.removeFromSuperview()})
-                    print("called: App Store")
+                                    self.coverImageView.removeFromSuperview()})
+                }
+                
+                if error != nil{
+                    self.coverImageView.removeFromSuperview() //QQQQ doesn't seem to work
                 }
             }
     }
     
+    
+    @objc func textFieldChange(_ sender: UITextField) {
+        if sender.text! ==  webLockKey!{
+            okAction.isEnabled = true
+        }else{
+            okAction.isEnabled = false
+        }
+    }
+        
+    var okAction: UIAlertAction! = nil
+
+    
 
     func jumpToWebPage(withURLstring string: String, inSafariMode safariMode: Bool = false,withSplashKey splashKey: String = ""){
         if safariMode{
-            let alert = UIAlertController(title: "You are leaving Epsilon Stream to an external page", message: "In version 1.0 you can password protect this (not yet in this version).", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
-                print("OK")
-                let safariVC = SFSafariViewController(url: NSURL(string: string) as! URL)
-                self.present(safariVC, animated: true, completion: nil)
-            }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
-                print("Cancel")
-            }))
-            self.present(alert, animated: true, completion: nil)
+            if let webKey = webLockKey{
+                let alert = UIAlertController(title: "External page", message: "Epsilon Stream is currently web locked. Enter the safety code to allow going to the external page. You can disable weblock in the settings menu.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addTextField { (textField : UITextField!) -> Void in
+                    textField.placeholder = "Enter 6 character Safety Code"
+                }
+                let textField = alert.textFields![0] as UITextField
+                
+                textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
+
+                
+                alert.addAction(UIAlertAction(title: "Go to page", style: UIAlertActionStyle.default, handler: {_ in
+                    let safariVC = SFSafariViewController(url: NSURL(string: string) as! URL)
+                    self.present(safariVC, animated: true, completion: nil)
+                }))
+                okAction = alert.actions[0]
+                okAction.isEnabled = false
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
+                }))
+                self.present(alert, animated: true, completion: nil)
+
+            }else{
+                let alert = UIAlertController(title: "You are leaving Epsilon Stream to an external page", message: "If you wish to block such functionallity, you can web lock Epsilon Stream in the settings menu.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Go to page", style: UIAlertActionStyle.default, handler: {_ in
+                    let safariVC = SFSafariViewController(url: NSURL(string: string) as! URL)
+                    self.present(safariVC, animated: true, completion: nil)
+                }))
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
         }else{
             if let vc = storyboard?.instantiateViewController(withIdentifier: "webViewingViewController") as? WebViewingViewController{
                 vc.webURLString = string

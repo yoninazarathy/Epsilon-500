@@ -235,8 +235,8 @@ class EpsilonStreamBackgroundFetch{
         let query = CKQuery(recordType: "Video", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
-        operation.qualityOfService = .userInteractive //QQQQ this is maybe abusive - but may speed up
-        operation.resultsLimit = queryOperationResultLimit
+        //operation.qualityOfService = .userInteractive //QQQQ this is maybe abusive - but may speed up
+        //operation.resultsLimit = queryOperationResultLimit
         
         videoNum = 0
         operation.recordFetchedBlock = populate(withVideoRecord:)
@@ -280,7 +280,7 @@ class EpsilonStreamBackgroundFetch{
     
     class func fetchVideoRecords(withCursor cursor: CKQueryCursor){
         let operation = CKQueryOperation(cursor: cursor)
-        operation.qualityOfService = .userInteractive
+        //operation.qualityOfService = .userInteractive
         operation.recordFetchedBlock = populate(withVideoRecord:)
         
         operation.queryCompletionBlock = { (cursor, error) in
@@ -419,6 +419,8 @@ class EpsilonStreamBackgroundFetch{
         let query = CKQuery(recordType: "FeaturedURL", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = queryOperationResultLimit //QQQQ
+        
         var num = 0
         operation.recordFetchedBlock = { record in
             print("Featured URL - RECORD FETCHED BLOCK -- \(num)")

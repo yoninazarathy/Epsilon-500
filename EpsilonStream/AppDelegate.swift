@@ -65,6 +65,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 
         let user = UserDefaults.standard.string(forKey: "userId")
         currentUserId = user
+        
+        webLockKey = UserDefaults.standard.string(forKey: "webLockKey")
     }
     
     

@@ -136,14 +136,13 @@ extension FeaturedURL {
             isInCollection = iic
         }else{
             //QQQQ report error
-            print("no isInCollection for feature \(ourFeaturedURLHashtag) - setting to true")
+            //print("no isInCollection for feature \(ourFeaturedURLHashtag) - setting to true")
             isInCollection = true
         }
         
         if let pr = record["displaySearchPriority"] as? Float{
             displaySearchPriority = pr
         }else{
-            print("--- FOUND NO PRIORITY ---") //QQQQ
             //the "1+" puts features after videos
             displaySearchPriority = 1 + Float(arc4random()) / 0xFFFFFFFF
             if typeOfFeature == "Game" || typeOfFeature == "game"{ //QQQQ
@@ -154,14 +153,12 @@ extension FeaturedURL {
         if let htp = record["hashTagPriorities"] as? String{
             hashTagPriorities = htp
         }else{
-            print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
             hashTagPriorities = ""
         }
         
         if let sk = record["splashKey"] as? String{
             splashKey = sk
         }else{
-            print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
             splashKey = ""
         }
 
@@ -173,7 +170,6 @@ extension FeaturedURL {
                 isExternal = false
             }
         }else{
-            print("--- FOUND NO isExternal ---") //QQQQ
             isExternal = false
         }
         

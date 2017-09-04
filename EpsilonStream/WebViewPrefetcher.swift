@@ -37,6 +37,24 @@ class WebViewPrefetcher{
     
     static var st: WKNavigationDelegate! = nil
     
+    //QQQQ temp
+    class func getFreshWebPage(withURLString webURLString: String)->WKWebView?{
+        let webConfiguration = WKWebViewConfiguration()
+        //QQQQ delete webConfiguration.suppressesIncrementalRendering = true
+        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        if st == nil{
+            st = SnifferTemp()
+        }
+
+        webView.navigationDelegate = st
+        let url = URL(string: webURLString)!
+        webView.load(URLRequest(url: url))
+        webView.reloadFromOrigin()
+        return webView
+    }
+    
+    //QQQQ temporarilly removing
+    /*
     class func doWebPage(withURLString webURLString: String)->WKWebView?{
         //if not allowed more pages, return nil
         
@@ -53,6 +71,7 @@ class WebViewPrefetcher{
         if st == nil{
             st = SnifferTemp()
         }
+        
         webView.navigationDelegate = st
         let url = URL(string: webURLString)!
         webView.load(URLRequest(url: url))
@@ -80,7 +99,7 @@ class WebViewPrefetcher{
         //print("NUM WEB VIEW PAGES: \(numPages)")
         return webView
     }
-    
+    */
     
     
 }

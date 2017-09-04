@@ -13,6 +13,8 @@ class ExternalPageViewer : UIViewController, SFSafariViewControllerDelegate{
     
     func openPage(onViewController vc: UIViewController)
     {
+        AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+        
         let safariVC = SFSafariViewController(url: NSURL(string: "https://www.google.co.in") as! URL)
         
         vc.present(safariVC, animated: true, completion: nil)

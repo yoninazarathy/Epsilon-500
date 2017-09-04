@@ -17,7 +17,6 @@ class ArticleItemTableViewCell: UITableViewCell {
     
     func configureWith(articleSearchResult result: BlogWebPageSearchResultItem){
         //IMAGE
-
         let image = ImageManager.getImage(forKey: result.imageName, withDefault: "Explore_icon")
 
         //QQQQ too small
@@ -30,6 +29,9 @@ class ArticleItemTableViewCell: UITableViewCell {
         //CHANNEL
         articleProducer.text = result.channel
         
+        if result.inCollection == false{
+            articleProducer.text?.append(" -NIC- ")
+        }
     }
 
     
@@ -42,9 +44,6 @@ class ArticleItemTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
-    
- 
 }

@@ -67,7 +67,6 @@ class VideoItemTableViewCell: UITableViewCell {
         
         if result.inCollection == false{
             videoChannel.text?.append(" -NIC- ") //QQQQ do this for games and articls too.
-
         }
     }
     

@@ -8,7 +8,8 @@
 
 
 import UIKit
-
+import AVFoundation
+import AVKit
 
 
 //FROM https://stackoverflow.com/questions/24111770/make-a-simple-fade-in-animation-in-swift
@@ -44,6 +45,7 @@ class SplashScreenViewController: UIViewController {
     @IBOutlet var spinner: UIActivityIndicatorView!
     
     @IBOutlet var splashLabel: UILabel!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,15 +57,9 @@ class SplashScreenViewController: UIViewController {
         
         EpsilonStreamBackgroundFetch.runUpdate()
         
-        
-        view.viewWithTag(4)!.alpha = 0
-        view.viewWithTag(3)!.alpha = 0
-        view.viewWithTag(2)!.alpha = 0
-        view.viewWithTag(1)!.alpha = 0
-        
         splashLabel.text = ""
         
-        
+        /*
         UIView.animate(withDuration: 0.7, animations: {
             //self.view.viewWithTag(4)!.alpha = 0
             self.view.viewWithTag(1)!.alpha = 1
@@ -101,6 +97,7 @@ class SplashScreenViewController: UIViewController {
                 })
             })
         })
+ */
     }
     
     override func didReceiveMemoryWarning() {
@@ -121,8 +118,61 @@ class SplashScreenViewController: UIViewController {
      override func viewDidAppear(_ animated: Bool){
         super.viewDidAppear(animated)
         AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+        
+        //let movieView = view.viewWithTag(1)!
+
+        let resourcePath = Bundle.main.resourcePath
+        let url = URL(fileURLWithPath:resourcePath!).appendingPathComponent("LogoAnimationVert_9sec.mp4")
+        //print(url)
+        let player = AVPlayer(url: url)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        let screenSize = UIScreen.main.bounds
+        playerLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
+        //print(playerLayer.frame)
+        view.layer.addSublayer(playerLayer)
+        playerLayer.borderWidth = 0.0
+        player.play()
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(beginExitProcedure))
+        
+        let transparentView = UIView()
+        transparentView.frame = playerLayer.frame
+        transparentView.alpha = 1.0
+        view.addSubview(transparentView)
+        transparentView.addGestureRecognizer(gesture)
+
+        
+        view.bringSubview(toFront: splashLabel)
+        view.bringSubview(toFront: spinner)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(beginExitProcedure),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+        
+
+
+        
     }
     
+    func beginExitProcedure(note: NSNotification) {
+        if let user = currentUserId{
+            self.splashLabel.text = "Beta \(versionNumber()), user: \(user)"
+        }else{
+            self.splashLabel.text = "Beta \(versionNumber())"
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false){
+            _ in
+            Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true){
+                timer in
+                if dbReadyToGo{
+                    timer.invalidate()
+                    self.moveOnToClient()
+                }
+                self.spinner.isHidden = false
+                self.spinner.startAnimating()
+            }
+        }
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)

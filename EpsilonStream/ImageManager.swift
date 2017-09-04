@@ -194,11 +194,11 @@ class ImageManager{
     
     //QQQQ not implemented
     class func makeImageUrgent(withKey key: String){
-        print("makeImageUrgent \(key)")
+        //print("makeImageUrgent \(key)")
        
         //QQQQ this is so not to have mulitple loads.... consider
         if statusHash[key] == ImageStatus.UrgentlyNeeded{
-            print("image \(key) already urgently needed - returning")
+            //print("image \(key) already urgently needed - returning")
             return
         }
         

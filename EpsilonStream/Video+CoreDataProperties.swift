@@ -71,7 +71,6 @@ extension Video {
         if let pr = record["displaySearchPriority"] as? Float{
             displaySearchPriority = pr
         }else{
-            print("--- FOUND NO PRIORITY ---") //QQQQ
             displaySearchPriority = Float(arc4random()) / 0xFFFFFFFF
         }
         
@@ -81,14 +80,13 @@ extension Video {
         if let htp = record["hashTagPriorities"] as? String{
             hashTagPriorities = htp
         }else{
-            print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
+            //print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
             hashTagPriorities = ""
         }
         
         if let sk = record["splashKey"] as? String{
             splashKey = sk
         }else{
-            print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
             splashKey = ""
         }
 

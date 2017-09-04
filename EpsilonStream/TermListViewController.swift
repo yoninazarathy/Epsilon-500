@@ -202,12 +202,12 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
             cell.detailTextLabel!.numberOfLines = 1
             cell.sizeToFit()
             
-            switch totalContent{
+            switch totalContentInColl{
             case 0:
                 cell.backgroundColor = UIColor.red.lighter(by: 70)
-            case 1..<9:
-                cell.backgroundColor = UIColor.orange.lighter(by: 70)
-            case 9..<17:
+            case 1..<5:
+                cell.backgroundColor = UIColor.orange//.lighter(by: 70)
+            case 5..<10:
                 cell.backgroundColor = UIColor.yellow.lighter(by: 70)
             default:
                 cell.backgroundColor = UIColor.green.lighter(by: 70)

@@ -199,8 +199,8 @@ class EpsilonStreamDataModel{
                 gamesOfHashTag[mo.hashTag] = games(ofHashTag: mo.hashTag)
 
                 videosOfHashTagInColl[mo.hashTag] = videos(ofHashTag: mo.hashTag,inCollection: true)
-                articlesOfHashTagInColl[mo.hashTag] = articles(ofHashTag: mo.hashTag)
-                gamesOfHashTagInColl[mo.hashTag] = games(ofHashTag: mo.hashTag)
+                articlesOfHashTagInColl[mo.hashTag] = articles(ofHashTag: mo.hashTag,inCollection: true)
+                gamesOfHashTagInColl[mo.hashTag] = games(ofHashTag: mo.hashTag,inCollection: true)
 
                 
                 curatorOfHashTag[mo.hashTag] = mo.curator
@@ -369,8 +369,8 @@ class EpsilonStreamDataModel{
             
             let featuredURLs = try container.viewContext.fetch(request)
             
-            for fu in featuredURLs{
-                if fu.typeOfFeature == "article"{
+            for fu in featuredURLs{//QQQQ clean up...
+                if fu.typeOfFeature == "article" || fu.typeOfFeature == "Article"{
                     articleStrings.append(fu.ourFeaturedURLHashtag)
                 }
             }
@@ -594,6 +594,7 @@ class EpsilonStreamDataModel{
                         item.hashTagPriorities = feature.hashTagPriorities
                         item.rawPriority = feature.displaySearchPriority
                         item.isExternal = feature.isExternal
+                        item.splashKey = feature.splashKey
                         blogSearchResult.append(item)
                         //QQQQ continue here
                     }else{ //is article
@@ -609,6 +610,7 @@ class EpsilonStreamDataModel{
                         item.hashTagPriorities = feature.hashTagPriorities
                         item.rawPriority = feature.displaySearchPriority
                         item.isExternal = feature.isExternal
+                        item.splashKey = feature.splashKey
                         blogSearchResult.append(item)
                         
                         //QQQQ assert here type is article
@@ -653,6 +655,7 @@ class EpsilonStreamDataModel{
         let len = min(videoSearchResult.count,maxVideosToShow)
         var ret = [SearchResultItem](videoSearchResult[0..<len])
         ret.append(contentsOf: blogSearchResult)
+//        print(blogSearchResult.count)
         ret.append(contentsOf: appSearchResult)
         ret.append(contentsOf: mathObjectLinkSearchResult)
         
@@ -679,7 +682,7 @@ class EpsilonStreamDataModel{
                     print("error - delta 0")
                 }
             }
-        print(priorityList)
+        //print(priorityList)
         
         //    for i in 0..<priorityList.count{
         //        priorityList[i] += 0.5*minDelta*(Float(arc4random()) / 0xFFFFFFFF)
@@ -693,14 +696,19 @@ class EpsilonStreamDataModel{
         // use map to extract the individual arrays
         ret = combined.map {$0.1}
 
+        
+        /*
         //QQQQ "hack" if o search, search as though empty and assume will get "home". - bad
         if ret.count == 0{
+            
             var searchObject = EpsilonStreamSearch()
             searchObject.searchString = "#backHomeLink"
             return search(withQuery: searchObject)
         }else{
             return ret
         }
+        */
+        return ret
     }
     
     //QQQQ Consolidate with code in newPriorityString
@@ -1015,14 +1023,14 @@ class EpsilonStreamDataModel{
         
         let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-        request.predicate = NSPredicate(format: "TRUEPREDICATE")
+        request.predicate = predicate
         let delRequest = NSBatchDeleteRequest(fetchRequest: request)
         do {
             try managedObjectContext.execute(delRequest)
         } catch {
             fatalError("Failed to execute request: \(error)")
         }
-        EpsilonStreamDataModel.saveViewContext()
+        //QQQQ EpsilonStreamDataModel.saveViewContext()
     }
     
     class func videoIntegrityCheck(){

@@ -49,7 +49,6 @@ extension MathObjectLink {
         if let htp = record["hashTagPriorities"] as? String{
             hashTagPriorities = htp
         }else{
-            print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
             hashTagPriorities = ""
         }
         
@@ -58,7 +57,6 @@ extension MathObjectLink {
         if let sk = record["splashKey"] as? String{
             splashKey = sk
         }else{
-            print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
             splashKey = ""
         }
         
@@ -72,7 +70,7 @@ extension MathObjectLink {
         if let cik = record["cellImageKey"] as? String{
             cellImageKey = cik
         }else{
-            print("--- FOUND NO CELL IMAGE KEY  ---") //QQQQ
+            //print("--- FOUND NO CELL IMAGE KEY  ---") //QQQQ
             cellImageKey = ""
         }
     }

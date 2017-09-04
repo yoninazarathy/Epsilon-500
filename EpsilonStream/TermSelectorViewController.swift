@@ -125,14 +125,19 @@ class TermSelectorViewController: UIViewController, UITableViewDelegate, UITable
             switch totalContent{
             case 0:
                 cell.backgroundColor = UIColor.red.lighter(by: 70)
-            case 1..<9:
-                cell.backgroundColor = UIColor.orange.lighter(by: 70)
-            case 9..<17:
+            case 1..<5:
+                cell.backgroundColor = UIColor.orange//.lighter(by: 70)
+            case 5..<10:
                 cell.backgroundColor = UIColor.yellow.lighter(by: 70)
             default:
                 cell.backgroundColor = UIColor.green.lighter(by: 70)
             }
 
+            if EpsilonStreamDataModel.hashTagInCollection[tag]! == false{
+                cell.backgroundColor = UIColor.purple
+            }
+
+        
             if hashTagsSelected.contains(tag){
                 cell.backgroundColor = UIColor.blue
             }

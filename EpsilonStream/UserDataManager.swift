@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import UIKit
+import FirebaseAnalytics
 
 class UserDataManager{
     
@@ -25,14 +26,30 @@ class UserDataManager{
     // Setters //
     /////////////
     
+    class func setWebLock(withKey key: String?){
+        webLockKey = key
+        UserDefaults.standard.set(key, forKey: "webLockKey")
+    }
+    
+    
     class func setInAdminMode(_ isAdmin: Bool, withUser user: String? = nil){
-        print("changing adming mode to: \(isAdmin)")
+        if isAdmin{
+            if let usr = user{
+                FIRAnalytics.logEvent(withName: "admin_modeEnter", parameters: ["user": usr as NSObject])
+            }
+        }else{
+            if let usr = currentUserId{
+                FIRAnalytics.logEvent(withName: "admin_modeEnter", parameters: ["user": usr as NSObject])
+            }
+        }
+
+        //print("changing adming mode to: \(isAdmin)")
         isInAdminMode = isAdmin
         UserDefaults.standard.set(isInAdminMode, forKey: "inAdmin")
         
         currentUserId = user
         UserDefaults.standard.set(user, forKey: "userId")
-        print("changing userId to: \(user)")
+        //print("changing userId to: \(user)")
         
         EpsilonStreamDataModel.deleteAllEntities(withName: "Video")
         
@@ -50,7 +67,7 @@ class UserDataManager{
         do{
             let result = try container.viewContext.fetch(request)
             for v in result{
-                print("going to try to delete seconds of \(v.youtubeVideoId)")
+                //print("going to try to delete seconds of \(v.youtubeVideoId)")
                 UserDefaults.standard.removeObject(forKey: v.youtubeVideoId)
             }
         }catch{
@@ -69,6 +86,11 @@ class UserDataManager{
     // Getters //
     /////////////
 
+    //QQQQ not using this in AppDelegate -but should
+    class func getWebLock() -> String?{
+        return UserDefaults.standard.string(forKey: "webLockKey")
+    }
+    
     class func getSecondsWatched(forKey key:String)-> Int{
         return UserDefaults.standard.integer(forKey: key)
     }

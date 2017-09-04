@@ -15,6 +15,7 @@ class GameItemTableViewCell: UITableViewCell {
     @IBOutlet weak var gameTitle: UILabel!
     @IBOutlet weak var gameProducer: UILabel!
     
+    
     func configureWith(iosAppSearchResult result: IOsAppSearchResultItem){
         //IMAGE
         
@@ -28,6 +29,10 @@ class GameItemTableViewCell: UITableViewCell {
         
         //CHANNEL
         gameProducer.text = result.channel
+        
+        if result.inCollection == false{
+            gameProducer.text?.append(" -NIC- ")
+        }
     }
 
     func configureWith(gameWebSearchResult result: GameWebPageSearchResultItem){
@@ -60,8 +65,6 @@ class GameItemTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-
- 
     
     
  

@@ -45,7 +45,7 @@ let maxVideosToShow = 100
 let maxAppsToShow = 100
 let maxBlogsToShow = 100
 
-var queryOperationResultLimit = 500 //QQQQ cursor for mathobjects and features.
+var queryOperationResultLimit = 1000 //QQQQ cursor for mathobjects and features.
 
 var latestImageDate: Date? = nil
 var latestVideoDate: Date? = nil
@@ -80,6 +80,8 @@ func versionNumber() -> String{
         return "V??"
     }
 }
+
+var webLockKey: String? = nil
 
 var curatorPasswords:[String:String] = ["coco":"940322",
                                         "yoni":"695569",

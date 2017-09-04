@@ -78,7 +78,12 @@ class EpsilonStreamAdminModel{
         video["whyVsHow"] = dbVideo.whyVsHow as CKRecordValue
         video["youtubeTitle"] = dbVideo.youtubeTitle as CKRecordValue
         video["youtubeVideoId"] = dbVideo.youtubeVideoId as CKRecordValue
+        let videoId = dbVideo.youtubeVideoId
         video["hashTags"] = dbVideo.hashTags as CKRecordValue
+        
+        
+        //QQQQ do the same for feature....
+        EpsilonStreamDataModel.deleteAllEntities(withName: "Video",withPredicate: NSPredicate(format: "youtubeVideoId == %@", videoId))
         
         deleteCloudVideoRecordsAndReplace(withVideoId: dbVideo.youtubeVideoId, withNewRecord: video)
     }
@@ -152,12 +157,14 @@ class EpsilonStreamAdminModel{
         let pred = NSPredicate(format: "youtubeVideoId == %@", videoId)//QQQQ want [cd] but didn't work
         let query = CKQuery(recordType: "Video", predicate: pred)
         
+        
         var idsToKill: [CKRecordID] = []
         
         let operation = CKQueryOperation(query: query)
-        operation.recordFetchedBlock = { record in
-            print("fetched: \(record)")
-            idsToKill.append(record.recordID)
+        operation.recordFetchedBlock = { rec in
+            print("fetched: \(rec)")
+            idsToKill.append(rec.recordID)
+            print(idsToKill)
         }
         
         //this doesn't really matter - there should be just 1 on the server
@@ -193,6 +200,11 @@ class EpsilonStreamAdminModel{
                     if let error = error{
                         print("\(error)")
                     }
+                    
+                    //QQQQ do this for feature and MO
+//                    DispatchQueue.main.async{
+//                        EpsilonStreamBackgroundFetch.readVideoDataFromCloud(false)
+//                    }
                     DispatchQueue.main.sync{
                         backgroundActionInProgress = false
                     }
@@ -210,8 +222,8 @@ class EpsilonStreamAdminModel{
         var idsToKill: [CKRecordID] = []
         
         let operation = CKQueryOperation(query: query)
-        operation.recordFetchedBlock = { record in
-            idsToKill.append(record.recordID)
+        operation.recordFetchedBlock = { rec in
+            idsToKill.append(rec.recordID)
         }
         
         operation.queryCompletionBlock = { (cursor, error) in

@@ -47,7 +47,7 @@ extension MathObject {
             isInCollection = iic
         }else{
             //QQQQ report error
-            print("no isInCollection for mathObject \(hashTag) - setting to true")
+           // print("no isInCollection for mathObject \(hashTag) - setting to true")
             isInCollection = true
         }
 
@@ -55,16 +55,13 @@ extension MathObject {
             supportsWhyVsHow = wvh
         }else{
             //QQQQ report error
-            print("no supportsWhyVsHow for mathObject \(hashTag) - setting to false")
+            //print("no supportsWhyVsHow for mathObject \(hashTag) - setting to false")
             supportsWhyVsHow = false
         }
-
-        supportsWhyVsHow = false
         
         if let sk = record["splashKey"] as? String{
             splashKey = sk
         }else{
-            print("--- FOUND NO HASH TAG PRIORITY ---") //QQQQ
             splashKey = ""
         }
 
