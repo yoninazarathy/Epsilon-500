@@ -57,7 +57,7 @@ class ClientSettingsViewController: UIViewController {
     
     @IBAction func registerAction(_ sender: Any) {
         FIRAnalytics.logEvent(withName: "register_action", parameters: [:])
-        jumpToWebPage(withURLstring: "https://www.oneonepsilon.com/register")
+        jumpToWebPage(withURLstring: "https://epsilonstream.com/sign-up_app")
     }
     
     @IBAction func resetAllAction(_ sender: Any) {
@@ -77,7 +77,7 @@ class ClientSettingsViewController: UIViewController {
     
     @IBAction func feedbackAction(_ sender: Any) {
         FIRAnalytics.logEvent(withName: "feedback_action", parameters: [:])
-        jumpToWebPage(withURLstring: "https://www.oneonepsilon.com/contact")
+        jumpToWebPage(withURLstring: "https://epsilonstream.com/contact_app")
     }
     
     func termListAction(_ sender: Any) {
@@ -97,6 +97,7 @@ class ClientSettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //QQQQ - links below are also old
         //_ = WebViewPrefetcher.doWebPage(withURLString: "https://www.epsilonstream.com/")
         //view.addSubview(vw1!)
         //_ = WebViewPrefetcher.doWebPage(withURLString: "https://www.oneonepsilon.com/register")

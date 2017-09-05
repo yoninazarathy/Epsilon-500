@@ -58,46 +58,6 @@ class SplashScreenViewController: UIViewController {
         EpsilonStreamBackgroundFetch.runUpdate()
         
         splashLabel.text = ""
-        
-        /*
-        UIView.animate(withDuration: 0.7, animations: {
-            //self.view.viewWithTag(4)!.alpha = 0
-            self.view.viewWithTag(1)!.alpha = 1
-        }, completion: { _ in
-            UIView.animate(withDuration: 0.6, animations: {
-                self.view.viewWithTag(1)!.alpha = 0
-                self.view.viewWithTag(2)!.alpha = 1
-            }, completion: { _ in
-                UIView.animate(withDuration: 0.5, animations: {
-                    self.view.viewWithTag(2)!.alpha = 0
-                    self.view.viewWithTag(3)!.alpha = 1
-                }, completion: { _ in
-                    UIView.animate(withDuration: 1.3, animations: {
-                        self.view.viewWithTag(3)!.alpha = 0
-                        self.view.viewWithTag(4)!.alpha = 1
-                    }, completion: { _ in
-                        if let user = currentUserId{
-                            self.splashLabel.text = "Alpha \(versionNumber()), user: \(user)"
-                        }else{
-                            self.splashLabel.text = "Alpha \(versionNumber())"
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500), execute: {
-                            self.spinner.isHidden = false
-                            self.spinner.startAnimating()
-                            Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true){
-                                timer in
-                                if true || dbReadyToGo{ //QQQQ
-                                    timer.invalidate()
-                                    self.moveOnToClient()
-                                }
-
-                            }
-                        })
-                    })
-                })
-            })
-        })
- */
     }
     
     override func didReceiveMemoryWarning() {

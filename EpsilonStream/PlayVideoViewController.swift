@@ -27,10 +27,10 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
     override func loadView() {
         super.loadView()
         videoPlayer = YouTubePlayerView(frame:view.frame)
-        videoPlayer.isUserInteractionEnabled = false
+        videoPlayer.isUserInteractionEnabled = true
         videoPlayer.loadVideoID(videoIdToPlay!)
         videoPlayer.delegate = self
-        view = videoPlayer
+        view.addSubview(videoPlayer)
         
         navigationController?.navigationBar.isHidden = true
         
@@ -75,7 +75,9 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
             UserDataManager.updateSecondsWatched(forKey: videoIdToPlay!, withSeconds: time)
             _ = navigationController?.popViewController(animated: true)
         case YouTubePlayerState.Playing:
-            videoPlayer.isUserInteractionEnabled = false
+            videoPlayer.isUserInteractionEnabled = true
+            imageCover.removeFromSuperview()
+            //loadSafetyCover.removeFromSuperview()
             print("PLAYING!!!!")
             break
         case YouTubePlayerState.Paused:
@@ -116,9 +118,9 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
-        videoPlayer.addGestureRecognizer(swipeLeft)
+//        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
+//        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+//        videoPlayer.addGestureRecognizer(swipeLeft)
 
         videoPlayer.isHidden = true
         videoPlayer.delegate = self
@@ -128,29 +130,29 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         print("viewWillLayoutSubviews")
-        videoPlayer.pause()
+       // videoPlayer.pause()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         print("viewDidLayoutSubviews")
-        loadSafetyCover.removeFromSuperview()
-        imageCover.removeFromSuperview()
-        videoPlayer.play()
+//        loadSafetyCover.removeFromSuperview()
+//        imageCover.removeFromSuperview()
+        //videoPlayer.play()
     }
     
-    func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.right:
-                print("Swiped right")
-            case UISwipeGestureRecognizerDirection.left:
-                print("Swiped left")
-            default:
-                break
-            }
-        }
-    }
+//    func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
+//        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+//            switch swipeGesture.direction {
+//            case UISwipeGestureRecognizerDirection.right:
+//                print("Swiped right")
+//            case UISwipeGestureRecognizerDirection.left:
+//                print("Swiped left")
+//            default:
+//                break
+//            }
+//        }
+//    }
 
     
 }

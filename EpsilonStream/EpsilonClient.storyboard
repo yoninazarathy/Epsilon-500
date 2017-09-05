@@ -789,10 +789,14 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIy-DQ-4Cm">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIy-DQ-4Cm">
                                         <rect key="frame" x="0.0" y="90" width="343" height="557"/>
-                                        <mutableString key="text">To use Epsilon Stream, just enter a mathematics search term and get useful and exciting content.  The prime focus is Youtube videos. Youtube has thousands of quality free mathematics videos. But how to find the best ones suited for you?  Our content team at One on Epsilon distilles the best free mathematics found on Youtube into a unified search experience.  The scope ranges from the multiplication table up to calculus, touching hundreds of math concepts on the way.  </mutableString>
-                                        <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="21"/>
+                                        <mutableString key="text">To use Epsilon Stream enter a math term to search and get engaging and relevant results. You no longer need to spend hours searching online for the right information to help you learn.
+
+Our content team distills the best math videos on the web into a unified search experience. Each piece of content in Epsilon Stream has been reviewed by multiple math experts, teachers, and parents for relevance, accuracy, and engaging presentation. 
+
+The scope ranges from addition and multiplication up to calculus, touching hundreds of math concepts along the way.</mutableString>
+                                        <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -997,10 +1001,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PaR-af-y3v">
-                                <rect key="frame" x="177" y="509" width="20" height="20"/>
+                                <rect key="frame" x="177" y="534.5" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watch, Play and Explore Mathematics" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q6u-xm-QFf">
-                                <rect key="frame" x="16" y="603" width="343" height="22"/>
+                                <rect key="frame" x="16" y="604.5" width="343" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1010,8 +1014,7 @@
                         <constraints>
                             <constraint firstItem="Q6u-xm-QFf" firstAttribute="leading" secondItem="AHy-AN-vJC" secondAttribute="leadingMargin" id="6IX-K5-bku"/>
                             <constraint firstItem="Q6u-xm-QFf" firstAttribute="trailing" secondItem="AHy-AN-vJC" secondAttribute="trailingMargin" id="G2L-xp-yF4"/>
-                            <constraint firstItem="Q6u-xm-QFf" firstAttribute="top" secondItem="PaR-af-y3v" secondAttribute="bottom" constant="74" id="Iye-tJ-z4W"/>
-                            <constraint firstItem="PaR-af-y3v" firstAttribute="top" secondItem="76c-f8-2kJ" secondAttribute="bottom" constant="489" id="RgL-dT-gk1"/>
+                            <constraint firstItem="Q6u-xm-QFf" firstAttribute="top" secondItem="PaR-af-y3v" secondAttribute="bottom" constant="50" id="aU0-Rw-lG3"/>
                             <constraint firstItem="PaR-af-y3v" firstAttribute="centerX" secondItem="Q6u-xm-QFf" secondAttribute="centerX" id="ctC-n9-Ufn"/>
                             <constraint firstItem="NlA-F1-hHF" firstAttribute="top" secondItem="Q6u-xm-QFf" secondAttribute="bottom" constant="42" id="zem-ym-2FN"/>
                         </constraints>
@@ -1976,10 +1979,14 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" tag="11" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4pJ-Es-CwH">
+                                    <label opaque="NO" userInteractionEnabled="NO" tag="11" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4pJ-Es-CwH">
                                         <rect key="frame" x="0.0" y="90" width="343" height="557"/>
-                                        <mutableString key="text">Do you like to play? Do your students or children like to play? Why?  For one thing, playing games is fun. But it also helps learning. As you explore mathematics with Epsilon Stream you are  presented with games and similar activities in the search results.   Most of the games we present are in the form of direct links to the AppStore where you can download free or paid iOS Apps.   Our content team tested these apps and associates them with your search.</mutableString>
-                                        <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                        <mutableString key="text">Why is playing such a great way to learn? Who doesn’t like to play? Firstly, playing is fun! It helps you learn because you stay engaged.
+
+As you explore math with Epsilon Stream you are presented with games and activities in the search results. Most of the games we present lead you to the App Store where you can get free or paid iOS apps. 
+
+We’ve tested these apps ourselves and with our children and colleagues, making it easy to find what you're looking for.</mutableString>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2037,9 +2044,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="11" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rut-6P-6YN">
-                                        <rect key="frame" x="0.0" y="90" width="343" height="557"/>
-                                        <mutableString key="text">How else can you explore mathematics? Reading is certainly a natural way.  Access hundreds of blog posts and relevant pages matching your search results.  This includes unique blog posts by One on Epsilon and many other reading resources created by incredible math expositors, available on the web.  Our content professional team has searched through hundreds of resrouces on the web. We present you with the most precise, most engaging and most approriapte content. </mutableString>
-                                        <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                        <rect key="frame" x="0.0" y="90" width="339.5" height="557"/>
+                                        <mutableString key="text">There are many ways to satisfy your curiosity and to learn. Some of us love to read!
+
+Access hundreds of blog posts and relevant links which match the search topic, all reviewed by our content team. We only list the ones we feel are the most accurate, and most engaging to save you time in searching. 
+
+This includes blogs by us and many other resources created by incredible math expositors. </mutableString>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2102,7 +2113,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rHs-EX-POY">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="162"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Epsilon Stream" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j5n-Fc-VNb">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="About Epsilon Stream" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j5n-Fc-VNb">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="141.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                                 <nil key="textColor"/>
@@ -2122,9 +2133,9 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Watch_icon" translatesAutoresizingMaskIntoConstraints="NO" id="JYZ-BA-Vie">
                                                 <rect key="frame" x="0.0" y="0.0" width="187.5" height="161.5"/>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watch a curated collection of Youtube videos." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V91-E1-kFb">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watch curated videos" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V91-E1-kFb">
                                                 <rect key="frame" x="187.5" y="0.0" width="187.5" height="161.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -2136,7 +2147,7 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Play_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Nf7-Ry-cVw">
                                                 <rect key="frame" x="0.0" y="0.0" width="187.5" height="162"/>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Play math exploration games and carry out activities." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="duM-yY-w5c">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Play games" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="duM-yY-w5c">
                                                 <rect key="frame" x="187.5" y="0.0" width="187.5" height="162"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
@@ -2150,7 +2161,7 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Explore_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Ff2-jE-q2E">
                                                 <rect key="frame" x="0.0" y="0.0" width="187.5" height="161.5"/>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Explore blog posts, books, activities and events of mathematics." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWs-1T-Oog">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Explore blogs and articles" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWs-1T-Oog">
                                                 <rect key="frame" x="187.5" y="0.0" width="187.5" height="161.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
@@ -2189,7 +2200,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6m0-1U-luj">
                                 <rect key="frame" x="16" y="50" width="343" height="540"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some Features to Look Out For" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="euh-Nw-2le">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Features" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="euh-Nw-2le">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="tTY-my-Rz7"/>
@@ -2207,7 +2218,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Every time you launch Epsilon Stream it synchronizes with the latest content from One on Epsilon's servers." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGr-k4-tuz">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Each time the app opens it will sync with the latest content from our servers." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGr-k4-tuz">
                                                 <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
@@ -2227,7 +2238,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can easily share content by swiping left in the search screen. Alternativly, tap a video while it is playing." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCj-dr-Cso">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe left to share a video, blog, or game with a friend." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCj-dr-Cso">
                                                 <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
@@ -2247,8 +2258,9 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may restrict access to external web pages by entering a safety code in the settings screen." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ZH-Ze-s4f">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ZH-Ze-s4f">
                                                 <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
+                                                <string key="text">The app can be locked from accessing external websites. We pull the videos in and also allow access to Youtube channels. A safety code can be added in the settings screen to ensure you don’t leave the app.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2267,9 +2279,8 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Yl-BQ-gCG">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn’t find what you need? We want to know and we’re pretty quick in responding. Put us to the test. " textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Yl-BQ-gCG">
                                                 <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
-                                                <string key="text">If you search for content and don't get the answers you wanted, you can easily let the team know. We update content rapidly to meet your needs.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>

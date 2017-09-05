@@ -58,7 +58,6 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void){
-        print("here")
         decisionHandler(.allow)
     }
 

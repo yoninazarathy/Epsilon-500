@@ -72,25 +72,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        //QQQQ temp
-        //QQQQ - delete this EpsilonStreamBackgroundFetch.mathObjectLinkDummyMake()
-        
         FIRApp.configure()
-
         setGlobalsFromUserDefaults()
-        
-        WebViewPrefetcher.setUp()
-        
+        //WebViewPrefetcher.setUp()
         EpsilonStreamDataModel.setLatestDates()
-        
-        ImageManager.setup()
-        
-        DispatchQueue.global(qos: .background).async{
-            EpsilonStreamBackgroundFetch.backgroundScan()
-        }
-        
         loadClient()
-        
         return true
     }
 

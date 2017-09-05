@@ -831,7 +831,6 @@ class EpsilonStreamDataModel{
     
     class func setLatestDates(){
         
-        
         //////////////////////
         //////////////////////
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer

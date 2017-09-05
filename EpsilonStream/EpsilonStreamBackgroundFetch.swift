@@ -27,7 +27,6 @@ class EpsilonStreamBackgroundFetch{
     static var finishedVideos = false
     static var finishedMathObjects = false
     static var finishedFeaturedURLs = false
-    static var finishedImages = false
     static var finishedMathObjectLinks = false
 
     static var videoNum = 0
@@ -120,12 +119,11 @@ class EpsilonStreamBackgroundFetch{
  */
     
     class func runUpdate(){
-        finishedImages = false
         finishedMathObjects = false
         finishedVideos = false
         finishedFeaturedURLs = false
 
-        readAllImagesFromCloud()
+        //QQQQ delete readAllImagesFromCloud()
         readMathObjectsFromCloud() //QQQQ implement for collection
         readMathObjectLinksFromCloud()
         
@@ -137,7 +135,7 @@ class EpsilonStreamBackgroundFetch{
     
     
     class func onFinish(){
-        var isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedImages && finishedMathObjectLinks
+        var isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedMathObjectLinks
         
         if isReady{
             EpsilonStreamDataModel.saveViewContext()
@@ -145,11 +143,14 @@ class EpsilonStreamBackgroundFetch{
             DispatchQueue.main.sync{
                 EpsilonStreamDataModel.setUpAutoCompleteLists()
                 EpsilonStreamDataModel.setLatestDates()
-                //ImageManager.refreshImageManager()
-                //finishedVideos = false
-                //readVideoDataFromCloud(false) //read videos not in the collection
+                ImageManager.refreshImageManager()
+                ImageManager.setup()
+                
+                DispatchQueue.global(qos: .background).async{
+                    EpsilonStreamBackgroundFetch.backgroundScan()
+                }
+                dbReadyToGo = true
             }
-            dbReadyToGo = true
         }
     }
     
@@ -373,46 +374,7 @@ class EpsilonStreamBackgroundFetch{
 
     
     
-    //QQQQ currently not used
-    class func readAllImagesFromCloud(){
-        
-        //QQQQ shortcirciut this
-        finishedImages = true
-        return;
-        
-        let pred = NSPredicate(format: "TRUEPREDICATE")// "modificationDate > %@", latestMathObjectDate! as NSDate)
-        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
-        
-        let operation = CKQueryOperation(query: query)
-        operation.resultsLimit = queryOperationResultLimit
-        
-        var num = 0
-        operation.recordFetchedBlock = { record in
-            print("LightImageThumbNail - RECORD FETCHED BLOCK -- \(num)")
-            num = num + 1 //QQQQ handle cursurs???
-            //print(record.recordChangeTag)
-            let obtainedKey = record["keyName"] as! String
-            
-            ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
-        }
-        
-        operation.queryCompletionBlock = { (cursor, error) in
-            DispatchQueue.main.async{
-                if error == nil{
-                }
-                else{
-                    print("\(error!.localizedDescription)")
-                }
-            }
-        }
-        
-        operation.completionBlock = {
-            finishedImages = true
-            onFinish() //QQQQ should this be in a mutex?
-        }
-        
-        CKContainer.default().publicCloudDatabase.add(operation)
-    }
+
     
     class func readFeaturedURLsFromCloud(){
         let pred = NSPredicate(format: "modificationDate > %@", latestFeatureDate! as NSDate)
@@ -454,73 +416,21 @@ class EpsilonStreamBackgroundFetch{
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
-    class func readImageListFromCloud(withKeys keyArray: [String]){
-        var arr:[Any] = []
-        for i in 0..<keyArray.count{
-            arr.append(keyArray[i])
-        }
-        let pred = NSPredicate(format: "keyName IN %@",  arr )
-        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
-
-        print("SENDING PREDICATE TO CLOUD FOR IMAGES: \(pred)")
-        
-        let operation = CKQueryOperation(query: query)
-        operation.resultsLimit = keyArray.count
-        
-        operation.recordFetchedBlock = { record in
-            let obtainedKey = record["keyName"] as! String
-            //print("GOT IMAGE: ----- \(obtainedKey)")
-            ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
-        }
-        
-        operation.queryCompletionBlock = { (cursor, error) in
-            if error == nil{
-            }else{
-                print("\(error!.localizedDescription)")
-            }
-        }
-        
-        operation.completionBlock = {
-        }
-        
-        CKContainer.default().publicCloudDatabase.add(operation)
-    }
 
     
-    class func readImageFromCloud(withKey key: String){
-        let pred = NSPredicate(format: "keyName == %@", key)
-        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
-        
-        let operation = CKQueryOperation(query: query)
-        operation.resultsLimit = 1
-        
-        operation.recordFetchedBlock = { record in
-                ImageManager.storeImage(fromRecord: record, withKey: key)
-        }
-        
-        operation.queryCompletionBlock = { (cursor, error) in
-            if error == nil{
-            }else{
-                print("\(error!.localizedDescription)")
-            }
-        }
-        operation.completionBlock = {}
-        CKContainer.default().publicCloudDatabase.add(operation)
-    }
     
     class func backgroundScan(){
    
         var counter = 0
         
         while true{
-            sleep(10)
+            sleep(5)
             switch counter % 9{
             case 0:
                 print("refresh images")
-             //   DispatchQueue.main.async { //QQQQ this could take some time???
-             //   ImageManager.refreshImageManager()
-             //   }
-                EpsilonStreamDataModel.saveViewContext()
+                DispatchQueue.main.async {
+                    ImageManager.refreshImageManager()
+                }
             case 1:
                 print("clean videos")
                 DispatchQueue.main.async {

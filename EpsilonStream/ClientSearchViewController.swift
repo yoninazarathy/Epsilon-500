@@ -290,7 +290,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func imagesUpdate(){
-        print("imagesUpdate()")
+        //print("imagesUpdate()")
         resultsTable.reloadData()
 
     }
@@ -623,11 +623,13 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if searchResultItems.count == 1{
+
+        //will be if there is no search.
+        //QQQQ fix this so it acts better on the "Let our team known"
+        if searchResultItems.count == 0{
             return
         }
-
+        
         switch searchResultItems[indexPath.row].type{
         case SearchResultItemType.video:
             if let vc = storyboard?.instantiateViewController(withIdentifier: "PlayVideo") as? PlayVideoViewController{
@@ -689,7 +691,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         /////////////////////////
         /////////////////////////
         case SearchResultItemType.specialItem:
-            print("speicalItem click")
+            print("speicalItem click do nothing - QQQQ")
         }
     }
     

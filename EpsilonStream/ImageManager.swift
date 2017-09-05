@@ -17,6 +17,7 @@ protocol ImageLoadedDelegate{
 }
 
 enum ImageStatus{
+    case Unknown
     case UrgentlyNeeded
     case NormallyNeeded
     case Loaded
@@ -60,7 +61,8 @@ class ImageManager{
     //records the url of the image (if such a thing exists)
     static var urlHash:[String:String] = [:]
     
-    //records (by use redundantly true) that an image is in the cloud. Youtube images can be both in cloud and in url.
+    //records true if an image is in the cloud. Youtube images can be both in cloud and in url (in future versions)
+    //currently youtube
     static var inCloudHash:[String:Bool] = [:]
     
     //indicates if an image is needed by the delagate. This would come with urgent and then once delegate would be activated.
@@ -68,14 +70,97 @@ class ImageManager{
 
     static var imageLoadedDelegate: ImageLoadedDelegate? = nil
     
-    class func updateImageMetaDBFromVideos(){
+    static var backgroundImageOn = true
+
+    
+    static var numURLLoads = 0
+    static var numCloudLoads = 0
+    
+    static let maxURLLoads = 50
+    static let maxCloudLoads = 10
+    
+    class func setup(){
+        //if running for first time copy images from Bundle to directory
+        if numImagesOnFile() == 0{
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
+            
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+            } catch let error as NSError {
+                print("Error creating directory: \(error.localizedDescription)")
+            }
+            
+            let bundlePath = Bundle.main.resourcePath!
+            let fileManager = FileManager.default
+            do {
+                let filesFromBundle = try fileManager.contentsOfDirectory(atPath: bundlePath)
+                
+                for f in filesFromBundle{
+                    if f.hasPrefix("PreThumb_"){
+                        let name = f.substring(from:9)
+                        moveImageFromBundleToDocuments(withKey: name)
+                    }
+                }
+            } catch {
+                print("Error with searching images in bundle")
+            }
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true){
+            timer in
+            for (id,url) in urlHash{
+                if statusHash[id] != ImageStatus.Loaded{
+                    if numURLLoads < maxURLLoads{
+                        loadImage(forKey: id, fromUrl: url)
+                    }
+                }
+            }
+            
+            for (key,b) in inCloudHash{
+                if b{
+                    if statusHash[key] != ImageStatus.Loaded{
+                        if numCloudLoads < maxCloudLoads{
+                            readImageFromCloud(withKey: key)
+                        }
+                    }
+
+                }
+            }
+            
+        }
+        
+    }
+    
+    class func refreshImageManager(){
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         
         do{
+            //iterate over all videos
             let result = try container.viewContext.fetch(request)
             for v in result{
+                inCloudHash[v.youtubeVideoId] = false //all youtubes are currently from youtube url (not cloud)
                 urlHash[v.youtubeVideoId] = v.imageURL
+
+                if !haveFile(forImageKey: v.youtubeVideoId){ //if no file
+                    if let st = statusHash[v.youtubeVideoId]{
+                        switch st{
+                        case ImageStatus.Loaded:
+                            print("QQQQ - error -how can it be loaded???")
+                        case ImageStatus.NormallyNeeded: //QQQQ just leave it
+                            break
+                        case ImageStatus.Unknown:
+                            statusHash[v.youtubeVideoId] = ImageStatus.NormallyNeeded
+                        case ImageStatus.UrgentlyNeeded: //QQQQ just leave it
+                            break
+                        }
+                    }else{ //no status hash
+                        statusHash[v.youtubeVideoId] = ImageStatus.NormallyNeeded
+                    }
+                }else{//have file
+                    statusHash[v.youtubeVideoId] = ImageStatus.Loaded
+                }
             }
         }catch{
             print("Fetch failed")
@@ -86,131 +171,67 @@ class ImageManager{
         do{
             let result = try container.viewContext.fetch(request2)
             for f in result{
-                inCloudHash[f.imageKey!] = true
-            }
-        }catch{
-            print("Fetch failed")
-        }
-
-        
-    }
-
-    class func updateImageMetaDBFromFeatures(){
-        
-    }
-    
-    class func updateImageMetaDBFromMathObjectLinks(){
-        //QQQQ implement
-    }
-    
-    
-    
-    /*
-    class func refreshImageManager(){
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let videoRequset = Video.createFetchRequest()
-        videoRequset.predicate = NSPredicate(value: true)
-        videoRequset.fetchLimit = 10000 //QQQQ
-        do{
-            let videoList = try container.viewContext.fetch(videoRequset)
-            for v in videoList{
-                refreshImage(withKey: v.youtubeVideoId,withURL: v.imageURL,primarySourceIsCloud: false)
-                //QQQQ make this imageKey (inDB)
-            }
-        }catch{
-            print("Fetch failed")
-        }
-
-        let featureRequset = FeaturedURL.createFetchRequest()
-        featureRequset.predicate = NSPredicate(value: true)
-        featureRequset.fetchLimit = 100000
-        do{
-            let featureList = try container.viewContext.fetch(featureRequset)
-            for f in featureList{
-                refreshImage(withKey: f.imageKey!, withURL: "",primarySourceIsCloud: true)//QQQQ note features don't have imageURL yet in cloud
-            }
-        }catch{
-            print("Fetch failed")
-        }
-        
-        EpsilonStreamDataModel.saveViewContext()
-        
-        //QQQQ
-        return
-        
-        let request = ImageThumbnail.createFetchRequest()
-        request.predicate = NSPredicate(value: true)
-        request.fetchLimit = 100000
-        do{
-            let imageList = try container.viewContext.fetch(request)
-            print(imageList.count)
-        }catch{
-            print("Fetch failed")
-        }
-
-    }
- */
-    
-    /*
-    class func refreshImage(withKey imageKey: String,withURL urlString: String,primarySourceIsCloud pCloud: Bool){
-        //print("DISCOVER IMAGE \(imageKey)")
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let imageRequest = ImageThumbnail.createFetchRequest()
-        imageRequest.predicate = NSPredicate(format: "keyName == %@", imageKey)
-        imageRequest.fetchLimit = 2
-        
-        
-        do{
-            let imageList = try container.viewContext.fetch(imageRequest)
-            switch imageList.count{
-            case 0:
-                print("ADDING IMAGE \(imageKey) to DB")
-                let newImage = ImageThumbnail(context: container.viewContext)
+                //QQQQ forcefully unwrapping imageKey (why is it optional???)
+                inCloudHash[f.imageKey!] = true //all features are currently from cloud
                 
-                newImage.hasFile = false //QQQQ check if file there
-                newImage.priority = 0//QQQQQ
-                newImage.cloudRequestSent = false
-                newImage.keyName = imageKey
-                newImage.oneOnEpsilonTimeStamp = Date() //QQQQ not clear what here
-                newImage.imageURL = urlString
-                newImage.primarySourceIsCloud = pCloud
-                newImage.webRequestSent = false
-            case 1:
-                let image = imageList[0]
-                if haveFile(forImageKey: image.keyName) == false{
-                    image.hasFile = false
-                    image.cloudRequestSent = false
-                    image.webRequestSent = false
-                    print("reseting image \(image.keyName)")
+                //QQQQ this is a bit of copy from above (factor it)
+                if !haveFile(forImageKey: f.imageKey!){ //if no file
+                    if let st = statusHash[f.imageKey!]{
+                        switch st{
+                        case ImageStatus.Loaded:
+                            print("QQQQ - error -how can it be loaded???")
+                        case ImageStatus.NormallyNeeded: //QQQQ just leave it
+                            break
+                        case ImageStatus.Unknown:
+                            statusHash[f.imageKey!] = ImageStatus.NormallyNeeded
+                        case ImageStatus.UrgentlyNeeded: //QQQQ just leave it
+                            break
+                        }
+                    }else{ //no status hash
+                        statusHash[f.imageKey!] = ImageStatus.NormallyNeeded
+                    }
+                }else{//have file
+                    statusHash[f.imageKey!] = ImageStatus.Loaded
                 }
-            default:
-                print("error - too many images with key \(imageKey). There are \(imageList.count).")
             }
         }catch{
             print("Fetch failed")
         }
+
+        //This whole chunk below just prints a summary for debug
+        let inCloud = inCloudHash.values.filter{$0}
+        let numInCloud = inCloud.count
+        let loaded = statusHash.values.filter(){$0 == ImageStatus.Loaded}
+        let numLoaded = loaded.count
+        let normallyNeeded = statusHash.values.filter(){$0 == ImageStatus.NormallyNeeded}
+        let numNormallyNeeded = normallyNeeded.count
+        let unknown = statusHash.values.filter(){$0 == ImageStatus.Unknown}
+        let numUnknown = unknown.count
+        let urgentlyNeeded = statusHash.values.filter(){$0 == ImageStatus.UrgentlyNeeded}
+        let numUrgentlyNeeded = urgentlyNeeded.count
+        print("inCloudHash.count: \(inCloudHash.count) (inCloud: \(numInCloud)), statusHash.count: \(statusHash.count), urlHash.count: \(urlHash.count),neededByDelagate.count: \(neededByDelagate.count)")
+        print("numLoaded: \(numLoaded), numNormallyNeeded: \(numNormallyNeeded), numUnknown: \(numUnknown), numUrgentlyNeeded: \(numUrgentlyNeeded),")
     }
-    */
     
-    //QQQQ not implemented
+
     class func makeImageUrgent(withKey key: String){
-        //print("makeImageUrgent \(key)")
        
-        //QQQQ this is so not to have mulitple loads.... consider
+        //QQQQ this is so not to have mulitple loads.... consider having a timeout instead
         if statusHash[key] == ImageStatus.UrgentlyNeeded{
-            //print("image \(key) already urgently needed - returning")
+            print("image \(key) already urgently needed - returning")
             return
         }
         
         statusHash[key] = ImageStatus.UrgentlyNeeded
         neededByDelagate[key] = true
+        
         if let url = urlHash[key]{
             loadImage(forKey: key, fromUrl: url)
-        }
-        
-        if let _ = inCloudHash[key]{
-            //QQQQ can make more efficient with list
-            EpsilonStreamBackgroundFetch.readImageFromCloud(withKey: key)
+        }else if let b = inCloudHash[key]{
+            if b{
+                //QQQQ can make more efficient with list
+                readImageFromCloud(withKey: key)
+            }
         }
     }
     
@@ -261,105 +282,25 @@ class ImageManager{
         return retVal
     }
     
-
-    class func setup(){
-
-        if numImagesOnFile() == 0{
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
-            
-            do {
-                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
-            } catch let error as NSError {
-                print("Error creating directory: \(error.localizedDescription)")
-            }
-           
-            let bundlePath = Bundle.main.resourcePath!
-            let fileManager = FileManager.default
-            do {
-                let filesFromBundle = try fileManager.contentsOfDirectory(atPath: bundlePath)
-                
-                for f in filesFromBundle{
-                    if f.hasPrefix("PreThumb_"){
-                        let name = f.substring(from:9)
-                        //print("FOUND IMAGE IN BUNDLE: \(name)")
-                        moveImageFromBundleToDocuments(withKey: name)
-                        statusHash[name] = ImageStatus.Loaded
-                        neededByDelagate[name] = false
-                    }
-                }
-            } catch {
-                print("Error with searching images in bundle")
-            }
-        }
-   
-        updateImageMetaDBFromVideos()
-        
-        
-        /*
-        
-        DispatchQueue.global(qos: .background).async{
-            while dbReadyToGo == false{
-                sleep(1)
-            }
-         
-            DispatchQueue.global(qos: .background).async{
-                backgroundImageLoadCloud()
-            }
-            DispatchQueue.global(qos: .background).async{
-                backgroundImageLoadWeb()
-            }
-        }
-        */
-    }
-   
-    static var backgroundImageOn = true
-    
-    
-    /*
-     //QQQQ - currently not used
-    class func backgroundImageLoadCloud(){
-        
-        return //QQQQ ignore
-        
-        while true{
-            sleep(1)
-            if backgroundImageOn == false{
-                continue
-            }
-            DispatchQueue.main.sync{
-                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-                let request = ImageThumbnail.createFetchRequest()
-                request.predicate = NSPredicate(format:"hasFile = %@ AND primarySourceIsCloud == %@ AND cloudRequestSent = %@", NSNumber(value: false),NSNumber(value: true),NSNumber(value:false))
-                request.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: false)]
-                request.fetchLimit = 50
-                do{
-                    let imageList = try container.viewContext.fetch(request)
-                    
-                    var keys: [String] = []
-                    
-                    for im in imageList{
-                        keys.append(im.keyName)
-                        im.cloudRequestSent = true //QQQQ may crash???
-                    }
-                    
-                    if keys.count > 0{
-                        print("Send Cloud Request for images: \(keys)")
-                        EpsilonStreamBackgroundFetch.readImageListFromCloud(withKeys: keys)
-                    }
-                }catch{
-                    print("Fetch failed")
-                }
-            }
-        }
-    }
- */
-    
     
     class func loadImage(forKey key: String, fromUrl url: String){
+        numURLLoads += 1
+        
+        //QQQQ - this is for another day
+//        var newUrl = url
+//        let ul = URL(fileURLWithPath: url)
+//        if ul.lastPathComponent.hasPrefix("default"){
+//            newUrl = ul.absoluteString.replacingOccurrences(of: "default", with: "hqdefault")
+//        }
+        
         Alamofire.request(url).responseData{
             response in
             DispatchQueue.main.async {
+                numURLLoads -= 1
+                //print("NUM URL LOADS: \(numURLLoads)")
+                if numURLLoads < 0{
+                    print("error")
+                }
                 switch response.result {
                 case .success(let data):
                     //print("SIZE OF IMAGE IS : \(data)")
@@ -367,9 +308,6 @@ class ImageManager{
                         //print("DOWNLOADED SIZE: \(img.size)") //QQQQ image sizes
                         //let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
                         store(img, withKey: key)
-                        DispatchQueue.main.async { //QQQQ maybe only do if needed by Delagate
-                            self.imageLoadedDelegate?.imagesUpdate()
-                        }
                     }else{
                         print("nil in image")
                     }
@@ -379,61 +317,6 @@ class ImageManager{
             }
         }
     }
-    
-    /*
-     QQQQ - currently not used
-    class func backgroundImageLoadWeb(){
-        
-        return //QQQQ
-        
-        while true{
-            sleep(5)
-            if backgroundImageOn == false{
-                continue
-            }
-            
-            DispatchQueue.main.sync{
-                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-                let request = ImageThumbnail.createFetchRequest()
-                request.predicate = NSPredicate(format:"hasFile = %@ AND primarySourceIsCloud == %@ AND webRequestSent = %@", NSNumber(value: false),NSNumber(value: false),NSNumber(value:false))
-                request.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: false)]
-                request.fetchLimit = 50
-                do{
-                    let imageList = try container.viewContext.fetch(request)
-                    
-                    for im in imageList{
-                        im.webRequestSent = true //QQQQ may crash???
-                    }
-
-                    for im in imageList{
-                        Alamofire.request(im.imageURL).responseData{
-                            response in
-                            DispatchQueue.main.async {
-                                switch response.result {
-                                case .success(let data):
-                                    //print("SIZE OF IMAGE IS : \(data)")
-                                    if let img = UIImage(data: data){
-                                        //print("DOWNLOADED SIZE: \(img.size)") //QQQQ image sizes
-                                        //let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
-                                        store(img, withKey: im.keyName)
-                                    }else{
-                                        print("nil in image")
-                                    }
-                                case .failure(let error):
-                                    print("Request failed with error: \(error)")
-                                    im.webRequestSent = false //QQQQ may crash???
-                                }
-                            }
-                        }
-                    }
-                }catch{
-                    print("Fetch failed")
-                }
-            }
-        }
-    }
-    */
-    
     
     class func moveImageFromBundleToDocuments(withKey key: String){
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -468,8 +351,8 @@ class ImageManager{
                 statusHash[key] = ImageStatus.Loaded
                 if let nk = neededByDelagate[key]{
                     if nk == true{
-                        //QQQQ imageLoadedDelegate?.imagesUpdate()
                         neededByDelagate[key] = false
+                        self.imageLoadedDelegate?.imagesUpdate()
                     }
                 }
                 
@@ -478,29 +361,6 @@ class ImageManager{
                 imageWriteOK = false
             }
         }
-        
-        /*
-        if imageWriteOK{
-            DispatchQueue.main.async {
-                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-                let imageRequest = ImageThumbnail.createFetchRequest()
-                imageRequest.predicate = NSPredicate(format: "keyName == %@", key)
-                imageRequest.fetchLimit = 2
-                        
-                do{
-                    let imageList = try container.viewContext.fetch(imageRequest)
-                    if imageList.count == 1{
-                        imageList[0].hasFile = true
-                    }else{
-                        print("error - bad number of  images in db with key \(key) -- \(imageList.count)")
-                    }
-                    
-                }catch{
-                    print("Fetch failed")
-                }
-            }
-        }
-         */
     }
     
     class func storeImage(fromRecord record: CKRecord, withKey key: String){
@@ -522,6 +382,20 @@ class ImageManager{
             print("NO ASSET - with image")
             //video.imageURLlocal = nil
         }
+    }
+    
+    
+    //QQQQ incomplete
+    class func updateHashesFromFiles(){
+        let fd = FileManager.default
+        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
+        
+        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
+            let url = e as! URL
+            print(url)
+        })
+
     }
     
     class func deleteAllImageFiles(){
@@ -570,63 +444,7 @@ class ImageManager{
         return retVal!
     }
     
-
-    /*
-    //This one is used in admin mode 
-    //QQQQ - turned off for now
-    class func refreshAllImagesFromURL(){
- 
-        //QQQQ need spinner for action....
-
-        DispatchQueue.main.async{
-            ImageManager.backgroundImageOn = false //QQQQ stop background image
-            
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let request = ImageThumbnail.createFetchRequest()
-            request.predicate = NSPredicate(value: true)
-            request.fetchLimit = 100000
-            var alamoFires = 0
-            do{
-                let imageList = try container.viewContext.fetch(request)
-                
-                for im in imageList{
-    //                if(alamoFires % 100 == 0 ){
-    //                    sleep(1)
-    //                }
-                    //print("Gonna get \(im.imageURL)")
-                    if im.imageURL != ""{
-                        alamoFires += 1
-                        
-                        Alamofire.request(im.imageURL).responseData{
-                            response in
-                            DispatchQueue.main.async {
-                                switch response.result {
-                                case .success(let data):
-                                    print("SIZE OF IMAGE IS : \(data)")
-                                    if let image = UIImage(data: data){
-                                        store(image, withKey: im.keyName)
-                                    }else{
-                                        print("nil in image")
-                                    }
-                                case .failure(let error):
-                                    print("Request failed with error: \(error)")
-                                }
-                            }
-                        }
-                    }
-
-                    
-                    
-                }
-                
-            }catch{
-                print("Fetch failed")
-            }
-        }
-    }
-    */
- 
- 
+    
     //generate a random 6 char (image) key 
     //QQQQ need to check for clashes and improve - STILL NOT USED
     class func generateKey() -> String{
@@ -642,4 +460,101 @@ class ImageManager{
         
         return randomString
     }
+    
+    //QQQQ currently not used
+    class func readImageListFromCloud(withKeys keyArray: [String]){
+        var arr:[Any] = []
+        for i in 0..<keyArray.count{
+            arr.append(keyArray[i])
+        }
+        let pred = NSPredicate(format: "keyName IN %@",  arr )
+        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
+        
+        print("SENDING PREDICATE TO CLOUD FOR IMAGES: \(pred)")
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = keyArray.count
+        
+        operation.recordFetchedBlock = { record in
+            let obtainedKey = record["keyName"] as! String
+            //print("GOT IMAGE: ----- \(obtainedKey)")
+            ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            if error == nil{
+            }else{
+                print("\(error!.localizedDescription)")
+            }
+        }
+        
+        operation.completionBlock = {
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+
+    class func readImageFromCloud(withKey key: String){
+        numCloudLoads += 1
+        let pred = NSPredicate(format: "keyName == %@", key)
+        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = 1
+        
+        operation.recordFetchedBlock = { record in
+            ImageManager.storeImage(fromRecord: record, withKey: key)
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            numCloudLoads -= 1
+            if numCloudLoads < 0{
+                print("error")
+            }
+            if error == nil{
+            }else{
+                print("\(error!.localizedDescription)")
+            }
+        }
+        operation.completionBlock = {}
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+
+    //QQQQ currently not used
+    class func readAllImagesFromCloud(){
+        
+        let pred = NSPredicate(format: "TRUEPREDICATE")// "modificationDate > %@", latestMathObjectDate! as NSDate)
+        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = queryOperationResultLimit
+        
+        var num = 0
+        operation.recordFetchedBlock = { record in
+            print("LightImageThumbNail - RECORD FETCHED BLOCK -- \(num)")
+            num = num + 1 //QQQQ handle cursurs???
+            //print(record.recordChangeTag)
+            let obtainedKey = record["keyName"] as! String
+            
+            ImageManager.storeImage(fromRecord: record, withKey: obtainedKey)
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            DispatchQueue.main.async{
+                if error == nil{
+                }
+                else{
+                    print("\(error!.localizedDescription)")
+                }
+            }
+        }
+        
+        operation.completionBlock = {
+            //onFinish() //QQQQ should this be in a mutex?
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
+    
 }

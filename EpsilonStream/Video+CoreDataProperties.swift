@@ -75,7 +75,7 @@ extension Video {
         }
         
         imageURL = record["imageURL"] as! String
-        print(imageURL)
+        //print(imageURL)
         
         if let htp = record["hashTagPriorities"] as? String{
             hashTagPriorities = htp
