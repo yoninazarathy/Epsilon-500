@@ -11,6 +11,28 @@ import CoreData
 import CloudKit
 import UIKit
 
+
+class YouTubeSearchResultItem{
+    var title: String = ""
+    var channel: String = ""
+    var youtubeId: String = ""//11 chars base 64 youtube id
+    var duration: Int = -1
+    var imageURL: String = "" //QQQQ
+    var image: UIImage? = nil
+}
+
+class YouTubeVideoListResultItem{
+    var videoId: String = ""
+    var channel: String = ""
+    var title: String = ""
+    var imageURLdef: String = ""
+    var imageURLmed: String = ""
+    var imageURLhigh: String = ""
+    var durationString: String = ""
+    var durationInt: Int32 = 0
+}
+
+
 //QQQQ When cleaning up this class and the other one (EpsilonStreamBackgroundFetch), make
 //a distinction between admin app and client (user) app
 

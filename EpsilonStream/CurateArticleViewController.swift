@@ -123,7 +123,7 @@ class CurateArticleViewController: UIViewController, UIImagePickerControllerDele
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
-        guard let image = info[UIImagePickerControllerEditedImage] as? UIImage else {return}
+        //guard let image = info[UIImagePickerControllerEditedImage] as? UIImage else {return}
         //print(image)
         dismiss(animated: true, completion: nil)
     }

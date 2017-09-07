@@ -234,7 +234,8 @@ class EpsilonStreamBackgroundFetch{
         let pred = inCollection ? NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2]) : pred1
         
         let query = CKQuery(recordType: "Video", predicate: pred)
-        
+        query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
+
         let operation = CKQueryOperation(query: query)
         //operation.qualityOfService = .userInteractive //QQQQ this is maybe abusive - but may speed up
         //operation.resultsLimit = queryOperationResultLimit
@@ -305,6 +306,7 @@ class EpsilonStreamBackgroundFetch{
     class func readMathObjectsFromCloud(){
         let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectDate! as NSDate)
         let query = CKQuery(recordType: "MathObject", predicate: pred)
+        query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
         
         let operation = CKQueryOperation(query: query)
         operation.resultsLimit = queryOperationResultLimit
@@ -339,9 +341,10 @@ class EpsilonStreamBackgroundFetch{
     }
     
     class func readMathObjectLinksFromCloud(){
-        let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectDate! as NSDate)
+        let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectLinkDate! as NSDate)
         let query = CKQuery(recordType: "MathObjectLinks", predicate: pred)
-        
+        query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
+
         let operation = CKQueryOperation(query: query)
         operation.resultsLimit = queryOperationResultLimit
         
@@ -379,7 +382,8 @@ class EpsilonStreamBackgroundFetch{
     class func readFeaturedURLsFromCloud(){
         let pred = NSPredicate(format: "modificationDate > %@", latestFeatureDate! as NSDate)
         let query = CKQuery(recordType: "FeaturedURL", predicate: pred)
-        
+        query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
+
         let operation = CKQueryOperation(query: query)
         operation.resultsLimit = queryOperationResultLimit //QQQQ
         
@@ -427,32 +431,40 @@ class EpsilonStreamBackgroundFetch{
             sleep(5)
             switch counter % 9{
             case 0:
-                print("refresh images")
+                //print("refresh images")
                 DispatchQueue.main.async {
                     ImageManager.refreshImageManager()
                 }
             case 1:
-                print("clean videos")
+                //print("clean videos")
                 DispatchQueue.main.async {
                     EpsilonStreamDataModel.videoIntegrityCheck()
                 }
             case 2:
-                print("clean features")
+                //print("clean features")
+                break
             case 3:
-                print("clean math objects")
+                //print("clean math objects")
+                break
             case 3:
-                print("clean math math object links")
+                //print("clean math math object links")
+                break
             case 4:
-                print("fetch videos")
+                //print("fetch videos")
+                break
             case 5:
-                print("fetch math objects")
+                //print("fetch math objects")
+                break
             case 6:
-                print("fetch math object links")
+                //print("fetch math object links")
+                break
             case 7:
-                print("fetch epsilon stream info")
+                //print("fetch epsilon stream info")
+                break
             case 8:
-                print("fetch features")
+                //print("fetch features")
                 //readFeaturedURLsFromCloud()
+                break
             default:
                 break
             }

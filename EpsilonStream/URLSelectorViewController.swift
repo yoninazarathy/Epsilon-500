@@ -16,7 +16,7 @@ class URLSelectorViewController: UIViewController,WKNavigationDelegate {
     var currentURLString = ""
     
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!){
-        print("YYYYYYY \(webView.url)")
+        //print("YYYYYYY \(webView.url)")
         currentURLString = webView.url!.absoluteString
     }
     

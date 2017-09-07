@@ -72,12 +72,11 @@ class ImageManager{
     
     static var backgroundImageOn = true
 
-    
     static var numURLLoads = 0
     static var numCloudLoads = 0
     
-    static let maxURLLoads = 50
-    static let maxCloudLoads = 10
+    static let maxURLLoads = 70
+    static let maxCloudLoads = 20
     
     class func setup(){
         //if running for first time copy images from Bundle to directory
@@ -116,20 +115,24 @@ class ImageManager{
                     }
                 }
             }
-            
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true){
+            timer in
             for (key,b) in inCloudHash{
                 if b{
                     if statusHash[key] != ImageStatus.Loaded{
+                        //QQQQ maybe problem here? --- yes there is problem - probably sending requests to same ones again and again.
                         if numCloudLoads < maxCloudLoads{
+                            //print("ok for cloud queue -- \(numCloudLoads)")
                             readImageFromCloud(withKey: key)
+                        }else{
+                            //print("cloud queue full -- \(numCloudLoads)")
                         }
                     }
-
                 }
             }
-            
         }
-        
     }
     
     class func refreshImageManager(){
@@ -198,6 +201,7 @@ class ImageManager{
             print("Fetch failed")
         }
 
+        /*
         //This whole chunk below just prints a summary for debug
         let inCloud = inCloudHash.values.filter{$0}
         let numInCloud = inCloud.count
@@ -211,6 +215,7 @@ class ImageManager{
         let numUrgentlyNeeded = urgentlyNeeded.count
         print("inCloudHash.count: \(inCloudHash.count) (inCloud: \(numInCloud)), statusHash.count: \(statusHash.count), urlHash.count: \(urlHash.count),neededByDelagate.count: \(neededByDelagate.count)")
         print("numLoaded: \(numLoaded), numNormallyNeeded: \(numNormallyNeeded), numUnknown: \(numUnknown), numUrgentlyNeeded: \(numUrgentlyNeeded),")
+     */
     }
     
 
@@ -218,7 +223,7 @@ class ImageManager{
        
         //QQQQ this is so not to have mulitple loads.... consider having a timeout instead
         if statusHash[key] == ImageStatus.UrgentlyNeeded{
-            print("image \(key) already urgently needed - returning")
+            //print("image \(key) already urgently needed - returning")
             return
         }
         
@@ -352,7 +357,9 @@ class ImageManager{
                 if let nk = neededByDelagate[key]{
                     if nk == true{
                         neededByDelagate[key] = false
-                        self.imageLoadedDelegate?.imagesUpdate()
+                        DispatchQueue.main.async{
+                            self.imageLoadedDelegate?.imagesUpdate()
+                        }
                     }
                 }
                 

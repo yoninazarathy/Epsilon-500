@@ -43,20 +43,15 @@ public extension UIView {
 class SplashScreenViewController: UIViewController {
 
     @IBOutlet var spinner: UIActivityIndicatorView!
-    
     @IBOutlet var splashLabel: UILabel!
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
         splashLabel.isHidden = false
         spinner.isHidden = true
-        
         EpsilonStreamBackgroundFetch.runUpdate()
-        
         splashLabel.text = ""
     }
     
@@ -107,30 +102,41 @@ class SplashScreenViewController: UIViewController {
         view.bringSubview(toFront: spinner)
         
         NotificationCenter.default.addObserver(self, selector: #selector(beginExitProcedure),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
-        
-
-
-        
     }
     
+    //QQQQ workaround for moving onto client several times
+    var calledAlready = false
+    
+    
     func beginExitProcedure(note: NSNotification) {
+        if calledAlready{
+            return
+        }
+        calledAlready = true
+        
         if let user = currentUserId{
-            self.splashLabel.text = "Beta \(versionNumber()), user: \(user)"
+            self.splashLabel.text = "\(versionNumber()), user: \(user)"
         }else{
-            self.splashLabel.text = "Beta \(versionNumber())"
+            self.splashLabel.text = ""//\(versionNumber())"
         }
         
-        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false){
-            _ in
-            Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true){
-                timer in
+        self.spinner.isHidden = false
+        self.spinner.startAnimating()
+
+ 
+//        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false){
+//            timer1 in
+            Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true){
+                timer2 in
                 if dbReadyToGo{
-                    timer.invalidate()
+                    NotificationCenter.default.removeObserver(NSNotification.Name.AVPlayerItemDidPlayToEndTime)
+//                    timer1.invalidate()
+                    timer2.invalidate()
                     self.moveOnToClient()
                 }
-                self.spinner.isHidden = false
-                self.spinner.startAnimating()
-            }
+//                self.spinner.isHidden = false
+//                self.spinner.startAnimating()
+//            }
         }
     }
     

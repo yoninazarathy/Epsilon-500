@@ -489,7 +489,7 @@
                                                                                 <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eStreamIcon" translatesAutoresizingMaskIntoConstraints="NO" id="qoP-sA-ZWg" userLabel="GameImage">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="175" height="200.5"/>
                                                                                     <constraints>
-                                                                                        <constraint firstAttribute="height" constant="118" id="HCd-4L-q9H"/>
+                                                                                        <constraint firstAttribute="height" constant="118" id="HCd-4L-q9H" userLabel="height = 118"/>
                                                                                         <constraint firstAttribute="width" constant="175" id="Z2h-GX-keY"/>
                                                                                     </constraints>
                                                                                 </imageView>
@@ -693,7 +693,7 @@
                         <outlet property="mainTopStack" destination="dTa-dx-kMW" id="JyZ-jt-WJv"/>
                         <outlet property="resultsTable" destination="ldx-pV-1wQ" id="axN-70-6Zp"/>
                         <outlet property="searchTextField" destination="DyB-Sa-Uf4" id="VDz-cG-moX"/>
-                        <segue destination="h26-oJ-Qbk" kind="show" id="SpG-m6-PDx"/>
+                        <segue destination="h26-oJ-Qbk" kind="show" identifier="segueToMenu" id="SpG-m6-PDx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jp5-UY-e7k" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -791,11 +791,11 @@
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIy-DQ-4Cm">
                                         <rect key="frame" x="0.0" y="90" width="343" height="557"/>
-                                        <mutableString key="text">To use Epsilon Stream enter a math term to search and get engaging and relevant results. You no longer need to spend hours searching online for the right information to help you learn.
+                                        <string key="text">To use Epsilon Stream enter a math term to search and get engaging and relevant results. You no longer need to spend hours searching online for the right information to help you learn.
 
 Our content team distills the best math videos on the web into a unified search experience. Each piece of content in Epsilon Stream has been reviewed by multiple math experts, teachers, and parents for relevance, accuracy, and engaging presentation. 
 
-The scope ranges from addition and multiplication up to calculus, touching hundreds of math concepts along the way.</mutableString>
+The scope ranges from addition and multiplication up to calculus, touching hundreds of math concepts along the way.</string>
                                         <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -1023,7 +1023,7 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                     <connections>
                         <outlet property="spinner" destination="PaR-af-y3v" id="CiQ-pL-Ydq"/>
                         <outlet property="splashLabel" destination="Q6u-xm-QFf" id="tmu-6P-POv"/>
-                        <segue destination="rmz-qn-qI7" kind="show" id="Pgq-lW-zID"/>
+                        <segue destination="rmz-qn-qI7" kind="show" identifier="segueFromSplash" id="Pgq-lW-zID"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j1U-wj-2dJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1981,11 +1981,11 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="11" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4pJ-Es-CwH">
                                         <rect key="frame" x="0.0" y="90" width="343" height="557"/>
-                                        <mutableString key="text">Why is playing such a great way to learn? Who doesn’t like to play? Firstly, playing is fun! It helps you learn because you stay engaged.
+                                        <string key="text">Why is playing such a great way to learn? Who doesn’t like to play? Firstly, playing is fun! It helps you learn because you stay engaged.
 
 As you explore math with Epsilon Stream you are presented with games and activities in the search results. Most of the games we present lead you to the App Store where you can get free or paid iOS apps. 
 
-We’ve tested these apps ourselves and with our children and colleagues, making it easy to find what you're looking for.</mutableString>
+We’ve tested these apps ourselves and with our children and colleagues, making it easy to find what you're looking for.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -2045,11 +2045,11 @@ We’ve tested these apps ourselves and with our children and colleagues, making
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="11" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rut-6P-6YN">
                                         <rect key="frame" x="0.0" y="90" width="339.5" height="557"/>
-                                        <mutableString key="text">There are many ways to satisfy your curiosity and to learn. Some of us love to read!
+                                        <string key="text">There are many ways to satisfy your curiosity and to learn. Some of us love to read!
 
 Access hundreds of blog posts and relevant links which match the search topic, all reviewed by our content team. We only list the ones we feel are the most accurate, and most engaging to save you time in searching. 
 
-This includes blogs by us and many other resources created by incredible math expositors. </mutableString>
+This includes blogs by us and many other resources created by incredible math expositors. </string>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>

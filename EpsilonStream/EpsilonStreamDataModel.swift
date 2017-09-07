@@ -826,7 +826,7 @@ class EpsilonStreamDataModel{
         latestVideoDate = Date(timeIntervalSince1970: 0.0)
         latestMathObjectDate = Date(timeIntervalSince1970: 0.0)
         latestFeatureDate = Date(timeIntervalSince1970: 0.0)
-        latestImageDate = Date(timeIntervalSince1970: 0.0)
+        latestMathObjectLinkDate = Date(timeIntervalSince1970: 0.0)
     }
     
     class func setLatestDates(){
@@ -847,7 +847,6 @@ class EpsilonStreamDataModel{
                 print("found no videos - setting video date to 1970")
             }else{
                 latestVideoDate = videos[0].oneOnEpsilonTimeStamp
-                print("setting video date to \(latestVideoDate) ")
             }
         }catch{
             print("Fetch failed")
@@ -893,23 +892,23 @@ class EpsilonStreamDataModel{
         
         //////////////////////
         //////////////////////
-        let request4 = ImageThumbnail.createFetchRequest()
+        let request4 = MathObjectLink.createFetchRequest()
         request4.fetchLimit = 1
         request4.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let imageThumbNails = try container.viewContext.fetch(request4)
+            let mathObjectLinks = try container.viewContext.fetch(request4)
             
-            if imageThumbNails.count == 0{
-                latestImageDate = Date(timeIntervalSince1970: 0.0)
-                print("found no images - setting image date to 1970")
+            if mathObjectLinks.count == 0{
+                latestMathObjectLinkDate = Date(timeIntervalSince1970: 0.0)
+                print("found no math object links - setting math object date to 1970")
             }else{
-                latestImageDate = imageThumbNails[0].oneOnEpsilonTimeStamp
+                latestMathObjectLinkDate = mathObjectLinks[0].oneOnEpsilonTimeStamp
             }
         }catch{
             print("Fetch failed")
         }
-    }
+     }
     
     static var minimalNextSaveTime: Date = Date()
     

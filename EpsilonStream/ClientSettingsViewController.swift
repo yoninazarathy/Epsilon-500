@@ -18,6 +18,9 @@ class ClientSettingsViewController: UIViewController {
     @IBAction func aboutAction(_ sender: Any) {
         FIRAnalytics.logEvent(withName: "about_action", parameters: [:])
         
+        jumpToWebPage(withURLstring: "https://www.epsilonstream.com") //QQQQ for now
+        
+        return //QQQQ skip this now
         if let vc = storyboard?.instantiateViewController(withIdentifier: "aboutViewController") as? AboutViewController{
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -232,7 +235,7 @@ class ClientSettingsViewController: UIViewController {
         //QQQQ add more info
         FIRAnalytics.logEvent(withName: "webLock_action", parameters: [:])
 
-        if let key = webLockKey{
+        if let _ = webLockKey{
             let alert = UIAlertController(title: "Web access settings", message: "Epsilon Stream is currently web locked and requires your safety code to allow access to external web pages. You may remove web lock by entering your safety code now.", preferredStyle: UIAlertControllerStyle.alert)
             alert.addTextField { (textField : UITextField!) -> Void in
                 textField.placeholder = "Enter 6 character Safety Code"

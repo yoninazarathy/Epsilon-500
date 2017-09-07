@@ -71,7 +71,7 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
                     matchCurate = true
                 }
             }else{
-                print("ERROR with curatorOfHashTag: \(ht) -- \(EpsilonStreamDataModel.curatorOfHashTag[ht])")
+               // print("ERROR with curatorOfHashTag: \(ht) -- \(EpsilonStreamDataModel.curatorOfHashTag[ht])")
             }
             
             if reviewer == "All"{

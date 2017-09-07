@@ -292,7 +292,6 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     func imagesUpdate(){
         //print("imagesUpdate()")
         resultsTable.reloadData()
-
     }
     
     var surpriseButton: UIButton! = nil
@@ -337,15 +336,6 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         
         EpsilonStreamBackgroundFetch.searcherUI = self
       
-        /*
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
-        self.view.addGestureRecognizer(swipeLeft)
-         */
         view.backgroundColor = UIColor(rgb: ES_watch1)
         view.alpha = 1.0
  
@@ -627,6 +617,11 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         //will be if there is no search.
         //QQQQ fix this so it acts better on the "Let our team known"
         if searchResultItems.count == 0{
+            if let text = searchTextField.text{
+                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : text as NSObject])
+            }else{
+                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : "EMPTY" as NSObject])
+            }
             return
         }
         
@@ -704,7 +699,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             case SearchResultItemType.video:
                 let video = self.searchResultItems[index.row] as! VideoSearchResultItem
                 
-                let shareString = "Check out this video: https://youtu.be/\(video.youtubeId), shared using Epsilon Stream Beta, https://www.epsilonstream.com."
+                let shareString = "Check out this video: https://youtu.be/\(video.youtubeId), shared using Epsilon Stream, https://www.epsilonstream.com ."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
@@ -725,7 +720,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             case SearchResultItemType.iosApp:
                 let iosApp = self.searchResultItems[index.row] as! IOsAppSearchResultItem
                 
-                let shareString = "Check this out: https://itunes.apple.com/us/app/id\(iosApp.appId), shared using Epsilon Stream Beta, https://www.epsilonstream.com."
+                let shareString = "Check this out: https://itunes.apple.com/us/app/id\(iosApp.appId), shared using Epsilon Stream, https://www.epsilonstream.com ."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
@@ -736,7 +731,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             case SearchResultItemType.gameWebPage:
                 let webPage = self.searchResultItems[index.row] as! GameWebPageSearchResultItem
                 
-                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream Beta, https://www.epsilonstream.com."
+                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
@@ -747,15 +742,20 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             case SearchResultItemType.blogWebPage:
                 let webPage = self.searchResultItems[index.row] as! BlogWebPageSearchResultItem
                 
-                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream Beta, https://www.epsilonstream.com."
+                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
             /////////////////////////
             /////////////////////////
             case SearchResultItemType.mathObjectLink:
-                //QQQQ do something 
-                print("not implemented yet")
+                let title = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).title
+
+                let shareString = "Check this out: \(title). Shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
+    
             /////////////////////////
             /////////////////////////
             case SearchResultItemType.specialItem:
@@ -771,7 +771,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         
         
         if isInAdminMode == false{
-            return [share]
+            return searchResultItems.count > 0 ? [share] : nil
         }
 
         //if got down to here then allowing admin mode
@@ -896,7 +896,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
     {
         return 125 //QQQQ
     }
-    
+ 
     
     func jumpToIosApp(withCode code:String) {
         let storeViewController = SKStoreProductViewController()

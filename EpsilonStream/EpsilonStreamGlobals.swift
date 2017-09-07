@@ -47,11 +47,10 @@ let maxBlogsToShow = 100
 
 var queryOperationResultLimit = 1000 //QQQQ cursor for mathobjects and features.
 
-var latestImageDate: Date? = nil
 var latestVideoDate: Date? = nil
 var latestMathObjectDate: Date? = nil
 var latestFeatureDate: Date? = nil
-//QQQQ MathObjectLink needs this
+var latestMathObjectLinkDate: Date? = nil
 
 //Red
 let ES_watch1 = 0xFF4646
