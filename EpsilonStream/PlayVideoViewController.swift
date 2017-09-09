@@ -20,6 +20,9 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
     var videoPlayer: YouTubePlayerView!
     var videoIdToPlay: String?
     
+    var leaveButton: UIButton! = nil
+    var shareButton: UIButton! = nil
+    
     var imageCover: UIImageView! = nil
     var loadSafetyCover: UIView! = nil
     var playSafetyCover: UIView! = nil
@@ -109,17 +112,48 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
         swipeRightGesture.direction = UISwipeGestureRecognizerDirection.right
         playSafetyCover.addGestureRecognizer(swipeRightGesture)
         
+        leaveButton = UIButton()//frame: CGRect(x: 5, y: playSafetyCover.frame.height*0.45, width: 35, height: 35))
+        leaveButton.setImage(UIImage(named: "Navigation_Icon_Left_Passive"), for: .normal)
+        leaveButton.addTarget(self, action: #selector(leaveNow), for: .touchUpInside)
+        leaveButton.isEnabled = true
+        
+        shareButton = UIButton()//frame: CGRect(x: 5, y: playSafetyCover.frame.height*0.45, width: 35, height: 35))
+        shareButton.setImage(UIImage(named: "shareTemp"), for: .normal)
+        shareButton.addTarget(self, action: #selector(share), for: .touchUpInside)
+        shareButton.isEnabled = true
+
+        //addLeave(to: imageCover) //QQQQ didn't work
+        
         let swipeRightGesture2 = UISwipeGestureRecognizer(target: self, action: #selector(leaveNow))
         swipeRightGesture2.direction = UISwipeGestureRecognizerDirection.right
         loadSafetyCover.addGestureRecognizer(swipeRightGesture2)
         
-        UIView.animate(withDuration: 7.0, animations: {
-            self.imageCover.alpha = 0.2
+        
+        UIView.animate(withDuration: 8.0, animations: {
+            self.imageCover.alpha = 0.1
         }, completion:
             {_ in })//imageView.removeFromSuperview()})
         
         videoPlayer.delegate = self
         videoPlayer.play()
+    }
+    
+    func addLeave(to view: UIView){
+        leaveButton.frame = CGRect(x: 5, y: view.frame.height*0.5, width: 35, height: 35)
+        view.addSubview(leaveButton)
+    }
+    
+    func addShare(to view:UIView){
+        shareButton.frame = CGRect(x: view.frame.width-35-10, y: 5, width: 35, height: 35)
+        view.addSubview(shareButton)
+    }
+    
+    
+    func share(){
+        let shareString = "Check out this video: https://youtu.be/\(videoIdToPlay!), shared using Epsilon Stream, https://www.epsilonstream.com."
+        let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+        vc.popoverPresentationController?.sourceView = shareButton.superview
+        self.present(vc, animated:  true)
     }
     
     func menuPop(){
@@ -159,6 +193,8 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
         loadSafetyCover.frame = CGRect(x: 0, y: 0, width: window.frame.height, height: window.frame.width)
         playSafetyCover.frame = CGRect(x: 0, y: 0, width: window.frame.height, height: window.frame.width-52)
 
+        leaveButton.removeFromSuperview()
+        shareButton.removeFromSuperview()
 
 
         videoPlayer.pause()
@@ -193,6 +229,8 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
             imageCover.removeFromSuperview()
             loadSafetyCover.removeFromSuperview()
             view.addSubview(playSafetyCover)
+            leaveButton.removeFromSuperview()
+            shareButton.removeFromSuperview()
             //print("PLAYING!!!!")
             break
         case YouTubePlayerState.Paused:
@@ -201,6 +239,8 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
             let time = Int((videoPlayer.getCurrentTime()! as NSString).doubleValue.rounded())
             UserDataManager.updateSecondsWatched(forKey: videoIdToPlay!, withSeconds: time)
             videoPlayer.isUserInteractionEnabled = true
+            addLeave(to: playSafetyCover)
+            addShare(to: playSafetyCover)
             FIRAnalytics.logEvent(withName: "video_paused", parameters: ["videoId" : videoIdToPlay! as NSObject])
             break
         case YouTubePlayerState.Buffering:

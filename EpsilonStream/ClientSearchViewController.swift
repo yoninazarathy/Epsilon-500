@@ -911,10 +911,10 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         coverImageView.contentMode = .scaleAspectFill
         coverImageView.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
         window.addSubview(coverImageView)
-        UIView.animate(withDuration: 2.0, animations: {
+        UIView.animate(withDuration: 7.0, animations: {
             self.coverImageView.alpha = 0.2
         }, completion:
-            {_ in })
+            {_ in self.coverImageView.removeFromSuperview()})
 
         storeViewController.modalTransitionStyle = .crossDissolve
         storeViewController.loadProduct(withParameters: parameters)

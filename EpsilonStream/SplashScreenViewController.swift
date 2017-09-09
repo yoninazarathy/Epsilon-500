@@ -126,7 +126,7 @@ class SplashScreenViewController: UIViewController {
  
 //        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false){
 //            timer1 in
-            Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true){
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true){
                 timer2 in
                 if dbReadyToGo{
                     NotificationCenter.default.removeObserver(NSNotification.Name.AVPlayerItemDidPlayToEndTime)
