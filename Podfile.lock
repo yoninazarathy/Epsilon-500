@@ -28,9 +28,9 @@ DEPENDENCIES:
   - Alamofire (~> 4.0)
   - BetterSegmentedControl (~> 0.8)
   - Firebase/Core
-  - SwiftyJSON
-  - Toucan
-  - YouTubePlayer
+  - SwiftyJSON (~> 3.1)
+  - Toucan (~> 0.6)
+  - YouTubePlayer (~> 0.4)
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
@@ -44,8 +44,8 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   SwiftyJSON: 38a8ea2006779c0fc4c310cb2ee8195327740faf
   Toucan: 47485bbc9cb4541ef6318d6886103e6eaf16e919
-  YouTubePlayer: 028451f6772f372d4759866db99824c676ac1473
+  YouTubePlayer: '028451f6772f372d4759866db99824c676ac1473'
 
-PODFILE CHECKSUM: f0ac563a240efabeed83cb7cfc8f2c9d5400af9f
+PODFILE CHECKSUM: e682faa94ae3cd8d3654d1e04df8846d7f9f6ed9
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.1
