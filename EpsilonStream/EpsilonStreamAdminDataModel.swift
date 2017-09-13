@@ -81,11 +81,11 @@ class EpsilonStreamAdminModel{
         video["contentVersionNumber"] = tempCurrentVersionForSubmit as CKRecordValue//QQQQ temp - have in settings app
         
         //QQQQ is ok?
-        if let str = dbVideo.imageURLlocal{
+        if dbVideo.imageURLlocal != nil {
             //QQQQ same problem as in the other place with url2            let url = URL(string: str)!
             
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let url2 = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(dbVideo.youtubeVideoId).appendingPathExtension("png")
+            //let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            //let url2 = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(dbVideo.youtubeVideoId).appendingPathExtension("png")
             
             //QQQQ no idea - why url is not working - as a workaround reconstructing path here...
             
@@ -218,7 +218,9 @@ class EpsilonStreamAdminModel{
         operation.completionBlock = {
             for id in idsToKill{
                 CKContainer.default().publicCloudDatabase.delete(withRecordID: id){ (id, error) in
-                    print("completion handler for delete of \(id)")
+                    if id != nil {
+                        print("completion handler for delete of \(id!)")
+                    }
                     if let error = error{
                         print("\(error)")
                     }
@@ -274,7 +276,9 @@ class EpsilonStreamAdminModel{
         operation.completionBlock = {
             for id in idsToKill{
                 CKContainer.default().publicCloudDatabase.delete(withRecordID: id){ (id, error) in
-                    print("completion handler for delete of \(id)")
+                    if id != nil {
+                        print("completion handler for delete of \(id!)")
+                    }
                     if let error = error{
                         print("\(error)")
                     }
@@ -326,7 +330,9 @@ class EpsilonStreamAdminModel{
         operation.completionBlock = {
             for id in idsToKill{
                 CKContainer.default().publicCloudDatabase.delete(withRecordID: id){ (id, error) in
-                    print("completion handler for delete of \(id)")
+                    if id != nil {
+                        print("completion handler for delete of \(id!)")
+                    }
                     if let error = error{
                         print("\(error)")
                     }

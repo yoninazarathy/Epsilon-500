@@ -57,7 +57,7 @@ class MathObjectLinkItemTableViewCell: UITableViewCell {
 
         
         //IMAGE
-        let image = ImageManager.getImage(forKey: result.imageName, withDefault: "eStreamIcon")
+        //let image = ImageManager.getImage(forKey: result.imageName, withDefault: "eStreamIcon")
     }
     
     

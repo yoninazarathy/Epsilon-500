@@ -81,7 +81,9 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
                     matchReview = true
                 }
             }else{
-                print("ERROR with reviewerOfHashTag: \(ht) -- \(EpsilonStreamDataModel.reviewerOfHashTag[ht])")
+                if let reviewerOfHashTag = EpsilonStreamDataModel.reviewerOfHashTag[ht] {
+                    print("ERROR with reviewerOfHashTag: \(ht) -- \(reviewerOfHashTag)")
+                }
             }
             
             if matchCurate && matchReview{

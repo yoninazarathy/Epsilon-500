@@ -135,7 +135,7 @@ class EpsilonStreamBackgroundFetch{
     
     
     class func onFinish(){
-        var isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedMathObjectLinks
+        let isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedMathObjectLinks
         
         if isReady{
             EpsilonStreamDataModel.saveViewContext()
@@ -156,7 +156,7 @@ class EpsilonStreamBackgroundFetch{
     
     class func createDBVideo(fromDataSource cloudSource: CKRecord){
         //unique key
-        let videoID = cloudSource["youtubeVideoId"] as! String
+        //let videoID = cloudSource["youtubeVideoId"] as! String
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let newVideo = Video(context: container.viewContext)
         newVideo.update(fromCloudRecord: cloudSource)
@@ -185,7 +185,7 @@ class EpsilonStreamBackgroundFetch{
     }
     
     class func createDBFeaturedURL(fromDataSource cloudSource: CKRecord){
-        let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        //let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
         let ourFeaturedURLHashtag = cloudSource["ourFeaturedURLHashtag"] as! String
 
