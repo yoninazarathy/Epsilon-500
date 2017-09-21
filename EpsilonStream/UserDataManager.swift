@@ -15,7 +15,7 @@ class UserDataManager{
     
     
     class func crash(){
-        var variable:Int! = nil
+        let variable:Int! = nil
         var variable2 = 0
         variable2 += variable
         print("never gonna get here: \(variable2)")

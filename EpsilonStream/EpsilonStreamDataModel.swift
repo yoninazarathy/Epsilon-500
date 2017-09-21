@@ -430,7 +430,7 @@ class EpsilonStreamDataModel{
         var featuresPredicate: NSPredicate!
         var mathObjectLinksPredicate: NSPredicate!
         
-        var showAll = isInAdminMode
+        let showAll = isInAdminMode
         
         if let ch = searchString.characters.first{
             switch ch{
@@ -673,7 +673,7 @@ class EpsilonStreamDataModel{
             var sortedList = priorityList.sorted()
             var minDelta = Float.infinity
             for i in 1..<sortedList.count{
-                var delta = sortedList[i]-sortedList[i-1]
+                let delta = sortedList[i]-sortedList[i-1]
                 if delta > 0{
                     if delta < minDelta{
                         minDelta = delta

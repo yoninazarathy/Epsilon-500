@@ -15,7 +15,9 @@ class SnifferTemp: NSObject, WKNavigationDelegate{
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!){
-        print("XXXXXXX \(webView.url)")
+        if let url = webView.url {
+            print("XXXXXXX \(url)")
+        }
     }
 }
 

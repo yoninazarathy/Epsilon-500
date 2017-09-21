@@ -327,7 +327,7 @@ class ImageManager{
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key)
         
-        var bundlePath = Bundle.main.url(forResource: "PreThumb_\(key)", withExtension: nil)
+        let bundlePath = Bundle.main.url(forResource: "PreThumb_\(key)", withExtension: nil)
 
         do{
             let source = bundlePath!.path
@@ -347,7 +347,7 @@ class ImageManager{
         //QQQQ consider saving JPEG.
         //QQQQ consider saving with file extension
         
-        var imageWriteOK = true
+        //var imageWriteOK = true
         
         if let data = UIImagePNGRepresentation(image) {
             do{
@@ -365,7 +365,7 @@ class ImageManager{
                 
             }catch let error as NSError{
                 print(error)
-                imageWriteOK = false
+                //imageWriteOK = false
             }
         }
     }

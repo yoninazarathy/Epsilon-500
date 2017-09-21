@@ -500,25 +500,25 @@ class EpsilonStreamAdminModel{
 
     class func storeAllVideos(){
         //QQQQ just to be safe this is commented out
-        return
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let request = Video.createFetchRequest()
-        request.predicate = NSPredicate(format:"TRUEPREDICATE")
-        do{
-            let videos = try container.viewContext.fetch(request)
-            for v in videos{
-                if (v.hashTags == "" || v.hashTags == "#noTag") && v.isInCollection == false && v.ourTitle == v.youtubeTitle{
-                    print("WILL SUBMIT VIDEO \(v.youtubeVideoId)")
-                    EpsilonStreamAdminModel.currentVideo = v
-                    EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
-                }else{
-                    print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags)")
-
-                }
-            }
-        }catch{
-            print("Fetch failed")
-        }
+//        return
+//        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+//        let request = Video.createFetchRequest()
+//        request.predicate = NSPredicate(format:"TRUEPREDICATE")
+//        do{
+//            let videos = try container.viewContext.fetch(request)
+//            for v in videos{
+//                if (v.hashTags == "" || v.hashTags == "#noTag") && v.isInCollection == false && v.ourTitle == v.youtubeTitle{
+//                    print("WILL SUBMIT VIDEO \(v.youtubeVideoId)")
+//                    EpsilonStreamAdminModel.currentVideo = v
+//                    EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
+//                }else{
+//                    print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags)")
+//
+//                }
+//            }
+//        }catch{
+//            print("Fetch failed")
+//        }
     }
     
     class func storeAllMathObjects(){
@@ -630,9 +630,9 @@ class EpsilonStreamAdminModel{
     
     class func createDBVideo(fromDataSource cloudSource: CKRecord){
         //unique key
-        let videoID = cloudSource["youtubeVideoId"] as! String
+        //let videoID = cloudSource["youtubeVideoId"] as! String
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let newVideo = Video(context: container.viewContext)
+        let _ = Video(context: container.viewContext)
         
     }
 
@@ -697,7 +697,9 @@ class EpsilonStreamAdminModel{
                 print("error - not a single id to kill \(idsToKill.count) - \(videoId)")
             }else{
                 CKContainer.default().publicCloudDatabase.delete(withRecordID: idsToKill[0]){ (id, error) in
-                    print("completion handler for delete of \(id)")
+                    if (id != nil) {
+                        print("completion handler for delete of \(id!)")
+                    }
                     if let error = error{
                         print("\(error)")
                     }

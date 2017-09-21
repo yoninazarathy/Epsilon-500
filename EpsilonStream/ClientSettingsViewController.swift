@@ -21,9 +21,9 @@ class ClientSettingsViewController: UIViewController {
         jumpToWebPage(withURLstring: "https://www.epsilonstream.com") //QQQQ for now
         
         return //QQQQ skip this now
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "aboutViewController") as? AboutViewController{
-            navigationController?.pushViewController(vc, animated: true)
-        }
+//        if let vc = storyboard?.instantiateViewController(withIdentifier: "aboutViewController") as? AboutViewController{
+//            navigationController?.pushViewController(vc, animated: true)
+//        }
     }
     
     @IBAction func epsilonStreamAction(_ sender: Any) {

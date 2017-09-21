@@ -71,7 +71,8 @@ protocol SearcherUI {
 
 
 
-class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate, SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI,ImageLoadedDelegate{
+class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
+SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI,ImageLoadedDelegate{
     
     var coverImageView: UIImageView! = nil
     
@@ -946,7 +947,7 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
 
     func jumpToWebPage(withURLstring string: String, inSafariMode safariMode: Bool = false,withSplashKey splashKey: String = ""){
         if safariMode{
-            if let webKey = webLockKey{
+            if webLockKey != nil {
                 let alert = UIAlertController(title: "External page", message: "Epsilon Stream is currently web locked. Enter the safety code to allow going to the external page. You can disable weblock in the settings menu.", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addTextField { (textField : UITextField!) -> Void in
                     textField.placeholder = "Enter 6 character Safety Code"
@@ -957,8 +958,11 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
 
                 
                 alert.addAction(UIAlertAction(title: "Go to page", style: UIAlertActionStyle.default, handler: {_ in
-                    let safariVC = SFSafariViewController(url: NSURL(string: string) as! URL)
-                    self.present(safariVC, animated: true, completion: nil)
+                    if let url = URL(string: string) {
+                        let safariVC = SFSafariViewController(url: url)
+                        safariVC.delegate = self
+                        self.present(safariVC, animated: true, completion: nil)
+                    }
                 }))
                 okAction = alert.actions[0]
                 okAction.isEnabled = false
@@ -970,8 +974,11 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
             }else{
                 let alert = UIAlertController(title: "You are leaving Epsilon Stream to an external page", message: "If you wish to block such functionallity, you can web lock Epsilon Stream in the settings menu.", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Go to page", style: UIAlertActionStyle.default, handler: {_ in
-                    let safariVC = SFSafariViewController(url: NSURL(string: string) as! URL)
-                    self.present(safariVC, animated: true, completion: nil)
+                    if let url = URL(string: string) {
+                        let safariVC = SFSafariViewController(url: url)
+                        safariVC.delegate = self
+                        self.present(safariVC, animated: true, completion: nil)
+                    }
                 }))
                 alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
                 }))
@@ -1004,10 +1011,10 @@ class ClientSearchViewController: UIViewController, UITableViewDelegate, UITable
         return url
     }
     
-    func safariViewControllerDidFinish(controller: SFSafariViewController)
-    {
+    // MARK: - SFSafariViewControllerDelegate
+    
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         print("safariViewControllerDidFinish")
-        controller.dismiss(animated: true, completion: nil)
     }
     
 }
