@@ -149,6 +149,8 @@ class EpsilonStreamBackgroundFetch{
                 DispatchQueue.global(qos: .background).async{
                     EpsilonStreamBackgroundFetch.backgroundScan()
                 }
+                
+                UserDataManager.lastDatabaseUpdateDate = Date()
                 dbReadyToGo = true
             }
         }

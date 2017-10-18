@@ -13,24 +13,27 @@ import FirebaseAnalytics
 
 class UserDataManager{
     
-    
-    class func crash(){
+    // Move to another place.
+    private class func crash() {
         let variable:Int! = nil
         var variable2 = 0
         variable2 += variable
         print("never gonna get here: \(variable2)")
     }
     
-    
-    /////////////
-    // Setters //
-    /////////////
+    // MARK: - Web lock
     
     class func setWebLock(withKey key: String?){
         webLockKey = key
         UserDefaults.standard.set(key, forKey: "webLockKey")
     }
     
+    //QQQQ not using this in AppDelegate -but should
+    class func getWebLock() -> String?{
+        return UserDefaults.standard.string(forKey: "webLockKey")
+    }
+    
+    // MARK: - Admin
     
     class func setInAdminMode(_ isAdmin: Bool, withUser user: String? = nil){
         if isAdmin{
@@ -59,7 +62,9 @@ class UserDataManager{
         
     }
     
-    class func deletedAllSecondsWatched(){
+    // MARK: - Video progress
+    
+    class func deletedAllSecondsWatched() {
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         //QQQQ check if fetchlimit?
@@ -75,27 +80,18 @@ class UserDataManager{
         }
     }
     
-    class func updateSecondsWatched(forKey key:String,withSeconds seconds:Int){
+    class func updateSecondsWatched(forKey key: String, withSeconds seconds: Int) {
         let oldSeconds = UserDefaults.standard.integer(forKey: key)
         if seconds > oldSeconds{
             UserDefaults.standard.set(seconds, forKey: key)
         }
     }
     
-    /////////////
-    // Getters //
-    /////////////
-
-    //QQQQ not using this in AppDelegate -but should
-    class func getWebLock() -> String?{
-        return UserDefaults.standard.string(forKey: "webLockKey")
-    }
-    
-    class func getSecondsWatched(forKey key:String)-> Int{
+    class func getSecondsWatched(forKey key: String) -> Int {
         return UserDefaults.standard.integer(forKey: key)
     }
 
-    class func getPercentWatched(forKey key: String) -> Float{
+    class func getPercentWatched(forKey key: String) -> Float {
         let secondsWatched = UserDefaults.standard.integer(forKey: key) //may be 0
         
         if let duration = EpsilonStreamDataModel.getDuration(forVideo: key){
@@ -107,8 +103,19 @@ class UserDataManager{
             }
             return percentWatched
         }else{
-            print("error - no duation for \(key)")
+            print("error - no duration for \(key)")
             return 0.0
+        }
+    }
+    
+    // MARK: - Misc
+    
+    static var lastDatabaseUpdateDate: Date? {
+        get {
+            return UserDefaults.standard.object(forKey: "lastDatabaseUpdateDate") as? Date
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "lastDatabaseUpdateDate")
         }
     }
     
