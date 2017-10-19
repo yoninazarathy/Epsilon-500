@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01372CF01F97C8F90072F3E3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01372CF21F97C8F90072F3E3 /* Localizable.strings */; };
+		01372D6C1F97C9650072F3E3 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01372D6B1F97C9650072F3E3 /* Common.swift */; };
 		200A62AF1F0B079E0093B50F /* EpsilonStreamLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */; };
 		200FDB491E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */; };
 		2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */; };
@@ -103,6 +105,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01372CF11F97C8F90072F3E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01372D6B1F97C9650072F3E3 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamLoginManager.swift; sourceTree = "<group>"; };
 		200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamAdminDataModel.swift; sourceTree = "<group>"; };
 		2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPrefetcher.swift; sourceTree = "<group>"; };
@@ -216,6 +220,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01372CED1F97C7620072F3E3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				01372CF21F97C8F90072F3E3 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		01372D6A1F97C9650072F3E3 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				01372D6B1F97C9650072F3E3 /* Common.swift */,
+			);
+			name = Common;
+			path = Sources/Common;
+			sourceTree = "<group>";
+		};
 		2030B7D31E10BC1B001E2237 = {
 			isa = PBXGroup;
 			children = (
@@ -241,6 +262,8 @@
 		2030B7DE1E10BC1B001E2237 /* EpsilonStream */ = {
 			isa = PBXGroup;
 			children = (
+				01372D6A1F97C9650072F3E3 /* Common */,
+				01372CED1F97C7620072F3E3 /* Resources */,
 				203B866F1E14B94000BAF08C /* SearchResultItem.swift */,
 				203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */,
 				20B6952A1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift */,
@@ -519,6 +542,7 @@
 				207432A71F51179A0095CEBB /* PreThumb_uiw42b.png in Resources */,
 				207432AD1F51179A0095CEBB /* PreThumb_YEU224.png in Resources */,
 				207432731F51179A0095CEBB /* PreThumb_73N871.png in Resources */,
+				01372CF01F97C8F90072F3E3 /* Localizable.strings in Resources */,
 				2074329B1F51179A0095CEBB /* PreThumb_mamOth.png in Resources */,
 				207432AE1F51179A0095CEBB /* PreThumb_yYYkd2.png in Resources */,
 				207432911F51179A0095CEBB /* PreThumb_gmp31d.png in Resources */,
@@ -621,6 +645,7 @@
 				20306A3B1E1A283900E6B5D9 /* WebViewingViewController.swift in Sources */,
 				204380FB1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift in Sources */,
 				2030B7FF1E10BC52001E2237 /* MathObject+CoreDataProperties.swift in Sources */,
+				01372D6C1F97C9650072F3E3 /* Common.swift in Sources */,
 				2077E8EE1E8D1C9D00C2A49B /* ImageThumbnail+CoreDataClass.swift in Sources */,
 				2073D62D1EFF8FCF00B7849D /* GameItemTableViewCell.swift in Sources */,
 				207432B01F5276250095CEBB /* AboutViewController.swift in Sources */,
@@ -643,6 +668,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		01372CF21F97C8F90072F3E3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				01372CF11F97C8F90072F3E3 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		2030B7EA1E10BC1B001E2237 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

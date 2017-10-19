@@ -49,40 +49,6 @@ class ClientSettingsViewController: UIViewController {
     
     @IBOutlet var shareAppButton: UIButton!
     
-    @IBAction func shareAppAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "shareApp_action", parameters: [:])
-        
-        let shareString = "I am exploring mathematics with Epsilon Stream for iOS. Get it and use it for free from https://www.epsilonstream.com ."
-        let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
-        vc.popoverPresentationController?.sourceView = shareAppButton
-        present(vc, animated:  true)
-    }
-    
-    @IBAction func registerAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "register_action", parameters: [:])
-        jumpToWebPage(withURLstring: "https://epsilonstream.com/sign-up_app")
-    }
-    
-    @IBAction func resetAllAction(_ sender: Any) {
-        //QQQQ send more analytics on what has reset
-        FIRAnalytics.logEvent(withName: "resetAllConsider_action", parameters: [:])
-
-        
-        let alert = UIAlertController(title: "Reset All Viewed", message: "Are you sure you want to reset all views?", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default){action in print("cancel reset")})
-        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.default){action in print("reset!!!!!!")
-            UserDataManager.deletedAllSecondsWatched()
-            FIRAnalytics.logEvent(withName: "resetAllGoThrough_action", parameters: [:])
-        })
-        self.present(alert, animated: true, completion: nil)
-
-    }
-    
-    @IBAction func feedbackAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "feedback_action", parameters: [:])
-        jumpToWebPage(withURLstring: "https://epsilonstream.com/contact_app")
-    }
-    
     func termListAction(_ sender: Any) {
         //QQQQ record curator id
         FIRAnalytics.logEvent(withName: "curatorTermList_action", parameters: [:])
@@ -230,6 +196,7 @@ class ClientSettingsViewController: UIViewController {
     
     var okAction: UIAlertAction! = nil
 
+    // MARK: - Actions
     
     @IBAction func webLockButtonAction(_ sender: Any) {
         //QQQQ add more info
@@ -274,5 +241,45 @@ class ClientSettingsViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
 
         }
+    }
+    
+    @IBAction func shareAppAction(_ sender: Any) {
+        FIRAnalytics.logEvent(withName: "shareApp_action", parameters: [:])
+        
+        let shareString = "I am exploring mathematics with Epsilon Stream for iOS. Get it and use it for free from https://www.epsilonstream.com ."
+        let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+        vc.popoverPresentationController?.sourceView = shareAppButton
+        present(vc, animated:  true)
+    }
+    
+    @IBAction func registerAction(_ sender: Any) {
+        FIRAnalytics.logEvent(withName: "register_action", parameters: [:])
+        jumpToWebPage(withURLstring: "https://epsilonstream.com/sign-up_app")
+    }
+    
+    @IBAction func resetAllAction(_ sender: Any) {
+        //QQQQ send more analytics on what has reset
+        FIRAnalytics.logEvent(withName: "resetAllConsider_action", parameters: [:])
+        
+        
+        let alert = UIAlertController(title: "Reset All Viewed", message: "Are you sure you want to reset all views?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default){action in print("cancel reset")})
+        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.default){action in print("reset!!!!!!")
+            UserDataManager.deletedAllSecondsWatched()
+            FIRAnalytics.logEvent(withName: "resetAllGoThrough_action", parameters: [:])
+        })
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    @IBAction func reviewAppButtonAction(_ sender: Any) {
+        if let url = URL(string: "https://itunes.apple.com/app/id1200152358") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    @IBAction func feedbackAction(_ sender: Any) {
+        FIRAnalytics.logEvent(withName: "feedback_action", parameters: [:])
+        jumpToWebPage(withURLstring: "https://epsilonstream.com/contact_app")
     }
 }

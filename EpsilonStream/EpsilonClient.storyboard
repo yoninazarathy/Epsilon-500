@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="KAj-u0-0Hv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="KAj-u0-0Hv">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -58,7 +58,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MDK-JB-lhk">
-                                <rect key="frame" x="153" y="104" width="70" height="70"/>
+                                <rect key="frame" x="153" y="94" width="70" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="M3M-nl-erv"/>
                                     <constraint firstAttribute="height" constant="70" id="dHf-9M-3md"/>
@@ -69,7 +69,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3d7-uh-FvF">
-                                <rect key="frame" x="153" y="547" width="70" height="70"/>
+                                <rect key="frame" x="153" y="567" width="70" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="I3G-g6-Zx7"/>
                                 </constraints>
@@ -79,10 +79,10 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="P83-ac-LrF">
-                                <rect key="frame" x="43" y="205" width="290" height="316"/>
+                                <rect key="frame" x="43" y="195" width="290" height="346"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ald-oD-ZEk">
-                                        <rect key="frame" x="0.0" y="0.0" width="290" height="28"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="290" height="26"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="About Epsilon Stream">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -92,7 +92,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Thd-3f-Y0t">
-                                        <rect key="frame" x="0.0" y="48" width="290" height="28"/>
+                                        <rect key="frame" x="0.0" y="46" width="290" height="25.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Share the App">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -102,7 +102,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ls5-7C-D11">
-                                        <rect key="frame" x="0.0" y="96" width="290" height="28"/>
+                                        <rect key="frame" x="0.0" y="91.5" width="290" height="26"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Register with One on Epsilon">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -111,8 +111,18 @@
                                             <action selector="registerAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="0Zx-9w-gJ9"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U2z-te-lZe">
+                                        <rect key="frame" x="0.0" y="137.5" width="290" height="25.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <state key="normal" title="Review the App">
+                                            <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="reviewAppButtonAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="3xz-7p-1tt"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XPa-bm-7wE">
-                                        <rect key="frame" x="0.0" y="144" width="290" height="28"/>
+                                        <rect key="frame" x="0.0" y="183" width="290" height="26"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Feedback to the Team">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -122,7 +132,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LUh-aC-ukk" userLabel="Credits">
-                                        <rect key="frame" x="0.0" y="192" width="290" height="28"/>
+                                        <rect key="frame" x="0.0" y="229" width="290" height="25.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Credits">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -132,7 +142,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nk2-Rz-dug">
-                                        <rect key="frame" x="0.0" y="240" width="290" height="28"/>
+                                        <rect key="frame" x="0.0" y="274.5" width="290" height="26"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Web Lock Settings">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -142,7 +152,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5wd-Fw-PWL">
-                                        <rect key="frame" x="0.0" y="288" width="290" height="28"/>
+                                        <rect key="frame" x="0.0" y="320.5" width="290" height="25.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Reset Viewed">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -157,11 +167,11 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="MDK-JB-lhk" firstAttribute="trailing" secondItem="3d7-uh-FvF" secondAttribute="trailing" id="0Kf-GV-WJw"/>
-                            <constraint firstItem="MDK-JB-lhk" firstAttribute="top" secondItem="G6o-wX-Zr0" secondAttribute="bottom" constant="40" id="1IL-29-Xx3"/>
+                            <constraint firstItem="MDK-JB-lhk" firstAttribute="top" secondItem="G6o-wX-Zr0" secondAttribute="bottom" constant="30" id="1IL-29-Xx3"/>
                             <constraint firstItem="3d7-uh-FvF" firstAttribute="top" secondItem="P83-ac-LrF" secondAttribute="bottom" constant="26" id="CPr-v9-nOt"/>
                             <constraint firstItem="MDK-JB-lhk" firstAttribute="centerX" secondItem="Zpe-d7-nbd" secondAttribute="centerX" id="hsp-Vt-H7T"/>
                             <constraint firstItem="MDK-JB-lhk" firstAttribute="leading" secondItem="3d7-uh-FvF" secondAttribute="leading" id="iLu-SS-ugI"/>
-                            <constraint firstItem="eSp-c6-mbZ" firstAttribute="top" secondItem="3d7-uh-FvF" secondAttribute="bottom" constant="50" id="wIM-MC-891"/>
+                            <constraint firstItem="eSp-c6-mbZ" firstAttribute="top" secondItem="3d7-uh-FvF" secondAttribute="bottom" constant="30" id="wIM-MC-891"/>
                             <constraint firstItem="P83-ac-LrF" firstAttribute="centerX" secondItem="3d7-uh-FvF" secondAttribute="centerX" id="wcW-Xx-oqz"/>
                             <constraint firstItem="P83-ac-LrF" firstAttribute="leading" secondItem="Zpe-d7-nbd" secondAttribute="leadingMargin" constant="27" id="wgM-Es-fB8"/>
                             <constraint firstItem="P83-ac-LrF" firstAttribute="top" secondItem="MDK-JB-lhk" secondAttribute="bottom" constant="31" id="zhX-v0-Hgg"/>
