@@ -133,14 +133,20 @@ class EpsilonStreamBackgroundFetch{
         readFeaturedURLsFromCloud()
     }
     
+    //QQQQ This is a patch to make onFinish run only once.
+    static var didItOnce = false
     
     class func onFinish(){
+        if didItOnce{
+            return
+        }
         let isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedMathObjectLinks
         
         if isReady{
+            didItOnce = true
             EpsilonStreamDataModel.saveViewContext()
             
-            DispatchQueue.main.sync{
+            DispatchQueue.main.async{
                 EpsilonStreamDataModel.setUpAutoCompleteLists()
                 EpsilonStreamDataModel.setLatestDates()
                 ImageManager.refreshImageManager()
@@ -231,6 +237,10 @@ class EpsilonStreamBackgroundFetch{
     }
     
     class func readVideoDataFromCloud(_ inCollection: Bool){
+        
+        EpsilonStreamBackgroundFetch.setActionStart()
+
+        
         let pred1 = NSPredicate(format: "modificationDate > %@", latestVideoDate! as NSDate)
         let pred2 = NSPredicate(format: "isInVideoCollection = %@", NSNumber(booleanLiteral: inCollection))
         let pred = inCollection ? NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2]) : pred1
@@ -267,6 +277,7 @@ class EpsilonStreamBackgroundFetch{
             if gotCursor == false{
                 finishedVideos = true
                 onFinish() //QQQQ should this be in a mutex?
+                EpsilonStreamBackgroundFetch.setActionFinish()
             }//otherwise will be set by fetchVideoRecords()
         }
         
@@ -306,6 +317,9 @@ class EpsilonStreamBackgroundFetch{
     
     //QQQQ add inCollectionFilter (also to Features and MathObjectLinks)
     class func readMathObjectsFromCloud(){
+        
+        EpsilonStreamBackgroundFetch.setActionStart()
+        
         let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectDate! as NSDate)
         let query = CKQuery(recordType: "MathObject", predicate: pred)
         query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
@@ -337,12 +351,16 @@ class EpsilonStreamBackgroundFetch{
         operation.completionBlock = {
             finishedMathObjects = true
             onFinish() //QQQQ should this be in a mutex?
+            EpsilonStreamBackgroundFetch.setActionFinish()
         }
         
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
     class func readMathObjectLinksFromCloud(){
+        
+        EpsilonStreamBackgroundFetch.setActionStart()
+        
         let pred = NSPredicate(format: "modificationDate > %@", latestMathObjectLinkDate! as NSDate)
         let query = CKQuery(recordType: "MathObjectLinks", predicate: pred)
         query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
@@ -372,6 +390,7 @@ class EpsilonStreamBackgroundFetch{
         operation.completionBlock = {
             finishedMathObjectLinks = true
             onFinish() //QQQQ should this be in a mutex?
+            EpsilonStreamBackgroundFetch.setActionFinish()
         }
         
         CKContainer.default().publicCloudDatabase.add(operation)
@@ -382,6 +401,9 @@ class EpsilonStreamBackgroundFetch{
 
     
     class func readFeaturedURLsFromCloud(){
+        
+        EpsilonStreamBackgroundFetch.setActionStart()
+        
         let pred = NSPredicate(format: "modificationDate > %@", latestFeatureDate! as NSDate)
         let query = CKQuery(recordType: "FeaturedURL", predicate: pred)
         query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
@@ -417,55 +439,84 @@ class EpsilonStreamBackgroundFetch{
 //            }
             finishedFeaturedURLs = true
             onFinish() //QQQQ should this be in a mutex?
+            
+            EpsilonStreamBackgroundFetch.setActionFinish()
         }
         
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
-
+    //indicates if any of the background actions is in progress at any given time
+    //the idea is that at most action will be in progress at any given time
+    //action progress is either initiated through user behaviour (sometimes in curation mode)
+    //or it is a result of the background scan
+    static var numBackGroundActionsInProgress = 0
+    
+    class func setActionStart(){
+        //QQQQ synch semaphore problem (also in setActionFinish() method)
+//        DispatchQueue.main.sync {
+            numBackGroundActionsInProgress += 1
+//        }
+    }
+    
+    class func setActionFinish(){
+//        DispatchQueue.main.sync {
+            numBackGroundActionsInProgress -= 1
+            if numBackGroundActionsInProgress < 0{
+                print("error")//QQQQ assert
+            }
+//        }
+    }
     
     
     class func backgroundScan(){
    
         var counter = 0
-        
+                
         while true{
             sleep(5)
+            if numBackGroundActionsInProgress > 0{
+                continue;
+            }
             switch counter % 9{
             case 0:
-                //print("refresh images")
-                DispatchQueue.main.async {
-                    ImageManager.refreshImageManager()
-                }
+//                print("refresh images")
+                //QQQQ I am worried that this happens in background thread
+                //If we do it with main.async it freezes with many videos (in curate mode)
+                ImageManager.refreshImageManager()
             case 1:
-                //print("clean videos")
+//                print("clean videos")
                 DispatchQueue.main.async {
                     EpsilonStreamDataModel.videoIntegrityCheck()
                 }
             case 2:
-                //print("clean features")
+//                print("clean features")
                 break
             case 3:
-                //print("clean math objects")
+//                print("clean math objects")
                 break
             case 3:
-                //print("clean math math object links")
+//                print("clean math math object links")
                 break
             case 4:
-                //print("fetch videos")
+//                print("fetch videos")
+                EpsilonStreamBackgroundFetch.readVideoDataFromCloud(isInAdminMode == false)
                 break
             case 5:
-                //print("fetch math objects")
+//                print("fetch math objects")
+                EpsilonStreamBackgroundFetch.readMathObjectsFromCloud()
                 break
             case 6:
-                //print("fetch math object links")
+//                print("fetch math object links")
+                EpsilonStreamBackgroundFetch.readMathObjectLinksFromCloud()
                 break
             case 7:
-                //print("fetch epsilon stream info")
+                print("fetch epsilon stream info")
+
                 break
             case 8:
-                //print("fetch features")
-                //readFeaturedURLsFromCloud()
+                print("fetch features")
+                EpsilonStreamBackgroundFetch.readFeaturedURLsFromCloud()
                 break
             default:
                 break

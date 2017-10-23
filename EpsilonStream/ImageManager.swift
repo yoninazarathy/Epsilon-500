@@ -75,8 +75,8 @@ class ImageManager{
     static var numURLLoads = 0
     static var numCloudLoads = 0
     
-    static let maxURLLoads = 70
-    static let maxCloudLoads = 20
+    static let maxURLLoads = 150
+    static let maxCloudLoads = 30
     
     class func setup(){
         //if running for first time copy images from Bundle to directory
@@ -106,13 +106,14 @@ class ImageManager{
             }
         }
         
-        Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true){
+        Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true){
             timer in
             for (id,url) in urlHash{
+                if numURLLoads > maxURLLoads{
+                    break;
+                }
                 if statusHash[id] != ImageStatus.Loaded{
-                    if numURLLoads < maxURLLoads{
-                        loadImage(forKey: id, fromUrl: url)
-                    }
+                    loadImage(forKey: id, fromUrl: url)
                 }
             }
         }
@@ -120,15 +121,14 @@ class ImageManager{
         Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true){
             timer in
             for (key,b) in inCloudHash{
+                if numCloudLoads > maxCloudLoads{
+                    break
+                }
                 if b{
                     if statusHash[key] != ImageStatus.Loaded{
                         //QQQQ maybe problem here? --- yes there is problem - probably sending requests to same ones again and again.
-                        if numCloudLoads < maxCloudLoads{
-                            //print("ok for cloud queue -- \(numCloudLoads)")
-                            readImageFromCloud(withKey: key)
-                        }else{
-                            //print("cloud queue full -- \(numCloudLoads)")
-                        }
+                        //print("ok for cloud queue -- \(numCloudLoads)")
+                        readImageFromCloud(withKey: key)
                     }
                 }
             }
@@ -136,6 +136,9 @@ class ImageManager{
     }
     
     class func refreshImageManager(){
+        
+        EpsilonStreamBackgroundFetch.setActionStart()
+        
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         
@@ -216,6 +219,9 @@ class ImageManager{
         print("inCloudHash.count: \(inCloudHash.count) (inCloud: \(numInCloud)), statusHash.count: \(statusHash.count), urlHash.count: \(urlHash.count),neededByDelagate.count: \(neededByDelagate.count)")
         print("numLoaded: \(numLoaded), numNormallyNeeded: \(numNormallyNeeded), numUnknown: \(numUnknown), numUrgentlyNeeded: \(numUrgentlyNeeded),")
      */
+        
+    EpsilonStreamBackgroundFetch.setActionFinish()
+
     }
     
 

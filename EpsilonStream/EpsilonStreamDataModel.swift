@@ -1032,6 +1032,9 @@ class EpsilonStreamDataModel{
     }
     
     class func videoIntegrityCheck(){
+        
+        EpsilonStreamBackgroundFetch.setActionStart()
+        
         let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         
@@ -1064,6 +1067,8 @@ class EpsilonStreamDataModel{
                 print("MULTIPLE COPIES: \(k) -- \(v)")
             }
         }
+        
+        EpsilonStreamBackgroundFetch.setActionFinish()
+        
     }
-    
 }
