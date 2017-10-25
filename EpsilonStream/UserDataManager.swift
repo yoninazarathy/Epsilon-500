@@ -11,7 +11,7 @@ import CoreData
 import UIKit
 import FirebaseAnalytics
 
-class UserDataManager{
+class UserDataManager: ManagedObjectContextUserProtocol {
     
     // Move to another place.
     private class func crash() {
@@ -65,12 +65,11 @@ class UserDataManager{
     // MARK: - Video progress
     
     class func deletedAllSecondsWatched() {
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         //QQQQ check if fetchlimit?
         
         do{
-            let result = try container.viewContext.fetch(request)
+            let result = try managedObjectContext.fetch(request)
             for v in result{
                 //print("going to try to delete seconds of \(v.youtubeVideoId)")
                 UserDefaults.standard.removeObject(forKey: v.youtubeVideoId)

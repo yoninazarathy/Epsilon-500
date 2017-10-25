@@ -46,7 +46,7 @@ extension String {
     }
 }
 
-class ImageManager{
+class ImageManager: ManagedObjectContextUserProtocol {
     
     //The data model of the image manager is now the hashtables associated with image Keys.
     //Image keys are eitehr 10 characters (youtube style) or 6 characters for features.
@@ -139,12 +139,11 @@ class ImageManager{
         
         EpsilonStreamBackgroundFetch.setActionStart()
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         
         do{
             //iterate over all videos
-            let result = try container.viewContext.fetch(request)
+            let result = try managedObjectContext.fetch(request)
             for v in result{
                 inCloudHash[v.youtubeVideoId] = false //all youtubes are currently from youtube url (not cloud)
                 urlHash[v.youtubeVideoId] = v.imageURL
@@ -175,7 +174,7 @@ class ImageManager{
         let request2 = FeaturedURL.createFetchRequest()
         
         do{
-            let result = try container.viewContext.fetch(request2)
+            let result = try managedObjectContext.fetch(request2)
             for f in result{
                 //QQQQ forcefully unwrapping imageKey (why is it optional???)
                 inCloudHash[f.imageKey!] = true //all features are currently from cloud
@@ -278,13 +277,12 @@ class ImageManager{
     }
     
     class func numImagesInCoreData() -> Int{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = ImageThumbnail.createFetchRequest()
         
         var retVal = -1
         
         do{
-            let result = try container.viewContext.fetch(request)
+            let result = try managedObjectContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")

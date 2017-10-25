@@ -24,16 +24,24 @@ class Common: NSObject {
         return Bundle.main.object(forInfoDictionaryKey: (kCFBundleNameKey as String)) as! String
     }
     
-    // MARK: Threads
+    // MARK: - Threads
     
+    static let concurrentQueue = DispatchQueue(label: "backgroundConcurrentQueue", attributes: .concurrent)
     public static func performInBackground(closure: @escaping () -> Void, completion: (() -> Void)? = nil) {
-        // http://stackoverflow.com/questions/24056205/how-to-use-background-thread-in-swift
-        DispatchQueue.global(qos: .background).async {
+        concurrentQueue.async {
             closure()
             if completion != nil {
                 performOnMainThread(closure: completion!)
             }
         }
+        
+        // http://stackoverflow.com/questions/24056205/how-to-use-background-thread-in-swift
+//        DispatchQueue.global(qos: .background).async {
+//            closure()
+//            if completion != nil {
+//                performOnMainThread(closure: completion!)
+//            }
+//        }
     }
     
     public static func performInBackground(closure: @escaping () -> Void) { // Need separate method to allow shorten closure code.

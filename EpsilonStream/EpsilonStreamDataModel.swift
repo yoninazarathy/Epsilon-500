@@ -57,7 +57,7 @@ extension String {
 //QQQQ When cleaning up this class and the other one (EpsilonStreamBackgroundFetch), make
 //a distinction between admin app and client (user) app
 
-class EpsilonStreamDataModel{
+class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     
     //maps "." commands to an NSPredicate tuple, 1 for video and 1 for feature
     static let specialCommands: [String:(NSPredicate,NSPredicate)] = [
@@ -145,8 +145,7 @@ class EpsilonStreamDataModel{
         request.sortDescriptors = [sort]
         
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let mathObjects = try container.viewContext.fetch(request)
+            let mathObjects = try managedObjectContext.fetch(request)
             
             var i = 1
             for mo in mathObjects{
@@ -183,8 +182,7 @@ class EpsilonStreamDataModel{
         request.sortDescriptors = [sort]
         
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let mathObjects = try container.viewContext.fetch(request)
+            let mathObjects = try managedObjectContext.fetch(request)
             
             for mo in mathObjects{
                 EpsilonStreamDataModel.fullHashTagList.append(mo.hashTag) //QQQQ not lowercased ?
@@ -308,11 +306,7 @@ class EpsilonStreamDataModel{
         var videos:[Video]=[]
         
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            
-            let foundVideos = try container.viewContext.fetch(request)
-            
-            videos = foundVideos
+            videos = try managedObjectContext.fetch(request)
         }catch{
             print("Fetch failed")
         }
@@ -335,10 +329,8 @@ class EpsilonStreamDataModel{
         var videoStrings:[String]=[]
         
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
             
-            let videos = try container.viewContext.fetch(request)
-            
+            let videos = try managedObjectContext.fetch(request)
             for vid in videos{
                 videoStrings.append(vid.youtubeVideoId)
             }
@@ -365,9 +357,7 @@ class EpsilonStreamDataModel{
         var articleStrings:[String]=[]
         
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            
-            let featuredURLs = try container.viewContext.fetch(request)
+            let featuredURLs = try managedObjectContext.fetch(request)
             
             for fu in featuredURLs{//QQQQ clean up...
                 if fu.typeOfFeature == "article" || fu.typeOfFeature == "Article"{
@@ -397,9 +387,8 @@ class EpsilonStreamDataModel{
         var gameStrings:[String]=[]
         
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            
-            let featuredURLs = try container.viewContext.fetch(request)
+
+            let featuredURLs = try managedObjectContext.fetch(request)
             
             for fu in featuredURLs{
                 if fu.isAppStoreApp == true{
@@ -414,7 +403,7 @@ class EpsilonStreamDataModel{
         return gameStrings
     }
     
-    
+    // IK: This method should be separated into several smaller methods.
     class func search(withQuery query: EpsilonStreamSearch) -> [SearchResultItem]{
         
         var hashTag = "" //QQQQ a bit of a mess
@@ -520,10 +509,8 @@ class EpsilonStreamDataModel{
         
         let predicateColl = showAll ? NSPredicate(value: true) : NSPredicate(format: "isInCollection == %@", NSNumber(booleanLiteral: true))
 
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, videosPredicate])
-
         
         var videoSearchResult: [SearchResultItem] = []
         var appSearchResult: [SearchResultItem] = []
@@ -533,7 +520,7 @@ class EpsilonStreamDataModel{
         request.fetchLimit = maxVideosToShow //QQQQ not needed below //QQQQ do for features
 
         do{
-            let videos = try container.viewContext.fetch(request)
+            let videos = try managedObjectContext.fetch(request)
             
             for i in 0..<videos.count{
                 let item = VideoSearchResultItem()
@@ -561,7 +548,7 @@ class EpsilonStreamDataModel{
         featureRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, featuresPredicate])
 
         do{
-            let features = try container.viewContext.fetch(featureRequest)
+            let features = try managedObjectContext.fetch(featureRequest)
             for feature in features{
                 if feature.isAppStoreApp{
                     let item = IOsAppSearchResultItem()
@@ -628,7 +615,7 @@ class EpsilonStreamDataModel{
         mathObjectLinkRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, mathObjectLinksPredicate])
         
         do{
-            let moLinks = try container.viewContext.fetch(mathObjectLinkRequest)
+            let moLinks = try managedObjectContext.fetch(mathObjectLinkRequest)
             for mol in moLinks{
                 let item = MathObjectLinkSearchResultItem()
                 item.title = mol.ourTitle
@@ -761,8 +748,7 @@ class EpsilonStreamDataModel{
         request.predicate = NSPredicate(format: "youtubeVideoId == %@", videoId)
         var retVal:Int? = nil
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let videos = try container.viewContext.fetch(request)
+            let videos = try managedObjectContext.fetch(request)
             
             switch videos.count{
             case 0:
@@ -800,8 +786,8 @@ class EpsilonStreamDataModel{
         var retValue: [String] = []
         
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let mathObjects = try container.viewContext.fetch(request)
+            
+            let mathObjects = try managedObjectContext.fetch(request)
             
             for mo in mathObjects{
                 if mo.isInCollection{
@@ -833,14 +819,13 @@ class EpsilonStreamDataModel{
         
         //////////////////////
         //////////////////////
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         request.fetchLimit = 1
         
         request.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let videos = try container.viewContext.fetch(request)
+            let videos = try managedObjectContext.fetch(request)
 
             if videos.count == 0{
                 latestVideoDate = Date(timeIntervalSince1970: 0.0)
@@ -859,7 +844,7 @@ class EpsilonStreamDataModel{
         request2.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let mathObjects = try container.viewContext.fetch(request2)
+            let mathObjects = try managedObjectContext.fetch(request2)
             
             if mathObjects.count == 0{
                 latestMathObjectDate = Date(timeIntervalSince1970: 0.0)
@@ -878,7 +863,7 @@ class EpsilonStreamDataModel{
         request3.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let featuredURLs = try container.viewContext.fetch(request3)
+            let featuredURLs = try managedObjectContext.fetch(request3)
             
             if featuredURLs.count == 0{
                 latestFeatureDate = Date(timeIntervalSince1970: 0.0)
@@ -897,7 +882,7 @@ class EpsilonStreamDataModel{
         request4.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let mathObjectLinks = try container.viewContext.fetch(request4)
+            let mathObjectLinks = try managedObjectContext.fetch(request4)
             
             if mathObjectLinks.count == 0{
                 latestMathObjectLinkDate = Date(timeIntervalSince1970: 0.0)
@@ -916,8 +901,7 @@ class EpsilonStreamDataModel{
     class func saveViewContext(){
         DispatchQueue.main.async {
             do {
-                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-                try container.viewContext.save()
+                try managedObjectContext.save()
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -927,7 +911,6 @@ class EpsilonStreamDataModel{
     
     //QQQQ use generic to merge three methods
     class func numVideos(inCollection inCol: Bool? = nil) -> Int{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         if let ic = inCol{
             request.predicate = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
@@ -936,7 +919,7 @@ class EpsilonStreamDataModel{
         var retVal = -1
         
         do{
-            let result = try container.viewContext.fetch(request)
+            let result = try managedObjectContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")
@@ -946,13 +929,13 @@ class EpsilonStreamDataModel{
     }
     
     class func numMathObjects() -> Int{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = MathObject.createFetchRequest()
         
         var retVal = -1
         
         do{
-            let result = try container.viewContext.fetch(request)
+            // Is there better way to get count of objects without fetching all objects?
+            let result = try managedObjectContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")
@@ -962,13 +945,12 @@ class EpsilonStreamDataModel{
     }
     
     class func numFeaturedURLs() -> Int{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = FeaturedURL.createFetchRequest()
         
         var retVal = -1
         
         do{
-            let result = try container.viewContext.fetch(request)
+            let result = try managedObjectContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")
@@ -980,13 +962,12 @@ class EpsilonStreamDataModel{
     
     
     class func latestVersion() -> Int64{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = VersionInfo.createFetchRequest()
         
         var max: Int64 = -1
         
         do{
-            let versionInfo = try container.viewContext.fetch(request)
+            let versionInfo = try managedObjectContext.fetch(request)
             for version in versionInfo{
                 if version.contentVersionNumber > max{
                     max = version.contentVersionNumber
@@ -999,13 +980,12 @@ class EpsilonStreamDataModel{
     }
     
     class func latestLoadedVersion() -> Int64{
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = VersionInfo.createFetchRequest()
         
         var max: Int64 = -1
         
         do{
-            let versionInfo = try container.viewContext.fetch(request)
+            let versionInfo = try managedObjectContext.fetch(request)
             for version in versionInfo{
                 if version.loaded && version.contentVersionNumber > max{
                     max = version.contentVersionNumber
@@ -1019,7 +999,6 @@ class EpsilonStreamDataModel{
 
     class func deleteAllEntities(withName name: String, withPredicate predicate:NSPredicate = NSPredicate(format: "TRUEPREDICATE")){
         
-        let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: name)
         request.predicate = predicate
         let delRequest = NSBatchDeleteRequest(fetchRequest: request)
@@ -1035,17 +1014,16 @@ class EpsilonStreamDataModel{
         
         EpsilonStreamBackgroundFetch.setActionStart()
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         
         var idHash:[String:Int] = [:]
         
         do{
-            let result = try container.viewContext.fetch(request)
+            let result = try managedObjectContext.fetch(request)
             for v in result{
                 if let vcount = idHash[v.youtubeVideoId]{
                     idHash[v.youtubeVideoId] = vcount + 1
-                    container.viewContext.delete(v)
+                    managedObjectContext.delete(v)
                     FIRAnalytics.logEvent(withName: "data_exception", parameters: ["type": "too many videos" as NSObject, "id": v.youtubeVideoId as NSObject, "count": idHash[v.youtubeVideoId]! as NSObject])
                     //QQQQ - used to clean cloud - keep commented.
                     //if isInAdminMode && currentUserId == "yoni"{

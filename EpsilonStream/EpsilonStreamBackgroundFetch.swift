@@ -16,7 +16,7 @@ import Firebase
 
 //QQQQ need to organize so this class is more for cloud and the other class is more for core data...?
 
-class EpsilonStreamBackgroundFetch{
+class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     
     static var searcherUI: SearcherUI! = nil
     static var needUpdate: Bool? = nil
@@ -165,8 +165,7 @@ class EpsilonStreamBackgroundFetch{
     class func createDBVideo(fromDataSource cloudSource: CKRecord){
         //unique key
         //let videoID = cloudSource["youtubeVideoId"] as! String
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let newVideo = Video(context: container.viewContext)
+        let newVideo = Video(context: managedObjectContext)
         newVideo.update(fromCloudRecord: cloudSource)
     }
 
@@ -174,13 +173,12 @@ class EpsilonStreamBackgroundFetch{
         
         let hashTag = cloudSource["hashTag"] as! String
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = MathObject.createFetchRequest()
         request.predicate = NSPredicate(format: "hashTag == %@", hashTag)
         do{
-            let mo = try container.viewContext.fetch(request)
+            let mo = try managedObjectContext.fetch(request)
             if mo.count == 0{
-                let newMathObject = MathObject(context: container.viewContext)
+                let newMathObject = MathObject(context: managedObjectContext)
                 newMathObject.update(fromCloudRecord: cloudSource)
             }else if mo.count == 1{
                 mo[0].update(fromCloudRecord: cloudSource)
@@ -197,13 +195,12 @@ class EpsilonStreamBackgroundFetch{
 
         let ourFeaturedURLHashtag = cloudSource["ourFeaturedURLHashtag"] as! String
 
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = FeaturedURL.createFetchRequest()
         request.predicate = NSPredicate(format: "ourFeaturedURLHashtag == %@", ourFeaturedURLHashtag)
         do{
-            let furl = try container.viewContext.fetch(request)
+            let furl = try managedObjectContext.fetch(request)
             if furl.count == 0{
-                let newFeature = FeaturedURL(context: container.viewContext)
+                let newFeature = FeaturedURL(context: managedObjectContext)
                 newFeature.update(fromCloudRecord: cloudSource)
             }else if furl.count == 1{
                 furl[0].update(fromCloudRecord: cloudSource)
@@ -218,13 +215,12 @@ class EpsilonStreamBackgroundFetch{
     class func createOrUpdateDBMathObjectLinks(fromDataSource cloudSource: CKRecord){
         let ourMathObjectLinkHashTag = cloudSource["ourMathObjectLinkHashTag"] as! String
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = MathObjectLink.createFetchRequest() //QQQQ name of object is singular or plural?
         request.predicate = NSPredicate(format: "ourMathObjectLinkHashTag == %@", ourMathObjectLinkHashTag)
         do{
-            let mol = try container.viewContext.fetch(request)
+            let mol = try managedObjectContext.fetch(request)
             if mol.count == 0{
-                let newMathObjectLink = MathObjectLink(context: container.viewContext)
+                let newMathObjectLink = MathObjectLink(context: managedObjectContext)
                 newMathObjectLink.update(fromCloudRecord: cloudSource)
             }else if mol.count == 1{
                 mol[0].update(fromCloudRecord: cloudSource)
@@ -534,11 +530,9 @@ class EpsilonStreamBackgroundFetch{
         //create a dummy MathObjectLink if one doesn't exist.
         let request = MathObjectLink.createFetchRequest()
         do{
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let mathObjectLinks = try container.viewContext.fetch(request)
+            let mathObjectLinks = try managedObjectContext.fetch(request)
             if mathObjectLinks.count == 0{
-                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-                let mol = MathObjectLink(context: container.viewContext)
+                let mol = MathObjectLink(context: managedObjectContext)
                 mol.hashTags = "#binary"
                 mol.imageKey = "NO IMAGE"
                 mol.ourTitle = "Binary on Exploding Dots"
