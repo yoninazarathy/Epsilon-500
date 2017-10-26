@@ -1,18 +1,14 @@
-//
-//  Video+CoreDataProperties.swift
-//  EpsilonStreamPrototype
-//
-//  Created by Yoni Nazarathy on 25/12/16.
-//  Copyright © 2016 Yoni Nazarathy. All rights reserved.
-//
-
 import Foundation
 import CoreData
 import CloudKit
 
+@objc(Video)
+public class Video: BaseCoreDataModel {
+
+}
 
 extension Video {
-
+    
     @nonobjc public class func createFetchRequest() -> NSFetchRequest<Video> {
         return NSFetchRequest<Video>(entityName: "Video");
     }
@@ -40,7 +36,7 @@ extension Video {
     @NSManaged public var hashTagPriorities: String
     @NSManaged public var initPriority: Float
     @NSManaged public var splashKey: String
-
+    
     
     func update(fromCloudRecord record: CKRecord){
         oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
@@ -89,7 +85,7 @@ extension Video {
         }else{
             splashKey = ""
         }
-
+        
     }
     
     func update(withYouTube item: YouTubeVideoListResultItem){

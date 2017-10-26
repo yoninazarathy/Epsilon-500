@@ -1,23 +1,18 @@
-//
-//  FeaturedURL+CoreDataProperties.swift
-//  EpsilonStreamPrototype
-//
-//  Created by Yoni Nazarathy on 25/12/16.
-//  Copyright © 2016 Yoni Nazarathy. All rights reserved.
-//  This file was automatically generated and should not be edited.
-//
-
 import Foundation
 import CoreData
 import CloudKit
 
+@objc(FeaturedURL)
+public class FeaturedURL: BaseCoreDataModel {
+
+}
 
 extension FeaturedURL {
-
+    
     @nonobjc public class func createFetchRequest() -> NSFetchRequest<FeaturedURL> {
         return NSFetchRequest<FeaturedURL>(entityName: "FeaturedURL");
     }
-
+    
     @NSManaged public var oneOnEpsilonTimeStamp: Date
     @NSManaged public var isAppStoreApp: Bool
     @NSManaged public var urlOfItem: String
@@ -35,7 +30,7 @@ extension FeaturedURL {
     @NSManaged public var hashTagPriorities: String
     @NSManaged public var splashKey: String
     @NSManaged public var isExternal: Bool
-
+    
     func update(fromCloudRecord record: CKRecord){
         if let ts = record["modificationDate"] as? Date{
             oneOnEpsilonTimeStamp = ts
@@ -161,7 +156,7 @@ extension FeaturedURL {
         }else{
             splashKey = ""
         }
-
+        
         //QQQQ messed up "isExternal" in cloudkit as string (should have been bool)
         if let ie = record["isExternal"] as? String{
             if ie == "true"{

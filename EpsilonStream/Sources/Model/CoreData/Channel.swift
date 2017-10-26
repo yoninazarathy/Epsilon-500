@@ -1,21 +1,17 @@
-//
-//  Channel+CoreDataProperties.swift
-//  EpsilonStreamPrototype
-//
-//  Created by Yoni Nazarathy on 25/12/16.
-//  Copyright © 2016 Yoni Nazarathy. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
+@objc(Channel)
+public class Channel: BaseCoreDataModel {
+
+}
 
 extension Channel {
-
+    
     @nonobjc public class func createFetchRequest() -> NSFetchRequest<Channel> {
         return NSFetchRequest<Channel>(entityName: "Channel");
     }
-
+    
     @NSManaged public var oneOnEpsilonTimeStamp: Date
     
     @NSManaged public var channelId: String

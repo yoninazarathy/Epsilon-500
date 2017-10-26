@@ -356,7 +356,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     /////////////////////////////
     
     class func makeNewChannel(_ context: NSManagedObjectContext){
-        let newChannel = Channel(context: context)
+        let newChannel = Channel(inContext: context)
         
         newChannel.channelId = "Channel Id - Fill In"
         newChannel.channelTitle = "Channel Title - Fill In"
@@ -370,7 +370,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     }
     
     class func makeNewFeaturedURL(_ context: NSManagedObjectContext) -> FeaturedURL{
-        let newFeaturedURL = FeaturedURL(context: context)
+        let newFeaturedURL = FeaturedURL(inContext: context)
         
         newFeaturedURL.oneOnEpsilonTimeStamp = Date()
         newFeaturedURL.isAppStoreApp = true
@@ -388,7 +388,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     }
     
     class func makeNewMathObject(_ context: NSManagedObjectContext){
-        let newMathObject = MathObject(context: context)
+        let newMathObject = MathObject(inContext: context)
         
         newMathObject.oneOnEpsilonTimeStamp = Date()
         newMathObject.associatedTitles = "ASSOCIATED TITLES - FILL IN"
@@ -398,7 +398,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     }
     
     class func makeNewVideo(_ context: NSManagedObjectContext){
-        let newVideo = Video(context: context)
+        let newVideo = Video(inContext: context)
         
         newVideo.age8Rating = 1.0
         newVideo.age10Rating = 1.0
@@ -612,7 +612,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             }
         }else{
             print("New \(item.channel) -- \(item.title)")
-            let newVideo = Video(context: managedObjectContext)
+            let newVideo = Video(inContext: managedObjectContext)
             newVideo.update(withYouTube: item)
         }
     }
@@ -620,7 +620,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     class func createDBVideo(fromDataSource cloudSource: CKRecord){
         //unique key
         //let videoID = cloudSource["youtubeVideoId"] as! String
-        let _ = Video(context: managedObjectContext)
+        let _ = Video(inContext: managedObjectContext)
     }
     
     class func mathObjectReport() -> String{

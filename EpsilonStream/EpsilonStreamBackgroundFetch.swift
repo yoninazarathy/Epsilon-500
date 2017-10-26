@@ -96,7 +96,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
             print("Fetch failed")
         }
         
-        let versionInfo = VersionInfo(context: container.viewContext)
+        let versionInfo = VersionInfo(inContext: container.viewContext)
         
         versionInfo.mathObjectCount = cloudSource["mathObjectCount"] as! Int64
         versionInfo.videoCount = cloudSource["videoCount"] as! Int64
@@ -165,7 +165,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func createDBVideo(fromDataSource cloudSource: CKRecord){
         //unique key
         //let videoID = cloudSource["youtubeVideoId"] as! String
-        let newVideo = Video(context: managedObjectContext)
+        let newVideo = Video(inContext: managedObjectContext)
         newVideo.update(fromCloudRecord: cloudSource)
     }
 
@@ -178,7 +178,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         do{
             let mo = try managedObjectContext.fetch(request)
             if mo.count == 0{
-                let newMathObject = MathObject(context: managedObjectContext)
+                let newMathObject = MathObject(inContext: managedObjectContext)
                 newMathObject.update(fromCloudRecord: cloudSource)
             }else if mo.count == 1{
                 mo[0].update(fromCloudRecord: cloudSource)
@@ -200,7 +200,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         do{
             let furl = try managedObjectContext.fetch(request)
             if furl.count == 0{
-                let newFeature = FeaturedURL(context: managedObjectContext)
+                let newFeature = FeaturedURL(inContext: managedObjectContext)
                 newFeature.update(fromCloudRecord: cloudSource)
             }else if furl.count == 1{
                 furl[0].update(fromCloudRecord: cloudSource)
@@ -220,7 +220,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         do{
             let mol = try managedObjectContext.fetch(request)
             if mol.count == 0{
-                let newMathObjectLink = MathObjectLink(context: managedObjectContext)
+                let newMathObjectLink = MathObjectLink(inContext: managedObjectContext)
                 newMathObjectLink.update(fromCloudRecord: cloudSource)
             }else if mol.count == 1{
                 mol[0].update(fromCloudRecord: cloudSource)
@@ -532,7 +532,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         do{
             let mathObjectLinks = try managedObjectContext.fetch(request)
             if mathObjectLinks.count == 0{
-                let mol = MathObjectLink(context: managedObjectContext)
+                let mol = MathObjectLink(inContext: managedObjectContext)
                 mol.hashTags = "#binary"
                 mol.imageKey = "NO IMAGE"
                 mol.ourTitle = "Binary on Exploding Dots"

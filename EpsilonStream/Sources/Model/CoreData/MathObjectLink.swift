@@ -1,24 +1,20 @@
-//
-//  MathObjectLink+CoreDataProperties.swift
-//  EpsilonStream
-//
-//  Created by Yoni Nazarathy on 21/7/17.
-//  Copyright © 2017 Yoni Nazarathy. All rights reserved.
-//
-
 import Foundation
 import CoreData
 import CloudKit
 
+@objc(MathObjectLink)
+public class MathObjectLink: BaseCoreDataModel {
+
+}
 
 extension MathObjectLink {
-
+    
     @nonobjc public class func createFetchRequest() -> NSFetchRequest<MathObjectLink> {
         return NSFetchRequest<MathObjectLink>(entityName: "MathObjectLink");
     }
-
+    
     @NSManaged public var searchTitle: String
-    @NSManaged public var hashTags: String 
+    @NSManaged public var hashTags: String
     @NSManaged public var imageKey: String
     @NSManaged public var ourTitle: String
     @NSManaged public var ourTitleDetail: String
@@ -29,7 +25,7 @@ extension MathObjectLink {
     @NSManaged public var ourMathObjectLinkHashTag: String
     @NSManaged public var splashKey: String
     @NSManaged public var cellImageKey: String
-
+    
     func update(fromCloudRecord record: CKRecord){
         searchTitle = record["searchTitle"] as! String
         hashTags = record["hashTags"] as! String
