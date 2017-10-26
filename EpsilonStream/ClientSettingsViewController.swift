@@ -274,7 +274,8 @@ class ClientSettingsViewController: UIViewController {
     
     @IBAction func reviewAppButtonAction(_ sender: Any) {
         if let url = URL(string: "https://itunes.apple.com/app/id1200152358") {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            //UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.openURL(url)
         }
     }
     

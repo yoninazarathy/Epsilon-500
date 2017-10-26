@@ -17,7 +17,7 @@ class PersistentStorageManager: NSObject {
     
     // MARK: - Database storage
     
-    private lazy var persistentContainer: NSPersistentContainer = {
+    @available(iOS 10.0, *) private lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
@@ -68,7 +68,7 @@ class PersistentStorageManager: NSObject {
     }()
     
     public lazy var managedObjectContext: NSManagedObjectContext = {
-        let managedObjectContext = NSManagedObjectContext()
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = PersistentStorageManager.shared.persistentStoreCoordinator
         return managedObjectContext
         
