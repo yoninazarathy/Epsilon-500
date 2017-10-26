@@ -10,6 +10,7 @@
 import UIKit
 import AVFoundation
 import AVKit
+import SwiftyTimer
 
 
 //FROM https://stackoverflow.com/questions/24111770/make-a-simple-fade-in-animation-in-swift
@@ -122,11 +123,11 @@ class SplashScreenViewController: UIViewController {
         
         spinner.isHidden = false
         spinner.startAnimating()
-
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer1 in
+        
+        Timer.every(0.1.seconds) { (timer: Timer) in
             if dbReadyToGo {
                 NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-                timer1.invalidate()
+                timer.invalidate()
                 self.moveOnToClient()
             }
         }

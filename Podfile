@@ -10,4 +10,5 @@ target 'EpsilonStream' do
     pod 'Firebase/Core'
     pod 'Toucan', '~> 0.6'
     pod 'BetterSegmentedControl', '~> 0.8'
+    pod 'SwiftyTimer', '~> 2.0'
 end

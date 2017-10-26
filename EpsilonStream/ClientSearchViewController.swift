@@ -168,11 +168,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             surpriseButton.imageView!.startAnimating()
             let newText = EpsilonStreamDataModel.surpriseText()
             searchTextField.text = newText.lowercased().jumble
-            textShuffleTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true){timer in
+            textShuffleTimer = Timer.every(0.1.seconds) {
                 self.searchTextField.text = newText.lowercased().jumble
             }
 
-            Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false){timer in
+            Timer.every(0.6.seconds) { (timer: Timer) in
                 self.surpriseButton.imageView!.stopAnimating()
                 self.surpriseButton.imageView!.isHighlighted = false
                 FIRAnalytics.logEvent(withName: "surprise_button", parameters: ["newText" : newText as NSObject])
