@@ -348,9 +348,9 @@
 		2080C2571E14747B00723F3B /* ClientUI */ = {
 			isa = PBXGroup;
 			children = (
+				2080C2541E14726C00723F3B /* EpsilonClient.storyboard */,
 				20B7849B1F213FD7005E28CD /* MathObjectLinkItemTableViewCell.swift */,
 				20C00D051F345BE2008284F0 /* SpecialItemTableViewCell.swift */,
-				2080C2541E14726C00723F3B /* EpsilonClient.storyboard */,
 				207432B41F55A3AB0095CEBB /* CreditsViewController.swift */,
 				207432AF1F5276250095CEBB /* AboutViewController.swift */,
 				2073D6281EFF8F8C00B7849D /* VideoItemTableViewCell.swift */,

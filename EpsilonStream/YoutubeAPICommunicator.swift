@@ -359,12 +359,12 @@ class YoutubeAPICommunicator{
             playListId: "",
             comment: "minutephysics")
         ,
-   /*     YoutubeResource( //QQQQ not clear the problem - it pullls a huge number of vids...
+        YoutubeResource( 
             channelName: "singingbanana",
             channelId: "",
             playListId: "",
             comment: "singingbanana")
-        ,*/
+        ,
         YoutubeResource(
             channelName: "MathTV",
             channelId: "",
@@ -410,8 +410,163 @@ class YoutubeAPICommunicator{
             channelName: "",
             channelId: "UCLo4jBc9fQkVPbmdnSL4IRg",
             playListId: "",
-            comment: "The Global Math Project")]
-    
+            comment: "The Global Math Project"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UC_SvYP0k05UKiJ_2ndB02IA",
+            playListId: "",
+            comment: "Black Pen Red Pen"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCxqAWLTk1CmBvZFPzeZMd9A",
+            playListId: "",
+            comment: "Domain of Science"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCsooa4yRKGN_zEE8iknghZA",
+            playListId: "",
+            comment: "TED-Ed"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCY5NDinr2975LghozXAeTWQ",
+            playListId: "",
+            comment: "OxfordSparks"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCs4aHmggTfFrpkPcWSaBN9g",
+            playListId: "",
+            comment: "PBS Infinite Series"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UC9yt3wz-6j19RwD5m5f6HSg",
+            playListId: "",
+            comment: "Think Twice"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UC_OjzlVO230cu7vQYUSNNDw",
+            playListId: "",
+            comment: "TyYann"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCG32MfGLit1pcqCRXyy9cAg",
+            playListId: "",
+            comment: "Statistics Learning Centre"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCciX2VHmW7Ix_FVWQ_u4RwQ",
+            playListId: "",
+            comment: "GoldfishAndRobin"),
+        YoutubeResource(
+            channelName: "ebalzarini",
+            channelId: "",
+            playListId: "",
+            comment: "the AllAroundMathGuy"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCKl7MXLRrk6hnWuObFwKxdg",
+            playListId: "",
+            comment: "Cole's World of Mathematics"),
+        YoutubeResource(
+            channelName: "blc0527",
+            channelId: "",
+            playListId: "",
+            comment: "blc0527"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCfG0OGu8IR9KqgZiDQOHIfg",
+            playListId: "",
+            comment: "Kealing Geometry"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UClOR1BiPyOkkIAnv9Cmj4iw",
+            playListId: "",
+            comment: "Mario's Math Tutoring"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UC7iAQJ5Ldf1lZSz96TUns0Q",
+            playListId: "",
+            comment: "The Bearded Math Man"),
+        YoutubeResource(
+            channelName: "EHSmathwithmurphy",
+            channelId: "",
+            playListId: "",
+            comment: "Math With Murphy"),
+        YoutubeResource(
+            channelName: "Mathfortress",
+            channelId: "",
+            playListId: "",
+            comment: "Math Fortress"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCtBtcQJ8_jsrjPzb8i1tOsA",
+            playListId: "",
+            comment: "MashUp Math"),
+        YoutubeResource(
+            channelName: "teachertubemath",
+            channelId: "",
+            playListId: "",
+            comment: "TeacherTube Math"),
+        YoutubeResource(
+            channelName: "MrBrianMcLogan",
+            channelId: "",
+            playListId: "",
+            comment: "Brian McLogan"),
+        YoutubeResource(
+            channelName: "DLBmaths",
+            channelId: "",
+            playListId: "",
+            comment: "DLBmaths"),
+        YoutubeResource(
+            channelName: "profrobbob",
+            channelId: "",
+            playListId: "",
+            comment: "ProfRobBob"),
+        YoutubeResource(
+            channelName: "TheIntegralCALC",
+            channelId: "",
+            playListId: "",
+            comment: "Krista King"),
+        YoutubeResource(
+            channelName: "yaymath",
+            channelId: "",
+            playListId: "",
+            comment: "yaymath"),
+        YoutubeResource(
+            channelName: "mathtutordvd",
+            channelId: "",
+            playListId: "",
+            comment: "mathtutordvd"),
+        YoutubeResource(
+            channelName: "bullcleo1",
+            channelId: "",
+            playListId: "",
+            comment: "Mathispower4u"),
+        YoutubeResource(
+            channelName: "derekowens",
+            channelId: "",
+            playListId: "",
+            comment: "Derek Owens"),
+        YoutubeResource(
+            channelName: "MySecretMathTutor",
+            channelId: "",
+            playListId: "",
+            comment: "MySecretMathTutor"),
+        YoutubeResource(
+            channelName: "FortBendTutoring",
+            channelId: "",
+            playListId: "",
+            comment: "FortBendTutoring"),
+        YoutubeResource(
+            channelName: "mrskrummel",
+            channelId: "",
+            playListId: "",
+            comment: "Michelle Krummel"),
+        YoutubeResource(
+            channelName: "MyWhyU",
+            channelId: "",
+            playListId: "",
+            comment: "MyWhyU")
+        ]
     static func fetchResource(_ resource: YoutubeResource){
         resourceQueryCount += 1
         
@@ -622,10 +777,15 @@ class YoutubeAPICommunicator{
     }
 
     
+    static var numVidsInGet = 0
+    
     //////////////
     //////////////
     static func getYouTubeAPIVideoInfo(_ idString: String){
 
+        numVidsInGet += 1
+        print("NUM (request): \(numVidsInGet)")
+        
         let YOUTUBE_API_VIDEOS_URL = "https://www.googleapis.com/youtube/v3/videos"
         var params: [String:String] = [:]
         
@@ -635,10 +795,11 @@ class YoutubeAPICommunicator{
         
         //QQQQ All this is troublsome below - study it well
         
-        
         Alamofire.request(YOUTUBE_API_VIDEOS_URL,parameters: params).responseJSON{
             response in
             
+            numVidsInGet -= 1
+            print("NUM (response): \(numVidsInGet)")
             //var vidInfoList = [YouTubeSearchResultItem]()
             switch response.result {
             case .success(let data):

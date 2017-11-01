@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="KAj-u0-0Hv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="KAj-u0-0Hv">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1737,31 +1737,31 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="1l0-xB-gfW">
-                                <rect key="frame" x="16" y="10" width="343" height="647"/>
+                                <rect key="frame" x="16" y="30" width="343" height="627"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="One on Eps Time Stamp" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tLj-Ig-u6i">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="46"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="45"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ourFeaturedURLHashtag" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Wc-Zx-UWR">
-                                        <rect key="frame" x="0.0" y="46" width="343" height="46.5"/>
+                                        <rect key="frame" x="0.0" y="45" width="343" height="44.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qAC-NW-b3w" userLabel="URLStack">
-                                        <rect key="frame" x="0.0" y="92.5" width="343" height="46"/>
+                                        <rect key="frame" x="0.0" y="89.5" width="343" height="45"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xi4-0h-9tO">
-                                                <rect key="frame" x="0.0" y="0.0" width="293" height="46"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="293" height="45"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWU-w7-CWd">
-                                                <rect key="frame" x="293" y="0.0" width="50" height="46"/>
+                                                <rect key="frame" x="293" y="0.0" width="50" height="45"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="way-Tt-ezR"/>
                                                 </constraints>
@@ -1773,40 +1773,40 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                         </subviews>
                                     </stackView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Our Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BSJ-Ko-DfT">
-                                        <rect key="frame" x="0.0" y="138.5" width="343" height="46.5"/>
+                                        <rect key="frame" x="0.0" y="134.5" width="343" height="44.5"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="provider" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0cX-nk-1Wd">
-                                        <rect key="frame" x="0.0" y="185" width="343" height="46"/>
+                                        <rect key="frame" x="0.0" y="179" width="343" height="45"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" spellCheckingType="no"/>
                                     </textField>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="HashTag List" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="E8i-je-1fy">
-                                        <rect key="frame" x="0.0" y="231" width="343" height="46.5"/>
+                                        <rect key="frame" x="0.0" y="224" width="343" height="44.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" spellCheckingType="no"/>
                                     </textView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ourDescription" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JEw-q8-heo">
-                                        <rect key="frame" x="0.0" y="277.5" width="343" height="46"/>
+                                        <rect key="frame" x="0.0" y="268.5" width="343" height="45"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" spellCheckingType="no"/>
                                     </textField>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Comments and Review" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="DiI-7V-fE5">
-                                        <rect key="frame" x="0.0" y="323.5" width="343" height="46"/>
+                                        <rect key="frame" x="0.0" y="313.5" width="343" height="45"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" spellCheckingType="no"/>
                                     </textView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Wmg-4R-ZHi">
-                                        <rect key="frame" x="0.0" y="369.5" width="343" height="46.5"/>
+                                        <rect key="frame" x="0.0" y="358.5" width="343" height="44.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Awesome:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kca-ai-bvK">
-                                                <rect key="frame" x="0.0" y="13" width="100" height="20.5"/>
+                                                <rect key="frame" x="0.0" y="12" width="100" height="20.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="P8G-DU-jqL"/>
                                                 </constraints>
@@ -1815,10 +1815,10 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4iT-ET-hkO">
-                                                <rect key="frame" x="100" y="8" width="96" height="31"/>
+                                                <rect key="frame" x="100" y="6.5" width="96" height="31"/>
                                             </switch>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In Collection:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5b-y9-Nem">
-                                                <rect key="frame" x="194" y="13" width="100" height="20.5"/>
+                                                <rect key="frame" x="194" y="12" width="100" height="20.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="iMi-MA-7A8"/>
                                                 </constraints>
@@ -1827,12 +1827,12 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TRi-Xz-s0N">
-                                                <rect key="frame" x="294" y="8" width="51" height="31"/>
+                                                <rect key="frame" x="294" y="6.5" width="51" height="31"/>
                                             </switch>
                                         </subviews>
                                     </stackView>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lfQ-5g-lzc">
-                                        <rect key="frame" x="0.0" y="416" width="343" height="47"/>
+                                        <rect key="frame" x="0.0" y="403" width="343" height="46"/>
                                         <color key="backgroundColor" red="0.73892686929999996" green="0.87610677380000002" blue="0.51342231199999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <segments>
                                             <segment title="WHY"/>
@@ -1842,7 +1842,7 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                         </segments>
                                     </segmentedControl>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="FaJ-WJ-gx0">
-                                        <rect key="frame" x="0.0" y="462" width="343" height="47.5"/>
+                                        <rect key="frame" x="0.0" y="448" width="343" height="45.5"/>
                                         <segments>
                                             <segment title="Article"/>
                                             <segment title="iOS Game/App"/>
@@ -1850,16 +1850,16 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                         </segments>
                                     </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wPN-sS-Na0">
-                                        <rect key="frame" x="0.0" y="508.5" width="343" height="46"/>
+                                        <rect key="frame" x="0.0" y="492.5" width="343" height="45"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Image Key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PXt-Yw-4Lc">
-                                                <rect key="frame" x="0.0" y="0.0" width="293" height="46"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="293" height="45"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZJ-Nx-5MG">
-                                                <rect key="frame" x="293" y="0.0" width="50" height="46"/>
+                                                <rect key="frame" x="293" y="0.0" width="50" height="45"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="khs-IK-6zA"/>
                                                 </constraints>
@@ -1871,16 +1871,16 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e6I-Ge-LOo">
-                                        <rect key="frame" x="0.0" y="554.5" width="343" height="46.5"/>
+                                        <rect key="frame" x="0.0" y="537.5" width="343" height="44.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Image URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u5h-BF-sRk">
-                                                <rect key="frame" x="0.0" y="0.0" width="293" height="46.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="293" height="44.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="anN-Pk-hB7">
-                                                <rect key="frame" x="293" y="0.0" width="50" height="46.5"/>
+                                                <rect key="frame" x="293" y="0.0" width="50" height="44.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="sVB-jd-Lft"/>
                                                 </constraints>
@@ -1892,10 +1892,10 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="pq5-MA-28V">
-                                        <rect key="frame" x="0.0" y="601" width="343" height="46"/>
+                                        <rect key="frame" x="0.0" y="582" width="343" height="45"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TTN-Fv-QhE">
-                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="46"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="45"/>
                                                 <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Select Hash Tags"/>
                                                 <connections>
@@ -1903,7 +1903,7 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="66y-AK-Jcb">
-                                                <rect key="frame" x="171.5" y="0.0" width="171.5" height="46"/>
+                                                <rect key="frame" x="171.5" y="0.0" width="171.5" height="45"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="0.37706163190000003" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Local Images"/>
                                             </button>
@@ -1949,7 +1949,7 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                 <navigationController storyboardIdentifier="clientNavViewController" automaticallyAdjustsScrollViewInsets="NO" id="rmz-qn-qI7" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ERm-J1-NdI">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
@@ -2054,7 +2054,7 @@ We’ve tested these apps ourselves and with our children and colleagues, making
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="11" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rut-6P-6YN">
-                                        <rect key="frame" x="0.0" y="90" width="339.5" height="557"/>
+                                        <rect key="frame" x="0.0" y="90" width="0.0" height="557"/>
                                         <string key="text">There are many ways to satisfy your curiosity and to learn. Some of us love to read!
 
 Access hundreds of blog posts and relevant links which match the search topic, all reviewed by our content team. We only list the ones we feel are the most accurate, and most engaging to save you time in searching. 
@@ -2141,10 +2141,10 @@ This includes blogs by us and many other resources created by incredible math ex
                                         <rect key="frame" x="0.0" y="162" width="375" height="161.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Watch_icon" translatesAutoresizingMaskIntoConstraints="NO" id="JYZ-BA-Vie">
-                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="161.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="161.5"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watch curated videos" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V91-E1-kFb">
-                                                <rect key="frame" x="187.5" y="0.0" width="187.5" height="161.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="161.5"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2155,10 +2155,10 @@ This includes blogs by us and many other resources created by incredible math ex
                                         <rect key="frame" x="0.0" y="323.5" width="375" height="162"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Play_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Nf7-Ry-cVw">
-                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="162"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="162"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Play games" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="duM-yY-w5c">
-                                                <rect key="frame" x="187.5" y="0.0" width="187.5" height="162"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="162"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2169,10 +2169,10 @@ This includes blogs by us and many other resources created by incredible math ex
                                         <rect key="frame" x="0.0" y="485.5" width="375" height="161.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Explore_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Ff2-jE-q2E">
-                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="161.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="161.5"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Explore blogs and articles" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWs-1T-Oog">
-                                                <rect key="frame" x="187.5" y="0.0" width="187.5" height="161.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="161.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2223,13 +2223,13 @@ This includes blogs by us and many other resources created by incredible math ex
                                         <rect key="frame" x="0.0" y="40" width="343" height="100"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Content Updates:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Foi-v4-KTd">
-                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Each time the app opens it will sync with the latest content from our servers." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGr-k4-tuz">
-                                                <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="-16" y="0.0" width="0.0" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2243,13 +2243,13 @@ This includes blogs by us and many other resources created by incredible math ex
                                         <rect key="frame" x="0.0" y="140" width="343" height="100"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sharing:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGG-Me-WfP">
-                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe left to share a video, blog, or game with a friend." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCj-dr-Cso">
-                                                <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="-16" y="0.0" width="0.0" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2263,13 +2263,13 @@ This includes blogs by us and many other resources created by incredible math ex
                                         <rect key="frame" x="0.0" y="240" width="343" height="100"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Web Locking:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DAI-Yt-ewp">
-                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ZH-Ze-s4f">
-                                                <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="-16" y="0.0" width="0.0" height="100"/>
                                                 <string key="text">The app can be locked from accessing external websites. We pull the videos in and also allow access to Youtube channels. A safety code can be added in the settings screen to ensure you don’t leave the app.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
@@ -2284,13 +2284,13 @@ This includes blogs by us and many other resources created by incredible math ex
                                         <rect key="frame" x="0.0" y="340" width="343" height="100"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dynamic Requests:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bi5-uF-P4U">
-                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn’t find what you need? We want to know and we’re pretty quick in responding. Put us to the test. " textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Yl-BQ-gCG">
-                                                <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="-16" y="0.0" width="0.0" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>

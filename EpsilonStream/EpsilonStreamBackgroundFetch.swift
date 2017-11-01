@@ -240,7 +240,6 @@ class EpsilonStreamBackgroundFetch{
         
         EpsilonStreamBackgroundFetch.setActionStart()
 
-        
         let pred1 = NSPredicate(format: "modificationDate > %@", latestVideoDate! as NSDate)
         let pred2 = NSPredicate(format: "isInVideoCollection = %@", NSNumber(booleanLiteral: inCollection))
         let pred = inCollection ? NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2]) : pred1
@@ -277,6 +276,7 @@ class EpsilonStreamBackgroundFetch{
             if gotCursor == false{
                 finishedVideos = true
                 onFinish() //QQQQ should this be in a mutex?
+                //QQQQ is this really called after the last fetchVideoRecords??? Could be a problem.
                 EpsilonStreamBackgroundFetch.setActionFinish()
             }//otherwise will be set by fetchVideoRecords()
         }
@@ -552,4 +552,81 @@ class EpsilonStreamBackgroundFetch{
             print("Fetch failed")
         }
     }
+    
+    ///////////////////////////
+    ///////////////////////////
+    // This is for getting all the videos in the cloud and seeing what they are
+    
+    static var videoCount:[String:Int] = [:]
+    static var peekVideoDone = false
+    
+    class func peekVideoDataFromCloud(){
+        EpsilonStreamBackgroundFetch.setActionStart() //QQQQ?
+        
+        videoCount = [:]
+        
+        let query = CKQuery(recordType: "Video", predicate: NSPredicate(value:true))
+        query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
+        
+        let operation = CKQueryOperation(query: query)
+        operation.recordFetchedBlock = gotRecord(withVideoRecord:)
+        
+        var gotCursor = false
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            if error == nil{
+                //print("no error")
+                if cursor != nil{
+                    gotCursor = true
+                    peekVideoRecords(withCursor: cursor!)
+                }
+            }else{
+                print("\(error!.localizedDescription)")
+            }
+        }
+        
+        operation.completionBlock = {
+            if gotCursor == false{
+                //QQQQ is this really called after the last fetchVideoRecords??? Could be a problem.
+                EpsilonStreamBackgroundFetch.setActionFinish()
+            }//otherwise will be set by fetchVideoRecords()
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
+    class func gotRecord(withVideoRecord record: CKRecord){
+        let videoID = record["youtubeVideoId"] as! String;
+        if let num = videoCount[videoID]{
+            videoCount[videoID] = num + 1
+        }else{
+            videoCount[videoID] = 1
+        }
+    }
+    
+    class func peekVideoRecords(withCursor cursor: CKQueryCursor){
+        print("peekVideoRecords()")
+        
+        let operation = CKQueryOperation(cursor: cursor)
+        //operation.qualityOfService = .userInteractive
+        operation.recordFetchedBlock = gotRecord(withVideoRecord:)
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            if error == nil{
+                //print("no error")
+                if cursor != nil{
+                    peekVideoRecords(withCursor: cursor!)
+                }else{
+                    //onFinish() //QQQQ should this be in a mutex?
+                    peekVideoDone = true
+                    print("done")
+                }
+            }else{
+                print("\(error!.localizedDescription)")
+            }
+        }
+        
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
 }

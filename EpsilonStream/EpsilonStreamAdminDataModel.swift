@@ -225,10 +225,6 @@ class EpsilonStreamAdminModel{
                         print("\(error)")
                     }
                     
-                    //QQQQ do this for feature and MO
-//                    DispatchQueue.main.async{
-//                        EpsilonStreamBackgroundFetch.readVideoDataFromCloud(false)
-//                    }
                     DispatchQueue.main.sync{
                         backgroundActionInProgress = false
                     }
@@ -499,26 +495,36 @@ class EpsilonStreamAdminModel{
     /////////////////////////////
 
     class func storeAllVideos(){
-        //QQQQ just to be safe this is commented out
-//        return
-//        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-//        let request = Video.createFetchRequest()
-//        request.predicate = NSPredicate(format:"TRUEPREDICATE")
-//        do{
-//            let videos = try container.viewContext.fetch(request)
-//            for v in videos{
-//                if (v.hashTags == "" || v.hashTags == "#noTag") && v.isInCollection == false && v.ourTitle == v.youtubeTitle{
-//                    print("WILL SUBMIT VIDEO \(v.youtubeVideoId)")
-//                    EpsilonStreamAdminModel.currentVideo = v
-//                    EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
-//                }else{
-//                    print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags)")
-//
-//                }
-//            }
-//        }catch{
-//            print("Fetch failed")
-//        }
+        EpsilonStreamBackgroundFetch.peekVideoDataFromCloud()
+        
+        while true{
+            sleep(2)
+            if EpsilonStreamBackgroundFetch.peekVideoDone{
+                print("done here")
+                break
+            }
+        }
+        
+        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        let request = Video.createFetchRequest()
+        request.predicate = NSPredicate(format:"TRUEPREDICATE")
+        do{
+            let videos = try container.viewContext.fetch(request)
+            for v in videos{
+                if let cnt =  EpsilonStreamBackgroundFetch.videoCount[v.youtubeVideoId]{
+                    //print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags) -- \(cnt)")
+                    if cnt > 1{
+                        print( "TOO MANY: \(v.youtubeVideoId) -- \(v.ourTitle) -- \(v.hashTags) -- \(cnt)")
+                    }
+                }else{//Video not there
+                    print("WILL SUBMIT VIDEO \(v.youtubeVideoId) -- \(v.ourTitle)")
+                    EpsilonStreamAdminModel.currentVideo = v
+                    EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
+                }
+            }
+        }catch{
+            print("Fetch failed")
+        }
     }
     
     class func storeAllMathObjects(){
@@ -603,9 +609,17 @@ class EpsilonStreamAdminModel{
         }
         
         func videoIdsOfChannelDone(withVideos videos: [String]){
-            print("IN EpsilonStreamAdminDataModel: Got \(videos.count) videos!")            
+            print("IN EpsilonStreamAdminDataModel: Got \(videos.count) videos!")
             for v in videos{
-                YoutubeAPICommunicator.getYouTubeAPIVideoInfo(v)
+                let videos = EpsilonStreamDataModel.videos(ofYoutubeId: v)
+                if videos.count == 0{
+                    YoutubeAPICommunicator.getYouTubeAPIVideoInfo(v)
+                }else{
+                    print("already have video \(v)")
+                }
+                if YoutubeAPICommunicator.numVidsInGet > 1000{
+                    break //stop
+                }
             }
         }
     }

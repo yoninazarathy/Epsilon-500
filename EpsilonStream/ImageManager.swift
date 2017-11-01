@@ -106,29 +106,31 @@ class ImageManager{
             }
         }
         
-        Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true){
-            timer in
-            for (id,url) in urlHash{
-                if numURLLoads > maxURLLoads{
-                    break;
-                }
-                if statusHash[id] != ImageStatus.Loaded{
-                    loadImage(forKey: id, fromUrl: url)
+        if isInAdminMode == false{
+            Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true){
+                timer in
+                for (id,url) in urlHash{
+                    if numURLLoads > maxURLLoads{
+                        break;
+                    }
+                    if statusHash[id] != ImageStatus.Loaded{
+                        loadImage(forKey: id, fromUrl: url)
+                    }
                 }
             }
-        }
         
-        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true){
-            timer in
-            for (key,b) in inCloudHash{
-                if numCloudLoads > maxCloudLoads{
-                    break
-                }
-                if b{
-                    if statusHash[key] != ImageStatus.Loaded{
-                        //QQQQ maybe problem here? --- yes there is problem - probably sending requests to same ones again and again.
-                        //print("ok for cloud queue -- \(numCloudLoads)")
-                        readImageFromCloud(withKey: key)
+            Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true){
+                timer in
+                for (key,b) in inCloudHash{
+                    if numCloudLoads > maxCloudLoads{
+                        break
+                    }
+                    if b{
+                        if statusHash[key] != ImageStatus.Loaded{
+                            //QQQQ maybe problem here? --- yes there is problem - probably sending requests to same ones again and again.
+                            //print("ok for cloud queue -- \(numCloudLoads)")
+                            readImageFromCloud(withKey: key)
+                        }
                     }
                 }
             }
