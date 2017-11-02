@@ -172,16 +172,16 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 self.searchTextField.text = newText.lowercased().jumble
             }
 
-            Timer.every(0.6.seconds) { (timer: Timer) in
+            Timer.after(0.6, {
                 self.surpriseButton.imageView!.stopAnimating()
                 self.surpriseButton.imageView!.isHighlighted = false
                 FIRAnalytics.logEvent(withName: "surprise_button", parameters: ["newText" : newText as NSObject])
                 self.selected(newText)
-                if let timer = self.textShuffleTimer{
-                    timer.invalidate()
+                if let textShuffleTimer = self.textShuffleTimer {
+                    textShuffleTimer.invalidate()
                 }
                 self.surpriseButton.isEnabled = true
-            }
+            })
             let url = ClientSearchViewController.getSoundURL()
             do{
                 audioPlayer = try AVAudioPlayer(contentsOf: url)
