@@ -162,14 +162,6 @@ class EpsilonStreamBackgroundFetch{
         }
     }
     
-    class func createDBVideo(fromDataSource cloudSource: CKRecord){
-        //unique key
-        //let videoID = cloudSource["youtubeVideoId"] as! String
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let newVideo = Video(context: container.viewContext)
-        newVideo.update(fromCloudRecord: cloudSource)
-    }
-
     class func createOrUpdateDBMathObject(fromDataSource cloudSource: CKRecord){
         
         let hashTag = cloudSource["hashTag"] as! String
@@ -285,11 +277,26 @@ class EpsilonStreamBackgroundFetch{
     }
     
     class func populate(withVideoRecord record: CKRecord){
-        print("Video - RECORD FETCHED BLOCK -- \(videoNum)")
-        videoNum = videoNum + 1 //QQQQ handle cursurs???
-        //print("Got Video with timestamp: \(record["modificationDate"] as! Date)")
-        DispatchQueue.main.async{
-            createDBVideo(fromDataSource: record)
+        if let videoID = record["youtubeVideoId"] as? String{
+            print("Video - RECORD FETCHED BLOCK -- \(videoNum), \(videoID)")
+            videoNum = videoNum + 1
+            DispatchQueue.main.async{
+                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+                var video: Video! = nil
+                let vids = EpsilonStreamDataModel.videos(ofYoutubeId: videoID)
+                
+                if vids.count == 0{ //new video
+                    video = Video(context: container.viewContext)
+                }else{
+                    video = vids[0]
+                    if vids.count > 1{
+                        print("error too many videos")
+                    }
+                }
+                video.update(fromCloudRecord: record)
+            }
+        }else{
+            print("error got no video id on video from cloud")
         }
     }
     
@@ -472,42 +479,42 @@ class EpsilonStreamBackgroundFetch{
     class func backgroundScan(){
    
         var counter = 0
-                
+
         while true{
-            sleep(5)
+            sleep(10)
             if numBackGroundActionsInProgress > 0{
                 continue;
             }
             switch counter % 9{
             case 0:
-//                print("refresh images")
+                print("refresh images")
                 //QQQQ I am worried that this happens in background thread
                 //If we do it with main.async it freezes with many videos (in curate mode)
                 ImageManager.refreshImageManager()
             case 1:
-//                print("clean videos")
+                print("clean videos")
                 DispatchQueue.main.async {
                     EpsilonStreamDataModel.videoIntegrityCheck()
                 }
             case 2:
-//                print("clean features")
+                print("clean features")
                 break
             case 3:
-//                print("clean math objects")
+                print("clean math objects")
                 break
             case 3:
-//                print("clean math math object links")
+                print("clean math math object links")
                 break
             case 4:
-//                print("fetch videos")
+                print("fetch videos")
                 EpsilonStreamBackgroundFetch.readVideoDataFromCloud(isInAdminMode == false)
                 break
             case 5:
-//                print("fetch math objects")
+                print("fetch math objects")
                 EpsilonStreamBackgroundFetch.readMathObjectsFromCloud()
                 break
             case 6:
-//                print("fetch math object links")
+                print("fetch math object links")
                 EpsilonStreamBackgroundFetch.readMathObjectLinksFromCloud()
                 break
             case 7:

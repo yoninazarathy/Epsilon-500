@@ -848,7 +848,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 print(EpsilonStreamAdminModel.currentVideo.hashTagPriorities)
                 
-                //QQQQ still not updating to cloud
+                EpsilonStreamAdminModel.submitVideo(withDBVideo: EpsilonStreamAdminModel.currentVideo)
                 
             /////////////////////////
             /////////////////////////

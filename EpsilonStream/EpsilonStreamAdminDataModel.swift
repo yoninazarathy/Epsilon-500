@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import CloudKit
 import UIKit
+import Firebase
 
 
 class YouTubeSearchResultItem{
@@ -55,59 +56,53 @@ class EpsilonStreamAdminModel{
     ////////////////////////
     
     class func submitVideo(withDBVideo dbVideo: Video){
-        let video = CKRecord(recordType: "Video")
-        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
-        video["oneOnEpsilonTimeStamp"] = dbVideo.oneOnEpsilonTimeStamp as CKRecordValue
+        let pred = NSPredicate(format: "youtubeVideoId == %@", dbVideo.youtubeVideoId)
+        let query = CKQuery(recordType: "Video", predicate: pred)
         
-        video["age8Rating"] = dbVideo.age8Rating as CKRecordValue
-        video["age10Rating"] = dbVideo.age10Rating as CKRecordValue
-        video["age12Rating"] = dbVideo.age12Rating as CKRecordValue
-        video["age14Rating"] = dbVideo.age14Rating as CKRecordValue
-        video["age16Rating"] = dbVideo.age16Rating as CKRecordValue
-        video["exploreVsUnderstand"] = dbVideo.exploreVsUnderstand as CKRecordValue
-        video["imageURL"] = dbVideo.imageURL as CKRecordValue
-        video["isAwesome"] = dbVideo.isAwesome as CKRecordValue
-        video["isInVideoCollection"] = dbVideo.isInCollection as CKRecordValue
-        video["ourTitle"] = dbVideo.ourTitle as CKRecordValue
-        video["commentAndReview"] = dbVideo.commentAndReview as CKRecordValue
-        video["channelKey"] = dbVideo.channelKey as CKRecordValue
-        video["durationSec"] = dbVideo.durationSec as CKRecordValue
+        let operation = CKQueryOperation(query: query)
+        var record: CKRecord! = nil
         
-        video["displaySearchPriority"] = dbVideo.displaySearchPriority as CKRecordValue
-        video["hashTagPriorities"] = dbVideo.hashTagPriorities as CKRecordValue
-        video["splashKey"] = dbVideo.splashKey as CKRecordValue
+        var numRecords = 0
         
-        
-        video["contentVersionNumber"] = tempCurrentVersionForSubmit as CKRecordValue//QQQQ temp - have in settings app
-        
-        //QQQQ is ok?
-        if dbVideo.imageURLlocal != nil {
-            //QQQQ same problem as in the other place with url2            let url = URL(string: str)!
-            
-            //let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            //let url2 = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(dbVideo.youtubeVideoId).appendingPathExtension("png")
-            
-            //QQQQ no idea - why url is not working - as a workaround reconstructing path here...
-            
-            
-            video["imagePic"] = nil //CKAsset(fileURL: url2)//QQQQ
-            //QQQQ submit it as ImageThumbNail 
-        }else{
-            video["imagePic"] = nil
-            print("No local URL for image - will try to cloud it without")
+        operation.recordFetchedBlock = { rec in
+            record = rec
+            numRecords += 1
         }
         
-        video["whyVsHow"] = dbVideo.whyVsHow as CKRecordValue
-        video["youtubeTitle"] = dbVideo.youtubeTitle as CKRecordValue
-        video["youtubeVideoId"] = dbVideo.youtubeVideoId as CKRecordValue
-        let videoId = dbVideo.youtubeVideoId
-        video["hashTags"] = dbVideo.hashTags as CKRecordValue
+        //this doesn't really matter - there should be just 1 on the server
+        operation.resultsLimit = 10
         
+        operation.queryCompletionBlock = { (cursor, error) in
+            if error == nil{
+                if numRecords != 1{
+                    print("ERROR - too many records in db for \(dbVideo.youtubeVideoId) -- \(numRecords)")
+                    FIRAnalytics.logEvent(withName: "data_exception", parameters: ["type": "too many videos during video update" as NSObject, "id": dbVideo.youtubeVideoId as NSObject, "count": numRecords as NSObject])
+                }
+            }
+            else{
+                print("\(error!.localizedDescription)")
+            }
+        }
         
-        //QQQQ do the same for feature....
-        EpsilonStreamDataModel.deleteAllEntities(withName: "Video",withPredicate: NSPredicate(format: "youtubeVideoId == %@", videoId))
-        
-        deleteCloudVideoRecordsAndReplace(withVideoId: dbVideo.youtubeVideoId, withNewRecord: video)
+        operation.completionBlock = {
+            dbVideo.populate(cloudRecord: record)
+            CKContainer.default().publicCloudDatabase.save(record){
+                record, error in
+                if let error = error{
+                    print("error on publicCloudDataBase.save: \(error.localizedDescription)")
+                    let alert = UIAlertController(title: "One on Epsilon Development", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in }))
+                    UIApplication.topViewController()!.present(alert, animated: true, completion: nil)
+                }else{
+                    print("video Record Saved on public cloud")
+                }
+                
+                DispatchQueue.main.sync{
+                    backgroundActionInProgress = false
+                }
+            }
+        }
+        CKContainer.default().publicCloudDatabase.add(operation)
     }
     
     class func submitFeaturedURL(withDBFeature dbFeature: FeaturedURL){
@@ -160,9 +155,6 @@ class EpsilonStreamAdminModel{
         
         deleteCloudMathRecordsAndReplace(withHashTag: EpsilonStreamAdminModel.currentMathObject.hashTag, withNewRecord: mathObject)
     }
-    
-    
-    
     
     ///////////////////////////
     // delete from cloud (if needed) and replace
@@ -518,8 +510,9 @@ class EpsilonStreamAdminModel{
                     }
                 }else{//Video not there
                     print("WILL SUBMIT VIDEO \(v.youtubeVideoId) -- \(v.ourTitle)")
-                    EpsilonStreamAdminModel.currentVideo = v
-                    EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
+                    //EpsilonStreamAdminModel.currentVideo = v
+                    //QQQQ need here method prior to Nov 2!!!!
+                    //EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
                 }
             }
         }catch{
@@ -640,14 +633,6 @@ class EpsilonStreamAdminModel{
             let newVideo = Video(context: container.viewContext)
             newVideo.update(withYouTube: item)
         }
-    }
-    
-    class func createDBVideo(fromDataSource cloudSource: CKRecord){
-        //unique key
-        //let videoID = cloudSource["youtubeVideoId"] as! String
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let _ = Video(context: container.viewContext)
-        
     }
 
     

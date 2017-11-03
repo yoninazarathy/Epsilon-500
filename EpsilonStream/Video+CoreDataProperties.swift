@@ -116,4 +116,57 @@ extension Video {
         displaySearchPriority = Float(arc4random()) / 0xFFFFFFFF
     }
     
+    func populate(cloudRecord video: CKRecord){
+        
+        if (video["recordType"] as! String) != "Video"{
+            print("error - why is recordType != Video???")
+            video["recordType"] = "Video" as CKRecordValue
+        }
+        
+        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
+        video["oneOnEpsilonTimeStamp"] = oneOnEpsilonTimeStamp as CKRecordValue
+        video["age8Rating"] = age8Rating as CKRecordValue
+        video["age10Rating"] = age10Rating as CKRecordValue
+        video["age12Rating"] = age12Rating as CKRecordValue
+        video["age14Rating"] = age14Rating as CKRecordValue
+        video["age16Rating"] = age16Rating as CKRecordValue
+        video["exploreVsUnderstand"] = exploreVsUnderstand as CKRecordValue
+        video["imageURL"] = imageURL as CKRecordValue
+        video["isAwesome"] = isAwesome as CKRecordValue
+        video["isInVideoCollection"] = isInCollection as CKRecordValue
+        video["ourTitle"] = ourTitle as CKRecordValue
+        video["commentAndReview"] = commentAndReview as CKRecordValue
+        video["channelKey"] = channelKey as CKRecordValue
+        video["durationSec"] = durationSec as CKRecordValue
+        
+        video["displaySearchPriority"] = displaySearchPriority as CKRecordValue
+        video["hashTagPriorities"] = hashTagPriorities as CKRecordValue
+        video["splashKey"] = splashKey as CKRecordValue
+        
+        
+        video["contentVersionNumber"] = tempCurrentVersionForSubmit as CKRecordValue//QQQQ temp - have in settings app
+        
+        //QQQQ is ok?
+        if imageURLlocal != nil {
+            //QQQQ same problem as in the other place with url2            let url = URL(string: str)!
+            
+            //let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            //let url2 = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(dbVideo.youtubeVideoId).appendingPathExtension("png")
+            
+            //QQQQ no idea - why url is not working - as a workaround reconstructing path here...
+            
+            
+            video["imagePic"] = nil //CKAsset(fileURL: url2)//QQQQ
+            //QQQQ submit it as ImageThumbNail
+        }else{
+            video["imagePic"] = nil
+            print("No local URL for image - will try to cloud it without")
+        }
+        
+        video["whyVsHow"] = whyVsHow as CKRecordValue
+        video["youtubeTitle"] = youtubeTitle as CKRecordValue
+        video["youtubeVideoId"] = youtubeVideoId as CKRecordValue
+        video["hashTags"] = hashTags as CKRecordValue
+    }
+    
 }

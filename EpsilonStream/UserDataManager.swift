@@ -13,14 +13,6 @@ import FirebaseAnalytics
 
 class UserDataManager{
     
-    // Move to another place.
-    private class func crash() {
-        let variable:Int! = nil
-        var variable2 = 0
-        variable2 += variable
-        print("never gonna get here: \(variable2)")
-    }
-    
     // MARK: - Web lock
     
     class func setWebLock(withKey key: String?){
@@ -58,7 +50,7 @@ class UserDataManager{
         
         sleep(5)
         
-        crash()
+        exit(0)
         
     }
     
