@@ -37,7 +37,7 @@ class YouTubeVideoListResultItem{
 //QQQQ When cleaning up this class and the other one (EpsilonStreamBackgroundFetch), make
 //a distinction between admin app and client (user) app
 
-class EpsilonStreamAdminModel{
+class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     
     static var currentVideo: Video!
     static var currentMathObject: MathObject!
@@ -344,7 +344,7 @@ class EpsilonStreamAdminModel{
     /////////////////////////////
     
     class func makeNewChannel(_ context: NSManagedObjectContext){
-        let newChannel = Channel(context: context)
+        let newChannel = Channel(inContext: context)
         
         newChannel.channelId = "Channel Id - Fill In"
         newChannel.channelTitle = "Channel Title - Fill In"
@@ -358,7 +358,7 @@ class EpsilonStreamAdminModel{
     }
     
     class func makeNewFeaturedURL(_ context: NSManagedObjectContext) -> FeaturedURL{
-        let newFeaturedURL = FeaturedURL(context: context)
+        let newFeaturedURL = FeaturedURL(inContext: context)
         
         newFeaturedURL.oneOnEpsilonTimeStamp = Date()
         newFeaturedURL.isAppStoreApp = true
@@ -376,7 +376,7 @@ class EpsilonStreamAdminModel{
     }
     
     class func makeNewMathObject(_ context: NSManagedObjectContext){
-        let newMathObject = MathObject(context: context)
+        let newMathObject = MathObject(inContext: context)
         
         newMathObject.oneOnEpsilonTimeStamp = Date()
         newMathObject.associatedTitles = "ASSOCIATED TITLES - FILL IN"
@@ -386,7 +386,7 @@ class EpsilonStreamAdminModel{
     }
     
     class func makeNewVideo(_ context: NSManagedObjectContext){
-        let newVideo = Video(context: context)
+        let newVideo = Video(inContext: context)
         
         newVideo.age8Rating = 1.0
         newVideo.age10Rating = 1.0
@@ -415,11 +415,9 @@ class EpsilonStreamAdminModel{
     class func setCurrentVideo(withVideo videoId: String){
         let request = Video.createFetchRequest()
         request.predicate = NSPredicate(format: "youtubeVideoId == %@", videoId)
-
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         
         do{
-            let videos = try container.viewContext.fetch(request)
+            let videos = try managedObjectContext.fetch(request)
             if videos.count != 1{
                 print("error too many videos of id \(videoId) -- \(videos.count)")
             }
@@ -433,10 +431,8 @@ class EpsilonStreamAdminModel{
         let request = FeaturedURL.createFetchRequest()
         request.predicate = NSPredicate(format: "ourFeaturedURLHashtag == %@", featureHashTag)
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        
         do{
-            let features = try container.viewContext.fetch(request)
+            let features = try managedObjectContext.fetch(request)
             if features.count != 1{
                 print("error too many videos of id \(featureHashTag) -- \(features.count)")
             }
@@ -450,10 +446,8 @@ class EpsilonStreamAdminModel{
         let request = MathObjectLink.createFetchRequest()
         request.predicate = NSPredicate(format: "ourMathObjectLinkHashTag == %@", molHashTag)
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        
         do{
-            let links = try container.viewContext.fetch(request)
+            let links = try managedObjectContext.fetch(request)
             if links.count != 1{
                 print("error too many videos of id \(molHashTag) -- \(links.count)")
             }
@@ -469,10 +463,8 @@ class EpsilonStreamAdminModel{
         let request = MathObject.createFetchRequest()
         request.predicate = NSPredicate(format: "hashTag == %@", hashTag)
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        
         do{
-            let mathObjects = try container.viewContext.fetch(request)
+            let mathObjects = try managedObjectContext.fetch(request)
             if mathObjects.count != 1{
                 print("error too many math objects with hashtag \(hashTag) -- \(mathObjects.count)")
             }
@@ -521,11 +513,10 @@ class EpsilonStreamAdminModel{
     }
     
     class func storeAllMathObjects(){
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = MathObject.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         do{
-            let mathObjects = try container.viewContext.fetch(request)
+            let mathObjects = try managedObjectContext.fetch(request)
             for mo in mathObjects{
                 EpsilonStreamAdminModel.currentMathObject = mo
                 EpsilonStreamAdminModel.submitMathObject()
@@ -573,11 +564,10 @@ class EpsilonStreamAdminModel{
     }
 
     class func storeAllFeatures(){
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = FeaturedURL.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         do{
-            let features = try container.viewContext.fetch(request)
+            let features = try managedObjectContext.fetch(request)
             for f in features{
                 EpsilonStreamAdminModel.currentFeature = f
                 EpsilonStreamAdminModel.submitFeaturedURL(withDBFeature: f)
@@ -629,8 +619,7 @@ class EpsilonStreamAdminModel{
             }
         }else{
             print("New \(item.channel) -- \(item.title)")
-            let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-            let newVideo = Video(context: container.viewContext)
+            let newVideo = Video(inContext: managedObjectContext)
             newVideo.update(withYouTube: item)
         }
     }
@@ -640,12 +629,11 @@ class EpsilonStreamAdminModel{
     class func mathObjectReport() -> String{
         var report = "Report on Math Objects as of \(Date())\n\n"
 
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = MathObject.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         request.sortDescriptors = [NSSortDescriptor(key: "hashTag", ascending: true)]
         do{
-            let mathObjects = try container.viewContext.fetch(request)
+            let mathObjects = try managedObjectContext.fetch(request)
             var num = 1
             for mo in mathObjects{
                 let moString = "\(num): (\(mo.curator), \(mo.reviewer)) -- \(mo.hashTag) -- \(mo.associatedTitles)"

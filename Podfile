@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
+platform :ios, '9.0'
 use_frameworks!
 inhibit_all_warnings!
 
@@ -10,4 +10,5 @@ target 'EpsilonStream' do
     pod 'Firebase/Core'
     pod 'Toucan', '~> 0.6'
     pod 'BetterSegmentedControl', '~> 0.8'
+    pod 'SwiftyTimer', '~> 2.0'
 end
