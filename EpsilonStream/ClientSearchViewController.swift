@@ -700,7 +700,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             case SearchResultItemType.video:
                 let video = self.searchResultItems[index.row] as! VideoSearchResultItem
                 
-                let shareString = "Check out this video: https://youtu.be/\(video.youtubeId), shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let shareString = "I saw this great video on Epsilon Stream, https://www.epsilonstream.com: https://youtu.be/\(video.youtubeId)"
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
