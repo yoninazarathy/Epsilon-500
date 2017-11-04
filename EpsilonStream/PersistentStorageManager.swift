@@ -68,10 +68,12 @@ class PersistentStorageManager: NSObject {
     }()
     
     public lazy var managedObjectContext: NSManagedObjectContext = {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = PersistentStorageManager.shared.persistentStoreCoordinator
-        return managedObjectContext
-        
-//        return PersistentStorageManager.shared.persistentContainer.viewContext
+        if #available(iOS 10.0, *) {
+            return PersistentStorageManager.shared.persistentContainer.viewContext
+        } else {
+            let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            managedObjectContext.persistentStoreCoordinator = PersistentStorageManager.shared.persistentStoreCoordinator
+            return managedObjectContext
+        }
     }()
 }
