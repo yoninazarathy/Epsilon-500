@@ -425,15 +425,10 @@ class ImageManager: ManagedObjectContextUserProtocol {
     }
     
     class func haveFile(forImageKey key: String) -> Bool{
-        do{
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let url = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key).appendingPathExtension("png")
-            
-            let _ = try Data(contentsOf: url)
-            return true
-        }catch{
-            return false
-        }
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let url = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key).appendingPathExtension("png")
+        let result = FileManager.default.fileExists(atPath: url.relativePath)
+        return result
     }
     
     class func getImage(forKey key: String, withDefault defaultName:String = "eStreamIcon") -> UIImage{
