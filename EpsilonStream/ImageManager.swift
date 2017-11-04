@@ -107,8 +107,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
         }
         
         if isInAdminMode == false{
-            Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true){
-                timer in
+            Timer.every(20.seconds){ (timer: Timer) in
                 for (id,url) in urlHash{
                     if numURLLoads > maxURLLoads{
                         break;
@@ -118,9 +117,8 @@ class ImageManager: ManagedObjectContextUserProtocol {
                     }
                 }
             }
-        
-            Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true){
-                timer in
+            
+            Timer.every(30.seconds){ (timer: Timer) in
                 for (key,b) in inCloudHash{
                     if numCloudLoads > maxCloudLoads{
                         break

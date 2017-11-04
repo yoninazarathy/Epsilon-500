@@ -489,11 +489,10 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             }
         }
         
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
         let request = Video.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         do{
-            let videos = try container.viewContext.fetch(request)
+            let videos = try managedObjectContext.fetch(request)
             for v in videos{
                 if let cnt =  EpsilonStreamBackgroundFetch.videoCount[v.youtubeVideoId]{
                     //print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags) -- \(cnt)")
@@ -624,7 +623,6 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         }
     }
 
-    
     
     class func mathObjectReport() -> String{
         var report = "Report on Math Objects as of \(Date())\n\n"

@@ -162,6 +162,13 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         }
     }
     
+    class func createDBVideo(fromDataSource cloudSource: CKRecord){
+        //unique key
+        //let videoID = cloudSource["youtubeVideoId"] as! String
+        let newVideo = Video(inContext: managedObjectContext)
+        newVideo.update(fromCloudRecord: cloudSource)
+    }
+
     class func createOrUpdateDBMathObject(fromDataSource cloudSource: CKRecord){
         
         let hashTag = cloudSource["hashTag"] as! String
@@ -278,12 +285,11 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
             print("Video - RECORD FETCHED BLOCK -- \(videoNum), \(videoID)")
             videoNum = videoNum + 1
             DispatchQueue.main.async{
-                let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
                 var video: Video! = nil
                 let vids = EpsilonStreamDataModel.videos(ofYoutubeId: videoID)
                 
                 if vids.count == 0{ //new video
-                    video = Video(context: container.viewContext)
+                    video = Video(inContext: managedObjectContext)
                 }else{
                     video = vids[0]
                     if vids.count > 1{
