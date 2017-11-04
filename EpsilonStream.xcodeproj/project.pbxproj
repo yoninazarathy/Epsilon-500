@@ -23,6 +23,8 @@
 		200A62AF1F0B079E0093B50F /* EpsilonStreamLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */; };
 		200FDB491E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */; };
 		2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */; };
+		202115301FADAD7900C18E70 /* UserMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2021152F1FADAD7900C18E70 /* UserMessageTableViewCell.swift */; };
+		202115321FADAEFF00C18E70 /* UserMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202115311FADAEFF00C18E70 /* UserMessageManager.swift */; };
 		202BC6E71E840379003CF122 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202BC6E61E840379003CF122 /* SplashScreenViewController.swift */; };
 		20306A3B1E1A283900E6B5D9 /* WebViewingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */; };
 		2030B7E01E10BC1B001E2237 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2030B7DF1E10BC1B001E2237 /* AppDelegate.swift */; };
@@ -117,6 +119,8 @@
 		200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamLoginManager.swift; sourceTree = "<group>"; };
 		200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamAdminDataModel.swift; sourceTree = "<group>"; };
 		2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPrefetcher.swift; sourceTree = "<group>"; };
+		2021152F1FADAD7900C18E70 /* UserMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageTableViewCell.swift; sourceTree = "<group>"; };
+		202115311FADAEFF00C18E70 /* UserMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageManager.swift; sourceTree = "<group>"; };
 		202BC6E61E840379003CF122 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewingViewController.swift; sourceTree = "<group>"; };
 		2030B7DC1E10BC1B001E2237 /* EpsilonStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpsilonStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -322,6 +326,7 @@
 				20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */,
 				200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */,
 				01746A3C1FA0F20E003A3BC2 /* PersistentStorageManager.swift */,
+				202115311FADAEFF00C18E70 /* UserMessageManager.swift */,
 			);
 			name = DataManagers;
 			sourceTree = "<group>";
@@ -366,6 +371,7 @@
 				207432AF1F5276250095CEBB /* AboutViewController.swift */,
 				2073D6281EFF8F8C00B7849D /* VideoItemTableViewCell.swift */,
 				2073D62A1EFF8FB900B7849D /* ArticleItemTableViewCell.swift */,
+				2021152F1FADAD7900C18E70 /* UserMessageTableViewCell.swift */,
 				2073D62C1EFF8FCF00B7849D /* GameItemTableViewCell.swift */,
 				202BC6E61E840379003CF122 /* SplashScreenViewController.swift */,
 				20306A3A1E1A283900E6B5D9 /* WebViewingViewController.swift */,
@@ -654,8 +660,10 @@
 				2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */,
 				20306A3B1E1A283900E6B5D9 /* WebViewingViewController.swift in Sources */,
 				204380FB1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift in Sources */,
+				202115301FADAD7900C18E70 /* UserMessageTableViewCell.swift in Sources */,
 				01746A3A1FA0F1A7003A3BC2 /* Common.swift in Sources */,
 				2073D62D1EFF8FCF00B7849D /* GameItemTableViewCell.swift in Sources */,
+				202115321FADAEFF00C18E70 /* UserMessageManager.swift in Sources */,
 				207432B01F5276250095CEBB /* AboutViewController.swift in Sources */,
 				2073D6291EFF8F8D00B7849D /* VideoItemTableViewCell.swift in Sources */,
 				200A62AF1F0B079E0093B50F /* EpsilonStreamLoginManager.swift in Sources */,

@@ -16,6 +16,7 @@ enum SearchResultItemType{
     case blogWebPage
     case mathObjectLink
     case specialItem
+    case messageItem
 }
 
 class SearchResultItem{
@@ -63,4 +64,7 @@ class MathObjectLinkSearchResultItem: SearchResultItem{
 }
 
 class SpecialSearchResultItem: SearchResultItem{
+}
+
+class UserMessageResultItem: SearchResultItem{
 }

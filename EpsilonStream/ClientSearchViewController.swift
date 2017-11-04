@@ -76,13 +76,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     var coverImageView: UIImageView! = nil
     
-    
     @IBOutlet weak var autoCompleteTableViewHeightConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var mainTopStack: UIStackView!
     @IBOutlet weak var mainSegmentView: UIView!
-    
-    
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
     
@@ -91,6 +87,8 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     @IBOutlet weak var homeButton: UIButton!
     
     @IBAction func homeButtonAction(_ sender: Any) {
+        UserMessageManager.userDidAnotherAction()
+
         if let prevText = searchTextField.text{
             FIRAnalytics.logEvent(withName: "home_button", parameters: ["prevText" : prevText as NSObject])
         }else{
@@ -106,15 +104,14 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     @IBAction func searchFieldEditBegin(_ sender: Any) {
         if searchTextField.text! != ""{
-        
             showXButton = true
             surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
         }
-        
-
-        
     }
+    
     func clearButtonAction() {
+        UserMessageManager.userDidAnotherAction()
+        
         if let prevText = searchTextField.text{
             FIRAnalytics.logEvent(withName: "clear_button", parameters: ["prevText" : prevText as NSObject])
         }else{
@@ -125,11 +122,12 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         showXButton = false
         //QQQQ duplicated
             surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
-        
     }
 
     
     @IBAction func backButtonAction(_ sender: UIButton) {
+        UserMessageManager.userDidAnotherAction()
+
         if let prevText = searchTextField.text{
             FIRAnalytics.logEvent(withName: "back_button", parameters: ["prevText" : prevText as NSObject])
         }else{
@@ -144,6 +142,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     
     @IBAction func forwardButtonAction(_ sender: UIButton) {
+        UserMessageManager.userDidAnotherAction()
         if let prevText = searchTextField.text{
             FIRAnalytics.logEvent(withName: "forward_button", parameters: ["prevText" : prevText as NSObject])
         }else{
@@ -158,8 +157,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     var showXButton = false
     
     @IBAction func supriseButtonAction(_ sender: UIButton) {
-        
-        //QQQQ cleanup
+        UserMessageManager.userDidAnotherAction()
         
         if showXButton{
             clearButtonAction()
@@ -190,44 +188,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             }catch{
                 print("error playing sound")
             }
-
-            
-            
-            
-            //searchTextField.text = newText
-            //refreshSearch()
-            //self.view.endEditing(true)
         }
         autoCompleteTable.isHidden = true
     }
     
-    
-    func playerStateChanged(_ videoPlayer: YouTubePlayerView, playerState: YouTubePlayerState){
-        print("PLAYER STATE in search: \(playerState)")
-        switch playerState{
-        case YouTubePlayerState.Unstarted:
-            break
-        case YouTubePlayerState.Ended:
-            break
-        case YouTubePlayerState.Playing:
-            print("playing.... now pause...")
-            videoPlayer.pause()
-            break
-        case YouTubePlayerState.Paused:
-            break
-        case YouTubePlayerState.Buffering:
-            break
-        case YouTubePlayerState.Queued:
-            break
-        }
-    }
-    
-    func playerReady(_ videoPlayer: YouTubePlayerView){
-        print("player ready")
-        //QQQQ doesn't work yet videoPlayer.play()
-        videoPlayer.isHidden = true
-    }
-    
+  
     @IBOutlet weak var whyHowSegmentedControl: UISegmentedControl!
     @IBAction func settingsButtonAction(_ sender: UIButton) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "clientSettingsViewController") as? ClientSettingsViewController{
@@ -241,7 +206,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var ageSegmentedControl: UISegmentedControl!
     @IBOutlet weak var resultsTable: UITableView!
-    
     @IBOutlet weak var autoCompleteTable: UITableView!
     
     // delete QQQQ - var playerBank: [YouTubePlayerView] = []
@@ -249,6 +213,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     var searchResultItems = [SearchResultItem]()
     
     @IBAction func searchEditChange(_ sender: UITextField) {
+        UserMessageManager.userDidKeyInAction()
         let searchString = sender.text!.lowercased().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         
         //QQQQ duplicated
@@ -260,10 +225,8 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
         }
         
-        
         let firstChar = searchString.characters.first
 
-        
         if searchString == ""{
             autoCompleteTableDelegate.autoCompleteOptions = []
         }else if firstChar == "#"{
@@ -282,7 +245,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             let frm = autoCompleteTable.frame
             autoCompleteTableViewHeightConstraint.constant = self.view.frame.height - keyboardHeight - frm.origin.y
             autoCompleteTable.layoutIfNeeded()
-
         }else{
             view.sendSubview(toBack: autoCompleteTable)
             autoCompleteTable.isHidden = true
@@ -291,7 +253,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     }
     
     func imagesUpdate(){
-        //print("imagesUpdate()")
         resultsTable.reloadData()
     }
     
@@ -306,32 +267,27 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         searchTextField.delegate = self
         resultsTable.delegate = self
         resultsTable.dataSource = self
+        resultsTable.separatorStyle = .none
+        resultsTable.keyboardDismissMode = .onDrag
+
         autoCompleteTable.delegate = autoCompleteTableDelegate
         autoCompleteTable.dataSource = autoCompleteTableDelegate
         autoCompleteTableDelegate.delegate = self
         
-        resultsTable.separatorStyle = .none
-        resultsTable.keyboardDismissMode = .onDrag
         
         surpriseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
         surpriseButton.imageView!.animationImages = [UIImage(named: "Surprise4")!, UIImage(named: "Surprise1")!, UIImage(named: "Surprise2")!, UIImage(named: "Surprise5")!, UIImage(named: "Surprise3")!, UIImage(named: "Surprise6")!]
         surpriseButton.imageView!.animationDuration = 0.4
-        
-        
         surpriseButton.addTarget(self, action: #selector(supriseButtonAction), for: .touchUpInside)
 
         
         searchTextField.rightViewMode = .always
         searchTextField.rightView = surpriseButton
-        
-        
-        
         searchTextField.text = ""
         var search = EpsilonStreamSearch()
         search.searchString = ""
 
-        //view.sendSubview(toBack: autoCompleteTable)
         autoCompleteTable.isHidden = true
         autoCompleteTable.separatorStyle = .none
         
@@ -378,23 +334,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     }
     */
     
-    func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.right:
-                print("Swiped right")
-            case UISwipeGestureRecognizerDirection.left:
-                print("Swiped left")
-            default:
-                break
-            }
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-
     }
     
     var keyboardHeight = CGFloat(313.0)
@@ -404,7 +346,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             keyboardHeight = keyboardSize.height
         }
     }
-
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -490,6 +431,13 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         searchResultItems = EpsilonStreamDataModel.search(withQuery: currentSearch)
 
+        if let message = UserMessageManager.showMessage(){
+            let item = UserMessageResultItem()
+            item.title = message
+            item.type = SearchResultItemType.messageItem
+            searchResultItems.insert(item, at: 0)
+        }
+        
         /*
         //loop on results for prefetching
         for it in searchResultItems{
@@ -540,20 +488,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
-        
-        
-        
-        /*
-        let transition = CATransition()
-        transition.type = kCATransitionReveal
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        transition.fillMode = kCAFillModeForwards
-        transition.duration = 0.5
-        transition.subtype = kCATransitionFromBottom
-        resultsTable.layer.add(transition, forKey: "UITableViewReloadDataAnimationKey")
-        */
         refreshSearch()
-        //view.sendSubview(toBack: autoCompleteTable)
         autoCompleteTable.isHidden = true
         return false
     }
@@ -610,6 +545,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
             cell.configureWith(specialSearchResultItem: searchResultItems[indexPath.row] as! SpecialSearchResultItem)
             return cell
+        case SearchResultItemType.messageItem:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellUserMessage", for: indexPath) as! UserMessageTableViewCell
+            cell.configureWith(userMessageResultItem: searchResultItems[indexPath.row] as! UserMessageResultItem)
+            return cell
+
         }
     }
     
@@ -688,6 +628,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         /////////////////////////
         case SearchResultItemType.specialItem:
             print("speicalItem click do nothing - QQQQ")
+            
+        /////////////////////////
+        /////////////////////////
+        case SearchResultItemType.messageItem:
+            print("messageItem click do nothing - QQQQ")
         }
     }
     
@@ -763,13 +708,18 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 //QQQQ do something
                 print("not implemented yet")
 
+            /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.messageItem:
+                //QQQQ do something
+                print("not implemented yet")
+                
             }
             
             //Make it disappear
             tableView.setEditing(false, animated: true)
         }
         share.backgroundColor = .green
-        
         
         if isInAdminMode == false{
             return searchResultItems.count > 0 ? [share] : nil
@@ -798,15 +748,22 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 }
 
                 
-                /////////////////////////
+            /////////////////////////
             /////////////////////////
             case SearchResultItemType.mathObjectLink:
                 print("need to implement edit of math object link")
-                /////////////////////////
+            
+            /////////////////////////
             /////////////////////////
             case SearchResultItemType.specialItem:
                 print("need to implement edit (or not)")
 
+            /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.messageItem:
+                print("message item")
+
+                
                 
             }
             //Make it disappear
@@ -879,6 +836,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             /////////////////////////
             /////////////////////////
             case SearchResultItemType.specialItem:
+                print("need to handle")
+    
+            /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.messageItem:
                 print("need to handle")
                 
             }
