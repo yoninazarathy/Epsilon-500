@@ -70,8 +70,8 @@ class SplashScreenViewController: UIViewController {
 //        if lastDatabaseUpdateDate == nil || NSDate().timeIntervalSince(lastDatabaseUpdateDate!) > period {
 //
 //            // Play video on first launch or after 1 week of inactivity.
-        let resourcePath = Bundle.main.resourcePath
-        let url = URL(fileURLWithPath:resourcePath!).appendingPathComponent("LogoAnimationVert_9sec.mp4")
+        let videoFileName = Common.is64Bit ? "LogoAnimationVert_9sec_High_Res.mp4" : "LogoAnimationVert_9sec_Norm_Res.mp4"
+        let url = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent(videoFileName)
         //print(url)
         let player = AVPlayer(url: url)
         let playerLayer = AVPlayerLayer(player: player)

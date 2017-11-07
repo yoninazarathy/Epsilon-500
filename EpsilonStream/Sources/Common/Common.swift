@@ -59,4 +59,8 @@ class Common: NSObject {
             }
         }
     }
+    
+    public static var is64Bit: Bool {
+        return MemoryLayout<Int>.size == MemoryLayout<Int64>.size
+    }
 }

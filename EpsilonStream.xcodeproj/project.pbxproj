@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		010FF33E1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 010FF33C1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 */; };
+		010FF33F1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */; };
 		01372CF01F97C8F90072F3E3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01372CF21F97C8F90072F3E3 /* Localizable.strings */; };
 		01746A3A1FA0F1A7003A3BC2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01746A371FA0F1A7003A3BC2 /* Common.swift */; };
 		01746A3D1FA0F20E003A3BC2 /* PersistentStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01746A3C1FA0F20E003A3BC2 /* PersistentStorageManager.swift */; };
@@ -84,7 +86,6 @@
 		207432AD1F51179A0095CEBB /* PreThumb_YEU224.png in Resources */ = {isa = PBXBuildFile; fileRef = 207432611F51179A0095CEBB /* PreThumb_YEU224.png */; };
 		207432AE1F51179A0095CEBB /* PreThumb_yYYkd2.png in Resources */ = {isa = PBXBuildFile; fileRef = 207432621F51179A0095CEBB /* PreThumb_yYYkd2.png */; };
 		207432B01F5276250095CEBB /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207432AF1F5276250095CEBB /* AboutViewController.swift */; };
-		207432B31F5585A50095CEBB /* LogoAnimationVert_9sec.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 207432B21F5571D60095CEBB /* LogoAnimationVert_9sec.mp4 */; };
 		207432B51F55A3AB0095CEBB /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207432B41F55A3AB0095CEBB /* CreditsViewController.swift */; };
 		2080C2551E14726C00723F3B /* EpsilonClient.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2080C2541E14726C00723F3B /* EpsilonClient.storyboard */; };
 		2080C2591E1474CD00723F3B /* ClientSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */; };
@@ -103,6 +104,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		010FF33C1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec_Norm_Res.mp4; sourceTree = "<group>"; };
+		010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec_High_Res.mp4; sourceTree = "<group>"; };
 		01372CF11F97C8F90072F3E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		01746A371FA0F1A7003A3BC2 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		01746A3C1FA0F20E003A3BC2 /* PersistentStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageManager.swift; sourceTree = "<group>"; };
@@ -182,7 +185,6 @@
 		207432611F51179A0095CEBB /* PreThumb_YEU224.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PreThumb_YEU224.png; sourceTree = "<group>"; };
 		207432621F51179A0095CEBB /* PreThumb_yYYkd2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PreThumb_yYYkd2.png; sourceTree = "<group>"; };
 		207432AF1F5276250095CEBB /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		207432B21F5571D60095CEBB /* LogoAnimationVert_9sec.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec.mp4; sourceTree = "<group>"; };
 		207432B41F55A3AB0095CEBB /* CreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditsViewController.swift; sourceTree = "<group>"; };
 		2080C2541E14726C00723F3B /* EpsilonClient.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EpsilonClient.storyboard; sourceTree = "<group>"; };
 		2080C2581E1474CD00723F3B /* ClientSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSearchViewController.swift; sourceTree = "<group>"; };
@@ -216,9 +218,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		010FF33B1FB1A19200619183 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				010FF33C1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 */,
+				010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
 		01372CED1F97C7620072F3E3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				010FF33B1FB1A19200619183 /* Video */,
 				01372CF21F97C8F90072F3E3 /* Localizable.strings */,
 			);
 			path = Resources;
@@ -277,7 +289,6 @@
 		2030B7D31E10BC1B001E2237 = {
 			isa = PBXGroup;
 			children = (
-				207432B11F55718A0095CEBB /* Movies */,
 				204BF4E61F3FBD08007451AD /* Sounds */,
 				20AA6CF31EE3F82C0017ACF7 /* imageThumbnailsPreLoad */,
 				2080C2561E14743A00723F3B /* SupportingFiles */,
@@ -338,14 +349,6 @@
 				204BF4E81F3FBD64007451AD /* Hole_Punch.wav */,
 			);
 			name = Sounds;
-			sourceTree = "<group>";
-		};
-		207432B11F55718A0095CEBB /* Movies */ = {
-			isa = PBXGroup;
-			children = (
-				207432B21F5571D60095CEBB /* LogoAnimationVert_9sec.mp4 */,
-			);
-			name = Movies;
 			sourceTree = "<group>";
 		};
 		2080C2561E14743A00723F3B /* SupportingFiles */ = {
@@ -528,19 +531,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				207432B31F5585A50095CEBB /* LogoAnimationVert_9sec.mp4 in Resources */,
 				207432881F51179A0095CEBB /* PreThumb_dd23AV.png in Resources */,
 				207432671F51179A0095CEBB /* PreThumb_7s3ns3.png in Resources */,
 				207432A51F51179A0095CEBB /* PreThumb_sdfas3.png in Resources */,
 				207432691F51179A0095CEBB /* PreThumb_23b1bx.png in Resources */,
 				207432701F51179A0095CEBB /* PreThumb_63SAvY.png in Resources */,
 				207432751F51179A0095CEBB /* PreThumb_352asd.png in Resources */,
+				010FF33F1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 in Resources */,
 				207432AA1F51179A0095CEBB /* PreThumb_vsa2rX.png in Resources */,
 				207432811F51179A0095CEBB /* PreThumb_bidAX2.png in Resources */,
 				2080C2551E14726C00723F3B /* EpsilonClient.storyboard in Resources */,
 				2074328B1F51179A0095CEBB /* PreThumb_dsf230.png in Resources */,
 				207432681F51179A0095CEBB /* PreThumb_8NDSQ0.png in Resources */,
 				204BF4E91F3FBD64007451AD /* click.wav in Resources */,
+				010FF33E1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 in Resources */,
 				207432861F51179A0095CEBB /* PreThumb_cnaACS.png in Resources */,
 				207432761F51179A0095CEBB /* PreThumb_462fa3.png in Resources */,
 				2074328C1F51179A0095CEBB /* PreThumb_e3DF6h.png in Resources */,
