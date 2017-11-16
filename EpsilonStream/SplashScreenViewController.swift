@@ -64,35 +64,34 @@ class SplashScreenViewController: UIViewController {
         
         AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 
-//        let period = TimeInterval(7 * 24 * 60 * 60)
-//        let lastDatabaseUpdateDate = UserDataManager.lastDatabaseUpdateDate
+        let period = TimeInterval(7 * 24 * 60 * 60)
+        let lastDatabaseUpdateDate = UserDataManager.lastDatabaseUpdateDate
 //        
-//        if lastDatabaseUpdateDate == nil || NSDate().timeIntervalSince(lastDatabaseUpdateDate!) > period {
-//
-//            // Play video on first launch or after 1 week of inactivity.
-        let videoFileName = Common.is64Bit ? "LogoAnimationVert_9sec_High_Res.mp4" : "LogoAnimationVert_9sec_Norm_Res.mp4"
-        let url = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent(videoFileName)
-        //print(url)
-        let player = AVPlayer(url: url)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        let screenSize = UIScreen.main.bounds
-        playerLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
-        view.layer.addSublayer(playerLayer)
-        playerLayer.borderWidth = 0.0
-        player.play()
-        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(notification:)),
-                                               name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-    
-        view.bringSubview(toFront: splashLabel)
-        view.bringSubview(toFront: spinner)
+        if lastDatabaseUpdateDate == nil || NSDate().timeIntervalSince(lastDatabaseUpdateDate!) > period {
+
+            // Play video on first launch or after 1 week of inactivity.
+            let videoFileName = Common.is64Bit ? "LogoAnimationVert_9sec_High_Res.mp4" : "LogoAnimationVert_9sec_Norm_Res.mp4"
+            let url = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent(videoFileName)
+            //print(url)
+            let player = AVPlayer(url: url)
+            let playerLayer = AVPlayerLayer(player: player)
+            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+            let screenSize = UIScreen.main.bounds
+            playerLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
+            view.layer.addSublayer(playerLayer)
+            playerLayer.borderWidth = 0.0
+            player.play()
+            NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(notification:)),
+                                                   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+            view.bringSubview(toFront: splashLabel)
+            view.bringSubview(toFront: spinner)
             
-//        } else {
-//            
-//            //beginExitProcedure()
-//            moveOnToClient()
-//            
-//        }
+        } else {
+            
+            moveOnToClient()
+            
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

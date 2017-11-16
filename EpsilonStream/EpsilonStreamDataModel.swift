@@ -190,8 +190,10 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     }
     
     //QQQQ rename to "set-local memory"
-    class func setUpAutoCompleteLists(){
+    class func setUpAutoCompleteLists() {
         //QQQQ can improve implementation...
+        
+//        let startDate = Date()
         
         fullHashTagList = []
         hashTagAutoCompleteList = []
@@ -212,33 +214,76 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         let sort = NSSortDescriptor(key: "hashTag", ascending: true)
         request.sortDescriptors = [sort]
         
-        do{
+        // For debug of performance
+//        var videosCount = 0
+//        var videosInCollectionCount = 0
+//        var articlesCount = 0
+//        var articlesInCollectionCount = 0
+//        var gamesCount = 0
+//        var gamesInCollectionCount = 0
+        
+        do {
             let mathObjects = try managedObjectContext.fetch(request)
             
-            for mo in mathObjects{
-                EpsilonStreamDataModel.fullHashTagList.append(mo.hashTag) //QQQQ not lowercased ?
-                if mo.isInCollection{
-                    EpsilonStreamDataModel.hashTagAutoCompleteList.append(mo.hashTag)
+            for mathObject in mathObjects{
+                let hashTag = mathObject.hashTag
+                
+                EpsilonStreamDataModel.fullHashTagList.append(hashTag) //QQQQ not lowercased ?
+                if mathObject.isInCollection {
+                    EpsilonStreamDataModel.hashTagAutoCompleteList.append(hashTag)
                 }
-                
-                rawTitleOfHashTag[mo.hashTag] = mo.associatedTitles
-                
-                videosOfHashTag[mo.hashTag] = videos(ofHashTag: mo.hashTag)
-                articlesOfHashTag[mo.hashTag] = articles(ofHashTag: mo.hashTag)
-                gamesOfHashTag[mo.hashTag] = games(ofHashTag: mo.hashTag)
 
-                videosOfHashTagInColl[mo.hashTag] = videos(ofHashTag: mo.hashTag,inCollection: true)
-                articlesOfHashTagInColl[mo.hashTag] = articles(ofHashTag: mo.hashTag,inCollection: true)
-                gamesOfHashTagInColl[mo.hashTag] = games(ofHashTag: mo.hashTag,inCollection: true)
-
+                rawTitleOfHashTag[hashTag] = mathObject.associatedTitles
                 
-                curatorOfHashTag[mo.hashTag] = mo.curator
-                reviewerOfHashTag[mo.hashTag] = mo.reviewer
-
-                hashTagInCollection[mo.hashTag] = mo.isInCollection
+                // Videos
+                let videos = fetchVideos(ofHashTag: hashTag)
+                videosOfHashTag[hashTag] = videos.map {
+                    $0.youtubeVideoId
+                }
+                videosOfHashTagInColl[hashTag] = videos.filter {
+                    $0.isInCollection
+                }.map {
+                    $0.youtubeVideoId
+                }
+//                videosCount +=  videosOfHashTag[hashTag]!.count
+//                videosInCollectionCount += videosOfHashTagInColl[hashTag]!.count
+                //
                 
-                if mo.isInCollection{
-                    let titleGroups = mo.associatedTitles.components(separatedBy: "~")
+                // Articles
+                let articles = fetchArticles(ofHashTag: hashTag)
+                articlesOfHashTag[hashTag] = articles.map {
+                    $0.ourFeaturedURLHashtag
+                }
+                articlesOfHashTagInColl[hashTag] = articles.filter {
+                    $0.isInCollection
+                }.map {
+                    $0.ourFeaturedURLHashtag
+                }
+//                articlesCount += articlesOfHashTag[hashTag]!.count
+//                articlesInCollectionCount += articlesOfHashTagInColl[hashTag]!.count
+                //
+                
+                // Games
+                let games = fetchGames(ofHashTag: hashTag)
+                gamesOfHashTag[hashTag] = games.map {
+                    return $0.ourFeaturedURLHashtag
+                }
+                gamesOfHashTagInColl[hashTag] = games.filter {
+                    return $0.isInCollection
+                }.map {
+                    return $0.ourFeaturedURLHashtag
+                }
+//                gamesCount += gamesOfHashTag[hashTag]!.count
+//                gamesInCollectionCount += gamesOfHashTagInColl[hashTag]!.count
+                //
+                
+                curatorOfHashTag[hashTag] = mathObject.curator
+                reviewerOfHashTag[hashTag] = mathObject.reviewer
+
+                hashTagInCollection[hashTag] = mathObject.isInCollection
+                
+                if mathObject.isInCollection {
+                    let titleGroups = mathObject.associatedTitles.components(separatedBy: "~")
                     for grp in titleGroups{
                         let titles = grp.components(separatedBy: ",")
                         var titleGroup: [String] = []
@@ -253,12 +298,12 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                                 let stripTit = tit.substring(with: range)
                                 if stripTit.contains("$") || stripTit.contains(",") || stripTit.contains("~"){
                                     print("Error with title: \(stripTit)")
-                                }else{
+                                } else {
                                     //print(stripTit)
                                     titleGroup.append(stripTit)
-                                    hashTagOfTitle[stripTit] = mo.hashTag
+                                    hashTagOfTitle[stripTit] = hashTag
                                     fullTitles.append(stripTit)
-                                    if first && mo.hashTag != "#homePage" && mo.hashTag != "#channels" && mo.hashTag != "#games" && mo.hashTag != "#awesome"{
+                                    if first && hashTag != "#homePage" && hashTag != "#channels" && hashTag != "#games" && hashTag != "#awesome"{
                                         titlesForSurprise.append(stripTit)
                                     }
                                 }
@@ -271,11 +316,17 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                     }
                 }
             }
-        }catch{
+        } catch {
             print("Fetch failed")
         }
+        
+//        NSLog(">>> \(videosCount), \(articlesCount), \(gamesCount)")
+//        NSLog(">>> \(videosInCollectionCount), \(articlesInCollectionCount), \(gamesInCollectionCount)")
+        
         fullTitles.sort()
         titlesForSurprise.sort()
+        
+//        NSLog("setUpAutoCompleteLists duration: \(Date().timeIntervalSince(startDate))")
     }
     
     /// Returns an array of strings that starts with the provided text
@@ -346,92 +397,76 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     }
 
     
-    class func videos(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [String]{
+    private class func fetchVideos(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [Video] {
         let request = Video.createFetchRequest()
         let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
-        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
-        if let ic = inColl{
+        let predicate = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
+//        let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", "hashTags", hashTag)    // may include wrogn results
+        if let ic = inColl {
             let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred, pred2])
-        }else{
-            request.predicate = pred
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, pred2])
+        } else {
+            request.predicate = predicate
         }
+        request.includesPropertyValues = false
         
-        var videoStrings:[String]=[]
-        
-        do{
-            
-            let videos = try managedObjectContext.fetch(request)
-            for vid in videos{
-                videoStrings.append(vid.youtubeVideoId)
-            }
-            
-        }catch{
-            print("Fetch failed")
+        var videos = [Video]()
+        do {
+            videos = try managedObjectContext.fetch(request)
+        } catch {
+            print("Videos for hashtag fetch failed")
         }
 
-        return videoStrings
+        return videos
     }
     
     
-    class func articles(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [String]{
+    private class func fetchArticles(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [FeaturedURL] {
+        let articleType = "article" // TODO: define this constant somewhere on global level
+        
         let request = FeaturedURL.createFetchRequest()
         let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
-        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
-        if let ic = inColl{
+        let predicate = NSPredicate(format: "(hashTags MATCHES[c] %@) && (%K = %@ || %K = %@)", pattern, "typeOfFeature", articleType,
+                                    "typeOfFeature", articleType.capitalized)
+        if let ic = inColl {
             let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred, pred2])
-        }else{
-            request.predicate = pred
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, pred2])
+        } else{
+            request.predicate = predicate
+        }
+        request.includesPropertyValues = false
+        
+        var articles = [FeaturedURL]()
+        do {
+            articles = try managedObjectContext.fetch(request)
+        } catch {
+            print("Articles for hashtag fetch failed")
         }
         
-        var articleStrings:[String]=[]
-        
-        do{
-            let featuredURLs = try managedObjectContext.fetch(request)
-            
-            for fu in featuredURLs{//QQQQ clean up...
-                if fu.typeOfFeature == "article" || fu.typeOfFeature == "Article"{
-                    articleStrings.append(fu.ourFeaturedURLHashtag)
-                }
-            }
-            
-        }catch{
-            print("Fetch failed")
-        }
-        
-        return articleStrings
+        return articles
     }
     
     
-    class func games(ofHashTag hashTag: String,inCollection inColl: Bool? = nil) -> [String]{
+    private class func fetchGames(ofHashTag hashTag: String,inCollection inColl: Bool? = nil) -> [FeaturedURL] {
         let request = FeaturedURL.createFetchRequest()
         let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
-        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
-        if let ic = inColl{
+        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@) && %K = %@", pattern, "isAppStoreApp", NSNumber(value: true) )
+        if let ic = inColl {
             let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred, pred2])
         }else{
             request.predicate = pred
         }
+        request.includesPropertyValues = false
         
-        var gameStrings:[String]=[]
-        
-        do{
-
-            let featuredURLs = try managedObjectContext.fetch(request)
-            
-            for fu in featuredURLs{
-                if fu.isAppStoreApp == true{
-                    gameStrings.append(fu.ourFeaturedURLHashtag)
-                }
-            }
-            
-        }catch{
-            print("Fetch failed")
+        var games = [FeaturedURL]()
+        do {
+            games = try managedObjectContext.fetch(request)
+        } catch{
+            print("Games for hashtag fetch failed")
         }
         
-        return gameStrings
+        return games
     }
     
     // IK: This method should be separated into several smaller methods.
