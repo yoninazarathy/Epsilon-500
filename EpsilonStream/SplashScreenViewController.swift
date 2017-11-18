@@ -67,9 +67,9 @@ class SplashScreenViewController: UIViewController {
         let period = TimeInterval(7 * 24 * 60 * 60)
         let lastDatabaseUpdateDate = UserDataManager.lastDatabaseUpdateDate
 //        
-        if lastDatabaseUpdateDate == nil || NSDate().timeIntervalSince(lastDatabaseUpdateDate!) > period {
+        if (lastDatabaseUpdateDate == nil || NSDate().timeIntervalSince(lastDatabaseUpdateDate!) > period) || currentUserId != nil {
 
-            // Play video on first launch or after 1 week of inactivity.
+            // Play video on first launch or after 1 week of inactivity. Or if the app is in curation mode.
             let videoFileName = Common.is64Bit ? "LogoAnimationVert_9sec_High_Res.mp4" : "LogoAnimationVert_9sec_Norm_Res.mp4"
             let url = URL(fileURLWithPath: Bundle.main.resourcePath!).appendingPathComponent(videoFileName)
             //print(url)

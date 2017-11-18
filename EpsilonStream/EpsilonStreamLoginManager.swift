@@ -59,7 +59,8 @@ class EpsilonStreamLoginManager{
             EpsilonStreamLoginManager.initialAdminRequest = true
             selectedUser = ""
             return
-        }else if EpsilonStreamLoginManager.initialAdminRequest && (user == "coco" || user == "yoni" || user == "phil" || user == "inna" || user == "yousuf"){
+        }else if EpsilonStreamLoginManager.initialAdminRequest && (user == "coco" || user == "yoni" || user == "phil" || user == "inna" ||
+            user == "yousuf" || user == "igor"){
             
             selectedUser = user!
             

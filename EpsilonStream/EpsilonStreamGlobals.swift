@@ -82,10 +82,11 @@ func versionNumber() -> String{
 
 var webLockKey: String? = nil
 
-var curatorPasswords:[String:String] = ["coco":"940322",
-                                        "yoni":"695569",
-                                        "inna":"239239",
-                                        "phil":"919828",
-                                        "miriam":"695569",
-                                        "yousuf":"291456"]
+var curatorPasswords = ["coco":     "940322",
+                        "yoni":     "695569",
+                        "inna":     "239239",
+                        "phil":     "919828",
+                        "miriam":   "695569",
+                        "yousuf":   "291456",
+                        "igor":     "200787"]
 

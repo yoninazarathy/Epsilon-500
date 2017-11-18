@@ -18,13 +18,14 @@ extension Dictionary where Value: Equatable {
 class EditMathObjectViewController: UIViewController {
     
     //QQQQ consolidate this
-    let editorOptions: [String:Int] = [ "All":0,
-                                        "None":1,
-                                        "Coco":2,
-                                        "Inna":3,
-                                        "Phil":4,
-                                        "Yoni":5,
-                                        "Yousuf":6]
+    let editorOptions = [ "All":      0,
+                          "None":     1,
+                          "Coco":     2,
+                          "Inna":     3,
+                          "Phil":     4,
+                          "Yoni":     5,
+                          "Yousuf":   6,
+                          "Igor":     7]
 
     
     @IBOutlet weak var inCollectionSwitch: UISwitch!

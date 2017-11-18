@@ -47,7 +47,7 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet var termTable: UITableView!
     
-    let editorOptions: [String] = ["All","None","Coco","Inna","Phil","Yoni","Yousuf"]
+    let editorOptions: [String] = ["All","None","Coco","Inna","Phil","Yoni","Yousuf","Igor"]
     
     @IBAction func curateSegmentChanged(_ sender: UISegmentedControl) {
         curator = editorOptions[sender.selectedSegmentIndex]

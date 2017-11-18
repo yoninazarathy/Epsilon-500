@@ -60,14 +60,15 @@ extension String {
 class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     
     //maps "." commands to an NSPredicate tuple, 1 for video and 1 for feature
-    static let specialCommands: [String:(NSPredicate,NSPredicate)] = [
-        ".curatelogin":(NSPredicate(value:false),NSPredicate(value:false)),
-        ".curatelogin.Coco":(NSPredicate(value:false),NSPredicate(value:false)), //QQQQ implement these logins
-        ".curatelogin.Inna":(NSPredicate(value:false),NSPredicate(value:false)),
-        ".curatelogin.Phil":(NSPredicate(value:false),NSPredicate(value:false)),
-        ".curatelogin.Yoni":(NSPredicate(value:false),NSPredicate(value:false)),
-        ".curatelogin.Yousuf":(NSPredicate(value:false),NSPredicate(value:false)),
-        ".curatelogout":(NSPredicate(value:false),NSPredicate(value:false)),
+    static let specialCommands: [String: (NSPredicate, NSPredicate)] = [
+        ".curatelogin":         (NSPredicate(value:false),NSPredicate(value:false)),
+        ".curatelogin.Coco":    (NSPredicate(value:false),NSPredicate(value:false)), //QQQQ implement these logins
+        ".curatelogin.Inna":    (NSPredicate(value:false),NSPredicate(value:false)),
+        ".curatelogin.Phil":    (NSPredicate(value:false),NSPredicate(value:false)),
+        ".curatelogin.Yoni":    (NSPredicate(value:false),NSPredicate(value:false)),
+        ".curatelogin.Yousuf":  (NSPredicate(value:false),NSPredicate(value:false)),
+        ".curatelogin.Igor":    (NSPredicate(value:false),NSPredicate(value:false)),
+        ".curatelogout":        (NSPredicate(value:false),NSPredicate(value:false)),
         ".all":(NSPredicate(value:true),NSPredicate(value:true)),
         ".features":(NSPredicate(value:false),NSPredicate(value:true)),
         ".khan":(NSPredicate(format:"channelKey CONTAINS[cd] %@","Khan Academy"),NSPredicate(value:false)),
