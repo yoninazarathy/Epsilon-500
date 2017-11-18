@@ -2,12 +2,12 @@ import UIKit
 import CoreData
 
 protocol ManagedObjectContextUserProtocol {
-    static var managedObjectContext: NSManagedObjectContext { get }
+    static var mainContext: NSManagedObjectContext { get }
 }
 
 extension ManagedObjectContextUserProtocol {
-    static var managedObjectContext: NSManagedObjectContext {
-        return PersistentStorageManager.shared.managedObjectContext
+    static var mainContext: NSManagedObjectContext {
+        return PersistentStorageManager.shared.mainContext
     }
 }
 
@@ -67,7 +67,7 @@ class PersistentStorageManager: NSObject {
         return coordinator
     }()
     
-    public lazy var managedObjectContext: NSManagedObjectContext = {
+    public lazy var mainContext: NSManagedObjectContext = {
         if #available(iOS 10.0, *) {
             return PersistentStorageManager.shared.persistentContainer.viewContext
         } else {
@@ -76,4 +76,17 @@ class PersistentStorageManager: NSObject {
             return managedObjectContext
         }
     }()
+    
+    public func newBackgroundContext() -> NSManagedObjectContext {
+        if #available(iOS 10.0, *) {
+            return persistentContainer.newBackgroundContext()
+        } else {
+            let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
+            managedObjectContext.parent = mainContext
+            return managedObjectContext
+        }
+        
+    }
+    
 }

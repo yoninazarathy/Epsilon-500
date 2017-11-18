@@ -143,7 +143,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
         
         do{
             //iterate over all videos
-            let result = try managedObjectContext.fetch(request)
+            let result = try mainContext.fetch(request)
             for v in result{
                 inCloudHash[v.youtubeVideoId] = false //all youtubes are currently from youtube url (not cloud)
                 urlHash[v.youtubeVideoId] = v.imageURL
@@ -174,7 +174,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
         let request2 = FeaturedURL.createFetchRequest()
         
         do{
-            let result = try managedObjectContext.fetch(request2)
+            let result = try mainContext.fetch(request2)
             for f in result{
                 //QQQQ forcefully unwrapping imageKey (why is it optional???)
                 inCloudHash[f.imageKey!] = true //all features are currently from cloud
@@ -282,7 +282,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
         var retVal = -1
         
         do{
-            let result = try managedObjectContext.fetch(request)
+            let result = try mainContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")

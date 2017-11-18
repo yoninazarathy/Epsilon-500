@@ -417,7 +417,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         request.predicate = NSPredicate(format: "youtubeVideoId == %@", videoId)
         
         do{
-            let videos = try managedObjectContext.fetch(request)
+            let videos = try mainContext.fetch(request)
             if videos.count != 1{
                 print("error too many videos of id \(videoId) -- \(videos.count)")
             }
@@ -432,7 +432,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         request.predicate = NSPredicate(format: "ourFeaturedURLHashtag == %@", featureHashTag)
         
         do{
-            let features = try managedObjectContext.fetch(request)
+            let features = try mainContext.fetch(request)
             if features.count != 1{
                 print("error too many videos of id \(featureHashTag) -- \(features.count)")
             }
@@ -447,7 +447,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         request.predicate = NSPredicate(format: "ourMathObjectLinkHashTag == %@", molHashTag)
         
         do{
-            let links = try managedObjectContext.fetch(request)
+            let links = try mainContext.fetch(request)
             if links.count != 1{
                 print("error too many videos of id \(molHashTag) -- \(links.count)")
             }
@@ -464,7 +464,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         request.predicate = NSPredicate(format: "hashTag == %@", hashTag)
         
         do{
-            let mathObjects = try managedObjectContext.fetch(request)
+            let mathObjects = try mainContext.fetch(request)
             if mathObjects.count != 1{
                 print("error too many math objects with hashtag \(hashTag) -- \(mathObjects.count)")
             }
@@ -492,7 +492,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         let request = Video.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         do{
-            let videos = try managedObjectContext.fetch(request)
+            let videos = try mainContext.fetch(request)
             for v in videos{
                 if let cnt =  EpsilonStreamBackgroundFetch.videoCount[v.youtubeVideoId]{
                     //print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags) -- \(cnt)")
@@ -515,7 +515,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         let request = MathObject.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         do{
-            let mathObjects = try managedObjectContext.fetch(request)
+            let mathObjects = try mainContext.fetch(request)
             for mo in mathObjects{
                 EpsilonStreamAdminModel.currentMathObject = mo
                 EpsilonStreamAdminModel.submitMathObject()
@@ -566,7 +566,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         let request = FeaturedURL.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         do{
-            let features = try managedObjectContext.fetch(request)
+            let features = try mainContext.fetch(request)
             for f in features{
                 EpsilonStreamAdminModel.currentFeature = f
                 EpsilonStreamAdminModel.submitFeaturedURL(withDBFeature: f)
@@ -618,7 +618,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             }
         }else{
             print("New \(item.channel) -- \(item.title)")
-            let newVideo = Video(inContext: managedObjectContext)
+            let newVideo = Video(inContext: mainContext)
             newVideo.update(withYouTube: item)
         }
     }
@@ -631,7 +631,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         request.sortDescriptors = [NSSortDescriptor(key: "hashTag", ascending: true)]
         do{
-            let mathObjects = try managedObjectContext.fetch(request)
+            let mathObjects = try mainContext.fetch(request)
             var num = 1
             for mo in mathObjects{
                 let moString = "\(num): (\(mo.curator), \(mo.reviewer)) -- \(mo.hashTag) -- \(mo.associatedTitles)"

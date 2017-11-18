@@ -176,7 +176,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request.sortDescriptors = [sort]
         
         do{
-            let mathObjects = try managedObjectContext.fetch(request)
+            let mathObjects = try mainContext.fetch(request)
             
             var i = 1
             for mo in mathObjects{
@@ -223,7 +223,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
 //        var gamesInCollectionCount = 0
         
         do {
-            let mathObjects = try managedObjectContext.fetch(request)
+            let mathObjects = try mainContext.fetch(request)
             
             for mathObject in mathObjects{
                 let hashTag = mathObject.hashTag
@@ -245,8 +245,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 }.map {
                     $0.youtubeVideoId
                 }
-//                videosCount +=  videosOfHashTag[hashTag]!.count
-//                videosInCollectionCount += videosOfHashTagInColl[hashTag]!.count
                 //
                 
                 // Articles
@@ -259,8 +257,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 }.map {
                     $0.ourFeaturedURLHashtag
                 }
-//                articlesCount += articlesOfHashTag[hashTag]!.count
-//                articlesInCollectionCount += articlesOfHashTagInColl[hashTag]!.count
                 //
                 
                 // Games
@@ -273,6 +269,13 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 }.map {
                     return $0.ourFeaturedURLHashtag
                 }
+                //
+
+                //
+//                videosCount += videosOfHashTag[hashTag]!.count
+//                videosInCollectionCount += videosOfHashTagInColl[hashTag]!.count
+//                articlesCount += articlesOfHashTag[hashTag]!.count
+//                articlesInCollectionCount += articlesOfHashTagInColl[hashTag]!.count
 //                gamesCount += gamesOfHashTag[hashTag]!.count
 //                gamesInCollectionCount += gamesOfHashTagInColl[hashTag]!.count
                 //
@@ -388,7 +391,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var videos:[Video]=[]
         
         do{
-            videos = try managedObjectContext.fetch(request)
+            videos = try mainContext.fetch(request)
         }catch{
             print("Fetch failed")
         }
@@ -412,10 +415,20 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         var videos = [Video]()
         do {
-            videos = try managedObjectContext.fetch(request)
+            videos = try mainContext.fetch(request)
         } catch {
             print("Videos for hashtag fetch failed")
         }
+// Trying to make it work on background thread
+//        let context = PersistentStorageManager.shared.newBackgroundContext()
+//        context.performAndWait {
+//            do {
+//                videos = try context.fetch(request)
+//    //            videos = try mainContext.fetch(request)
+//            } catch {
+//                print("Videos for hashtag fetch failed")
+//            }
+//        }
 
         return videos
     }
@@ -438,7 +451,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         var articles = [FeaturedURL]()
         do {
-            articles = try managedObjectContext.fetch(request)
+            articles = try mainContext.fetch(request)
         } catch {
             print("Articles for hashtag fetch failed")
         }
@@ -461,7 +474,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         var games = [FeaturedURL]()
         do {
-            games = try managedObjectContext.fetch(request)
+            games = try mainContext.fetch(request)
         } catch{
             print("Games for hashtag fetch failed")
         }
@@ -586,7 +599,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request.fetchLimit = maxVideosToShow //QQQQ not needed below //QQQQ do for features
 
         do{
-            let videos = try managedObjectContext.fetch(request)
+            let videos = try mainContext.fetch(request)
             
             for i in 0..<videos.count{
                 let item = VideoSearchResultItem()
@@ -614,7 +627,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         featureRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, featuresPredicate])
 
         do{
-            let features = try managedObjectContext.fetch(featureRequest)
+            let features = try mainContext.fetch(featureRequest)
             for feature in features{
                 if feature.isAppStoreApp{
                     let item = IOsAppSearchResultItem()
@@ -681,7 +694,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         mathObjectLinkRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, mathObjectLinksPredicate])
         
         do{
-            let moLinks = try managedObjectContext.fetch(mathObjectLinkRequest)
+            let moLinks = try mainContext.fetch(mathObjectLinkRequest)
             for mol in moLinks{
                 let item = MathObjectLinkSearchResultItem()
                 item.title = mol.ourTitle
@@ -814,7 +827,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request.predicate = NSPredicate(format: "youtubeVideoId == %@", videoId)
         var retVal:Int? = nil
         do{
-            let videos = try managedObjectContext.fetch(request)
+            let videos = try mainContext.fetch(request)
             
             switch videos.count{
             case 0:
@@ -853,7 +866,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         do{
             
-            let mathObjects = try managedObjectContext.fetch(request)
+            let mathObjects = try mainContext.fetch(request)
             
             for mo in mathObjects{
                 if mo.isInCollection{
@@ -891,7 +904,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let videos = try managedObjectContext.fetch(request)
+            let videos = try mainContext.fetch(request)
 
             if videos.count == 0{
                 latestVideoDate = Date(timeIntervalSince1970: 0.0)
@@ -910,7 +923,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request2.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let mathObjects = try managedObjectContext.fetch(request2)
+            let mathObjects = try mainContext.fetch(request2)
             
             if mathObjects.count == 0{
                 latestMathObjectDate = Date(timeIntervalSince1970: 0.0)
@@ -929,7 +942,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request3.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let featuredURLs = try managedObjectContext.fetch(request3)
+            let featuredURLs = try mainContext.fetch(request3)
             
             if featuredURLs.count == 0{
                 latestFeatureDate = Date(timeIntervalSince1970: 0.0)
@@ -948,7 +961,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request4.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
         
         do{
-            let mathObjectLinks = try managedObjectContext.fetch(request4)
+            let mathObjectLinks = try mainContext.fetch(request4)
             
             if mathObjectLinks.count == 0{
                 latestMathObjectLinkDate = Date(timeIntervalSince1970: 0.0)
@@ -967,7 +980,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     class func saveViewContext(){
         DispatchQueue.main.async {
             do {
-                try managedObjectContext.save()
+                try mainContext.save()
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -985,7 +998,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var retVal = -1
         
         do{
-            let result = try managedObjectContext.fetch(request)
+            let result = try mainContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")
@@ -1001,7 +1014,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         do{
             // Is there better way to get count of objects without fetching all objects?
-            let result = try managedObjectContext.fetch(request)
+            let result = try mainContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")
@@ -1016,7 +1029,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var retVal = -1
         
         do{
-            let result = try managedObjectContext.fetch(request)
+            let result = try mainContext.fetch(request)
             retVal = result.count
         }catch{
             print("Fetch failed")
@@ -1033,7 +1046,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var max: Int64 = -1
         
         do{
-            let versionInfo = try managedObjectContext.fetch(request)
+            let versionInfo = try mainContext.fetch(request)
             for version in versionInfo{
                 if version.contentVersionNumber > max{
                     max = version.contentVersionNumber
@@ -1051,7 +1064,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var max: Int64 = -1
         
         do{
-            let versionInfo = try managedObjectContext.fetch(request)
+            let versionInfo = try mainContext.fetch(request)
             for version in versionInfo{
                 if version.loaded && version.contentVersionNumber > max{
                     max = version.contentVersionNumber
@@ -1069,7 +1082,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         request.predicate = predicate
         let delRequest = NSBatchDeleteRequest(fetchRequest: request)
         do {
-            try managedObjectContext.execute(delRequest)
+            try mainContext.execute(delRequest)
         } catch {
             fatalError("Failed to execute request: \(error)")
         }
@@ -1085,11 +1098,11 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var idHash:[String:Int] = [:]
         
         do{
-            let result = try managedObjectContext.fetch(request)
+            let result = try mainContext.fetch(request)
             for v in result{
                 if let vcount = idHash[v.youtubeVideoId]{
                     idHash[v.youtubeVideoId] = vcount + 1
-                    managedObjectContext.delete(v)
+                    mainContext.delete(v)
                     FIRAnalytics.logEvent(withName: "data_exception", parameters: ["type": "too many videos" as NSObject, "id": v.youtubeVideoId as NSObject, "count": idHash[v.youtubeVideoId]! as NSObject])
                     //QQQQ - used to clean cloud - keep commented.
                     //if isInAdminMode && currentUserId == "yoni"{

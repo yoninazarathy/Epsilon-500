@@ -60,7 +60,7 @@ class URLSelectorViewController: UIViewController,WKNavigationDelegate {
         
         
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
-            EpsilonStreamAdminModel.currentFeature = FeaturedURL(inContext: PersistentStorageManager.shared.managedObjectContext)
+            EpsilonStreamAdminModel.currentFeature = FeaturedURL(inContext: PersistentStorageManager.shared.mainContext)
             EpsilonStreamAdminModel.currentFeature.ourFeaturedURLHashtag = "#newUnfinishedFeature"
             EpsilonStreamAdminModel.currentFeature.urlOfItem = self.currentURLString
             

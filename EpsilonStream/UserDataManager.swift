@@ -61,7 +61,7 @@ class UserDataManager: ManagedObjectContextUserProtocol {
         //QQQQ check if fetchlimit?
         
         do{
-            let result = try managedObjectContext.fetch(request)
+            let result = try mainContext.fetch(request)
             for v in result{
                 //print("going to try to delete seconds of \(v.youtubeVideoId)")
                 UserDefaults.standard.removeObject(forKey: v.youtubeVideoId)

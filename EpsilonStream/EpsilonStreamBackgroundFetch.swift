@@ -165,7 +165,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func createDBVideo(fromDataSource cloudSource: CKRecord){
         //unique key
         //let videoID = cloudSource["youtubeVideoId"] as! String
-        let newVideo = Video(inContext: managedObjectContext)
+        let newVideo = Video(inContext: mainContext)
         newVideo.update(fromCloudRecord: cloudSource)
     }
 
@@ -176,9 +176,9 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         let request = MathObject.createFetchRequest()
         request.predicate = NSPredicate(format: "hashTag == %@", hashTag)
         do{
-            let mo = try managedObjectContext.fetch(request)
+            let mo = try mainContext.fetch(request)
             if mo.count == 0{
-                let newMathObject = MathObject(inContext: managedObjectContext)
+                let newMathObject = MathObject(inContext: mainContext)
                 newMathObject.update(fromCloudRecord: cloudSource)
             }else if mo.count == 1{
                 mo[0].update(fromCloudRecord: cloudSource)
@@ -198,9 +198,9 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         let request = FeaturedURL.createFetchRequest()
         request.predicate = NSPredicate(format: "ourFeaturedURLHashtag == %@", ourFeaturedURLHashtag)
         do{
-            let furl = try managedObjectContext.fetch(request)
+            let furl = try mainContext.fetch(request)
             if furl.count == 0{
-                let newFeature = FeaturedURL(inContext: managedObjectContext)
+                let newFeature = FeaturedURL(inContext: mainContext)
                 newFeature.update(fromCloudRecord: cloudSource)
             }else if furl.count == 1{
                 furl[0].update(fromCloudRecord: cloudSource)
@@ -218,9 +218,9 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         let request = MathObjectLink.createFetchRequest() //QQQQ name of object is singular or plural?
         request.predicate = NSPredicate(format: "ourMathObjectLinkHashTag == %@", ourMathObjectLinkHashTag)
         do{
-            let mol = try managedObjectContext.fetch(request)
+            let mol = try mainContext.fetch(request)
             if mol.count == 0{
-                let newMathObjectLink = MathObjectLink(inContext: managedObjectContext)
+                let newMathObjectLink = MathObjectLink(inContext: mainContext)
                 newMathObjectLink.update(fromCloudRecord: cloudSource)
             }else if mol.count == 1{
                 mol[0].update(fromCloudRecord: cloudSource)
@@ -289,7 +289,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
                 let vids = EpsilonStreamDataModel.videos(ofYoutubeId: videoID)
                 
                 if vids.count == 0{ //new video
-                    video = Video(inContext: managedObjectContext)
+                    video = Video(inContext: mainContext)
                 }else{
                     video = vids[0]
                     if vids.count > 1{
@@ -544,9 +544,9 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         //create a dummy MathObjectLink if one doesn't exist.
         let request = MathObjectLink.createFetchRequest()
         do{
-            let mathObjectLinks = try managedObjectContext.fetch(request)
+            let mathObjectLinks = try mainContext.fetch(request)
             if mathObjectLinks.count == 0{
-                let mol = MathObjectLink(inContext: managedObjectContext)
+                let mol = MathObjectLink(inContext: mainContext)
                 mol.hashTags = "#binary"
                 mol.imageKey = "NO IMAGE"
                 mol.ourTitle = "Binary on Exploding Dots"
