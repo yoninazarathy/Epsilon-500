@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAnalytics
+import StoreKit
 
 class ClientSettingsViewController: UIViewController {
 
@@ -178,15 +179,11 @@ class ClientSettingsViewController: UIViewController {
     }
     
     @objc func textFieldChange(_ sender: UITextField) {
-        if sender.text!.characters.count ==  6{
-            okAction.isEnabled = true
-        }else{
-            okAction.isEnabled = false
-        }
+        okAction.isEnabled = (sender.text!.count == 6)
     }
     
     @objc func textFieldChangeLocked(_ sender: UITextField) {
-        if sender.text! ==  webLockKey!{
+        if sender.text! == webLockKey!{
             okAction.isEnabled = true
         }else{
             okAction.isEnabled = false

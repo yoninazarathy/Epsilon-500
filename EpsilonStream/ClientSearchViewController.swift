@@ -225,7 +225,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
         }
         
-        let firstChar = searchString.characters.first
+        let firstChar = searchString.first
 
         if searchString == ""{
             autoCompleteTableDelegate.autoCompleteOptions = []

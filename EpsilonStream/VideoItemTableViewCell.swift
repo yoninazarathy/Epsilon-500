@@ -38,8 +38,8 @@ class VideoItemTableViewCell: UITableViewCell {
         //TITLE
         videoTitle.text = result.title
         
-        if let len = videoTitle.text?.characters.count{
-            if len > 45{ //QQQQ lazy let?
+        if let len = videoTitle.text?.count {
+            if len > 45 { //QQQQ lazy let?
                 videoTitle.text = videoTitle.text?.chopSuffix(len-45).appending(" ...")
             }
         }

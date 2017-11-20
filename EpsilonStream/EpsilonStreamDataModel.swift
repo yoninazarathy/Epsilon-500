@@ -293,7 +293,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                         var titleGroup: [String] = []
                         var first = true
                         for tit in titles{
-                            if tit.characters.first != "$" || tit.characters.last != "$"{
+                            if tit.first != "$" || tit.last != "$"{
                                 print("Error with title: \(tit) in \(titles)")
                             }else{
                                 let start = tit.index(tit.startIndex, offsetBy: 1)
@@ -501,8 +501,8 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         let showAll = isInAdminMode
         
-        if let ch = searchString.characters.first{
-            switch ch{
+        if let ch = searchString.first {
+            switch ch {
                 case ".":
                     if searchString == ".curatelogin"{
                         EpsilonStreamLoginManager.getInstance().loginAdminRequest(withUser:nil)
@@ -536,7 +536,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                     }
                     
                     //QQQQ treat "..<searchString>" as ".all.<searchString>"
-                    if searchString.characters.count >= 2 && searchString.substring(with: 0..<2) == ".."{
+                    if searchString.count >= 2 && searchString.substring(with: 0..<2) == ".."{
                         searchString = ".all.\(searchString.chopPrefix(2))"
                     }
                     let comps = searchString.components(separatedBy: ".")
@@ -785,7 +785,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         for c in cmp{
             let tagFree = "\(tag.substring(from: 1)):"
             if c.hasPrefix(tagFree){
-                let rem = c.substring(from: tagFree.characters.count)
+                let rem = c.substring(from: tagFree.count)
                 if let val = NumberFormatter().number(from: rem){
                     return val.floatValue
                 }
