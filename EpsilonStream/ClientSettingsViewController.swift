@@ -16,37 +16,6 @@ class ClientSettingsViewController: UIViewController {
 
     
     @IBOutlet weak var webLockButton: UIButton!
-    @IBAction func aboutAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "about_action", parameters: [:])
-        
-        jumpToWebPage(withURLstring: "https://www.epsilonstream.com") //QQQQ for now
-        
-        return //QQQQ skip this now
-//        if let vc = storyboard?.instantiateViewController(withIdentifier: "aboutViewController") as? AboutViewController{
-//            navigationController?.pushViewController(vc, animated: true)
-//        }
-    }
-    
-    @IBAction func epsilonStreamAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "epsilonStreamIcon_action", parameters: [:])
-        jumpToWebPage(withURLstring: "https://www.epsilonstream.com")
-    }
-    
-    @IBAction func creditActions(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "credit_action", parameters: [:])
-        
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "creditsViewController") as? CreditsViewController{
-            navigationController?.pushViewController(vc, animated: true)
-        }
-
-        
-    }
-    
-    @IBAction func oneOnEpsilonAction(_ sender: UIButton) {
-        FIRAnalytics.logEvent(withName: "oneOnEpsilonIcon_action", parameters: [:])
-        jumpToWebPage(withURLstring: "https://www.oneonepsilon.com")
-
-    }
     
     @IBOutlet var shareAppButton: UIButton!
     
@@ -194,6 +163,40 @@ class ClientSettingsViewController: UIViewController {
     var okAction: UIAlertAction! = nil
 
     // MARK: - Actions
+    
+    @IBAction func epsilonStreamAction(_ sender: Any) {
+        FIRAnalytics.logEvent(withName: "epsilonStreamIcon_action", parameters: [:])
+        jumpToWebPage(withURLstring: "https://www.epsilonstream.com")
+    }
+    
+    @IBAction func creditActions(_ sender: Any) {
+        FIRAnalytics.logEvent(withName: "credit_action", parameters: [:])
+        
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "creditsViewController") as? CreditsViewController{
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        
+    }
+    
+    @IBAction func oneOnEpsilonAction(_ sender: UIButton) {
+        FIRAnalytics.logEvent(withName: "oneOnEpsilonIcon_action", parameters: [:])
+        jumpToWebPage(withURLstring: "https://www.oneonepsilon.com")
+        
+    }
+    
+    @IBAction func aboutAction(_ sender: Any) {
+        FIRAnalytics.logEvent(withName: "about_action", parameters: [:])
+        
+//        jumpToWebPage(withURLstring: "https://www.epsilonstream.com") //QQQQ for now
+//
+//        return //QQQQ skip this now
+        
+        // IK: Replaced with segue in storyboard.
+//        if let vc = storyboard?.instantiateViewController(withIdentifier: "aboutViewController") as? AboutViewController {
+//            navigationController?.pushViewController(vc, animated: true)
+//        }
+    }
     
     @IBAction func webLockButtonAction(_ sender: Any) {
         //QQQQ add more info

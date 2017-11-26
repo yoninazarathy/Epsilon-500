@@ -195,10 +195,10 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
   
     @IBOutlet weak var whyHowSegmentedControl: UISegmentedControl!
     @IBAction func settingsButtonAction(_ sender: UIButton) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "clientSettingsViewController") as? ClientSettingsViewController{
-            
-            navigationController?.pushViewController(vc, animated: true)
-        }
+        // IK: Replaced with segue in storyboard.
+//        if let vc = storyboard?.instantiateViewController(withIdentifier: "clientSettingsViewController") as? ClientSettingsViewController{
+//            navigationController?.pushViewController(vc, animated: true)
+//        }
     }
     
     let autoCompleteTableDelegate = AutoCompleteTableDelegate()
