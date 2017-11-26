@@ -52,6 +52,9 @@
                                         <state key="normal" title="About Epsilon Stream">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="aboutAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="wbG-x5-E7n"/>
                                             <segue destination="fZq-e3-u3S" kind="show" id="imd-vM-Qoy"/>
@@ -63,6 +66,9 @@
                                         <state key="normal" title="Share the App">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="shareAppAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="E6Z-RT-nKY"/>
                                         </connections>
@@ -73,6 +79,9 @@
                                         <state key="normal" title="Register with One on Epsilon">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="registerAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="0Zx-9w-gJ9"/>
                                         </connections>
@@ -83,6 +92,9 @@
                                         <state key="normal" title="Review the App">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="reviewAppButtonAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="3xz-7p-1tt"/>
                                         </connections>
@@ -93,6 +105,9 @@
                                         <state key="normal" title="Feedback to the Team">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="feedbackAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="3i5-yq-p7F"/>
                                         </connections>
@@ -103,6 +118,9 @@
                                         <state key="normal" title="Credits">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="creditActions:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="gJ0-7N-jT2"/>
                                         </connections>
@@ -113,6 +131,9 @@
                                         <state key="normal" title="Web Lock Settings">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="webLockButtonAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="Y94-Ia-xQd"/>
                                         </connections>
@@ -123,6 +144,9 @@
                                         <state key="normal" title="Reset Viewed">
                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        </variation>
                                         <connections>
                                             <action selector="resetAllAction:" destination="h26-oJ-Qbk" eventType="primaryActionTriggered" id="oQ6-tU-Z54"/>
                                         </connections>
@@ -1183,14 +1207,14 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                 <rect key="frame" x="16" y="20" width="343" height="677"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukn-2C-vP8">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="99"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="187"/>
                                         <state key="normal" title="Send (Share)"/>
                                         <connections>
                                             <action selector="shareButtonAction:" destination="JRd-Ug-bUz" eventType="primaryActionTriggered" id="EWo-Eq-H9F"/>
                                         </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="report" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="K0i-AA-Ek6">
-                                        <rect key="frame" x="0.0" y="99" width="343" height="578"/>
+                                        <rect key="frame" x="0.0" y="187" width="343" height="490"/>
                                         <color key="backgroundColor" red="0.98548370600000001" green="0.77560450790000002" blue="0.77675778340000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -1550,13 +1574,13 @@ The scope ranges from addition and multiplication up to calculus, touching hundr
                                 <rect key="frame" x="16" y="20" width="343" height="647"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="864-PX-Vxz">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="99"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="187"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7Og-H6-dgU">
-                                        <rect key="frame" x="0.0" y="99" width="343" height="548"/>
+                                        <rect key="frame" x="0.0" y="187" width="343" height="460"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="termListCell" textLabel="7ZR-47-dgF" detailTextLabel="jTA-Kx-3UK" style="IBUITableViewCellStyleSubtitle" id="dKq-gR-UfA">
@@ -2220,14 +2244,11 @@ This includes blogs by us and many other resources created by incredible math ex
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6m0-1U-luj">
-                                <rect key="frame" x="16" y="50" width="343" height="540"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="6m0-1U-luj">
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Features" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="euh-Nw-2le">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="tTY-my-Rz7"/>
-                                        </constraints>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="244" verticalHuggingPriority="244" text="Features" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="euh-Nw-2le">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="36"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -2235,11 +2256,16 @@ This includes blogs by us and many other resources created by incredible math ex
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="38"/>
                                         </variation>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afh-jw-Iie">
-                                        <rect key="frame" x="0.0" y="40" width="343" height="100"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="afh-jw-Iie">
+                                        <rect key="frame" x="0.0" y="107.5" width="343" height="70"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Content Updates:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Foi-v4-KTd">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="110" id="qqe-zU-IgZ">
+                                                        <variation key="heightClass=regular-widthClass=regular" constant="160"/>
+                                                    </constraint>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2248,7 +2274,7 @@ This includes blogs by us and many other resources created by incredible math ex
                                                 </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Each time the app opens it will sync with the latest content from our servers." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGr-k4-tuz">
-                                                <rect key="frame" x="-16" y="0.0" width="0.0" height="100"/>
+                                                <rect key="frame" x="120" y="0.0" width="223" height="70"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2258,14 +2284,19 @@ This includes blogs by us and many other resources created by incredible math ex
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="Fny-D4-vhl"/>
+                                            <constraint firstAttribute="height" constant="70" id="Fny-D4-vhl"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B6I-pp-FUc">
-                                        <rect key="frame" x="0.0" y="140" width="343" height="100"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="B6I-pp-FUc">
+                                        <rect key="frame" x="0.0" y="232.5" width="343" height="70"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sharing:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGG-Me-WfP">
-                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="110" id="ND6-6P-D8a">
+                                                        <variation key="heightClass=regular-widthClass=regular" constant="160"/>
+                                                    </constraint>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2274,7 +2305,7 @@ This includes blogs by us and many other resources created by incredible math ex
                                                 </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe left to share a video, blog, or game with a friend." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCj-dr-Cso">
-                                                <rect key="frame" x="171.5" y="0.0" width="171.5" height="100"/>
+                                                <rect key="frame" x="120" y="0.0" width="223" height="70"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2284,14 +2315,19 @@ This includes blogs by us and many other resources created by incredible math ex
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="P7q-sp-Vho"/>
+                                            <constraint firstAttribute="height" constant="70" id="P7q-sp-Vho"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j85-1h-Wa3">
-                                        <rect key="frame" x="0.0" y="240" width="343" height="100"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="j85-1h-Wa3">
+                                        <rect key="frame" x="0.0" y="307" width="343" height="170"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Web Locking:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DAI-Yt-ewp">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="100"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Web Locking:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DAI-Yt-ewp">
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="170"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="110" id="sMF-1k-T7o">
+                                                        <variation key="heightClass=regular-widthClass=regular" constant="160"/>
+                                                    </constraint>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2300,7 +2336,7 @@ This includes blogs by us and many other resources created by incredible math ex
                                                 </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ZH-Ze-s4f">
-                                                <rect key="frame" x="-16" y="0.0" width="0.0" height="100"/>
+                                                <rect key="frame" x="120" y="0.0" width="223" height="170"/>
                                                 <string key="text">The app can be locked from accessing external websites. We pull the videos in and also allow access to Youtube channels. A safety code can be added in the settings screen to ensure you don’t leave the app.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
@@ -2311,14 +2347,19 @@ This includes blogs by us and many other resources created by incredible math ex
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="ZjW-TX-cZF"/>
+                                            <constraint firstAttribute="height" constant="170" id="ZjW-TX-cZF"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O1h-UH-4Ms">
-                                        <rect key="frame" x="0.0" y="340" width="343" height="100"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="O1h-UH-4Ms">
+                                        <rect key="frame" x="0.0" y="477" width="343" height="90"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dynamic Requests:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bi5-uF-P4U">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="90"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="110" id="2q1-YU-8Dz">
+                                                        <variation key="heightClass=regular-widthClass=regular" constant="160"/>
+                                                    </constraint>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2327,7 +2368,7 @@ This includes blogs by us and many other resources created by incredible math ex
                                                 </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn’t find what you need? We want to know and we’re pretty quick in responding. Put us to the test. " textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Yl-BQ-gCG">
-                                                <rect key="frame" x="-16" y="0.0" width="0.0" height="100"/>
+                                                <rect key="frame" x="120" y="0.0" width="223" height="90"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2337,38 +2378,27 @@ This includes blogs by us and many other resources created by incredible math ex
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="LVU-Ce-pY5"/>
+                                            <constraint firstAttribute="height" constant="90" id="LVU-Ce-pY5"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="GDf-Ba-9az">
-                                        <rect key="frame" x="0.0" y="440" width="343" height="100"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eStreamAlphaBack" translatesAutoresizingMaskIntoConstraints="NO" id="1UU-59-8ZA">
-                                                <rect key="frame" x="0.0" y="0.0" width="343" height="100"/>
-                                            </imageView>
-                                        </subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="280" verticalHuggingPriority="280" image="eStreamAlphaBack" translatesAutoresizingMaskIntoConstraints="NO" id="1UU-59-8ZA">
+                                        <rect key="frame" x="0.0" y="567" width="343" height="80"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="SnA-Bg-Y7E"/>
+                                            <constraint firstAttribute="height" constant="80" id="z1h-UJ-muD"/>
                                         </constraints>
-                                    </stackView>
+                                    </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="B6I-pp-FUc" firstAttribute="leading" secondItem="6m0-1U-luj" secondAttribute="leading" id="540-y4-lDe"/>
-                                    <constraint firstAttribute="trailing" secondItem="afh-jw-Iie" secondAttribute="trailing" id="A5t-e0-XUD"/>
-                                    <constraint firstItem="afh-jw-Iie" firstAttribute="leading" secondItem="6m0-1U-luj" secondAttribute="leading" id="Aqt-Za-mef"/>
-                                    <constraint firstItem="afh-jw-Iie" firstAttribute="leading" secondItem="6m0-1U-luj" secondAttribute="leading" id="HSr-vA-e6z"/>
-                                    <constraint firstAttribute="trailing" secondItem="B6I-pp-FUc" secondAttribute="trailing" id="WIc-Yl-b48"/>
-                                    <constraint firstAttribute="trailing" secondItem="afh-jw-Iie" secondAttribute="trailing" id="bIm-XD-X8r"/>
-                                    <constraint firstItem="O1h-UH-4Ms" firstAttribute="top" secondItem="j85-1h-Wa3" secondAttribute="bottom" id="mwE-mI-WAn"/>
-                                    <constraint firstAttribute="trailing" secondItem="afh-jw-Iie" secondAttribute="trailing" id="tcD-7I-RZJ"/>
+                                    <constraint firstItem="euh-Nw-2le" firstAttribute="top" secondItem="6m0-1U-luj" secondAttribute="top" constant="10" id="56F-a8-Z03"/>
                                 </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="6m0-1U-luj" firstAttribute="top" secondItem="Xf1-O2-JGJ" secondAttribute="bottom" constant="30" id="ScZ-oS-auR"/>
+                            <constraint firstItem="6m0-1U-luj" firstAttribute="top" secondItem="Xf1-O2-JGJ" secondAttribute="bottom" id="ScZ-oS-auR"/>
                             <constraint firstItem="6m0-1U-luj" firstAttribute="leading" secondItem="Fba-yU-w9V" secondAttribute="leadingMargin" id="UCH-HM-Hhy"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6m0-1U-luj" secondAttribute="trailing" id="dq8-gU-eWe"/>
+                            <constraint firstItem="SgN-pK-AW6" firstAttribute="top" secondItem="6m0-1U-luj" secondAttribute="bottom" id="tIC-KH-fQ1"/>
                         </constraints>
                     </view>
                 </viewController>
