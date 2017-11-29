@@ -20,8 +20,18 @@ public func IsPad() -> Bool {
 
 class Common: NSObject {
     
+    // MARK: - App Info
+    
     static var appName: String {
-        return Bundle.main.object(forInfoDictionaryKey: (kCFBundleNameKey as String)) as! String
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+    }
+    
+    static var appVersion: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+    }
+    
+    static var buildVersion: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     }
     
     // MARK: - Threads

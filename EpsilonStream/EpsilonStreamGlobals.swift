@@ -72,14 +72,6 @@ let ES_gray1 = 0x999999
 let ES_gray2 = 0xCCCCCC
 let ES_gray3 = 0x666666
 
-func versionNumber() -> String{
-    if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-        return version
-    }else{
-        return "V??"
-    }
-}
-
 var webLockKey: String? = nil
 
 var curatorPasswords = ["coco":     "940322",

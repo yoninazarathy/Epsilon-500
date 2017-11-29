@@ -115,9 +115,9 @@ class SplashScreenViewController: UIViewController {
         exitProcedureWasCalled = true
         
         if let user = currentUserId {
-            self.splashLabel.text = "\(versionNumber()), user: \(user)"
+            self.splashLabel.text = "\(Common.appVersion) #\(Common.buildVersion), user: \(user)"
         } else{
-            self.splashLabel.text = ""//\(versionNumber())"
+            self.splashLabel.text = ""
         }
         
         spinner.isHidden = false
