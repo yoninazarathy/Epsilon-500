@@ -82,11 +82,22 @@ class PersistentStorageManager: NSObject {
             return persistentContainer.newBackgroundContext()
         } else {
             let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
+            //managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
             managedObjectContext.parent = mainContext
             return managedObjectContext
         }
         
     }
     
+    public func saveMainContext(){
+        DispatchQueue.main.async {
+            do {
+                try self.mainContext.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+
 }

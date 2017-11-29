@@ -191,7 +191,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     }
     
     //QQQQ rename to "set-local memory"
-    class func setUpAutoCompleteLists() {
+    class func setUpAutoCompleteLists(withContext context: NSManagedObjectContext) {
         //QQQQ can improve implementation...
         
 //        let startDate = Date()
@@ -224,9 +224,10 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
 //        var gamesInCollectionCount = 0
         
         do {
-            let mathObjects = try mainContext.fetch(request)
+            let mathObjects = try context.fetch(request)
             
-            for mathObject in mathObjects{
+            for mathObject in mathObjects {
+                
                 let hashTag = mathObject.hashTag
                 
                 EpsilonStreamDataModel.fullHashTagList.append(hashTag) //QQQQ not lowercased ?
@@ -237,7 +238,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 rawTitleOfHashTag[hashTag] = mathObject.associatedTitles
                 
                 // Videos
-                let videos = fetchVideos(ofHashTag: hashTag)
+                let videos = fetchVideos(withContext: context, hashTag: hashTag)
                 videosOfHashTag[hashTag] = videos.map {
                     $0.youtubeVideoId
                 }
@@ -249,7 +250,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 //
                 
                 // Articles
-                let articles = fetchArticles(ofHashTag: hashTag)
+                let articles = fetchArticles(withContext: context, hashTag: hashTag)
                 articlesOfHashTag[hashTag] = articles.map {
                     $0.ourFeaturedURLHashtag
                 }
@@ -259,9 +260,9 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                     $0.ourFeaturedURLHashtag
                 }
                 //
-                
+
                 // Games
-                let games = fetchGames(ofHashTag: hashTag)
+                let games = fetchGames(withContext: context, hashTag: hashTag)
                 gamesOfHashTag[hashTag] = games.map {
                     return $0.ourFeaturedURLHashtag
                 }
@@ -324,13 +325,12 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
             print("Fetch failed")
         }
         
-//        NSLog(">>> \(videosCount), \(articlesCount), \(gamesCount)")
-//        NSLog(">>> \(videosInCollectionCount), \(articlesInCollectionCount), \(gamesInCollectionCount)")
-        
         fullTitles.sort()
         titlesForSurprise.sort()
         
-//        NSLog("setUpAutoCompleteLists duration: \(Date().timeIntervalSince(startDate))")
+//        DLog(">>> \(videosCount), \(articlesCount), \(gamesCount)")
+//        DLog(">>> \(videosInCollectionCount), \(articlesInCollectionCount), \(gamesInCollectionCount)")
+//        DLog("setUpAutoCompleteLists duration: \(Date().timeIntervalSince(startDate))")
     }
     
     /// Returns an array of strings that starts with the provided text
@@ -400,59 +400,59 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         return videos
     }
 
-    
-    private class func fetchVideos(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [Video] {
-        let request = Video.createFetchRequest()
-        let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
-        let predicate = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
-//        let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", "hashTags", hashTag)    // may include wrogn results
-        if let ic = inColl {
-            let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, pred2])
+    private class func finishConfigureFetchRequest<T: NSManagedObject>(_ request: NSFetchRequest<T>, predicate: NSPredicate, inCollection: Bool? = nil) {
+        if let ic = inCollection {
+            let predicate2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, predicate2])
         } else {
             request.predicate = predicate
         }
-        request.includesPropertyValues = false
+        //request.includesPropertyValues = false
+    }
+    
+    private class func fetchVideos(withContext context: NSManagedObjectContext, hashTag: String, inCollection: Bool? = nil) -> [Video] {
+        let request = Video.createFetchRequest()
+        let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
+        let predicate = NSPredicate(format: "(hashTags MATCHES[c] %@)", pattern)
+//        let predicate = NSPredicate(format: "%K CONTAINS[cd] %@", "hashTags", hashTag)    // may include wrong results
+        finishConfigureFetchRequest(request, predicate: predicate, inCollection: inCollection)
         
         var videos = [Video]()
-        do {
-            videos = try mainContext.fetch(request)
-        } catch {
-            print("Videos for hashtag fetch failed")
-        }
+//        do {
+//            videos = try mainContext.fetch(request)
+//        } catch {
+//            print("Videos for hashtag fetch failed")
+//        }
 // Trying to make it work on background thread
-//        let context = PersistentStorageManager.shared.newBackgroundContext()
 //        context.performAndWait {
-//            do {
-//                videos = try context.fetch(request)
-//    //            videos = try mainContext.fetch(request)
-//            } catch {
-//                print("Videos for hashtag fetch failed")
-//            }
+            do {
+                videos = try context.fetch(request)
+    //            videos = try mainContext.fetch(request)
+            } catch {
+                print("Videos for hashtag fetch failed")
+            }
+//        }
+        
+//        for video in videos {
+//            DLog("video ID: \(video.youtubeVideoId)")
 //        }
 
         return videos
     }
     
     
-    private class func fetchArticles(ofHashTag hashTag: String, inCollection inColl: Bool? = nil) -> [FeaturedURL] {
+    private class func fetchArticles(withContext context: NSManagedObjectContext, hashTag: String, inCollection: Bool? = nil) -> [FeaturedURL] {
         let articleType = "article" // TODO: define this constant somewhere on global level
         
         let request = FeaturedURL.createFetchRequest()
         let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
         let predicate = NSPredicate(format: "(hashTags MATCHES[c] %@) && (%K = %@ || %K = %@)", pattern, "typeOfFeature", articleType,
                                     "typeOfFeature", articleType.capitalized)
-        if let ic = inColl {
-            let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, pred2])
-        } else{
-            request.predicate = predicate
-        }
-        request.includesPropertyValues = false
+        finishConfigureFetchRequest(request, predicate: predicate, inCollection: inCollection)
         
         var articles = [FeaturedURL]()
         do {
-            articles = try mainContext.fetch(request)
+            articles = try context.fetch(request)
         } catch {
             print("Articles for hashtag fetch failed")
         }
@@ -461,22 +461,16 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     }
     
     
-    private class func fetchGames(ofHashTag hashTag: String,inCollection inColl: Bool? = nil) -> [FeaturedURL] {
+    private class func fetchGames(withContext context: NSManagedObjectContext, hashTag: String, inCollection: Bool? = nil) -> [FeaturedURL] {
         let request = FeaturedURL.createFetchRequest()
         let pattern = NSString(format: "(.*(%1$@),.*|.*(%1$@)\\z)", hashTag)
-        let pred = NSPredicate(format: "(hashTags MATCHES[c] %@) && %K = %@", pattern, "isAppStoreApp", NSNumber(value: true) )
-        if let ic = inColl {
-            let pred2 = NSPredicate(format: "isInCollection = %@", NSNumber(booleanLiteral: ic))
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred, pred2])
-        }else{
-            request.predicate = pred
-        }
-        request.includesPropertyValues = false
+        let predicate = NSPredicate(format: "(hashTags MATCHES[c] %@) && %K = %@", pattern, "isAppStoreApp", NSNumber(value: true) )
+        finishConfigureFetchRequest(request, predicate: predicate, inCollection: inCollection)
         
         var games = [FeaturedURL]()
         do {
-            games = try mainContext.fetch(request)
-        } catch{
+            games = try context.fetch(request)
+        } catch {
             print("Games for hashtag fetch failed")
         }
         
@@ -977,18 +971,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     
     static var minimalNextSaveTime: Date = Date()
     
-    //QQQQ This is currently implemented as a workaround for crashes associated with saving the view context
-    class func saveViewContext(){
-        DispatchQueue.main.async {
-            do {
-                try mainContext.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
-    
     //QQQQ use generic to merge three methods
     class func numVideos(inCollection inCol: Bool? = nil) -> Int{
         let request = Video.createFetchRequest()
@@ -1118,7 +1100,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
             print("Fetch failed")
         }
         
-        EpsilonStreamDataModel.saveViewContext()
+        PersistentStorageManager.shared.saveMainContext()
 
         for (k,v) in idHash{
             if v > 1{

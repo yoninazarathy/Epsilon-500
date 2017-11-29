@@ -142,12 +142,14 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         }
         let isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedMathObjectLinks
         
-        if isReady{
+        if isReady {
             didItOnce = true
-            EpsilonStreamDataModel.saveViewContext()
+            PersistentStorageManager.shared.saveMainContext()
             
-            DispatchQueue.main.async{
-                EpsilonStreamDataModel.setUpAutoCompleteLists()
+            EpsilonStreamDataModel.setUpAutoCompleteLists(withContext: PersistentStorageManager.shared.newBackgroundContext() )
+            
+            DispatchQueue.main.async {
+                //EpsilonStreamDataModel.setUpAutoCompleteLists(withContext: mainContext)
                 EpsilonStreamDataModel.setLatestDates()
                 ImageManager.refreshImageManager()
                 ImageManager.setup()
