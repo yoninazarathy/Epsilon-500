@@ -101,15 +101,15 @@ class TermSelectorViewController: UIViewController, UITableViewDelegate, UITable
             let tag = hashTagsToShow[indexPath.row]
         
             var numVideos = 0
-            if let num = EpsilonStreamDataModel.videosOfHashTag[tag]?.count{
+            if let num = EpsilonStreamDataModel.videoIDsForHashTags[tag]?.count{
                     numVideos = num
             }
             var numArticles = 0
-            if let num = EpsilonStreamDataModel.articlesOfHashTag[tag]?.count{
+            if let num = EpsilonStreamDataModel.articleURLHashtagsForHashTags[tag]?.count{
                 numArticles = num
             }
             var numGames = 0
-            if let num = EpsilonStreamDataModel.gamesOfHashTag[tag]?.count{
+            if let num = EpsilonStreamDataModel.gamesURLHashTagsForHashTags[tag]?.count{
                 numGames = num
             }
             let totalContent = numVideos + numArticles + numGames

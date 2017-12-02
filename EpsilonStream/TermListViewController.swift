@@ -167,27 +167,27 @@ class TermListViewController: UIViewController, UITableViewDelegate, UITableView
         case 0:
             let tag = hashTagsToShow[indexPath.row]
             var numVideos = 0
-            if let num = EpsilonStreamDataModel.videosOfHashTag[tag]?.count{
+            if let num = EpsilonStreamDataModel.videoIDsForHashTags[tag]?.count{
                     numVideos = num
             }
             var numVideosInCollection = 0
-            if let num = EpsilonStreamDataModel.videosOfHashTagInColl[tag]?.count{
+            if let num = EpsilonStreamDataModel.videoIDsForHashTagsInCollection[tag]?.count{
                 numVideosInCollection = num
             }
             var numArticles = 0
-            if let num = EpsilonStreamDataModel.articlesOfHashTag[tag]?.count{
+            if let num = EpsilonStreamDataModel.articleURLHashtagsForHashTags[tag]?.count{
                 numArticles = num
             }
             var numArticlesInCollection = 0
-            if let num = EpsilonStreamDataModel.articlesOfHashTagInColl[tag]?.count{
+            if let num = EpsilonStreamDataModel.articleURLHashtagsForHashTagsInCollection[tag]?.count{
                 numArticlesInCollection = num
             }
             var numGames = 0
-            if let num = EpsilonStreamDataModel.gamesOfHashTag[tag]?.count{
+            if let num = EpsilonStreamDataModel.gamesURLHashTagsForHashTags[tag]?.count{
                 numGames = num
             }
             var numGamesInCollection = 0
-            if let num = EpsilonStreamDataModel.gamesOfHashTagInColl[tag]?.count{
+            if let num = EpsilonStreamDataModel.gamesURLHashTagsForHashTagsInCollection[tag]?.count{
                 numGamesInCollection = num
             }
 

@@ -75,8 +75,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         FIRApp.configure()
         setGlobalsFromUserDefaults()
         //WebViewPrefetcher.setUp()
+        EpsilonStreamDataModel.loadAllAutoCompletionDictionaries()
         EpsilonStreamDataModel.setLatestDates()
         loadClient()
+        
         return true
     }
 

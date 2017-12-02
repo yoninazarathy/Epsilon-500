@@ -151,25 +151,85 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     static var fullTitles: Array<String> = []
     static var rawTitleOfHashTag = [String:String]()
     
-    static var videosOfHashTag = [String:Array<String>]()
-    static var articlesOfHashTag = [String:Array<String>]()
-    static var gamesOfHashTag = [String:Array<String>]()
-
-    static var videosOfHashTagInColl = [String:Array<String>]()
-    static var articlesOfHashTagInColl = [String:Array<String>]()
-    static var gamesOfHashTagInColl = [String:Array<String>]()
+    static var videoIDsForHashTags                          = [String: Array<String>]()
+    static var videoIDsForHashTagsInCollection              = [String: Array<String>]()
+    static var articleURLHashtagsForHashTags                = [String: Array<String>]()
+    static var articleURLHashtagsForHashTagsInCollection    = [String: Array<String>]()
+    static var gamesURLHashTagsForHashTags                  = [String: Array<String>]()
+    static var gamesURLHashTagsForHashTagsInCollection      = [String: Array<String>]()
     
-    static var curatorOfHashTag = [String:String]()
-    static var reviewerOfHashTag = [String:String]()
+    static var curatorOfHashTag     = [String: String]()
+    static var reviewerOfHashTag    = [String: String]()
     
-    static var hashTagInCollection = [String:Bool]()
+    static var hashTagInCollection = [String: Bool]()
     
     static var searchStack: [EpsilonStreamSearch] = []
     static var searchStackIndex = 0
     
-    ///////////////////////////////////////////////////
-    // Searching and autocomplete
-    ///////////////////////////////////////////////////
+    // MARK: - Storage
+    
+    private static var autoCompletionStorageFilePath: String = {
+        var path = IKFileManager.shared.documentsDirectory
+        path = (path as NSString).appendingPathComponent("EpsilonStreamDataModel")
+        path = (path as NSString).appendingPathComponent("AutoCompletion")
+        IKFileManager.shared.createDirectoryIfDoesntExist(atPath: path)
+        
+        return path
+    }()
+    
+    private static func pathForAutoCompletionDictionary(withName name: String) -> String {
+        var result = (autoCompletionStorageFilePath as NSString).appendingPathComponent(name)
+        result = (result as NSString).appendingPathExtension("json")!
+        return result
+    }
+    
+    private static func loadAutoCompletionDictionary(atPath path: String) -> [String: Array<String>] {
+        var result = [String: Array<String>]()
+        if IKFileManager.shared.fileExists(atPath: path), let data = IKFileManager.shared.dataWithContentsOfFile(atPath: path) {
+            do {
+                result = try JSONSerialization.jsonObject(with: data) as! [String: Array<String>]
+            } catch {
+            }
+        }
+
+        return result
+    }
+    
+    private static func loadAutoCompletionDictionary(withName name: String) -> [String: Array<String>] {
+        return loadAutoCompletionDictionary(atPath: pathForAutoCompletionDictionary(withName: name) )
+    }
+    
+    static func loadAllAutoCompletionDictionaries() {
+        videoIDsForHashTags                          = loadAutoCompletionDictionary(withName: "videoIDsForHashTags")
+        videoIDsForHashTagsInCollection              = loadAutoCompletionDictionary(withName: "videoIDsForHashTagsInCollection")
+        articleURLHashtagsForHashTags                = loadAutoCompletionDictionary(withName: "articleURLHashtagsForHashTags")
+        articleURLHashtagsForHashTagsInCollection    = loadAutoCompletionDictionary(withName: "articleURLHashtagsForHashTagsInCollection")
+        gamesURLHashTagsForHashTags                  = loadAutoCompletionDictionary(withName: "gamesURLHashTagsForHashTags")
+        gamesURLHashTagsForHashTagsInCollection      = loadAutoCompletionDictionary(withName: "gamesURLHashTagsForHashTagsInCollection")
+    }
+    
+    private static func saveAutoCompletionDictionary(_ dictionary: [String: Array<String>], atPath path: String) {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dictionary)
+            IKFileManager.shared.createFile(atPath: path, contents: data)
+        } catch {
+        }
+    }
+
+    private static func saveAutoCompletionDictionary(_ dictionary: [String: Array<String>], withName name: String) {
+        saveAutoCompletionDictionary(dictionary, atPath: pathForAutoCompletionDictionary(withName: name))
+    }
+    
+    private static func saveAllAutoCompletionDictionaries() {
+        saveAutoCompletionDictionary(videoIDsForHashTags,                       withName: "videoIDsForHashTags")
+        saveAutoCompletionDictionary(videoIDsForHashTagsInCollection,           withName: "videoIDsForHashTagsInCollection")
+        saveAutoCompletionDictionary(articleURLHashtagsForHashTags,             withName: "articleURLHashtagsForHashTags")
+        saveAutoCompletionDictionary(articleURLHashtagsForHashTagsInCollection, withName: "articleURLHashtagsForHashTagsInCollection")
+        saveAutoCompletionDictionary(gamesURLHashTagsForHashTags,               withName: "gamesURLHashTagsForHashTags")
+        saveAutoCompletionDictionary(gamesURLHashTagsForHashTagsInCollection,   withName: "gamesURLHashTagsForHashTagsInCollection")
+    }
+    
+    //MARK: - Searching and autocomplete
     
     class func printMathObjects(){
         let request = MathObject.createFetchRequest()
@@ -204,12 +264,16 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         hashTagOfTitle = [:]
         fullTitles = []
         rawTitleOfHashTag = [:]
-        videosOfHashTag = [:]
-        articlesOfHashTag = [:]
-        gamesOfHashTag = [:]
         curatorOfHashTag = [:]
         reviewerOfHashTag = [:]
         hashTagInCollection = [:]
+        
+        var tempVideoIDsForHashTags                         = [String: Array<String>]()
+        var tempVideoIDsForHashTagsInCollection             = [String: Array<String>]()
+        var tempArticleURLHashtagsForHashTags               = [String: Array<String>]()
+        var tempArticleURLHashtagsForHashTagsInCollection   = [String: Array<String>]()
+        var tempGamesURLHashTagsForHashTags                 = [String: Array<String>]()
+        var tempGamesURLHashTagsForHashTagsInCollection     = [String: Array<String>]()
         
         let request = MathObject.createFetchRequest()
         let sort = NSSortDescriptor(key: "hashTag", ascending: true)
@@ -222,6 +286,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
 //        var articlesInCollectionCount = 0
 //        var gamesCount = 0
 //        var gamesInCollectionCount = 0
+        //
         
         do {
             let mathObjects = try context.fetch(request)
@@ -239,10 +304,10 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 
                 // Videos
                 let videos = fetchVideos(withContext: context, hashTag: hashTag)
-                videosOfHashTag[hashTag] = videos.map {
+                tempVideoIDsForHashTags[hashTag] = videos.map {
                     $0.youtubeVideoId
                 }
-                videosOfHashTagInColl[hashTag] = videos.filter {
+                tempVideoIDsForHashTagsInCollection[hashTag] = videos.filter {
                     $0.isInCollection
                 }.map {
                     $0.youtubeVideoId
@@ -251,10 +316,10 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 
                 // Articles
                 let articles = fetchArticles(withContext: context, hashTag: hashTag)
-                articlesOfHashTag[hashTag] = articles.map {
+                tempArticleURLHashtagsForHashTags[hashTag] = articles.map {
                     $0.ourFeaturedURLHashtag
                 }
-                articlesOfHashTagInColl[hashTag] = articles.filter {
+                tempArticleURLHashtagsForHashTagsInCollection[hashTag] = articles.filter {
                     $0.isInCollection
                 }.map {
                     $0.ourFeaturedURLHashtag
@@ -263,10 +328,10 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
 
                 // Games
                 let games = fetchGames(withContext: context, hashTag: hashTag)
-                gamesOfHashTag[hashTag] = games.map {
+                tempGamesURLHashTagsForHashTags[hashTag] = games.map {
                     return $0.ourFeaturedURLHashtag
                 }
-                gamesOfHashTagInColl[hashTag] = games.filter {
+                tempGamesURLHashTagsForHashTagsInCollection[hashTag] = games.filter {
                     return $0.isInCollection
                 }.map {
                     return $0.ourFeaturedURLHashtag
@@ -274,12 +339,12 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 //
 
                 //
-//                videosCount += videosOfHashTag[hashTag]!.count
-//                videosInCollectionCount += videosOfHashTagInColl[hashTag]!.count
-//                articlesCount += articlesOfHashTag[hashTag]!.count
-//                articlesInCollectionCount += articlesOfHashTagInColl[hashTag]!.count
-//                gamesCount += gamesOfHashTag[hashTag]!.count
-//                gamesInCollectionCount += gamesOfHashTagInColl[hashTag]!.count
+//                videosCount                 += tempVideoIDsForHashTags[hashTag]!.count
+//                videosInCollectionCount     += tempVideoIDsForHashTagsInCollection[hashTag]!.count
+//                articlesCount               += tempArticleURLHashtagsForHashTags[hashTag]!.count
+//                articlesInCollectionCount   += tempArticleURLHashtagsForHashTagsInCollection[hashTag]!.count
+//                gamesCount                  += tempGamesURLHashTagsForHashTags[hashTag]!.count
+//                gamesInCollectionCount      += tempGamesURLHashTagsForHashTagsInCollection[hashTag]!.count
                 //
                 
                 curatorOfHashTag[hashTag] = mathObject.curator
@@ -288,6 +353,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 hashTagInCollection[hashTag] = mathObject.isInCollection
                 
                 if mathObject.isInCollection {
+                    // IK: Propbably this can be moved to separate method
                     let titleGroups = mathObject.associatedTitles.components(separatedBy: "~")
                     for grp in titleGroups{
                         let titles = grp.components(separatedBy: ",")
@@ -324,6 +390,17 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         } catch {
             print("Fetch failed")
         }
+        
+        //
+        videoIDsForHashTags                         = tempVideoIDsForHashTags
+        videoIDsForHashTagsInCollection             = tempGamesURLHashTagsForHashTagsInCollection
+        articleURLHashtagsForHashTags               = tempArticleURLHashtagsForHashTags
+        articleURLHashtagsForHashTagsInCollection   = tempArticleURLHashtagsForHashTagsInCollection
+        gamesURLHashTagsForHashTags                 = tempGamesURLHashTagsForHashTags
+        gamesURLHashTagsForHashTagsInCollection     = tempGamesURLHashTagsForHashTagsInCollection
+        
+        saveAllAutoCompletionDictionaries()
+        //
         
         fullTitles.sort()
         titlesForSurprise.sort()

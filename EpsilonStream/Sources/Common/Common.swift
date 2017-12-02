@@ -1,8 +1,8 @@
 import UIKit
 
-func DLog(_ items: Any...) {
+func DLog(_ format: String, _ args: CVarArg...) {
 #if DEBUG
-    print(items)
+    NSLog(format, args)
 #endif
 }
 
