@@ -69,8 +69,6 @@ protocol SearcherUI {
 }
 
 
-
-
 class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
 SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI,ImageLoadedDelegate{
     
@@ -320,39 +318,23 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         refreshSearch()
     }
     
- //   var whyVsHow = 0
-   /*
-    // MARK: - Action handlers
-    func bscValueChanged(_ sender: BetterSegmentedControl) {
-        if sender.index == 0 {
-            whyVsHow = 0
-        }
-        else {
-            whyVsHow = 1
-        }
-        refreshSearch()
-    }
-    */
-    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
     }
     
-    var keyboardHeight = CGFloat(313.0)
-    
-    func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-        }
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.isNavigationBarHidden = false
         //AppUtility.lockOrientation(.all)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        //AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+        refreshSearch()
+    }
+    
+    var keyboardHeight = CGFloat(313.0)
     
     func selected(_ string: String){
         var search = EpsilonStreamSearch()
@@ -365,12 +347,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         refreshSearch()
         self.view.endEditing(true)
         FIRAnalytics.logEvent(withName: "item_selected", parameters: ["string" : string as NSObject])
-    }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        //AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-        refreshSearch()
     }
     
     var currentSearch = EpsilonStreamSearch()
@@ -482,385 +458,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         goingToTop = true //QQQ super nasty hack
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        refreshSearch()
-        autoCompleteTable.isHidden = true
-        return false
-    }
-    
-    func tableView(_ tableView: UITableView,numberOfRowsInSection section: Int) -> Int {
-        //QQQQ this is a horrible hack - make cleaner
-        if searchResultItems.count == 0{// && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
-            return 1
-        }else{
-            return searchResultItems.count
-        }
-    }
-
-
-    func tableView(_ tableView: UITableView,cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if searchResultItems.count == 0{// && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
-            if indexPath.row == 0{
-                let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
-                cell.mainLabel.text = "No match for \"\(currentSearch.searchString)\""
-                cell.clientSearchViewController = self
-                return cell
-            }else{
-                let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellMathObjectLink", for: indexPath) as! MathObjectLinkItemTableViewCell
-                cell.configureWith(mathObjectLinkSearchResult: searchResultItems[0] as! MathObjectLinkSearchResultItem)
-                return cell
-            }
-        }
-        
-        switch searchResultItems[indexPath.row].type{
-        case SearchResultItemType.video:
-            let cell = tableView.dequeueReusableCell(withIdentifier:
-                    "searchTableCellVideo", for: indexPath) as! VideoItemTableViewCell
-            cell.configureWith(videoSearchResult:  searchResultItems[indexPath.row] as! VideoSearchResultItem)
-            return cell
-        case SearchResultItemType.iosApp:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(iosAppSearchResult: searchResultItems[indexPath.row] as! IOsAppSearchResultItem)
-            return cell
-        case SearchResultItemType.gameWebPage:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(gameWebSearchResult: searchResultItems[indexPath.row] as! GameWebPageSearchResultItem)
-            return cell
-        case SearchResultItemType.blogWebPage:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellBlog", for: indexPath) as! ArticleItemTableViewCell
-            cell.configureWith(articleSearchResult: searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem)
-            return cell
-        case SearchResultItemType.mathObjectLink:
-            //QQQQ implement Math ObjectLink Search Result Item
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellMathObjectLink", for: indexPath) as! MathObjectLinkItemTableViewCell
-            cell.configureWith(mathObjectLinkSearchResult: searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem)
-            return cell
-        case SearchResultItemType.specialItem:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
-            cell.configureWith(specialSearchResultItem: searchResultItems[indexPath.row] as! SpecialSearchResultItem)
-            return cell
-        case SearchResultItemType.messageItem:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellUserMessage", for: indexPath) as! UserMessageTableViewCell
-            cell.configureWith(userMessageResultItem: searchResultItems[indexPath.row] as! UserMessageResultItem)
-            return cell
-
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        //will be if there is no search.
-        //QQQQ fix this so it acts better on the "Let our team known"
-        if searchResultItems.count == 0{
-            if let text = searchTextField.text{
-                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : text as NSObject])
-            }else{
-                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : "EMPTY" as NSObject])
-            }
-            return
-        }
-        
-        switch searchResultItems[indexPath.row].type{
-        case SearchResultItemType.video:
-            if let vc = storyboard?.instantiateViewController(withIdentifier: "PlayVideo") as? PlayVideoViewController{
-                // QQQQ - delete vc.videoPlayer = playerBank[indexPath.row]
-                vc.isExplodingDots = false //QQQQ read type of video display here
-                let videoItem = searchResultItems[indexPath.row] as! VideoSearchResultItem
-                FIRAnalytics.logEvent(withName: "video_play", parameters: ["videoId" : videoItem.youtubeId as NSObject])
-                vc.videoIdToPlay = videoItem.youtubeId
-                navigationController?.pushViewController(vc, animated: true)
-            }
-
-        /////////////////////////
-        /////////////////////////
-        case SearchResultItemType.iosApp:
-            FIRAnalytics.logEvent(withName: "appStore_go", parameters: ["appId" :  (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId as NSObject])
-            jumpToIosApp(withCode: (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId) //QQQQ
-        /////////////////////////
-        /////////////////////////
-        case SearchResultItemType.gameWebPage:
-            FIRAnalytics.logEvent(withName: "gameWeb_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url as NSObject])
-            jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url, withSplashKey: "gameQQQQ")
-        /////////////////////////
-        /////////////////////////
-        case SearchResultItemType.blogWebPage:
-            FIRAnalytics.logEvent(withName: "web_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url as NSObject])
-            jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url,inSafariMode: (searchResultItems[indexPath.row]as! BlogWebPageSearchResultItem).isExternal, withSplashKey: searchResultItems[indexPath.row].splashKey)
-        /////////////////////////
-        /////////////////////////
-        case SearchResultItemType.mathObjectLink:
-            //QQQQ implement math object link search result item
-            let molItem = searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem
-     
-            FIRAnalytics.logEvent(withName: "mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
-            
-            //QQQQ move elsewhere and allow other splashes.
-            if molItem.splashKey == "gmp-splash"{
-                coverImageView = UIImageView(image: UIImage(named: "ed_background1"))
-                coverImageView!.contentMode = .scaleAspectFill
-            }else if molItem.splashKey == "youtube-splash"{
-                coverImageView = UIImageView(image: UIImage(named: "youTubeSplash"))
-                coverImageView!.contentMode = .scaleAspectFill
-            }else if molItem.splashKey == "OoE-splash"{
-                coverImageView = UIImageView(image: UIImage(named: "oneOnEpsilonSplash"))
-                coverImageView!.contentMode = .scaleAspectFill
-            }
-        
-            if let iv = coverImageView{
-                let window = UIApplication.shared.keyWindow!
-                iv.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
-                window.addSubview(iv)
-                UIView.animate(withDuration: 1.5, animations: {
-                    iv.alpha = 0.0
-                }, completion:
-                    {_ in iv.removeFromSuperview()})
-            }
-            
-            selected(molItem.searchTitle)
-            
-        /////////////////////////
-        /////////////////////////
-        case SearchResultItemType.specialItem:
-            print("speicalItem click do nothing - QQQQ")
-            
-        /////////////////////////
-        /////////////////////////
-        case SearchResultItemType.messageItem:
-            print("messageItem click do nothing - QQQQ")
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let share = UITableViewRowAction(style: .normal, title: "Share"){(action, index) in
-            
-            FIRAnalytics.logEvent(withName: "share",parameters:  [:])
-            
-            switch self.searchResultItems[index.row].type{
-            case SearchResultItemType.video:
-                let video = self.searchResultItems[index.row] as! VideoSearchResultItem
-                
-                let shareString = "I saw this great video on Epsilon Stream, https://www.epsilonstream.com: https://youtu.be/\(video.youtubeId)"
-                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
-                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
-                self.present(vc, animated:  true)
-                
-                
-                /*
-                 //QQQQ not doing this - delte?
-                if let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook){
-                    vc.setInitialText("I watch this on Epsilon Stream (https:www.epsilonstream.com):")
-                    vc.add(URL(string: "https:youtu.be/\(video.youtubeId)"))
-                    self.present(vc,animated:true)
-                }
-                 */
-
-                
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.iosApp:
-                let iosApp = self.searchResultItems[index.row] as! IOsAppSearchResultItem
-                
-                let shareString = "Check this out: https://itunes.apple.com/us/app/id\(iosApp.appId), shared using Epsilon Stream, https://www.epsilonstream.com ."
-                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
-                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
-                self.present(vc, animated:  true)
-
-                
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.gameWebPage:
-                let webPage = self.searchResultItems[index.row] as! GameWebPageSearchResultItem
-                
-                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
-                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
-                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
-                self.present(vc, animated:  true)
-
-                
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.blogWebPage:
-                let webPage = self.searchResultItems[index.row] as! BlogWebPageSearchResultItem
-                
-                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
-                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
-                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
-                self.present(vc, animated:  true)
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.mathObjectLink:
-                let title = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).title
-
-                let shareString = "Check this out: \(title). Shared using Epsilon Stream, https://www.epsilonstream.com ."
-                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
-                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
-                self.present(vc, animated:  true)
-    
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.specialItem:
-                //QQQQ do something
-                print("not implemented yet")
-
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.messageItem:
-                //QQQQ do something
-                print("not implemented yet")
-                
-            }
-            
-            //Make it disappear
-            tableView.setEditing(false, animated: true)
-        }
-        share.backgroundColor = .green
-        
-        if isInAdminMode == false{
-            return searchResultItems.count > 0 ? [share] : nil
-        }
-
-        //if got down to here then allowing admin mode
-        
-        let edit = UITableViewRowAction(style: .normal, title: "Edit"){(action, index) in
-            switch self.searchResultItems[index.row].type{
-            case SearchResultItemType.video:
-                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
-                let youTubeIdToEdit = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
-                EpsilonStreamAdminModel.setCurrentVideo(withVideo: youTubeIdToEdit)
-
-                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "curateItemViewController") as? CurateItemViewController{
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.iosApp, SearchResultItemType.gameWebPage, SearchResultItemType.blogWebPage:
-                let ourFeaturedURLHashtag = (self.searchResultItems[index.row] as! FeatureSearchResultItem).ourFeaturedURLHashtag
-                EpsilonStreamAdminModel.setCurrentFeature(withFeature: ourFeaturedURLHashtag)
-                
-                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "curateArticleViewController") as? CurateArticleViewController{
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-
-                
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.mathObjectLink:
-                print("need to implement edit of math object link")
-            
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.specialItem:
-                print("need to implement edit (or not)")
-
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.messageItem:
-                print("message item")
-
-                
-                
-            }
-            //Make it disappear
-            tableView.setEditing(false, animated: true)
-        }
-
-        edit.backgroundColor = .red
-        
-        //if got down to here then allowing admin mode
-        
-        
-        let pushDown = UITableViewRowAction(style: .normal, title: "Down"){(action, index) in
-            
-            /*
-            for i in 0..<self.searchResultItems.count{
-                print("PRI - \(self.searchResultItems[i].foundPriority)")
-            }
-            */
-            
-            var newPriority: Float = 0.0
-            
-            let lastIndex = self.searchResultItems.count - 1
-            if index.row == lastIndex || index.row == lastIndex - 1{
-                newPriority = self.searchResultItems[lastIndex].foundPriority * 10
-                print(newPriority)
-            }else{
-                let nextPri = self.searchResultItems[index.row+1].foundPriority
-                let nextAfterPri =  self.searchResultItems[index.row + 2].foundPriority
-                newPriority = (nextPri + nextAfterPri)/2
-                print("next: \(nextPri), nextAfter: \(nextAfterPri), new: \(newPriority)")
-            }
-            
-            switch self.searchResultItems[index.row].type{
-            case SearchResultItemType.video:
-                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
-                let youTubeIdToPushDown = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
-                EpsilonStreamAdminModel.setCurrentVideo(withVideo: youTubeIdToPushDown)
-                EpsilonStreamAdminModel.currentVideo.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentVideo.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
-                
-                print(EpsilonStreamAdminModel.currentVideo.hashTagPriorities)
-                
-                EpsilonStreamAdminModel.submitVideo(withDBVideo: EpsilonStreamAdminModel.currentVideo)
-                
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.iosApp, SearchResultItemType.gameWebPage, SearchResultItemType.blogWebPage:
-                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
-                let id = (self.searchResultItems[index.row] as! FeatureSearchResultItem).ourFeaturedURLHashtag
-                EpsilonStreamAdminModel.setCurrentFeature(withFeature: id)
-                EpsilonStreamAdminModel.currentFeature.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentFeature.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
-                
-                print(EpsilonStreamAdminModel.currentFeature.hashTagPriorities)
-                
-                EpsilonStreamAdminModel.submitFeaturedURL(withDBFeature: EpsilonStreamAdminModel.currentFeature)
-
-                
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.mathObjectLink:
-                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
-                let id = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).ourMathObjectLinkHashTag
-                EpsilonStreamAdminModel.setCurrentMathObjectLink(withHashTag: id)
-                EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
-                
-                print(EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities)
-
-                //QQQQ still not updating to cloud
-
-                
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.specialItem:
-                print("need to handle")
-    
-            /////////////////////////
-            /////////////////////////
-            case SearchResultItemType.messageItem:
-                print("need to handle")
-                
-            }
-            //Make it disappear
-            tableView.setEditing(false, animated: true)
-            self.goingToTop = false
-            self.refreshSearch()
-
-        }
-        
-        pushDown.backgroundColor = .orange
-        return [share, edit, pushDown]
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
-        return 125 //QQQQ
-    }
- 
-    
     func jumpToIosApp(withCode code:String) {
         let storeViewController = SKStoreProductViewController()
         storeViewController.delegate = self
@@ -893,19 +490,8 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 }
             }
     }
-    
-    
-    @objc func textFieldChange(_ sender: UITextField) {
-        if sender.text! ==  webLockKey!{
-            okAction.isEnabled = true
-        }else{
-            okAction.isEnabled = false
-        }
-    }
         
     var okAction: UIAlertAction! = nil
-
-    
 
     func jumpToWebPage(withURLstring string: String, inSafariMode safariMode: Bool = false,withSplashKey splashKey: String = ""){
         if safariMode{
@@ -973,11 +559,410 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         return url
     }
     
+    // MARK: - UITableViewDataSource
+    
+    func tableView(_ tableView: UITableView,cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if searchResultItems.count == 0{// && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
+            if indexPath.row == 0{
+                let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
+                cell.mainLabel.text = "No match for \"\(currentSearch.searchString)\""
+                cell.clientSearchViewController = self
+                return cell
+            }else{
+                let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellMathObjectLink", for: indexPath) as! MathObjectLinkItemTableViewCell
+                cell.configureWith(mathObjectLinkSearchResult: searchResultItems[0] as! MathObjectLinkSearchResultItem)
+                return cell
+            }
+        }
+        
+        switch searchResultItems[indexPath.row].type{
+        case SearchResultItemType.video:
+            let cell = tableView.dequeueReusableCell(withIdentifier:
+                "searchTableCellVideo", for: indexPath) as! VideoItemTableViewCell
+            cell.configureWith(videoSearchResult:  searchResultItems[indexPath.row] as! VideoSearchResultItem)
+            return cell
+        case SearchResultItemType.iosApp:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
+            cell.configureWith(iosAppSearchResult: searchResultItems[indexPath.row] as! IOsAppSearchResultItem)
+            return cell
+        case SearchResultItemType.gameWebPage:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
+            cell.configureWith(gameWebSearchResult: searchResultItems[indexPath.row] as! GameWebPageSearchResultItem)
+            return cell
+        case SearchResultItemType.blogWebPage:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellBlog", for: indexPath) as! ArticleItemTableViewCell
+            cell.configureWith(articleSearchResult: searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem)
+            return cell
+        case SearchResultItemType.mathObjectLink:
+            //QQQQ implement Math ObjectLink Search Result Item
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellMathObjectLink", for: indexPath) as! MathObjectLinkItemTableViewCell
+            cell.configureWith(mathObjectLinkSearchResult: searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem)
+            return cell
+        case SearchResultItemType.specialItem:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
+            cell.configureWith(specialSearchResultItem: searchResultItems[indexPath.row] as! SpecialSearchResultItem)
+            return cell
+        case SearchResultItemType.messageItem:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellUserMessage", for: indexPath) as! UserMessageTableViewCell
+            cell.configureWith(userMessageResultItem: searchResultItems[indexPath.row] as! UserMessageResultItem)
+            return cell
+            
+        }
+    }
+
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView,numberOfRowsInSection section: Int) -> Int {
+        //QQQQ this is a horrible hack - make cleaner
+        if searchResultItems.count == 0 {// && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
+            return 1
+        } else {
+            return searchResultItems.count
+        }
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        //will be if there is no search.
+        //QQQQ fix this so it acts better on the "Let our team known"
+        if searchResultItems.count == 0{
+            if let text = searchTextField.text{
+                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : text as NSObject])
+            }else{
+                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : "EMPTY" as NSObject])
+            }
+            return
+        }
+        
+        switch searchResultItems[indexPath.row].type{
+        case SearchResultItemType.video:
+            if let vc = storyboard?.instantiateViewController(withIdentifier: "PlayVideo") as? PlayVideoViewController{
+                // QQQQ - delete vc.videoPlayer = playerBank[indexPath.row]
+                vc.isExplodingDots = false //QQQQ read type of video display here
+                let videoItem = searchResultItems[indexPath.row] as! VideoSearchResultItem
+                FIRAnalytics.logEvent(withName: "video_play", parameters: ["videoId" : videoItem.youtubeId as NSObject])
+                vc.videoIdToPlay = videoItem.youtubeId
+                navigationController?.pushViewController(vc, animated: true)
+            }
+            
+        /////////////////////////
+        case SearchResultItemType.iosApp:
+            FIRAnalytics.logEvent(withName: "appStore_go", parameters: ["appId" :  (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId as NSObject])
+            jumpToIosApp(withCode: (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId) //QQQQ
+        /////////////////////////
+        case SearchResultItemType.gameWebPage:
+            FIRAnalytics.logEvent(withName: "gameWeb_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url as NSObject])
+            jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url, withSplashKey: "gameQQQQ")
+        /////////////////////////
+        case SearchResultItemType.blogWebPage:
+            FIRAnalytics.logEvent(withName: "web_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url as NSObject])
+            jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url,inSafariMode: (searchResultItems[indexPath.row]as! BlogWebPageSearchResultItem).isExternal, withSplashKey: searchResultItems[indexPath.row].splashKey)
+        /////////////////////////
+        case SearchResultItemType.mathObjectLink:
+            //QQQQ implement math object link search result item
+            let molItem = searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem
+            
+            FIRAnalytics.logEvent(withName: "mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
+            
+            //QQQQ move elsewhere and allow other splashes.
+            if molItem.splashKey == "gmp-splash"{
+                coverImageView = UIImageView(image: UIImage(named: "ed_background1"))
+                coverImageView!.contentMode = .scaleAspectFill
+            }else if molItem.splashKey == "youtube-splash"{
+                coverImageView = UIImageView(image: UIImage(named: "youTubeSplash"))
+                coverImageView!.contentMode = .scaleAspectFill
+            }else if molItem.splashKey == "OoE-splash"{
+                coverImageView = UIImageView(image: UIImage(named: "oneOnEpsilonSplash"))
+                coverImageView!.contentMode = .scaleAspectFill
+            }
+            
+            if let iv = coverImageView{
+                let window = UIApplication.shared.keyWindow!
+                iv.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
+                window.addSubview(iv)
+                UIView.animate(withDuration: 1.5, animations: {
+                    iv.alpha = 0.0
+                }, completion:
+                    {_ in iv.removeFromSuperview()})
+            }
+            
+            selected(molItem.searchTitle)
+            
+        /////////////////////////
+        case SearchResultItemType.specialItem:
+            print("speicalItem click do nothing - QQQQ")
+            
+        /////////////////////////
+        case SearchResultItemType.messageItem:
+            print("messageItem click do nothing - QQQQ")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let share = UITableViewRowAction(style: .normal, title: "Share"){(action, index) in
+            
+            FIRAnalytics.logEvent(withName: "share",parameters:  [:])
+            
+            switch self.searchResultItems[index.row].type{
+            case SearchResultItemType.video:
+                let video = self.searchResultItems[index.row] as! VideoSearchResultItem
+                
+                let shareString = "I saw this great video on Epsilon Stream, https://www.epsilonstream.com: https://youtu.be/\(video.youtubeId)"
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
+                
+                
+                /*
+                 //QQQQ not doing this - delte?
+                 if let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook){
+                 vc.setInitialText("I watch this on Epsilon Stream (https:www.epsilonstream.com):")
+                 vc.add(URL(string: "https:youtu.be/\(video.youtubeId)"))
+                 self.present(vc,animated:true)
+                 }
+                 */
+                
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.iosApp:
+                let iosApp = self.searchResultItems[index.row] as! IOsAppSearchResultItem
+                
+                let shareString = "Check this out: https://itunes.apple.com/us/app/id\(iosApp.appId), shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
+                
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.gameWebPage:
+                let webPage = self.searchResultItems[index.row] as! GameWebPageSearchResultItem
+                
+                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
+                
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.blogWebPage:
+                let webPage = self.searchResultItems[index.row] as! BlogWebPageSearchResultItem
+                
+                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.mathObjectLink:
+                let title = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).title
+                
+                let shareString = "Check this out: \(title). Shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.specialItem:
+                //QQQQ do something
+                print("not implemented yet")
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.messageItem:
+                //QQQQ do something
+                print("not implemented yet")
+                
+            }
+            
+            //Make it disappear
+            tableView.setEditing(false, animated: true)
+        }
+        share.backgroundColor = .green
+        
+        if isInAdminMode == false{
+            return searchResultItems.count > 0 ? [share] : nil
+        }
+        
+        //if got down to here then allowing admin mode
+        
+        let edit = UITableViewRowAction(style: .normal, title: "Edit"){(action, index) in
+            switch self.searchResultItems[index.row].type{
+            case SearchResultItemType.video:
+                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
+                let youTubeIdToEdit = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
+                EpsilonStreamAdminModel.setCurrentVideo(withVideo: youTubeIdToEdit)
+                
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "curateItemViewController") as? CurateItemViewController{
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.iosApp, SearchResultItemType.gameWebPage, SearchResultItemType.blogWebPage:
+                let ourFeaturedURLHashtag = (self.searchResultItems[index.row] as! FeatureSearchResultItem).ourFeaturedURLHashtag
+                EpsilonStreamAdminModel.setCurrentFeature(withFeature: ourFeaturedURLHashtag)
+                
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "curateArticleViewController") as? CurateArticleViewController{
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+                
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.mathObjectLink:
+                print("need to implement edit of math object link")
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.specialItem:
+                print("need to implement edit (or not)")
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.messageItem:
+                print("message item")
+            }
+            //Make it disappear
+            tableView.setEditing(false, animated: true)
+        }
+        
+        edit.backgroundColor = .red
+        
+        //if got down to here then allowing admin mode
+        
+        
+        let pushDown = UITableViewRowAction(style: .normal, title: "Down"){(action, index) in
+            
+            /*
+             for i in 0..<self.searchResultItems.count{
+             print("PRI - \(self.searchResultItems[i].foundPriority)")
+             }
+             */
+            
+            var newPriority: Float = 0.0
+            
+            let lastIndex = self.searchResultItems.count - 1
+            if index.row == lastIndex || index.row == lastIndex - 1{
+                newPriority = self.searchResultItems[lastIndex].foundPriority * 10
+                print(newPriority)
+            }else{
+                let nextPri = self.searchResultItems[index.row+1].foundPriority
+                let nextAfterPri =  self.searchResultItems[index.row + 2].foundPriority
+                newPriority = (nextPri + nextAfterPri)/2
+                print("next: \(nextPri), nextAfter: \(nextAfterPri), new: \(newPriority)")
+            }
+            
+            switch self.searchResultItems[index.row].type{
+            case SearchResultItemType.video:
+                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
+                let youTubeIdToPushDown = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
+                EpsilonStreamAdminModel.setCurrentVideo(withVideo: youTubeIdToPushDown)
+                EpsilonStreamAdminModel.currentVideo.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentVideo.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
+                
+                print(EpsilonStreamAdminModel.currentVideo.hashTagPriorities)
+                
+                EpsilonStreamAdminModel.submitVideo(withDBVideo: EpsilonStreamAdminModel.currentVideo)
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.iosApp, SearchResultItemType.gameWebPage, SearchResultItemType.blogWebPage:
+                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
+                let id = (self.searchResultItems[index.row] as! FeatureSearchResultItem).ourFeaturedURLHashtag
+                EpsilonStreamAdminModel.setCurrentFeature(withFeature: id)
+                EpsilonStreamAdminModel.currentFeature.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentFeature.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
+                
+                print(EpsilonStreamAdminModel.currentFeature.hashTagPriorities)
+                
+                EpsilonStreamAdminModel.submitFeaturedURL(withDBFeature: EpsilonStreamAdminModel.currentFeature)
+                
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.mathObjectLink:
+                //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
+                let id = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).ourMathObjectLinkHashTag
+                EpsilonStreamAdminModel.setCurrentMathObjectLink(withHashTag: id)
+                EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities = EpsilonStreamDataModel.newPriorityString(oldHashTagPriorityString: EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities, forHashTag: EpsilonStreamAdminModel.currentHashTag, withRawPriority: newPriority)
+                
+                print(EpsilonStreamAdminModel.currentMathObjectLink.hashTagPriorities)
+                
+                //QQQQ still not updating to cloud
+                
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.specialItem:
+                print("need to handle")
+                
+                /////////////////////////
+            /////////////////////////
+            case SearchResultItemType.messageItem:
+                print("need to handle")
+                
+            }
+            //Make it disappear
+            tableView.setEditing(false, animated: true)
+            self.goingToTop = false
+            self.refreshSearch()
+            
+        }
+        
+        pushDown.backgroundColor = .orange
+        
+        return [share, edit, pushDown]
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 125
+    }
+    
+    // MARK: - UITextFieldDelegate
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        refreshSearch()
+        autoCompleteTable.isHidden = true
+        return false
+    }
+    
     // MARK: - SFSafariViewControllerDelegate
     
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         print("safariViewControllerDidFinish")
     }
     
+    // MARK: - Notifications
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardSize.height
+        }
+    }
+    
+    // MARK: - Actions
+    
+    @objc func textFieldChange(_ sender: UITextField) {
+        okAction.isEnabled = (sender.text! == webLockKey!)
+    }
+    //   var whyVsHow = 0
+     /*
+     func bscValueChanged(_ sender: BetterSegmentedControl) {
+     if sender.index == 0 {
+     whyVsHow = 0
+     }
+     else {
+     whyVsHow = 1
+     }
+     refreshSearch()
+     }
+     */
 }
-
