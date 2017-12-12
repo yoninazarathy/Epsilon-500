@@ -54,7 +54,7 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
         super.viewWillAppear(animated)
         
         isViewDisplayed = true
-        refresh()
+        //refresh()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -97,10 +97,51 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
         isRotating = true
     }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if IsPad() {
-            return .all
+//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+//        if IsPad() {
+//            return .all
+//        }
+//        return .portrait
+//    }
+    
+    // MARK: - Keyboard
+    func registerKeyboardNotifications () {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),  name: .UIKeyboardWillShow,  object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification:)),   name: .UIKeyboardDidShow,   object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),  name: .UIKeyboardWillHide,  object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(notification:)),   name: .UIKeyboardDidHide,   object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame(notification:)),
+                                               name: .UIKeyboardDidChangeFrame,    object: nil)
+    }
+    
+    func unregisterKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow,          object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardDidShow,           object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide,          object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardDidHide,           object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardDidChangeFrame,    object: nil)
+    }
+    
+    func keyboardWillShow(notification: Notification) {
+
+    }
+    
+    func keyboardDidShow(notification: Notification) {
+        
+    }
+    
+    func keyboardWillHide(notification: Notification) {
+        keyboardFrame = .zero
+    }
+    
+    func keyboardDidHide(notification: Notification) {
+        
+    }
+    
+    func keyboardDidChangeFrame(notification: Notification) {
+        if let frame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardFrame = frame
+            //DLog("keyboardFrame: %@", NSStringFromCGRect(keyboardFrame))
         }
-        return .portrait
     }
 }

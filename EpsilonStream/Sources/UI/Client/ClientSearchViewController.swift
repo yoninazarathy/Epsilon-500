@@ -69,8 +69,8 @@ protocol SearcherUI {
 }
 
 
-class ClientSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
-SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI,ImageLoadedDelegate{
+class ClientSearchViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
+SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI, ImageLoadedDelegate{
     
     var coverImageView: UIImageView! = nil
     
@@ -98,13 +98,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         showXButton = false
         //QQQQ duplicated
         surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
-    }
-    
-    @IBAction func searchFieldEditBegin(_ sender: Any) {
-        if searchTextField.text! != ""{
-            showXButton = true
-            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
-        }
     }
     
     func clearButtonAction() {
@@ -210,46 +203,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     var searchResultItems = [SearchResultItem]()
     
-    @IBAction func searchEditChange(_ sender: UITextField) {
-        UserMessageManager.userDidKeyInAction()
-        let searchString = sender.text!.lowercased().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        
-        //QQQQ duplicated
-        if searchString == ""{
-            showXButton = false
-            surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
-        }else{
-            showXButton = true
-            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
-        }
-        
-        let firstChar = searchString.first
-
-        if searchString == ""{
-            autoCompleteTableDelegate.autoCompleteOptions = []
-        }else if firstChar == "#"{
-            autoCompleteTableDelegate.autoCompleteOptions = EpsilonStreamDataModel.autoCompleteListHashTags(searchString)
-        }else if firstChar == "." && isInAdminMode{
-            autoCompleteTableDelegate.autoCompleteOptions = EpsilonStreamDataModel.autoCompleteListCommands(searchString)
-        }else{
-            autoCompleteTableDelegate.autoCompleteOptions = EpsilonStreamDataModel.autoCompleteListTitle(searchString)
-        }
-        autoCompleteTable.reloadData()
-        print(autoCompleteTableDelegate.autoCompleteOptions.count)
-        if(autoCompleteTableDelegate.autoCompleteOptions.count > 0){
-            view.bringSubview(toFront: autoCompleteTable)
-            autoCompleteTable.isHidden = false
-            //let activeHeight = autoCompleteTable.rowHeight * CGFloat(autoCompleteTable.numberOfRows(inSection: 0))
-            let frm = autoCompleteTable.frame
-            autoCompleteTableViewHeightConstraint.constant = self.view.frame.height - keyboardHeight - frm.origin.y
-            autoCompleteTable.layoutIfNeeded()
-        }else{
-            view.sendSubview(toBack: autoCompleteTable)
-            autoCompleteTable.isHidden = true
-        }
-        refreshSearch()
-    }
-    
     func imagesUpdate(){
         resultsTable.reloadData()
     }
@@ -319,22 +272,26 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         navigationController?.isNavigationBarHidden = true
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        registerKeyboardNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        
         super.viewWillDisappear(animated)
         navigationController?.isNavigationBarHidden = false
+        unregisterKeyboardNotifications()
         //AppUtility.lockOrientation(.all)
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         //AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         refreshSearch()
     }
-    
-    var keyboardHeight = CGFloat(313.0)
     
     func selected(_ string: String){
         var search = EpsilonStreamSearch()
@@ -347,6 +304,18 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         refreshSearch()
         self.view.endEditing(true)
         FIRAnalytics.logEvent(withName: "item_selected", parameters: ["string" : string as NSObject])
+    }
+    
+    override func refresh() {
+        guard shouldRefresh else {
+            return
+        }
+        
+    }
+    
+    func refreshAutoCompleteTableViewLayout() {
+        autoCompleteTableViewHeightConstraint.constant = keyboardFrame.minY - autoCompleteTable.frame.minY
+        autoCompleteTable.layoutIfNeeded()
     }
     
     var currentSearch = EpsilonStreamSearch()
@@ -940,19 +909,62 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         print("safariViewControllerDidFinish")
     }
     
-    // MARK: - Notifications
-    
-    func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-        }
+    // MARK: - Keyboard
+    override func keyboardDidChangeFrame(notification: Notification) {
+        super.keyboardDidChangeFrame(notification: notification)
+        refreshAutoCompleteTableViewLayout()
     }
     
     // MARK: - Actions
     
+    @IBAction func searchFieldEditBegin(_ sender: Any) {
+        if searchTextField.text! != ""{
+            showXButton = true
+            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+        }
+    }
+    
+    @IBAction func searchEditChange(_ sender: UITextField) {
+        UserMessageManager.userDidKeyInAction()
+        let searchString = sender.text!.lowercased().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        
+        //QQQQ duplicated
+        if searchString == ""{
+            showXButton = false
+            surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
+        }else{
+            showXButton = true
+            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+        }
+        
+        let firstChar = searchString.first
+        
+        if searchString == ""{
+            autoCompleteTableDelegate.autoCompleteOptions = []
+        }else if firstChar == "#"{
+            autoCompleteTableDelegate.autoCompleteOptions = EpsilonStreamDataModel.autoCompleteListHashTags(searchString)
+        }else if firstChar == "." && isInAdminMode{
+            autoCompleteTableDelegate.autoCompleteOptions = EpsilonStreamDataModel.autoCompleteListCommands(searchString)
+        }else{
+            autoCompleteTableDelegate.autoCompleteOptions = EpsilonStreamDataModel.autoCompleteListTitle(searchString)
+        }
+        autoCompleteTable.reloadData()
+        print(autoCompleteTableDelegate.autoCompleteOptions.count)
+        if(autoCompleteTableDelegate.autoCompleteOptions.count > 0){
+            view.bringSubview(toFront: autoCompleteTable)
+            autoCompleteTable.isHidden = false
+            //let activeHeight = autoCompleteTable.rowHeight * CGFloat(autoCompleteTable.numberOfRows(inSection: 0))
+        }else{
+            view.sendSubview(toBack: autoCompleteTable)
+            autoCompleteTable.isHidden = true
+        }
+        refreshSearch()
+    }
+    
     @objc func textFieldChange(_ sender: UITextField) {
         okAction.isEnabled = (sender.text! == webLockKey!)
     }
+    
     //   var whyVsHow = 0
      /*
      func bscValueChanged(_ sender: BetterSegmentedControl) {

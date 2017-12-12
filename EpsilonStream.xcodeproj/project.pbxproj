@@ -280,9 +280,9 @@
 		0152C9DE1FDD40F800ADBFA8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				0152C9F71FDD40F800ADBFA8 /* Base */,
 				0152C9DF1FDD40F800ADBFA8 /* Admin */,
 				0152C9E81FDD40F800ADBFA8 /* Client */,
-				0152C9F71FDD40F800ADBFA8 /* Base */,
 				0152C9FA1FDD40F800ADBFA8 /* EpsilonClient.storyboard */,
 			);
 			path = UI;
