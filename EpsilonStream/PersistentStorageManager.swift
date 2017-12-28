@@ -52,10 +52,8 @@ class PersistentStorageManager: NSObject {
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         // Create the coordinator and store
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: PersistentStorageManager.shared.managedObjectModel)
-        var path = (IKFileManager.shared.libraryDirectory as NSString).appendingPathComponent("Application Support")
-        path = (path as NSString).appendingPathComponent("EpsilonStreamDataModel.sqlite")
-        path = IKFileManager.shared.absolutePath(forPath: path)
-        let url = URL(fileURLWithPath: path)
+        var url = IKFileManager.shared.libraryDirectoryURL.appendingPathComponent("Application Support")
+        url = url.appendingPathComponent("EpsilonStreamDataModel.sqlite")
         
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)

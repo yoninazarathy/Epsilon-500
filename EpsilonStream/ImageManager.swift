@@ -23,60 +23,45 @@ enum ImageStatus{
     case Loaded
 }
 
-//taken from: https://stackoverflow.com/questions/39677330/how-does-string-substring-work-in-swift-3
-extension String {
-    func index(from: Int) -> Index {
-        return self.index(startIndex, offsetBy: from)
-    }
-
-    func substring(from: Int) -> String {
-        let fromIndex = index(from: from)
-        return substring(from: fromIndex)
-    }
-
-    func substring(to: Int) -> String {
-        let toIndex = index(from: to)
-        return substring(to: toIndex)
-    }
-
-    func substring(with r: Range<Int>) -> String {
-        let startIndex = index(from: r.lowerBound)
-        let endIndex = index(from: r.upperBound)
-        return substring(with: startIndex..<endIndex)
-    }
-}
-
 class ImageManager: ManagedObjectContextUserProtocol {
     
-    //The data model of the image manager is now the hashtables associated with image Keys.
-    //Image keys are eitehr 10 characters (youtube style) or 6 characters for features.
-    //Images can be on the:
+    // The data model of the image manager is now the hashtables associated with image Keys.
+    // Image keys are eitehr 10 characters (youtube style) or 6 characters for features.
+    // Images can be on the:
     // 1) The bundle - then they are copied to the document directory on (first) startup.
-    // 2) In the cloudkit envionrment - this is for 6 char images of features.
-    // 3) In the youtube severs (using urls).
+    // 2) In the cloudkit environment - this is for 6 char images of features.
+    // 3) In the youtube servers (using urls).
     
-    //Indicates the status of images (urgent, normal, loaded - or not there if hash empty).
-    static var statusHash:[String:ImageStatus] = [:]
+    // Indicates the status of images (urgent, normal, loaded - or not there if hash empty).
+    private static var statusHash = [String: ImageStatus]()
     
-    //records the url of the image (if such a thing exists)
-    static var urlHash:[String:String] = [:]
+    // Records the url of the image (if such a thing exists)
+    private static var urlHash = [String: String]()
     
-    //records true if an image is in the cloud. Youtube images can be both in cloud and in url (in future versions)
-    //currently youtube
-    static var inCloudHash:[String:Bool] = [:]
+    // Records true if an image is in the cloud. Youtube images can be both in cloud and in url (in future versions)
+    // currently youtube
+    private static var inCloudHash = [String: Bool]()
     
-    //indicates if an image is needed by the delagate. This would come with urgent and then once delegate would be activated.
-    static var neededByDelagate:[String:Bool] = [:]
+    // Indicates if an image is needed by the delagate. This would come with urgent and then once delegate would be activated.
+    private static var neededByDelegate = [String: Bool]()
 
     static var imageLoadedDelegate: ImageLoadedDelegate? = nil
     
     static var backgroundImageOn = true
 
-    static var numURLLoads = 0
-    static var numCloudLoads = 0
+    private static var numURLLoads = 0
+    private static var numCloudLoads = 0
     
-    static let maxURLLoads = 150
-    static let maxCloudLoads = 30
+    private static let maxURLLoads = 150
+    private static let maxCloudLoads = 30
+    
+    private static var oldImageThumbnailsPath: String {
+        return "bb"
+    }
+    
+    private static var imageThumbnailsPath: String {
+        return "aaa"
+    }
     
     class func setup(){
         //if running for first time copy images from Bundle to directory
@@ -135,72 +120,72 @@ class ImageManager: ManagedObjectContextUserProtocol {
         }
     }
     
-    class func refreshImageManager(){
+    class func refreshImageManager() {
         
         EpsilonStreamBackgroundFetch.setActionStart()
         
         let request = Video.createFetchRequest()
-        
-        do{
+        do {
             //iterate over all videos
-            let result = try mainContext.fetch(request)
-            for v in result{
-                inCloudHash[v.youtubeVideoId] = false //all youtubes are currently from youtube url (not cloud)
-                urlHash[v.youtubeVideoId] = v.imageURL
+            let videos = try mainContext.fetch(request)
+            for video in videos {
+                let youtubeVideoId = video.youtubeVideoId
+                inCloudHash[youtubeVideoId] = false //all youtubes are currently from youtube url (not cloud)
+                urlHash[youtubeVideoId] = video.imageURL
 
-                if !haveFile(forImageKey: v.youtubeVideoId){ //if no file
-                    if let st = statusHash[v.youtubeVideoId]{
-                        switch st{
+                if !haveFile(forImageKey: video.youtubeVideoId) { //if no file
+                    if let status = statusHash[youtubeVideoId] {
+                        switch status {
                         case ImageStatus.Loaded:
                             print("QQQQ - error -how can it be loaded???")
                         case ImageStatus.NormallyNeeded: //QQQQ just leave it
                             break
                         case ImageStatus.Unknown:
-                            statusHash[v.youtubeVideoId] = ImageStatus.NormallyNeeded
+                            statusHash[youtubeVideoId] = ImageStatus.NormallyNeeded
                         case ImageStatus.UrgentlyNeeded: //QQQQ just leave it
                             break
                         }
-                    }else{ //no status hash
-                        statusHash[v.youtubeVideoId] = ImageStatus.NormallyNeeded
+                    } else { //no status hash
+                        statusHash[youtubeVideoId] = ImageStatus.NormallyNeeded
                     }
-                }else{//have file
-                    statusHash[v.youtubeVideoId] = ImageStatus.Loaded
+                } else { //have file
+                    statusHash[youtubeVideoId] = ImageStatus.Loaded
                 }
             }
-        }catch{
-            print("Fetch failed")
+        } catch {
+            DLog("Video fetch failed")
         }
         
         let request2 = FeaturedURL.createFetchRequest()
-        
-        do{
-            let result = try mainContext.fetch(request2)
-            for f in result{
+        do {
+            let featuredURLs = try mainContext.fetch(request2)
+            for featuredURL in featuredURLs {
                 //QQQQ forcefully unwrapping imageKey (why is it optional???)
-                inCloudHash[f.imageKey!] = true //all features are currently from cloud
+                let imageKey = featuredURL.imageKey!
+                inCloudHash[imageKey] = true //all features are currently from cloud
                 
                 //QQQQ this is a bit of copy from above (factor it)
-                if !haveFile(forImageKey: f.imageKey!){ //if no file
-                    if let st = statusHash[f.imageKey!]{
-                        switch st{
+                if !haveFile(forImageKey: imageKey) { //if no file
+                    if let status = statusHash[imageKey] {
+                        switch status {
                         case ImageStatus.Loaded:
                             print("QQQQ - error -how can it be loaded???")
                         case ImageStatus.NormallyNeeded: //QQQQ just leave it
                             break
                         case ImageStatus.Unknown:
-                            statusHash[f.imageKey!] = ImageStatus.NormallyNeeded
+                            statusHash[imageKey] = ImageStatus.NormallyNeeded
                         case ImageStatus.UrgentlyNeeded: //QQQQ just leave it
                             break
                         }
-                    }else{ //no status hash
-                        statusHash[f.imageKey!] = ImageStatus.NormallyNeeded
+                    } else { //no status hash
+                        statusHash[imageKey] = ImageStatus.NormallyNeeded
                     }
-                }else{//have file
-                    statusHash[f.imageKey!] = ImageStatus.Loaded
+                } else {//have file
+                    statusHash[imageKey] = ImageStatus.Loaded
                 }
             }
-        }catch{
-            print("Fetch failed")
+        } catch {
+            print("FeaturedURL fetch failed")
         }
 
         /*
@@ -219,11 +204,9 @@ class ImageManager: ManagedObjectContextUserProtocol {
         print("numLoaded: \(numLoaded), numNormallyNeeded: \(numNormallyNeeded), numUnknown: \(numUnknown), numUrgentlyNeeded: \(numUrgentlyNeeded),")
      */
         
-    EpsilonStreamBackgroundFetch.setActionFinish()
-
+        EpsilonStreamBackgroundFetch.setActionFinish()
     }
     
-
     class func makeImageUrgent(withKey key: String){
        
         //QQQQ this is so not to have mulitple loads.... consider having a timeout instead
@@ -233,7 +216,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
         }
         
         statusHash[key] = ImageStatus.UrgentlyNeeded
-        neededByDelagate[key] = true
+        neededByDelegate[key] = true
         
         if let url = urlHash[key]{
             loadImage(forKey: key, fromUrl: url)
@@ -264,13 +247,13 @@ class ImageManager: ManagedObjectContextUserProtocol {
     }
    
     class func numImagesOnFile() -> Int{
-        let fd = FileManager.default
-        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileManager = FileManager.default
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
         
         var numImages = 0
         
-        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
+        fileManager.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
             numImages += 1
         })
         return numImages
@@ -358,9 +341,9 @@ class ImageManager: ManagedObjectContextUserProtocol {
                 try data.write(to: dataPath)
                 print("saving image with key \(key)")// to \(dataPath)")
                 statusHash[key] = ImageStatus.Loaded
-                if let nk = neededByDelagate[key]{
+                if let nk = neededByDelegate[key]{
                     if nk == true{
-                        neededByDelagate[key] = false
+                        neededByDelegate[key] = false
                         DispatchQueue.main.async{
                             self.imageLoadedDelegate?.imagesUpdate()
                         }

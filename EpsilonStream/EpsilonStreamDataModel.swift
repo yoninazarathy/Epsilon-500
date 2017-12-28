@@ -169,7 +169,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     // MARK: - Storage
     
     private static var autoCompletionStorageFilePath: String = {
-        var path = IKFileManager.shared.documentsDirectory
+        var path = IKFileManager.shared.documentsDirectoryPath
         path = (path as NSString).appendingPathComponent("EpsilonStreamDataModel")
         path = (path as NSString).appendingPathComponent("AutoCompletion")
         IKFileManager.shared.createDirectoryIfDoesntExist(atPath: path)
