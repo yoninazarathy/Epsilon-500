@@ -381,7 +381,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                             }
                             first = false
                         }
-                        if titleGroup.count > 0{
+                        if titleGroup.count > 0 {
                             EpsilonStreamDataModel.titleAutoCompleteList.append(titleGroup)
                         }
                     }

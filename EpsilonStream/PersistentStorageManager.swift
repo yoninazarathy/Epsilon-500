@@ -84,16 +84,23 @@ class PersistentStorageManager: NSObject {
             managedObjectContext.parent = mainContext
             return managedObjectContext
         }
-        
     }
     
-    public func saveMainContext(){
-        DispatchQueue.main.async {
+    public func saveMainContext() {
+        let saveContext = {
             do {
                 try self.mainContext.save()
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+        
+        if Thread.isMainThread {
+            saveContext()
+        } else {
+            DispatchQueue.main.sync {
+                saveContext()
             }
         }
     }

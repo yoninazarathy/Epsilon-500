@@ -32,6 +32,8 @@ class ImageManager: ManagedObjectContextUserProtocol {
     // 2) In the cloudkit environment - this is for 6 char images of features.
     // 3) In the youtube servers (using urls).
     
+    // MARK: - Propeprties
+    
     // Indicates the status of images (urgent, normal, loaded - or not there if hash empty).
     private static var statusHash = [String: ImageStatus]()
     
@@ -55,69 +57,43 @@ class ImageManager: ManagedObjectContextUserProtocol {
     private static let maxURLLoads = 150
     private static let maxCloudLoads = 30
     
-    private static var oldImageThumbnailsPath: String {
-        return "bb"
-    }
+    private static let bundleImagesURL = Bundle.main.resourceURL!.appendingPathComponent("PreloadedThumbnailImages")
+    private static let oldImagesDirectoryURL = IKFileManager.shared.documentsDirectoryURL.appendingPathComponent("imageThumbnails")
+    private static let imagesDirectoryURL = IKFileManager.shared.cachesDirectoryURL.appendingPathComponent("Images")
     
-    private static var imageThumbnailsPath: String {
-        return "aaa"
-    }
+    // MARK: - Methods
     
-    class func setup(){
-        //if running for first time copy images from Bundle to directory
-        if numImagesOnFile() == 0{
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
-            
-            do {
-                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
-            } catch let error as NSError {
-                print("Error creating directory: \(error.localizedDescription)")
-            }
-            
-            let bundlePath = Bundle.main.resourcePath!
-            let fileManager = FileManager.default
-            do {
-                let filesFromBundle = try fileManager.contentsOfDirectory(atPath: bundlePath)
-                
-                for f in filesFromBundle{
-                    if f.hasPrefix("PreThumb_"){
-                        let name = f.substring(from:9)
-                        moveImageFromBundleToDocuments(withKey: name)
-                    }
-                }
-            } catch {
-                print("Error with searching images in bundle")
-            }
-        }
+    class func setup() {
+        moveImageFilesFromOldDirectory()
+        copyThumbImagesFromBundle()
         
-        if isInAdminMode == false{
-            Timer.every(20.seconds){ (timer: Timer) in
-                for (id,url) in urlHash{
-                    if numURLLoads > maxURLLoads{
-                        break;
-                    }
-                    if statusHash[id] != ImageStatus.Loaded{
-                        loadImage(forKey: id, fromUrl: url)
-                    }
-                }
-            }
-            
-            Timer.every(30.seconds){ (timer: Timer) in
-                for (key,b) in inCloudHash{
-                    if numCloudLoads > maxCloudLoads{
-                        break
-                    }
-                    if b{
-                        if statusHash[key] != ImageStatus.Loaded{
-                            //QQQQ maybe problem here? --- yes there is problem - probably sending requests to same ones again and again.
-                            //print("ok for cloud queue -- \(numCloudLoads)")
-                            readImageFromCloud(withKey: key)
-                        }
-                    }
-                }
-            }
-        }
+//        if isInAdminMode == false{
+//            Timer.every(20.seconds){ (timer: Timer) in
+//                for (id,url) in urlHash{
+//                    if numURLLoads > maxURLLoads{
+//                        break;
+//                    }
+//                    if statusHash[id] != ImageStatus.Loaded{
+//                        loadImage(forKey: id, fromUrl: url)
+//                    }
+//                }
+//            }
+//
+//            Timer.every(30.seconds){ (timer: Timer) in
+//                for (key,b) in inCloudHash{
+//                    if numCloudLoads > maxCloudLoads{
+//                        break
+//                    }
+//                    if b{
+//                        if statusHash[key] != ImageStatus.Loaded{
+//                            //QQQQ maybe problem here? --- yes there is problem - probably sending requests to same ones again and again.
+//                            //print("ok for cloud queue -- \(numCloudLoads)")
+//                            readImageFromCloud(withKey: key)
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
     
     class func refreshImageManager() {
@@ -137,7 +113,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
                     if let status = statusHash[youtubeVideoId] {
                         switch status {
                         case ImageStatus.Loaded:
-                            print("QQQQ - error -how can it be loaded???")
+                            DLog("QQQQ - error - how can it be loaded???")
                         case ImageStatus.NormallyNeeded: //QQQQ just leave it
                             break
                         case ImageStatus.Unknown:
@@ -185,7 +161,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
                 }
             }
         } catch {
-            print("FeaturedURL fetch failed")
+            DLog("FeaturedURL fetch failed")
         }
 
         /*
@@ -205,6 +181,12 @@ class ImageManager: ManagedObjectContextUserProtocol {
      */
         
         EpsilonStreamBackgroundFetch.setActionFinish()
+    }
+    
+    private class func fileURLForImage(withKey key: String) -> URL {
+        //QQQQ consider saving JPEG.
+        //QQQQ consider saving with file extension
+        return imagesDirectoryURL.appendingPathComponent(key).appendingPathExtension("png")
     }
     
     class func makeImageUrgent(withKey key: String){
@@ -228,24 +210,178 @@ class ImageManager: ManagedObjectContextUserProtocol {
         }
     }
     
-    class func numImagesInBundle() -> Int{
-        let bundlePath = Bundle.main.resourcePath!
-        let fileManager = FileManager.default
-        var retVal = 0
-        do {
-            let filesFromBundle = try fileManager.contentsOfDirectory(atPath: bundlePath)
-            
-            for f in filesFromBundle{
-                if f.hasPrefix("PreThumb_"){
-                    retVal += 1
+    class func loadImage(forKey key: String, fromUrl url: String) {
+        numURLLoads += 1
+        
+        //QQQQ - this is for another day
+//        var newUrl = url
+//        let ul = URL(fileURLWithPath: url)
+//        if ul.lastPathComponent.hasPrefix("default"){
+//            newUrl = ul.absoluteString.replacingOccurrences(of: "default", with: "hqdefault")
+//        }
+        
+        Alamofire.request(url).responseData { response in
+            DispatchQueue.main.async {
+                numURLLoads -= 1
+                //print("NUM URL LOADS: \(numURLLoads)")
+                if numURLLoads < 0 {
+                    DLog("error")
+                }
+                switch response.result {
+                case .success(let data):
+                    //print("SIZE OF IMAGE IS : \(data)")
+                    if let img = UIImage(data: data) {
+                        //print("DOWNLOADED SIZE: \(img.size)") //QQQQ image sizes
+                        //let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
+                        store(img, withKey: key)
+                    }else{
+                        DLog("nil in image")
+                    }
+                case .failure(let error):
+                    DLog("Request failed with error: \(error)")
                 }
             }
-        } catch {
-            print("Error with searching images in bundle")
         }
-        return retVal
     }
-   
+    
+    private class func copyThumbImagesFromBundle() {
+        //if running for first time copy images from Bundle to directory
+        if IKFileManager.shared.fileExists(atURL: imagesDirectoryURL) == false {
+            IKFileManager.shared.createDirectory(atURL: imagesDirectoryURL)
+            
+            let fileNames = IKFileManager.shared.contentsOfDirectory(atPath: bundleImagesURL.relativePath)
+            
+            for fileName in fileNames {
+                let prefix = "PreThumb_"
+                let name = fileName.substring(from: prefix.count)
+
+                let targetPath = imagesDirectoryURL.appendingPathComponent(name)
+                IKFileManager.shared.copyItem(atURL: bundleImagesURL.appendingPathComponent(fileName), toURL: targetPath)
+            }
+        }
+    }
+    
+    private class func moveImageFilesFromOldDirectory() {
+        if IKFileManager.shared.fileExists(atURL: imagesDirectoryURL) == false &&
+            IKFileManager.shared.fileExists(atURL: oldImagesDirectoryURL) == true {
+            
+            IKFileManager.shared.moveItem(atURL: oldImagesDirectoryURL, toURL: imagesDirectoryURL)
+        }
+    }
+    
+    class func store(_ image: UIImage, withKey key: String) {
+        if let data = UIImagePNGRepresentation(image) {
+            do {
+                try data.write(to: fileURLForImage(withKey: key) )
+                print("saving image with key \(key)")// to \(dataPath)")
+                statusHash[key] = ImageStatus.Loaded
+                if let nk = neededByDelegate[key] {
+                    if nk == true {
+                        neededByDelegate[key] = false
+                        DispatchQueue.main.async {
+                            self.imageLoadedDelegate?.imagesUpdate()
+                        }
+                    }
+                }
+                
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+    }
+    
+    class func storeImage(fromRecord record: CKRecord, withKey key: String){
+        if let asset = record["imagePic"] as? CKAsset{
+            do{
+                let data = try Data(contentsOf: asset.fileURL)
+                if let image = UIImage(data: data){
+                    ImageManager.store(image, withKey: key)
+                    DispatchQueue.main.async { //QQQQ maybe only do if needed by Delagate
+                        self.imageLoadedDelegate?.imagesUpdate()
+                    }
+                }else{
+                    print("error with image")
+                }
+            }catch{
+                print("err with image")
+            }
+        }else{
+            print("NO ASSET - with image")
+            //video.imageURLlocal = nil
+        }
+    }
+    
+    
+    //QQQQ incomplete
+    private class func updateHashesFromFiles() {
+        FileManager.default.enumerator(at: imagesDirectoryURL, includingPropertiesForKeys: nil)?.forEach({ (url) in
+            print(url)
+        })
+    }
+    
+    class func deleteAllImageFiles() {
+        IKFileManager.shared.removeItem(atURL: imagesDirectoryURL)
+        IKFileManager.shared.createDirectoryIfDoesntExist(atURL: imagesDirectoryURL)
+    }
+    
+    class func haveFile(forImageKey key: String) -> Bool {
+        return IKFileManager.shared.fileExists(atURL: fileURLForImage(withKey: key))
+    }
+    
+    class func getImage(forKey key: String, withDefault defaultName: String = "eStreamIcon") -> UIImage {
+        var retVal: UIImage! = nil
+        do {
+            let data = try Data(contentsOf: fileURLForImage(withKey: key) )
+            retVal = UIImage(data: data)
+        } catch {
+            //print("Could not find image with key \(key)")
+            makeImageUrgent(withKey: key)
+        }
+        if retVal == nil {
+            retVal = UIImage(named: defaultName)
+            makeImageUrgent(withKey: key)
+        }
+        return retVal!
+    }
+    
+    
+    // MARK: - Cloud images
+    
+    private class func readImageFromCloud(withKey key: String){
+        numCloudLoads += 1
+        let pred = NSPredicate(format: "keyName == %@", key)
+        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
+        
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = 1
+        
+        operation.recordFetchedBlock = { record in
+            ImageManager.storeImage(fromRecord: record, withKey: key)
+        }
+        
+        operation.queryCompletionBlock = { (cursor, error) in
+            numCloudLoads -= 1
+            if numCloudLoads < 0{
+                print("error")
+            }
+            if error == nil{
+            }else{
+                print("\(error!.localizedDescription)")
+            }
+        }
+        operation.completionBlock = {}
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+
+    
+
+    // MARK: - Count images
+    
+    class func numImagesInBundle() -> Int{
+        let result = IKFileManager.shared.contentsOfDirectory(atURL: bundleImagesURL).count
+        return result
+    }
+    
     class func numImagesOnFile() -> Int{
         let fileManager = FileManager.default
         let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -274,169 +410,11 @@ class ImageManager: ManagedObjectContextUserProtocol {
         return retVal
     }
     
+    // MARK: - Currently not used
     
-    class func loadImage(forKey key: String, fromUrl url: String){
-        numURLLoads += 1
-        
-        //QQQQ - this is for another day
-//        var newUrl = url
-//        let ul = URL(fileURLWithPath: url)
-//        if ul.lastPathComponent.hasPrefix("default"){
-//            newUrl = ul.absoluteString.replacingOccurrences(of: "default", with: "hqdefault")
-//        }
-        
-        Alamofire.request(url).responseData{
-            response in
-            DispatchQueue.main.async {
-                numURLLoads -= 1
-                //print("NUM URL LOADS: \(numURLLoads)")
-                if numURLLoads < 0{
-                    print("error")
-                }
-                switch response.result {
-                case .success(let data):
-                    //print("SIZE OF IMAGE IS : \(data)")
-                    if let img = UIImage(data: data){
-                        //print("DOWNLOADED SIZE: \(img.size)") //QQQQ image sizes
-                        //let image = Toucan(image: img).resize(CGSize(width: 240, height: 180), fitMode: Toucan.Resize.FitMode.crop).image
-                        store(img, withKey: key)
-                    }else{
-                        print("nil in image")
-                    }
-                case .failure(let error):
-                    print("Request failed with error: \(error)")
-                }
-            }
-        }
-    }
-    
-    class func moveImageFromBundleToDocuments(withKey key: String){
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key)
-        
-        let bundlePath = Bundle.main.url(forResource: "PreThumb_\(key)", withExtension: nil)
-
-        do{
-            let source = bundlePath!.path
-            let dest = dataPath.path
-            //print("COPYING: \(source) TO \(dest)")
-            try FileManager.default.copyItem(atPath: source, toPath: dest)
-        }catch{
-            print("\n")
-            print(error)
-        }
-    }
-    
-    class func store(_ image: UIImage, withKey key: String){
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key).appendingPathExtension("png")
-
-        //QQQQ consider saving JPEG.
-        //QQQQ consider saving with file extension
-        
-        //var imageWriteOK = true
-        
-        if let data = UIImagePNGRepresentation(image) {
-            do{
-                try data.write(to: dataPath)
-                print("saving image with key \(key)")// to \(dataPath)")
-                statusHash[key] = ImageStatus.Loaded
-                if let nk = neededByDelegate[key]{
-                    if nk == true{
-                        neededByDelegate[key] = false
-                        DispatchQueue.main.async{
-                            self.imageLoadedDelegate?.imagesUpdate()
-                        }
-                    }
-                }
-                
-            }catch let error as NSError{
-                print(error)
-                //imageWriteOK = false
-            }
-        }
-    }
-    
-    class func storeImage(fromRecord record: CKRecord, withKey key: String){
-        if let asset = record["imagePic"] as? CKAsset{
-            do{
-                let data = try Data(contentsOf: asset.fileURL)
-                if let image = UIImage(data: data){
-                    ImageManager.store(image, withKey: key)
-                    DispatchQueue.main.async { //QQQQ maybe only do if needed by Delagate
-                        self.imageLoadedDelegate?.imagesUpdate()
-                    }
-                }else{
-                    print("error with image")
-                }
-            }catch{
-                print("err with image")
-            }
-        }else{
-            print("NO ASSET - with image")
-            //video.imageURLlocal = nil
-        }
-    }
-    
-    
-    //QQQQ incomplete
-    class func updateHashesFromFiles(){
-        let fd = FileManager.default
-        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
-        
-        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
-            let url = e as! URL
-            print(url)
-        })
-
-    }
-    
-    class func deleteAllImageFiles(){
-        let fd = FileManager.default
-        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
-        
-        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
-            let url = e as! URL
-            do {
-                try fd.removeItem(at: url)
-            } catch let error as NSError {
-                print(error.debugDescription)
-            }
-        })
-    }
-    
-    class func haveFile(forImageKey key: String) -> Bool{
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let url = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key).appendingPathExtension("png")
-        let result = FileManager.default.fileExists(atPath: url.relativePath)
-        return result
-    }
-    
-    class func getImage(forKey key: String, withDefault defaultName:String = "eStreamIcon") -> UIImage{
-        var retVal: UIImage! = nil
-        do{
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let url = documentsDirectory.appendingPathComponent("imageThumbnails").appendingPathComponent(key).appendingPathExtension("png")
-            
-            let data = try Data(contentsOf: url)
-            retVal = UIImage(data: data)
-        }catch{
-            //print("Could not find image with key \(key)")
-            makeImageUrgent(withKey: key)
-        }
-        if retVal == nil{
-            retVal = UIImage(named: defaultName)
-            makeImageUrgent(withKey: key)
-        }
-        return retVal!
-    }
-    
-    
-    //generate a random 6 char (image) key 
+    //generate a random 6 char (image) key
     //QQQQ need to check for clashes and improve - STILL NOT USED
-    class func generateKey() -> String{
+    private class func generateKey() -> String{
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let len = UInt32(letters.length)
         var randomString = ""
@@ -450,8 +428,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
         return randomString
     }
     
-    //QQQQ currently not used
-    class func readImageListFromCloud(withKeys keyArray: [String]){
+    private class func readImageListFromCloud(withKeys keyArray: [String]){
         var arr:[Any] = []
         for i in 0..<keyArray.count{
             arr.append(keyArray[i])
@@ -482,35 +459,8 @@ class ImageManager: ManagedObjectContextUserProtocol {
         
         CKContainer.default().publicCloudDatabase.add(operation)
     }
-
-    class func readImageFromCloud(withKey key: String){
-        numCloudLoads += 1
-        let pred = NSPredicate(format: "keyName == %@", key)
-        let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
-        
-        let operation = CKQueryOperation(query: query)
-        operation.resultsLimit = 1
-        
-        operation.recordFetchedBlock = { record in
-            ImageManager.storeImage(fromRecord: record, withKey: key)
-        }
-        
-        operation.queryCompletionBlock = { (cursor, error) in
-            numCloudLoads -= 1
-            if numCloudLoads < 0{
-                print("error")
-            }
-            if error == nil{
-            }else{
-                print("\(error!.localizedDescription)")
-            }
-        }
-        operation.completionBlock = {}
-        CKContainer.default().publicCloudDatabase.add(operation)
-    }
-
-    //QQQQ currently not used
-    class func readAllImagesFromCloud(){
+    
+    private class func readAllImagesFromCloud(){
         
         let pred = NSPredicate(format: "TRUEPREDICATE")// "modificationDate > %@", latestMathObjectDate! as NSDate)
         let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
@@ -544,6 +494,4 @@ class ImageManager: ManagedObjectContextUserProtocol {
         
         CKContainer.default().publicCloudDatabase.add(operation)
     }
-    
-    
 }

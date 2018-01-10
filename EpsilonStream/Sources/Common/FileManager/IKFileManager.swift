@@ -211,20 +211,20 @@ public class IKFileManager: NSObject {
     
     @discardableResult public func createFile(atURL url: URL, contents data: Data?, attributes attr: [String : Any]? = nil,
                                               overwrites: Bool = true) -> Bool {
-        var result = false
-        
-        if overwrites == true || fileExists(atURL: url) == false {
-            result = FileManager.default.createFile(atPath: url.absoluteString, contents: data, attributes: attr)
-            if result == false {
-                printError(prefix: "Save file", url: url, error: nil)
-            }
-        }
-        return result
+        return createFile(atPath: absolutePath(forPath: url.relativePath), contents: data, attributes: attr, overwrites: overwrites)
     }
     
     @discardableResult public func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil,
                                               overwrites: Bool = true) -> Bool {
-        return createFile(atURL: URL(fileURLWithPath: absolutePath(forPath: path) ), contents: data, attributes:  attr, overwrites: overwrites)
+        var result = false
+        
+        if overwrites == true || fileExists(atPath: path) == false {
+            result = FileManager.default.createFile(atPath: absolutePath(forPath: path), contents: data, attributes: attr)
+            if result == false {
+                printError(prefix: "Save file", path: path, error: nil)
+            }
+        }
+        return result
     }
     
     public func url(forResource name: String) -> URL? {
@@ -238,11 +238,14 @@ public class IKFileManager: NSObject {
     }
     
     public func path(forResource name: String) -> String? {
-        return url(forResource: name)?.absoluteString
+        if let url = url(forResource: name) {
+            return absolutePath(forPath: url.relativePath)
+        }
+        return nil
     }
     
     public func imageWithContentsOfFile(atURL url: URL?) -> UIImage? {
-        return imageWithContentsOfFile(atPath: url?.absoluteString)
+        return imageWithContentsOfFile(atPath: url?.relativePath)
     }
     
     public func imageWithContentsOfFile(atPath path: String?) -> UIImage? {
