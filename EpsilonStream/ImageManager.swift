@@ -462,7 +462,7 @@ class ImageManager: ManagedObjectContextUserProtocol {
     
     private class func readAllImagesFromCloud(){
         
-        let pred = NSPredicate(format: "TRUEPREDICATE")// "modificationDate > %@", latestMathObjectDate! as NSDate)
+        let pred = NSPredicate(format: "TRUEPREDICATE")
         let query = CKQuery(recordType: "LightImageThumbNail", predicate: pred)
         
         let operation = CKQueryOperation(query: query)
