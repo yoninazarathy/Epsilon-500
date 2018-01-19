@@ -1,6 +1,6 @@
 import Foundation
 
-class MappingTestClass: NSObject {
+@objcMembers class MappingTestClass: NSObject {
     var testString = "test string"
     //var testDate = NSDate()
     var testInt = 1
@@ -40,6 +40,8 @@ extension Array where Element : DictionaryMappingProtocol  {
     }
 }
 
+// Mappable classes should be marked with "@objcMembers" attribute since Swift 4.
+
 extension NSObject: DictionaryMappingProtocol {
     
 //    public init(dictionary: AnyDictionary) {
@@ -48,7 +50,7 @@ extension NSObject: DictionaryMappingProtocol {
 //        setValues(fromDictionary: dictionary)
 //    }
     
-    public func setValues(fromDictionary dictionary: AnyDictionary) {
+    @objc public func setValues(fromDictionary dictionary: AnyDictionary) {
         
         // We use static dictionary: [className: [propertyName: propertyType] ] here to store structure of class.
         // Probably it should make mapping faster.
@@ -122,7 +124,7 @@ extension NSObject: DictionaryMappingProtocol {
         }
     }
     
-    public func toDictionary() -> AnyDictionary {
+    @objc public func toDictionary() -> AnyDictionary {
         let mirror = Mirror(reflecting: self)
         let dictionary = mirror.toDictionary()
         

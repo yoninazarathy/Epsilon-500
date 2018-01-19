@@ -100,15 +100,15 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
         
         if splashKey == "OoE-splash"{
             navigationController?.navigationBar.barTintColor = UIColor(rgb: ES_watch1)
-            navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName :UIColor.white]
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor :UIColor.white]
             navigationItem.title = "One on Epsilon"
         }else if splashKey == "gmp-splash"{
             navigationController?.navigationBar.barTintColor = UIColor.blue.lighter(by: 0.5)
-            navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName :UIColor.white]
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor :UIColor.white]
             navigationItem.title = "The Global Math Project"
         }else{
             navigationController?.navigationBar.barTintColor = UIColor(rgb: ES_explore1)
-            navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName :UIColor.white]
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor :UIColor.white]
             navigationItem.title = "Epsilon Stream"
         }
     }
@@ -123,7 +123,7 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: btn1)
     }
     
-    func backClicked(){
+    @objc func backClicked(){
         navigationController?.popViewController(animated: true)
     }
     

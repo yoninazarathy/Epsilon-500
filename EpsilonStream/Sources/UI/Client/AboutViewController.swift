@@ -55,7 +55,7 @@ class AboutViewController: UIPageViewController, UIPageViewControllerDataSource 
 
     // MARK: - Actions
     
-    func backClicked(){
+    @objc func backClicked(){
         navigationController?.popViewController(animated: true)
     }
     

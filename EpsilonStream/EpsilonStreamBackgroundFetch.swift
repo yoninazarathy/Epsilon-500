@@ -365,7 +365,9 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         
         operation.recordFetchedBlock = { record in
             readRecordsCount[recordTypeName]! += 1
-            //DLog("\(typeName) - RECORD FETCHED BLOCK - \(readRecordsCount[typeName]!)")
+            if isInAdminMode {
+                DLog("\(recordTypeName) - RECORD FETCHED BLOCK - \(readRecordsCount[recordTypeName]!)")
+            }
             DispatchQueue.main.async {
                 saveRecordBlock(record)
             }
@@ -443,7 +445,9 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func populate(withVideoRecord record: CKRecord) {
         if let videoID = record["youtubeVideoId"] as? String {
             videoNum = videoNum + 1
-            //DLog("Video - RECORD FETCHED BLOCK -- \(videoNum), \(videoID)")
+            if isInAdminMode {
+                DLog("Video - RECORD FETCHED BLOCK -- \(videoNum), \(videoID)")
+            }
             DispatchQueue.main.async{
                 var video: Video! = nil
                 let vids = EpsilonStreamDataModel.videos(ofYoutubeId: videoID)

@@ -75,7 +75,7 @@ class SplashScreenViewController: UIViewController {
             //print(url)
             let player = AVPlayer(url: url)
             let playerLayer = AVPlayerLayer(player: player)
-            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+            playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
             let screenSize = UIScreen.main.bounds
             playerLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
             view.layer.addSublayer(playerLayer)
@@ -103,7 +103,7 @@ class SplashScreenViewController: UIViewController {
         spinner.stopAnimating()
         if let vc = storyboard?.instantiateViewController(withIdentifier: "clientNavViewController"){
             vc.modalTransitionStyle = .crossDissolve
-            self.present(vc,animated: true, completion: { _ in })
+            self.present(vc,animated: true, completion: nil)
             //navigationController?.show(vc, sender: self)
         }
     }
@@ -134,7 +134,7 @@ class SplashScreenViewController: UIViewController {
     
     // MARK: - Notifications
     
-    func playerItemDidPlayToEndTime(notification: NSNotification) {
+    @objc func playerItemDidPlayToEndTime(notification: NSNotification) {
         beginExitProcedure()
     }
 }

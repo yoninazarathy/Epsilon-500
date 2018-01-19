@@ -12,18 +12,6 @@ import CloudKit
 import UIKit
 import Firebase
 
-//https://stackoverflow.com/questions/28445917/what-is-the-most-succinct-way-to-remove-the-first-character-from-a-string-in-swi
-extension String {
-    func chopPrefix(_ count: Int = 1) -> String {
-        return substring(from: index(startIndex, offsetBy: count))
-    }
-    
-    func chopSuffix(_ count: Int = 1) -> String {
-        return substring(to: index(endIndex, offsetBy: -count))
-    }
-}
-
-
 //https://stackoverflow.com/questions/32305891/index-of-a-substring-in-a-string-with-swift
 extension String {
     func index(of string: String, options: CompareOptions = .literal) -> Index? {
@@ -359,23 +347,20 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                         let titles = grp.components(separatedBy: ",")
                         var titleGroup: [String] = []
                         var first = true
-                        for tit in titles{
-                            if tit.first != "$" || tit.last != "$"{
-                                print("Error with title: \(tit) in \(titles)")
-                            }else{
-                                let start = tit.index(tit.startIndex, offsetBy: 1)
-                                let end = tit.index(tit.endIndex, offsetBy: -1)
-                                let range = start..<end
-                                let stripTit = tit.substring(with: range)
-                                if stripTit.contains("$") || stripTit.contains(",") || stripTit.contains("~"){
-                                    print("Error with title: \(stripTit)")
+                        for title in titles {
+                            if title.first != "$" || title.last != "$" {
+                                print("Error with title: \(title) in \(titles)")
+                            } else {
+                                let stripTitle = title.substring(with: 1..<(title.count - 1))
+                                if stripTitle.contains("$") || stripTitle.contains(",") || stripTitle.contains("~") {
+                                    DLog("Error with title: \(stripTitle)")
                                 } else {
-                                    //print(stripTit)
-                                    titleGroup.append(stripTit)
-                                    hashTagOfTitle[stripTit] = hashTag
-                                    fullTitles.append(stripTit)
+                                    //DLog("stripTitle: \(stripTitle)");
+                                    titleGroup.append(stripTitle)
+                                    hashTagOfTitle[stripTitle] = hashTag
+                                    fullTitles.append(stripTitle)
                                     if first && hashTag != "#homePage" && hashTag != "#channels" && hashTag != "#games" && hashTag != "#awesome"{
-                                        titlesForSurprise.append(stripTit)
+                                        titlesForSurprise.append(stripTitle)
                                     }
                                 }
                             }
@@ -582,7 +567,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                         mathObjectLinksPredicate = NSPredicate(value:false)
                         break
                     }else if searchString.hasPrefix(".curatelogin."){
-                        let user = searchString.chopPrefix(13)
+                        let user = searchString.substring(from: 13)
                         print(user)
                         EpsilonStreamLoginManager.getInstance().loginAdminRequest(withUser:user)
                         videosPredicate = NSPredicate(value:false)
@@ -608,7 +593,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                     
                     //QQQQ treat "..<searchString>" as ".all.<searchString>"
                     if searchString.count >= 2 && searchString.substring(with: 0..<2) == ".."{
-                        searchString = ".all.\(searchString.chopPrefix(2))"
+                        searchString = ".all.\(searchString.substring(from: 2))"
                     }
                     let comps = searchString.components(separatedBy: ".")
                     if let predTuple = specialCommands[".\(comps[1])"]{

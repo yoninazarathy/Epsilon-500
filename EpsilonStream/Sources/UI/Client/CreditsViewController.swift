@@ -10,7 +10,7 @@ import UIKit
 
 class CreditsViewController: UIViewController {
 
-    func backClicked(){
+    @objc func backClicked(){
         navigationController?.popViewController(animated: true)
     }
     

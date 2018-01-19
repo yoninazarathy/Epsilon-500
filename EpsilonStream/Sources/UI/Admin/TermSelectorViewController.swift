@@ -20,7 +20,7 @@ class TermSelectorViewController: UIViewController, UITableViewDelegate, UITable
     
     var topLabel = ""
     
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         updateData()
     }
     

@@ -19,7 +19,7 @@ class ClientSettingsViewController: UIViewController {
     
     @IBOutlet var shareAppButton: UIButton!
     
-    func termListAction(_ sender: Any) {
+    @objc func termListAction(_ sender: Any) {
         //QQQQ record curator id
         FIRAnalytics.logEvent(withName: "curatorTermList_action", parameters: [:])
         if let vc = storyboard?.instantiateViewController(withIdentifier: "termListViewController") as? TermListViewController{
@@ -48,7 +48,7 @@ class ClientSettingsViewController: UIViewController {
         //QQQQ doesn't work vw3?.scrollView.setContentOffset(CGPoint.zero, animated: false)
         
         //view.backgroundColor = UIColor(rgb: ES_watch2)
-        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName :UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor :UIColor.white]
 
 
         navigationController?.navigationBar.tintColor = UIColor(rgb: ES_watch1)
@@ -99,12 +99,12 @@ class ClientSettingsViewController: UIViewController {
     }
     
 
-    func settingsBackClicked(){
+    @objc func settingsBackClicked(){
         navigationController?.popViewController(animated: true)
     }
 
     
-    func changeToAdmin(){
+    @objc func changeToAdmin(){
         FIRAnalytics.logEvent(withName: "changeToAdmin_action", parameters: [:])
         //(UIApplication.shared.delegate as! AppDelegate).loadAdmin()
         if let vc = storyboard?.instantiateViewController(withIdentifier: "AdminSettings") as? AdminSettingsViewController{

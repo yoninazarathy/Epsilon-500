@@ -74,7 +74,7 @@ class AdminSettingsViewController: UIViewController {
         
     }
     
-    func textFieldChange(_ sender: UITextField) {
+    @objc func textFieldChange(_ sender: UITextField) {
         if sender.text! == "6955"{
             okAction.isEnabled = true
         }else{

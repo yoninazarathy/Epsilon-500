@@ -39,7 +39,7 @@ class URLSelectorViewController: UIViewController,WKNavigationDelegate {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit Page", style: .plain, target: self, action: #selector(submitTapped))
     }
     
-    func textFieldChange(_ sender: UITextField) {
+    @objc func textFieldChange(_ sender: UITextField) {
         if sender.text! == "1234"{ //QQQQ curator password
             okAction.isEnabled = true
         }else{
@@ -50,7 +50,7 @@ class URLSelectorViewController: UIViewController,WKNavigationDelegate {
     var okAction: UIAlertAction! = nil
 
     
-    func submitTapped(){
+    @objc func submitTapped(){
         let alert = UIAlertController(title: "One on Epsilon Development", message: "Do you want to add this webpage to the DB?", preferredStyle: UIAlertControllerStyle.alert)
         alert.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Enter Safety Code"

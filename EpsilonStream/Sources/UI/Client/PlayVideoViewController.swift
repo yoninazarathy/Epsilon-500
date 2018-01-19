@@ -149,18 +149,18 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
     }
     
     
-    func share(){
+    @objc func share(){
         let shareString = "Check out this video: https://youtu.be/\(videoIdToPlay!), shared using Epsilon Stream, https://www.epsilonstream.com."
         let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
         vc.popoverPresentationController?.sourceView = shareButton.superview
         self.present(vc, animated:  true)
     }
     
-    func menuPop(){
+    @objc func menuPop(){
         videoPlayer.pause()
     }
     
-    func leaveNow(){
+    @objc func leaveNow(){
         //videoPlayer.pause()
         videoPlayer.stop()
         //videoPlayer.removeFromSuperview()

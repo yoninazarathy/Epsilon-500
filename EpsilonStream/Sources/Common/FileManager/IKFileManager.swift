@@ -151,7 +151,7 @@ public class IKFileManager: NSObject {
         
         return result
     }
-
+    
     public func urlsOfDirectory(atURL url: URL, recursive: Bool = true) -> [URL] {
         var result = [URL]()
         let urls = contentsOfDirectory(atURL: url)
@@ -209,12 +209,13 @@ public class IKFileManager: NSObject {
         return dataWithContentsOfFile(atURL: URL(fileURLWithPath: absolutePath(forPath: path!) ) )
     }
     
-    @discardableResult public func createFile(atURL url: URL, contents data: Data?, attributes attr: [String : Any]? = nil,
+    @discardableResult public func createFile(atURL url: URL, contents data: Data?, attributes attr: [FileAttributeKey : Any]? = nil,
                                               overwrites: Bool = true) -> Bool {
+        
         return createFile(atPath: absolutePath(forPath: url.relativePath), contents: data, attributes: attr, overwrites: overwrites)
     }
     
-    @discardableResult public func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil,
+    @discardableResult public func createFile(atPath path: String, contents data: Data?, attributes attr: [FileAttributeKey : Any]? = nil,
                                               overwrites: Bool = true) -> Bool {
         var result = false
         
@@ -408,7 +409,7 @@ public class IKFileManager: NSObject {
         
         return result
     }
-
+    
     public func setAttributes(_ attributes: [FileAttributeKey: Any], ofItemAtURL url: URL) {
         setAttributes(attributes, ofItemAtPath: url.relativePath)
     }
@@ -437,11 +438,11 @@ public class IKFileManager: NSObject {
     public func addSkipBackupAttributeToItem(atPath path: String) -> Bool {
         return addSkipBackupAttributeToItem(atURL:  URL(fileURLWithPath: absolutePath(forPath: path) ) )
     }
-
+    
     // MARK: -  Property list
     
     public func propertyListDictionary(withFileAtURL url: URL) -> [String: Any]? {
-       return propertyListDictionary(withFileAtPath: url.relativePath)
+        return propertyListDictionary(withFileAtPath: url.relativePath)
     }
     
     public func propertyListDictionary(withFileAtPath path: String) -> [String: Any]? {
@@ -474,3 +475,4 @@ public class IKFileManager: NSObject {
     }
     
 }
+

@@ -10,7 +10,7 @@ public struct RGBAColor {
         var array: [CGFloat] = [0, 0, 0, 1]
         
         
-        let strlen = hexString.characters.count
+        let strlen = hexString.count
         var start = hexString.startIndex
         let lastIndex = strlen > 0 ? hexString.index(before: hexString.endIndex) : hexString.startIndex
         let count = min((strlen + 1) / 2, array.count)

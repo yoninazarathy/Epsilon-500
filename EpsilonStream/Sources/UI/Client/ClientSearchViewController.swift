@@ -27,19 +27,22 @@ extension Array {
     var shuffled: Array {
         var array = self
         indices.dropLast().forEach {
-            guard case let index = Int(arc4random_uniform(UInt32(count - $0))) + $0, index != $0 else { return }
-            swap(&array[$0], &array[index])
+            guard case let index = Int(arc4random_uniform(UInt32(count - $0))) + $0, index != $0 else {
+                return
+            }
+            array.swapAt($0, index)
         }
         return array
     }
+    
     var chooseOne: Element {
         return self[Int(arc4random_uniform(UInt32(count)))]
     }
-    
 }
+
 extension String {
     var jumble: String {
-        return String(Array(characters).shuffled)
+        return String(Array(self).shuffled)
     }
 }
 

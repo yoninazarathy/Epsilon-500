@@ -38,11 +38,13 @@ class VideoItemTableViewCell: UITableViewCell {
         //TITLE
         videoTitle.text = result.title
         
+        // IK: Why??? UILabel can cut text automatically
         if let len = videoTitle.text?.count {
             if len > 45 { //QQQQ lazy let?
-                videoTitle.text = videoTitle.text?.chopSuffix(len-45).appending(" ...")
+                videoTitle.text = videoTitle.text?.substring(to: 45).appending(" ...")
             }
         }
+        //
         
         //CHANNEL
         videoChannel.text = result.channel

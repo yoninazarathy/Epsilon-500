@@ -45,8 +45,8 @@ extension Dictionary where Key: Comparable, Value: Hashable {
         let sortedKeys = self.keys.sorted()
         for (key) in sortedKeys {
             let value = self[key]!
-            result = Int.addWithOverflow(Int.multiplyWithOverflow(prime, result).0, key.hashValue).0
-            result = Int.addWithOverflow(Int.multiplyWithOverflow(prime, result).0, value.hashValue).0
+            result = key.hashValue.addingReportingOverflow (prime.multipliedReportingOverflow(by: result).0 ).0
+            result = value.hashValue.addingReportingOverflow(prime.multipliedReportingOverflow(by: result).0 ).0
         }
         
         return result

@@ -122,23 +122,23 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardDidChangeFrame,    object: nil)
     }
     
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
 
     }
     
-    func keyboardDidShow(notification: Notification) {
+    @objc func keyboardDidShow(notification: Notification) {
         
     }
     
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         keyboardFrame = .zero
     }
     
-    func keyboardDidHide(notification: Notification) {
+    @objc func keyboardDidHide(notification: Notification) {
         
     }
     
-    func keyboardDidChangeFrame(notification: Notification) {
+    @objc func keyboardDidChangeFrame(notification: Notification) {
         if let frame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardFrame = frame
             //DLog("keyboardFrame: %@", NSStringFromCGRect(keyboardFrame))
