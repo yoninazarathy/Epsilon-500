@@ -27,12 +27,25 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
     var loadSafetyCover: UIView! = nil
     var playSafetyCover: UIView! = nil
 
+    var playSafetyCoverSpare: CGFloat! = nil
+    
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
     override func loadView() {
         super.loadView()
+        
+        //QQQQ This is an ugly hack - in iOS 11 there are controls at the top of the video player
+        //                          so don't want the panel to cover them.
+        if #available(iOS 11.0, *) {
+            playSafetyCoverSpare = 80
+        }else{
+            playSafetyCoverSpare = 0
+        }
+
+        
         videoPlayer = YouTubePlayerView(frame:view.frame)
         // See https://developers.google.com/youtube/player_parameters
         videoPlayer.playerVars = [
@@ -54,9 +67,8 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
         
         //QQQQ this should perhaps not even be in a navigation controller
         navigationController?.navigationBar.isHidden = true
-        
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         //This is to allow sound playback under silent
         do {
@@ -102,7 +114,7 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
         imageCover.frame = windowFrame
         window.addSubview(imageCover)
         
-        playSafetyCover = UIView(frame: CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height-52))//QQQQ constant - anyway this is a workaround
+        playSafetyCover = UIView(frame: CGRect(x: window.frame.origin.x, y: window.frame.origin.y+playSafetyCoverSpare, width: window.frame.width, height: window.frame.height-52-playSafetyCoverSpare))//QQQQ constant - anyway this is a workaround
         playSafetyCover.backgroundColor = UIColor.clear//doesn't matter
 //        playSafetyCover.alpha = 0.01 //QQQQ it needs to recieve events and doesn't with 0.0
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(menuPop))
@@ -191,7 +203,7 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
         videoPlayer.frame = CGRect(x: 0, y: 0, width: window.frame.height, height: window.frame.width)
         imageCover.frame = CGRect(x: 0, y: 0, width: window.frame.height, height: window.frame.width)
         loadSafetyCover.frame = CGRect(x: 0, y: 0, width: window.frame.height, height: window.frame.width)
-        playSafetyCover.frame = CGRect(x: 0, y: 0, width: window.frame.height, height: window.frame.width-52)
+        playSafetyCover.frame = CGRect(x: 0, y: playSafetyCoverSpare, width: window.frame.height, height: window.frame.width-52-playSafetyCoverSpare)
 
         leaveButton.removeFromSuperview()
         shareButton.removeFromSuperview()
