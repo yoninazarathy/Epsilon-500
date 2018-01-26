@@ -15,11 +15,13 @@ class UserMessageManager{
     //returns nil if there isn't a message to show
     //returns a string with the message to show if needed.
     class func showMessage() -> String?{
-        if searchCount < 30{
-            return "Search above"
-        }else{
-            return nil
-        }
+        return nil
+//
+//        if searchCount < 30{
+//            return "Search above"
+//        }else{
+//            return nil
+//        }
     }
     
     class func userDidKeyInAction(){
