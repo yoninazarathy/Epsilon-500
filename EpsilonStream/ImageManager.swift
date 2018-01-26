@@ -138,7 +138,12 @@ class ImageManager: ManagedObjectContextUserProtocol {
             for featuredURL in featuredURLs {
                 //QQQQ forcefully unwrapping imageKey (why is it optional???)
                 let imageKey = featuredURL.imageKey!
-                inCloudHash[imageKey] = true //all features are currently from cloud
+                inCloudHash[imageKey] = false //images from cloud are deprecated
+                
+                //note that "znone" is the code used in cloudkit DB for not having a URL
+                if featuredURL.imageURL != "znone"{
+                    urlHash[imageKey] = featuredURL.imageURL
+                }
                 
                 //QQQQ this is a bit of copy from above (factor it)
                 if !haveFile(forImageKey: imageKey) { //if no file

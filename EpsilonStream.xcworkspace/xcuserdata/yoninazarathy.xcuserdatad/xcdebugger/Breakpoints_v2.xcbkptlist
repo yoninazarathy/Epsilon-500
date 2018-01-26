@@ -218,12 +218,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.255639"
+            timestampString = "538634248.426107"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "311"
-            endingLineNumber = "311"
-            landmarkName = "loadImage(forKey:fromUrl:)"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
+            landmarkName = "storeImage(fromRecord:withKey:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -792,11 +792,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256296"
+            timestampString = "538634248.426829"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
             landmarkName = "refreshImageManager()"
             landmarkType = "7">
          </BreakpointContent>
@@ -808,11 +808,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256335"
+            timestampString = "538634248.427094"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "refreshImageManager()"
             landmarkType = "7">
          </BreakpointContent>
@@ -824,12 +824,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256374"
+            timestampString = "538634248.427316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "248"
-            endingLineNumber = "248"
-            landmarkName = "makeImageUrgent(withKey:)"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
+            landmarkName = "copyThumbImagesFromBundle()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -840,12 +840,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256411"
+            timestampString = "538634248.427529"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "317"
-            endingLineNumber = "317"
-            landmarkName = "loadImage(forKey:fromUrl:)"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
+            landmarkName = "updateHashesFromFiles()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -872,12 +872,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256515"
+            timestampString = "538634248.427754"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
-            landmarkName = "makeImageUrgent(withKey:)"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
+            landmarkName = "loadImage(forKey:fromUrl:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -888,12 +888,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256552"
+            timestampString = "538634248.427961"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
-            landmarkName = "makeImageUrgent(withKey:)"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "loadImage(forKey:fromUrl:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -904,12 +904,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.25659"
+            timestampString = "538634248.428161"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "371"
-            endingLineNumber = "371"
-            landmarkName = "store(_:withKey:)"
+            startingLineNumber = "376"
+            endingLineNumber = "376"
+            landmarkName = "readImageFromCloud(withKey:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -920,28 +920,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256626"
+            timestampString = "538634248.4283659"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "ImageManager"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256664"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "543"
-            endingLineNumber = "543"
-            landmarkName = "readAllImagesFromCloud()"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "loadImage(forKey:fromUrl:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -952,13 +936,25 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EpsilonStream/ImageManager.swift"
-            timestampString = "531487902.256701"
+            timestampString = "538634248.428569"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "544"
-            endingLineNumber = "544"
-            landmarkName = "readAllImagesFromCloud()"
-            landmarkType = "7">
+            startingLineNumber = "503"
+            endingLineNumber = "503">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EpsilonStream/ImageManager.swift"
+            timestampString = "538634248.428749"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "503"
+            endingLineNumber = "503">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
