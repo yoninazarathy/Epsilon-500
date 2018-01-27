@@ -72,6 +72,16 @@ protocol SearcherUI {
 }
 
 
+class SurpriseTextField: UITextField {
+    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        let gap = CGFloat(3)
+        let size = CGSize(width: bounds.height - 2 * gap)
+        let origin = CGPoint(x: bounds.width - size.width - gap, y: gap)
+        return CGRect(origin: origin, size: size)
+    }
+}
+
+
 class ClientSearchViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
 SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI, ImageLoadedDelegate{
     
@@ -197,7 +207,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     let autoCompleteTableDelegate = AutoCompleteTableDelegate()
     
-    @IBOutlet weak var searchTextField: UITextField!
+    @IBOutlet weak var searchTextField: SurpriseTextField!
     @IBOutlet weak var ageSegmentedControl: UISegmentedControl!
     @IBOutlet weak var resultsTable: UITableView!
     @IBOutlet weak var autoCompleteTable: UITableView!
