@@ -54,7 +54,6 @@
 		015720821FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015720701FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift */; };
 		015720831FCF294A0043A828 /* UIImage_IKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015720711FCF294A0043A828 /* UIImage_IKExtension.swift */; };
 		01746A3A1FA0F1A7003A3BC2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01746A371FA0F1A7003A3BC2 /* Common.swift */; };
-		01746A3D1FA0F20E003A3BC2 /* PersistentStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01746A3C1FA0F20E003A3BC2 /* PersistentStorageManager.swift */; };
 		017617BB1FFBE79D002621E4 /* PreloadedThumbnailImages in Resources */ = {isa = PBXBuildFile; fileRef = 017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */; };
 		017617BD1FFBE7EC002621E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 017617BC1FFBE7EC002621E4 /* Assets.xcassets */; };
 		018B97EC1FD8652E003EBDCB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018B97EB1FD8652D003EBDCB /* AppDelegate.swift */; };
@@ -70,22 +69,23 @@
 		018BAA491FA21FA300F8583A /* VersionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA3A1FA21FA300F8583A /* VersionInfo.swift */; };
 		018BAA4B1FA21FA300F8583A /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA3C1FA21FA300F8583A /* Video.swift */; };
 		018BAA4E1FA2251100F8583A /* BaseCoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA4D1FA2251100F8583A /* BaseCoreDataModel.swift */; };
-		200A62AF1F0B079E0093B50F /* EpsilonStreamLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */; };
-		200FDB491E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */; };
-		2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */; };
-		202115321FADAEFF00C18E70 /* UserMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202115311FADAEFF00C18E70 /* UserMessageManager.swift */; };
+		01BBEE1E20360ADA002DA8D6 /* EpsilonStreamGlobals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE1D20360ADA002DA8D6 /* EpsilonStreamGlobals.swift */; };
+		01BBEE2020360AF7002DA8D6 /* EpsilonStreamAdminDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE1F20360AF6002DA8D6 /* EpsilonStreamAdminDataModel.swift */; };
+		01BBEE2220360B18002DA8D6 /* EpsilonStreamDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2120360B18002DA8D6 /* EpsilonStreamDataModel.swift */; };
+		01BBEE2420360C0C002DA8D6 /* SearchResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2320360C0C002DA8D6 /* SearchResultItem.swift */; };
+		01BBEE2620360CF7002DA8D6 /* EpsilonStreamSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2520360CF7002DA8D6 /* EpsilonStreamSearch.swift */; };
+		01BBEE3220360EF5002DA8D6 /* YoutubeAPICommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2820360EF5002DA8D6 /* YoutubeAPICommunicator.swift */; };
+		01BBEE3320360EF5002DA8D6 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2920360EF5002DA8D6 /* ImageManager.swift */; };
+		01BBEE3420360EF5002DA8D6 /* UserMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2A20360EF5002DA8D6 /* UserMessageManager.swift */; };
+		01BBEE3520360EF5002DA8D6 /* BrowseStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2B20360EF5002DA8D6 /* BrowseStackManager.swift */; };
+		01BBEE3620360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2C20360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift */; };
+		01BBEE3720360EF5002DA8D6 /* EpsilonStreamLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2D20360EF5002DA8D6 /* EpsilonStreamLoginManager.swift */; };
+		01BBEE3820360EF5002DA8D6 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2E20360EF5002DA8D6 /* UserDataManager.swift */; };
+		01BBEE3920360EF5002DA8D6 /* WebViewPrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2F20360EF5002DA8D6 /* WebViewPrefetcher.swift */; };
+		01BBEE3A20360EF5002DA8D6 /* AutoCompleteTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE3020360EF5002DA8D6 /* AutoCompleteTableDelegate.swift */; };
+		01BBEE3B20360EF5002DA8D6 /* PersistentStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE3120360EF5002DA8D6 /* PersistentStorageManager.swift */; };
 		2030B7EC1E10BC1B001E2237 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2030B7EA1E10BC1B001E2237 /* LaunchScreen.storyboard */; };
-		203B24821F3EB9BD00A24B92 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B24811F3EB9BD00A24B92 /* UserDataManager.swift */; };
-		203B866E1E14B66A00BAF08C /* EpsilonStreamSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */; };
-		203B86701E14B94000BAF08C /* SearchResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B866F1E14B94000BAF08C /* SearchResultItem.swift */; };
-		204380FB1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204380FA1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift */; };
 		206992641E3E01C600EBC614 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 206992631E3E01C600EBC614 /* GoogleService-Info.plist */; };
-		20704A691E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */; };
-		207432161F4E9B8E0095CEBB /* BrowseStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207432151F4E9B8E0095CEBB /* BrowseStackManager.swift */; };
-		2080C25B1E14769B00723F3B /* EpsilonStreamGlobals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */; };
-		20B6952B1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6952A1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift */; };
-		20B771111E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */; };
-		20C25C511E18C34A00CE046E /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C25C501E18C34A00CE046E /* ImageManager.swift */; };
 		20EE413B1E10E502002F78F9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20EE413A1E10E502002F78F9 /* CloudKit.framework */; };
 		8B3D27D8BA516FFBA790A595 /* Pods_EpsilonStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8365442A59822C0F1455CBAB /* Pods_EpsilonStream.framework */; };
 /* End PBXBuildFile section */
@@ -138,7 +138,6 @@
 		015720701FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSJSONSerialization_IKExtension.swift; sourceTree = "<group>"; };
 		015720711FCF294A0043A828 /* UIImage_IKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage_IKExtension.swift; sourceTree = "<group>"; };
 		01746A371FA0F1A7003A3BC2 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
-		01746A3C1FA0F20E003A3BC2 /* PersistentStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageManager.swift; sourceTree = "<group>"; };
 		017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PreloadedThumbnailImages; sourceTree = "<group>"; };
 		017617BC1FFBE7EC002621E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		018B97EB1FD8652D003EBDCB /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -154,24 +153,25 @@
 		018BAA3A1FA21FA300F8583A /* VersionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionInfo.swift; sourceTree = "<group>"; };
 		018BAA3C1FA21FA300F8583A /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		018BAA4D1FA2251100F8583A /* BaseCoreDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoreDataModel.swift; sourceTree = "<group>"; };
-		200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamLoginManager.swift; sourceTree = "<group>"; };
-		200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamAdminDataModel.swift; sourceTree = "<group>"; };
-		2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPrefetcher.swift; sourceTree = "<group>"; };
-		202115311FADAEFF00C18E70 /* UserMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageManager.swift; sourceTree = "<group>"; };
+		01BBEE1D20360ADA002DA8D6 /* EpsilonStreamGlobals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamGlobals.swift; sourceTree = "<group>"; };
+		01BBEE1F20360AF6002DA8D6 /* EpsilonStreamAdminDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamAdminDataModel.swift; sourceTree = "<group>"; };
+		01BBEE2120360B18002DA8D6 /* EpsilonStreamDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamDataModel.swift; sourceTree = "<group>"; };
+		01BBEE2320360C0C002DA8D6 /* SearchResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultItem.swift; sourceTree = "<group>"; };
+		01BBEE2520360CF7002DA8D6 /* EpsilonStreamSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamSearch.swift; sourceTree = "<group>"; };
+		01BBEE2820360EF5002DA8D6 /* YoutubeAPICommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeAPICommunicator.swift; sourceTree = "<group>"; };
+		01BBEE2920360EF5002DA8D6 /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		01BBEE2A20360EF5002DA8D6 /* UserMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMessageManager.swift; sourceTree = "<group>"; };
+		01BBEE2B20360EF5002DA8D6 /* BrowseStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseStackManager.swift; sourceTree = "<group>"; };
+		01BBEE2C20360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamBackgroundFetch.swift; sourceTree = "<group>"; };
+		01BBEE2D20360EF5002DA8D6 /* EpsilonStreamLoginManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamLoginManager.swift; sourceTree = "<group>"; };
+		01BBEE2E20360EF5002DA8D6 /* UserDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
+		01BBEE2F20360EF5002DA8D6 /* WebViewPrefetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPrefetcher.swift; sourceTree = "<group>"; };
+		01BBEE3020360EF5002DA8D6 /* AutoCompleteTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteTableDelegate.swift; sourceTree = "<group>"; };
+		01BBEE3120360EF5002DA8D6 /* PersistentStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentStorageManager.swift; sourceTree = "<group>"; };
 		2030B7DC1E10BC1B001E2237 /* EpsilonStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpsilonStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2030B7EB1E10BC1B001E2237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2030B7ED1E10BC1B001E2237 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		203B24811F3EB9BD00A24B92 /* UserDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
-		203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamSearch.swift; sourceTree = "<group>"; };
-		203B866F1E14B94000BAF08C /* SearchResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultItem.swift; sourceTree = "<group>"; };
-		204380FA1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamDataModel.swift; sourceTree = "<group>"; };
 		206992631E3E01C600EBC614 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
-		20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeAPICommunicator.swift; sourceTree = "<group>"; };
-		207432151F4E9B8E0095CEBB /* BrowseStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseStackManager.swift; sourceTree = "<group>"; };
-		2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamGlobals.swift; sourceTree = "<group>"; };
-		20B6952A1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteTableDelegate.swift; sourceTree = "<group>"; };
-		20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamBackgroundFetch.swift; sourceTree = "<group>"; };
-		20C25C501E18C34A00CE046E /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		20EE41381E10E4FD002F78F9 /* EpsilonStream.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EpsilonStream.entitlements; sourceTree = "<group>"; };
 		20EE413A1E10E502002F78F9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		5A1D6AF38DFD4957AEA58554 /* Pods-EpsilonStream.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpsilonStream.release.xcconfig"; path = "Pods/Target Support Files/Pods-EpsilonStream/Pods-EpsilonStream.release.xcconfig"; sourceTree = "<group>"; };
@@ -298,6 +298,7 @@
 			children = (
 				018B97EA1FD8652D003EBDCB /* Application */,
 				01746A361FA0F1A7003A3BC2 /* Common */,
+				01BBEE2720360EF5002DA8D6 /* Components */,
 				018BAA2D1FA21FA300F8583A /* Model */,
 				0152C9DE1FDD40F800ADBFA8 /* UI */,
 			);
@@ -351,6 +352,11 @@
 		018BAA2D1FA21FA300F8583A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				01BBEE1F20360AF6002DA8D6 /* EpsilonStreamAdminDataModel.swift */,
+				01BBEE2120360B18002DA8D6 /* EpsilonStreamDataModel.swift */,
+				01BBEE1D20360ADA002DA8D6 /* EpsilonStreamGlobals.swift */,
+				01BBEE2520360CF7002DA8D6 /* EpsilonStreamSearch.swift */,
+				01BBEE2320360C0C002DA8D6 /* SearchResultItem.swift */,
 				018BAA2E1FA21FA300F8583A /* CoreData */,
 			);
 			path = Model;
@@ -370,6 +376,23 @@
 				018BAA3C1FA21FA300F8583A /* Video.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		01BBEE2720360EF5002DA8D6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				01BBEE2820360EF5002DA8D6 /* YoutubeAPICommunicator.swift */,
+				01BBEE2920360EF5002DA8D6 /* ImageManager.swift */,
+				01BBEE2A20360EF5002DA8D6 /* UserMessageManager.swift */,
+				01BBEE2B20360EF5002DA8D6 /* BrowseStackManager.swift */,
+				01BBEE2C20360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift */,
+				01BBEE2D20360EF5002DA8D6 /* EpsilonStreamLoginManager.swift */,
+				01BBEE2E20360EF5002DA8D6 /* UserDataManager.swift */,
+				01BBEE2F20360EF5002DA8D6 /* WebViewPrefetcher.swift */,
+				01BBEE3020360EF5002DA8D6 /* AutoCompleteTableDelegate.swift */,
+				01BBEE3120360EF5002DA8D6 /* PersistentStorageManager.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		2030B7D31E10BC1B001E2237 = {
@@ -396,31 +419,8 @@
 			children = (
 				01746A351FA0F1A7003A3BC2 /* Sources */,
 				01372CED1F97C7620072F3E3 /* Resources */,
-				203B866F1E14B94000BAF08C /* SearchResultItem.swift */,
-				203B866D1E14B66A00BAF08C /* EpsilonStreamSearch.swift */,
-				20B6952A1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift */,
-				2019AB221E41592100D4BC22 /* WebViewPrefetcher.swift */,
-				2080C25A1E14769B00723F3B /* EpsilonStreamGlobals.swift */,
-				203B24831F3EB9DB00A24B92 /* DataManagers */,
 			);
 			path = EpsilonStream;
-			sourceTree = "<group>";
-		};
-		203B24831F3EB9DB00A24B92 /* DataManagers */ = {
-			isa = PBXGroup;
-			children = (
-				207432151F4E9B8E0095CEBB /* BrowseStackManager.swift */,
-				204380FA1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift */,
-				203B24811F3EB9BD00A24B92 /* UserDataManager.swift */,
-				200FDB481E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift */,
-				20704A681E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift */,
-				20C25C501E18C34A00CE046E /* ImageManager.swift */,
-				20B771101E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift */,
-				200A62AE1F0B079E0093B50F /* EpsilonStreamLoginManager.swift */,
-				01746A3C1FA0F20E003A3BC2 /* PersistentStorageManager.swift */,
-				202115311FADAEFF00C18E70 /* UserMessageManager.swift */,
-			);
-			name = DataManagers;
 			sourceTree = "<group>";
 		};
 		2080C2561E14743A00723F3B /* SupportingFiles */ = {
@@ -596,12 +596,11 @@
 				018BAA431FA21FA300F8583A /* ImageThumbnail.swift in Sources */,
 				018BAA451FA21FA300F8583A /* MathObject.swift in Sources */,
 				018BAA401FA21FA300F8583A /* EpsilonStreamDataModel.xcdatamodel in Sources */,
-				20B6952B1E16530A0071C9A8 /* AutoCompleteTableDelegate.swift in Sources */,
 				0157207E1FCF294A0043A828 /* UIVIew_IKExtensions.swift in Sources */,
 				0152CA0C1FDD40F800ADBFA8 /* PlayVideoViewController.swift in Sources */,
+				01BBEE3920360EF5002DA8D6 /* WebViewPrefetcher.swift in Sources */,
 				018BAA4E1FA2251100F8583A /* BaseCoreDataModel.swift in Sources */,
 				0152CA031FDD40F800ADBFA8 /* ClientSettingsViewController.swift in Sources */,
-				207432161F4E9B8E0095CEBB /* BrowseStackManager.swift in Sources */,
 				0157207F1FCF294A0043A828 /* UILabel_IKExtension.swift in Sources */,
 				0152C9FE1FDD40F800ADBFA8 /* AdminSettingsViewController.swift in Sources */,
 				0152CA071FDD40F800ADBFA8 /* VideoItemTableViewCell.swift in Sources */,
@@ -609,58 +608,59 @@
 				0157207D1FCF294A0043A828 /* UIColor_IKExtension.swift in Sources */,
 				015720781FCF294A0043A828 /* CachedURLResponse_IKExtension.swift in Sources */,
 				0157207C1FCF294A0043A828 /* UIViewController_IKExtension.swift in Sources */,
-				2080C25B1E14769B00723F3B /* EpsilonStreamGlobals.swift in Sources */,
 				0152CA021FDD40F800ADBFA8 /* TermListViewController.swift in Sources */,
 				018BAA2C1FA21F2D00F8583A /* IKFileManager.swift in Sources */,
+				01BBEE2220360B18002DA8D6 /* EpsilonStreamDataModel.swift in Sources */,
 				0152CA0B1FDD40F800ADBFA8 /* SplashScreenViewController.swift in Sources */,
 				018BAA491FA21FA300F8583A /* VersionInfo.swift in Sources */,
 				0152CA0E1FDD40F800ADBFA8 /* SpecialItemTableViewCell.swift in Sources */,
-				20C25C511E18C34A00CE046E /* ImageManager.swift in Sources */,
 				015720771FCF294A0043A828 /* CGPoint_IKExtension.swift in Sources */,
 				0152CA0F1FDD40F800ADBFA8 /* AboutViewController.swift in Sources */,
 				0152CA001FDD40F800ADBFA8 /* CurateArticleViewController.swift in Sources */,
 				018BAA471FA21FA300F8583A /* MathObjectLink.swift in Sources */,
 				0152CA011FDD40F800ADBFA8 /* ViewReportViewController.swift in Sources */,
-				203B866E1E14B66A00BAF08C /* EpsilonStreamSearch.swift in Sources */,
+				01BBEE2620360CF7002DA8D6 /* EpsilonStreamSearch.swift in Sources */,
 				0152CA091FDD40F800ADBFA8 /* ExternalPageViewer.swift in Sources */,
 				018BAA4B1FA21FA300F8583A /* Video.swift in Sources */,
-				20B771111E1719A10062D09F /* EpsilonStreamBackgroundFetch.swift in Sources */,
 				015720821FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift in Sources */,
-				200FDB491E36261D0015ADA1 /* EpsilonStreamAdminDataModel.swift in Sources */,
 				015720801FCF294A0043A828 /* Mirror_IKExtension.swift in Sources */,
 				0152CA0D1FDD40F800ADBFA8 /* MathObjectLinkItemTableViewCell.swift in Sources */,
 				018B97EC1FD8652E003EBDCB /* AppDelegate.swift in Sources */,
 				015720831FCF294A0043A828 /* UIImage_IKExtension.swift in Sources */,
+				01BBEE3620360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift in Sources */,
 				0157207B1FCF294A0043A828 /* CGSize_IKExtension.swift in Sources */,
-				203B24821F3EB9BD00A24B92 /* UserDataManager.swift in Sources */,
-				20704A691E1BAEEE000C6B79 /* YoutubeAPICommunicator.swift in Sources */,
 				0152CA111FDD40F800ADBFA8 /* BaseViewController.swift in Sources */,
 				0152CA121FDD40F800ADBFA8 /* BaseView.swift in Sources */,
-				2019AB231E41592100D4BC22 /* WebViewPrefetcher.swift in Sources */,
-				204380FB1E11E1E800ABBAD6 /* EpsilonStreamDataModel.swift in Sources */,
+				01BBEE2020360AF7002DA8D6 /* EpsilonStreamAdminDataModel.swift in Sources */,
+				01BBEE3820360EF5002DA8D6 /* UserDataManager.swift in Sources */,
 				015720811FCF294A0043A828 /* DispatchQueue_IKExtension.swift in Sources */,
+				01BBEE2420360C0C002DA8D6 /* SearchResultItem.swift in Sources */,
+				01BBEE3220360EF5002DA8D6 /* YoutubeAPICommunicator.swift in Sources */,
+				01BBEE3520360EF5002DA8D6 /* BrowseStackManager.swift in Sources */,
 				01746A3A1FA0F1A7003A3BC2 /* Common.swift in Sources */,
 				0152C9FB1FDD40F800ADBFA8 /* TermSelectorViewController.swift in Sources */,
 				015720751FCF294A0043A828 /* Data_IKExtension.swift in Sources */,
 				0152C9FC1FDD40F800ADBFA8 /* URLSelectorViewController.swift in Sources */,
 				0152CA041FDD40F800ADBFA8 /* ClientSearchViewController.swift in Sources */,
-				202115321FADAEFF00C18E70 /* UserMessageManager.swift in Sources */,
 				015720721FCF294A0043A828 /* String_IKExtension.swift in Sources */,
 				015720791FCF294A0043A828 /* UIButton_IKExtension.swift in Sources */,
-				200A62AF1F0B079E0093B50F /* EpsilonStreamLoginManager.swift in Sources */,
 				0152CA101FDD40F800ADBFA8 /* CreditsViewController.swift in Sources */,
+				01BBEE3420360EF5002DA8D6 /* UserMessageManager.swift in Sources */,
+				01BBEE3720360EF5002DA8D6 /* EpsilonStreamLoginManager.swift in Sources */,
 				015720761FCF294A0043A828 /* NSObject_IKExtension.swift in Sources */,
+				01BBEE3A20360EF5002DA8D6 /* AutoCompleteTableDelegate.swift in Sources */,
 				018BAA411FA21FA300F8583A /* FeaturedURL.swift in Sources */,
 				0152CA0A1FDD40F800ADBFA8 /* UserMessageTableViewCell.swift in Sources */,
-				203B86701E14B94000BAF08C /* SearchResultItem.swift in Sources */,
 				0152CA081FDD40F800ADBFA8 /* WebViewingViewController.swift in Sources */,
 				018BAA3E1FA21FA300F8583A /* Channel.swift in Sources */,
 				0152C9FD1FDD40F800ADBFA8 /* CurateItemViewController.swift in Sources */,
 				0152C9FF1FDD40F800ADBFA8 /* EditMathObjectViewController.swift in Sources */,
+				01BBEE3B20360EF5002DA8D6 /* PersistentStorageManager.swift in Sources */,
+				01BBEE1E20360ADA002DA8D6 /* EpsilonStreamGlobals.swift in Sources */,
 				015720741FCF294A0043A828 /* CGRect_IKExtension.swift in Sources */,
+				01BBEE3320360EF5002DA8D6 /* ImageManager.swift in Sources */,
 				0157207A1FCF294A0043A828 /* UIAlertController_IKExtension.swift in Sources */,
 				0152CA061FDD40F800ADBFA8 /* ArticleItemTableViewCell.swift in Sources */,
-				01746A3D1FA0F20E003A3BC2 /* PersistentStorageManager.swift in Sources */,
 				015720731FCF294A0043A828 /* Dictionary_IKExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
