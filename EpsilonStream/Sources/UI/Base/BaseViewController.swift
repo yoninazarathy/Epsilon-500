@@ -6,7 +6,7 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
     
     var animationDuration: TimeInterval = 0.2
     var isViewDisplayed: Bool = false
-    var keyboardFrame: CGRect = CGRect.zero
+    var keyboardFrame: CGRect = .zero
     var isRotating = false
     
     var shouldRefresh: Bool {
@@ -21,7 +21,7 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
     }
     
     var keyboardIsDisplayed: Bool {
-        return keyboardFrame.equalTo(CGRect.zero) == false
+        return (keyboardFrame.size.height > 0 && view.bounds.intersects(keyboardFrame) );
     }
     
 //    var navigationBarIsDisplayed: Bool {
@@ -105,13 +105,23 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
 //    }
     
     // MARK: - Keyboard
+    func keyboardFrameUpdated() {
+        refresh()
+    }
+    
     func registerKeyboardNotifications () {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),  name: .UIKeyboardWillShow,  object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification:)),   name: .UIKeyboardDidShow,   object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),  name: .UIKeyboardWillHide,  object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(notification:)),   name: .UIKeyboardDidHide,   object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
+                                               name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification:)),
+                                               name: .UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
+                                               name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(notification:)),
+                                               name: .UIKeyboardDidHide,   object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(notification:)),
+                                               name: .UIKeyboardWillChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame(notification:)),
-                                               name: .UIKeyboardDidChangeFrame,    object: nil)
+                                               name: .UIKeyboardDidChangeFrame, object: nil)
     }
     
     func unregisterKeyboardNotifications() {
@@ -119,6 +129,7 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardDidShow,           object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide,          object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardDidHide,           object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillChangeFrame,    object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardDidChangeFrame,    object: nil)
     }
     
@@ -131,17 +142,27 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
     }
     
     @objc func keyboardWillHide(notification: Notification) {
-        keyboardFrame = .zero
+        
     }
     
     @objc func keyboardDidHide(notification: Notification) {
         
     }
     
-    @objc func keyboardDidChangeFrame(notification: Notification) {
-        if let frame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardFrame = frame
-            //DLog("keyboardFrame: %@", NSStringFromCGRect(keyboardFrame))
+    @objc func keyboardWillChangeFrame(notification: Notification) {
+        if var frame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if frame.origin.y >= self.view.bounds.size.height { // Keyboard dissapeared
+                frame = .zero
+            }
+            if keyboardFrame.equalTo(frame) == false {
+                keyboardFrame = frame
+                //DLog("keyboardFrame: %@", NSStringFromCGRect(keyboardFrame))
+                keyboardFrameUpdated()
+            }
         }
+    }
+    
+    @objc func keyboardDidChangeFrame(notification: Notification) {
+        
     }
 }

@@ -191,12 +191,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="22" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QGS-2M-yFu">
-                                <rect key="frame" x="0.0" y="139" width="768" height="528"/>
+                                <rect key="frame" x="0.0" y="139" width="768" height="885"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.91786667870000005" green="0.37844412779999997" blue="0.161048989" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="528" id="OUs-lQ-ulX"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="autoCompleteTableCell2" textLabel="yqc-E9-mb0" rowHeight="50" style="IBUITableViewCellStyleDefault" id="XVj-yf-gac">
                                         <rect key="frame" x="0.0" y="28" width="768" height="50"/>
@@ -710,6 +707,7 @@
                             <constraint firstAttribute="trailing" secondItem="QGS-2M-yFu" secondAttribute="trailing" id="oIW-Ea-BB6"/>
                             <constraint firstAttribute="trailing" secondItem="dTa-dx-kMW" secondAttribute="trailing" id="qxy-zF-IXr"/>
                             <constraint firstItem="QGS-2M-yFu" firstAttribute="leading" secondItem="B2r-aX-GMv" secondAttribute="leading" id="tmY-xV-yZY"/>
+                            <constraint firstAttribute="bottom" secondItem="QGS-2M-yFu" secondAttribute="bottom" id="xOb-ex-zra"/>
                             <constraint firstItem="QGS-2M-yFu" firstAttribute="top" secondItem="iUj-E0-gjR" secondAttribute="bottom" id="yNv-Rh-sju"/>
                             <constraint firstItem="dTa-dx-kMW" firstAttribute="leading" secondItem="B2r-aX-GMv" secondAttribute="leading" id="zMJ-Yu-fBl"/>
                         </constraints>
@@ -717,7 +715,6 @@
                     <navigationItem key="navigationItem" id="HQ9-mP-Qgj"/>
                     <connections>
                         <outlet property="autoCompleteTable" destination="QGS-2M-yFu" id="oLG-Oq-cm7"/>
-                        <outlet property="autoCompleteTableViewHeightConstraint" destination="OUs-lQ-ulX" id="bFV-vc-eOP"/>
                         <outlet property="backButton" destination="zs9-tB-nF5" id="hKP-v4-EnF"/>
                         <outlet property="forwardButton" destination="EMP-TV-ezD" id="amk-r3-gZ8"/>
                         <outlet property="homeButton" destination="5ky-1a-wB1" id="c5A-fG-X8w"/>

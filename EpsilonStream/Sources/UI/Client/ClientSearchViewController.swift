@@ -87,7 +87,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     var coverImageView: UIImageView! = nil
     
-    @IBOutlet weak var autoCompleteTableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainTopStack: UIStackView!
     @IBOutlet weak var mainSegmentView: UIView!
     @IBOutlet weak var backButton: UIButton!
@@ -323,12 +322,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         guard shouldRefresh else {
             return
         }
-        
+        refreshAutoCompleteTableView()
     }
     
-    func refreshAutoCompleteTableViewLayout() {
-        autoCompleteTableViewHeightConstraint.constant = keyboardFrame.minY - autoCompleteTable.frame.minY
-        autoCompleteTable.layoutIfNeeded()
+    func refreshAutoCompleteTableView() {
+        ViewFactory.shared.refreshScrollViewInsets(scrollView: autoCompleteTable, withKeyboardFrame: keyboardFrame)
     }
     
     var currentSearch = EpsilonStreamSearch()
@@ -919,13 +917,12 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     // MARK: - SFSafariViewControllerDelegate
     
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        print("safariViewControllerDidFinish")
+        DLog("safariViewControllerDidFinish")
     }
     
     // MARK: - Keyboard
-    override func keyboardDidChangeFrame(notification: Notification) {
-        super.keyboardDidChangeFrame(notification: notification)
-        refreshAutoCompleteTableViewLayout()
+    override func keyboardFrameUpdated() {
+        refreshAutoCompleteTableView()
     }
     
     // MARK: - Actions
