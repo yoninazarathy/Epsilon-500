@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        FIRApp.configure()
+        FirebaseApp.configure()
         setGlobalsFromUserDefaults()
         //WebViewPrefetcher.setUp()
         EpsilonStreamDataModel.loadAllAutoCompletionDictionaries()

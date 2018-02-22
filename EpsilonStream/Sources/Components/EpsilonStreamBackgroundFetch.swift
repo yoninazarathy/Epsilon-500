@@ -244,7 +244,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
             }
             counter += 1
             if counter % 100 == 0{
-                FIRAnalytics.logEvent(withName: "background_long_cycle", parameters: ["counter" : counter as NSObject])
+                Analytics.logEvent("background_long_cycle", parameters: ["counter" : counter as NSObject])
             }
         }
     }

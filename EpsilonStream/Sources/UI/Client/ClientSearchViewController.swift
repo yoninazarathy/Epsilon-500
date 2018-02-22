@@ -101,9 +101,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         UserMessageManager.userDidAnotherAction()
 
         if let prevText = searchTextField.text{
-            FIRAnalytics.logEvent(withName: "home_button", parameters: ["prevText" : prevText as NSObject])
+            Analytics.logEvent("home_button", parameters: ["prevText" : prevText as NSObject])
         }else{
-            FIRAnalytics.logEvent(withName: "home_button", parameters: ["prevText" : "EMPTY" as NSObject])
+            Analytics.logEvent("home_button", parameters: ["prevText" : "EMPTY" as NSObject])
         }
         searchTextField.text = "" //QQQQ or home?
         BrowseStackManager.reset(withBaseSearch: EpsilonStreamSearch())
@@ -117,9 +117,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         UserMessageManager.userDidAnotherAction()
         
         if let prevText = searchTextField.text{
-            FIRAnalytics.logEvent(withName: "clear_button", parameters: ["prevText" : prevText as NSObject])
+            Analytics.logEvent("clear_button", parameters: ["prevText" : prevText as NSObject])
         }else{
-            FIRAnalytics.logEvent(withName: "clear_button", parameters: ["prevText" : "EMPTY" as NSObject])
+            Analytics.logEvent("clear_button", parameters: ["prevText" : "EMPTY" as NSObject])
         }
         searchTextField.text = "" //QQQQ or home?
         refreshSearch()
@@ -133,9 +133,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         UserMessageManager.userDidAnotherAction()
 
         if let prevText = searchTextField.text{
-            FIRAnalytics.logEvent(withName: "back_button", parameters: ["prevText" : prevText as NSObject])
+            Analytics.logEvent("back_button", parameters: ["prevText" : prevText as NSObject])
         }else{
-            FIRAnalytics.logEvent(withName: "back_button", parameters: ["prevText" : "EMPTY" as NSObject])
+            Analytics.logEvent("back_button", parameters: ["prevText" : "EMPTY" as NSObject])
         }
         
         let newSearchText = BrowseStackManager.moveBack().searchString
@@ -148,9 +148,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     @IBAction func forwardButtonAction(_ sender: UIButton) {
         UserMessageManager.userDidAnotherAction()
         if let prevText = searchTextField.text{
-            FIRAnalytics.logEvent(withName: "forward_button", parameters: ["prevText" : prevText as NSObject])
+            Analytics.logEvent("forward_button", parameters: ["prevText" : prevText as NSObject])
         }else{
-            FIRAnalytics.logEvent(withName: "forward_button", parameters: ["prevText" : "EMPTY" as NSObject])
+            Analytics.logEvent("forward_button", parameters: ["prevText" : "EMPTY" as NSObject])
         }
         searchTextField.text = BrowseStackManager.moveForward().searchString
         refreshSearch()
@@ -177,7 +177,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             Timer.after(0.6, {
                 self.surpriseButton.imageView!.stopAnimating()
                 self.surpriseButton.imageView!.isHighlighted = false
-                FIRAnalytics.logEvent(withName: "surprise_button", parameters: ["newText" : newText as NSObject])
+                Analytics.logEvent("surprise_button", parameters: ["newText" : newText as NSObject])
                 self.selected(newText)
                 if let textShuffleTimer = self.textShuffleTimer {
                     textShuffleTimer.invalidate()
@@ -316,7 +316,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         autoCompleteTable.isHidden = true
         refreshSearch()
         self.view.endEditing(true)
-        FIRAnalytics.logEvent(withName: "item_selected", parameters: ["string" : string as NSObject])
+        Analytics.logEvent("item_selected", parameters: ["string" : string as NSObject])
     }
     
     override func refresh() {
@@ -615,9 +615,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         //QQQQ fix this so it acts better on the "Let our team known"
         if searchResultItems.count == 0{
             if let text = searchTextField.text{
-                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : text as NSObject])
+                Analytics.logEvent("no_search", parameters: ["stringSearch" : text as NSObject])
             }else{
-                FIRAnalytics.logEvent(withName: "no_search", parameters: ["stringSearch" : "EMPTY" as NSObject])
+                Analytics.logEvent("no_search", parameters: ["stringSearch" : "EMPTY" as NSObject])
             }
             return
         }
@@ -628,29 +628,29 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 // QQQQ - delete vc.videoPlayer = playerBank[indexPath.row]
                 vc.isExplodingDots = false //QQQQ read type of video display here
                 let videoItem = searchResultItems[indexPath.row] as! VideoSearchResultItem
-                FIRAnalytics.logEvent(withName: "video_play", parameters: ["videoId" : videoItem.youtubeId as NSObject])
+                Analytics.logEvent("video_play", parameters: ["videoId" : videoItem.youtubeId as NSObject])
                 vc.videoIdToPlay = videoItem.youtubeId
                 navigationController?.pushViewController(vc, animated: true)
             }
             
         /////////////////////////
         case SearchResultItemType.iosApp:
-            FIRAnalytics.logEvent(withName: "appStore_go", parameters: ["appId" :  (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId as NSObject])
+            Analytics.logEvent("appStore_go", parameters: ["appId" :  (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId as NSObject])
             jumpToIosApp(withCode: (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId) //QQQQ
         /////////////////////////
         case SearchResultItemType.gameWebPage:
-            FIRAnalytics.logEvent(withName: "gameWeb_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url as NSObject])
+            Analytics.logEvent("gameWeb_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url as NSObject])
             jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url, withSplashKey: "gameQQQQ")
         /////////////////////////
         case SearchResultItemType.blogWebPage:
-            FIRAnalytics.logEvent(withName: "web_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url as NSObject])
+            Analytics.logEvent("web_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url as NSObject])
             jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url,inSafariMode: (searchResultItems[indexPath.row]as! BlogWebPageSearchResultItem).isExternal, withSplashKey: searchResultItems[indexPath.row].splashKey)
         /////////////////////////
         case SearchResultItemType.mathObjectLink:
             //QQQQ implement math object link search result item
             let molItem = searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem
             
-            FIRAnalytics.logEvent(withName: "mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
+            Analytics.logEvent("mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
             
             //QQQQ move elsewhere and allow other splashes.
             if molItem.splashKey == "gmp-splash"{
@@ -689,7 +689,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let share = UITableViewRowAction(style: .normal, title: "Share"){(action, index) in
             
-            FIRAnalytics.logEvent(withName: "share",parameters:  [:])
+            Analytics.logEvent("share",parameters: nil)
             
             switch self.searchResultItems[index.row].type{
             case SearchResultItemType.video:

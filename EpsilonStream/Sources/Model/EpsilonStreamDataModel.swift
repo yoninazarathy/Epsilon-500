@@ -1148,7 +1148,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 if let vcount = idHash[v.youtubeVideoId]{
                     idHash[v.youtubeVideoId] = vcount + 1
                     mainContext.delete(v)
-                    FIRAnalytics.logEvent(withName: "data_exception", parameters: ["type": "too many videos" as NSObject, "id": v.youtubeVideoId as NSObject, "count": idHash[v.youtubeVideoId]! as NSObject])
+                    Analytics.logEvent("data_exception", parameters: ["type": "too many videos" as NSObject, "id": v.youtubeVideoId as NSObject, "count": idHash[v.youtubeVideoId]! as NSObject])
                     //QQQQ - used to clean cloud - keep commented.
                     //if isInAdminMode && currentUserId == "yoni"{
                     //    print("XXXX - deleting single record in cloud")

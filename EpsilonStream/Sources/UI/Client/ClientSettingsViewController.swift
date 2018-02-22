@@ -21,7 +21,7 @@ class ClientSettingsViewController: UIViewController {
     
     @objc func termListAction(_ sender: Any) {
         //QQQQ record curator id
-        FIRAnalytics.logEvent(withName: "curatorTermList_action", parameters: [:])
+        Analytics.logEvent("curatorTermList_action", parameters: nil)
         if let vc = storyboard?.instantiateViewController(withIdentifier: "termListViewController") as? TermListViewController{
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -105,7 +105,7 @@ class ClientSettingsViewController: UIViewController {
 
     
     @objc func changeToAdmin(){
-        FIRAnalytics.logEvent(withName: "changeToAdmin_action", parameters: [:])
+        Analytics.logEvent("changeToAdmin_action", parameters: nil)
         //(UIApplication.shared.delegate as! AppDelegate).loadAdmin()
         if let vc = storyboard?.instantiateViewController(withIdentifier: "AdminSettings") as? AdminSettingsViewController{
             navigationController?.pushViewController(vc, animated: true)
@@ -113,7 +113,7 @@ class ClientSettingsViewController: UIViewController {
     }
     
     func addVideo(){
-        FIRAnalytics.logEvent(withName: "addVideo_action", parameters: [:])
+        Analytics.logEvent("addVideo_action", parameters: nil)
         //(UIApplication.shared.delegate as! AppDelegate).loadAdmin()
         if let vc = storyboard?.instantiateViewController(withIdentifier: "AdminSettings") as? AdminSettingsViewController{
             navigationController?.pushViewController(vc, animated: true)
@@ -121,7 +121,7 @@ class ClientSettingsViewController: UIViewController {
     }
 
     func addURL(){
-        FIRAnalytics.logEvent(withName: "addURL_action", parameters: [:])
+        Analytics.logEvent("addURL_action", parameters: nil)
         //(UIApplication.shared.delegate as! AppDelegate).loadAdmin()
         if let vc = storyboard?.instantiateViewController(withIdentifier: "URLSelectorViewController") as? URLSelectorViewController{
             navigationController?.pushViewController(vc, animated: true)
@@ -165,12 +165,12 @@ class ClientSettingsViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func epsilonStreamAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "epsilonStreamIcon_action", parameters: [:])
+        Analytics.logEvent("epsilonStreamIcon_action", parameters: nil)
         jumpToWebPage(withURLstring: "https://www.epsilonstream.com")
     }
     
     @IBAction func creditActions(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "credit_action", parameters: [:])
+        Analytics.logEvent("credit_action", parameters: nil)
         
         if let vc = storyboard?.instantiateViewController(withIdentifier: "creditsViewController") as? CreditsViewController{
             navigationController?.pushViewController(vc, animated: true)
@@ -180,13 +180,13 @@ class ClientSettingsViewController: UIViewController {
     }
     
     @IBAction func oneOnEpsilonAction(_ sender: UIButton) {
-        FIRAnalytics.logEvent(withName: "oneOnEpsilonIcon_action", parameters: [:])
+        Analytics.logEvent("oneOnEpsilonIcon_action", parameters: nil)
         jumpToWebPage(withURLstring: "https://www.oneonepsilon.com")
         
     }
     
     @IBAction func aboutAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "about_action", parameters: [:])
+        Analytics.logEvent("about_action", parameters: nil)
         
 //        jumpToWebPage(withURLstring: "https://www.epsilonstream.com") //QQQQ for now
 //
@@ -200,7 +200,7 @@ class ClientSettingsViewController: UIViewController {
     
     @IBAction func webLockButtonAction(_ sender: Any) {
         //QQQQ add more info
-        FIRAnalytics.logEvent(withName: "webLock_action", parameters: [:])
+        Analytics.logEvent("webLock_action", parameters: nil)
 
         if let _ = webLockKey{
             let alert = UIAlertController(title: "Web access settings", message: "Epsilon Stream is currently web locked and requires your safety code to allow access to external web pages. You may remove web lock by entering your safety code now.", preferredStyle: UIAlertControllerStyle.alert)
@@ -244,7 +244,7 @@ class ClientSettingsViewController: UIViewController {
     }
     
     @IBAction func shareAppAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "shareApp_action", parameters: [:])
+        Analytics.logEvent("shareApp_action", parameters: nil)
         
         let shareString = "I am exploring mathematics with Epsilon Stream for iOS. Get it and use it for free from https://www.epsilonstream.com ."
         let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
@@ -253,20 +253,20 @@ class ClientSettingsViewController: UIViewController {
     }
     
     @IBAction func registerAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "register_action", parameters: [:])
+        Analytics.logEvent("register_action", parameters: nil)
         jumpToWebPage(withURLstring: "https://epsilonstream.com/sign-up_app")
     }
     
     @IBAction func resetAllAction(_ sender: Any) {
         //QQQQ send more analytics on what has reset
-        FIRAnalytics.logEvent(withName: "resetAllConsider_action", parameters: [:])
+        Analytics.logEvent("resetAllConsider_action", parameters: nil)
         
         
         let alert = UIAlertController(title: "Reset All Viewed", message: "Are you sure you want to reset all views?", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default){action in print("cancel reset")})
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.default){action in print("reset!!!!!!")
             UserDataManager.deletedAllSecondsWatched()
-            FIRAnalytics.logEvent(withName: "resetAllGoThrough_action", parameters: [:])
+            Analytics.logEvent("resetAllGoThrough_action", parameters: nil)
         })
         self.present(alert, animated: true, completion: nil)
         
@@ -280,7 +280,7 @@ class ClientSettingsViewController: UIViewController {
     }
     
     @IBAction func feedbackAction(_ sender: Any) {
-        FIRAnalytics.logEvent(withName: "feedback_action", parameters: [:])
+        Analytics.logEvent("feedback_action", parameters: nil)
         jumpToWebPage(withURLstring: "https://epsilonstream.com/contact_app")
     }
 }

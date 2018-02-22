@@ -213,9 +213,9 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
         //QQQQ redudent maybe for analytics
         if UIDevice.current.orientation.isLandscape {
             print("Landscape")
-            FIRAnalytics.logEvent(withName: "video_to_landscape", parameters: ["videoId" : videoIdToPlay! as NSObject])
+            Analytics.logEvent("video_to_landscape", parameters: ["videoId" : videoIdToPlay! as NSObject])
         } else {
-            FIRAnalytics.logEvent(withName: "video_to_portrait", parameters: ["videoId" : videoIdToPlay! as NSObject])
+            Analytics.logEvent("video_to_portrait", parameters: ["videoId" : videoIdToPlay! as NSObject])
         }
     }
 
@@ -253,7 +253,7 @@ class PlayVideoViewController: UIViewController, YouTubePlayerDelegate {
             videoPlayer.isUserInteractionEnabled = true
             addLeave(to: playSafetyCover)
             addShare(to: playSafetyCover)
-            FIRAnalytics.logEvent(withName: "video_paused", parameters: ["videoId" : videoIdToPlay! as NSObject])
+            Analytics.logEvent("video_paused", parameters: ["videoId" : videoIdToPlay! as NSObject])
             break
         case YouTubePlayerState.Buffering:
             //print("BUFFERING!!!!")

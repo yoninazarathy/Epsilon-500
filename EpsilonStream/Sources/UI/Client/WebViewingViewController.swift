@@ -53,7 +53,7 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error){
-        FIRAnalytics.logEvent(withName: "web_fail", parameters: ["webURL" :  webURLString! as NSObject])
+        Analytics.logEvent("web_fail", parameters: ["webURL" :  webURLString! as NSObject])
         backClicked()//QQQQ refactor name
     }
     

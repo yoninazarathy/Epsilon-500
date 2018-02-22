@@ -76,7 +76,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             if error == nil{
                 if numRecords != 1{
                     print("ERROR - too many records in db for \(dbVideo.youtubeVideoId) -- \(numRecords)")
-                    FIRAnalytics.logEvent(withName: "data_exception", parameters: ["type": "too many videos during video update" as NSObject, "id": dbVideo.youtubeVideoId as NSObject, "count": numRecords as NSObject])
+                    Analytics.logEvent("data_exception", parameters: ["type": "too many videos during video update" as NSObject, "id": dbVideo.youtubeVideoId as NSObject, "count": numRecords as NSObject])
                 }
             }
             else{

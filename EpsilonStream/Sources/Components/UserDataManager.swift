@@ -30,11 +30,11 @@ class UserDataManager: ManagedObjectContextUserProtocol {
     class func setInAdminMode(_ isAdmin: Bool, withUser user: String? = nil){
         if isAdmin{
             if let usr = user{
-                FIRAnalytics.logEvent(withName: "admin_modeEnter", parameters: ["user": usr as NSObject])
+                Analytics.logEvent("admin_modeEnter", parameters: ["user": usr as NSObject])
             }
         }else{
             if let usr = currentUserId{
-                FIRAnalytics.logEvent(withName: "admin_modeEnter", parameters: ["user": usr as NSObject])
+                Analytics.logEvent("admin_modeEnter", parameters: ["user": usr as NSObject])
             }
         }
 
