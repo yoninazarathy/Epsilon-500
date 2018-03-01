@@ -104,7 +104,12 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
 //        return .portrait
 //    }
     
+    func close() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - Keyboard
+    
     func keyboardFrameUpdated() {
         refresh()
     }
