@@ -539,6 +539,39 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         return url
     }
     
+    // MARK: - View controllers
+    
+    func openVideoItem(_ item: VideoSearchResultItem) {
+        Analytics.logEvent("video_play", parameters: ["videoId" : item.youtubeId as NSObject])
+        
+        let secondsWatched = UserDataManager.getSecondsWatched(forKey: item.youtubeId)
+        
+        let playVideo = { (resumeSeconds: Int) -> Void in
+            let vc = PlayVideoViewController()
+            vc.isExplodingDots = false //QQQQ read type of video display here
+            vc.videoIdToPlay = item.youtubeId
+            vc.startSeconds = resumeSeconds
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        if secondsWatched > 0 {
+        
+            AlertManager.shared.showResumePlayback(seconds: secondsWatched, confirmation: { (confirmed, _) in
+                if confirmed {
+                    playVideo(secondsWatched)
+                } else {
+                    playVideo(0)
+                }
+            })
+            
+        } else {
+            
+            playVideo(0)
+            
+        }
+        
+    }
+    
     // MARK: - UITableViewDataSource
     
     func tableView(_ tableView: UITableView,cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -622,15 +655,8 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         switch searchResultItems[indexPath.row].type{
         case SearchResultItemType.video:
-            if let vc = storyboard?.instantiateViewController(withIdentifier: "PlayVideo") as? PlayVideoViewController{
-                // QQQQ - delete vc.videoPlayer = playerBank[indexPath.row]
-                vc.isExplodingDots = false //QQQQ read type of video display here
-                let videoItem = searchResultItems[indexPath.row] as! VideoSearchResultItem
-                Analytics.logEvent("video_play", parameters: ["videoId" : videoItem.youtubeId as NSObject])
-                vc.videoIdToPlay = videoItem.youtubeId
-                navigationController?.pushViewController(vc, animated: true)
-            }
-            
+            let videoItem = searchResultItems[indexPath.row] as! VideoSearchResultItem
+            openVideoItem(videoItem)
         /////////////////////////
         case SearchResultItemType.iosApp:
             Analytics.logEvent("appStore_go", parameters: ["appId" :  (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId as NSObject])

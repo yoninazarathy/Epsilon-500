@@ -8,3 +8,14 @@
 "CommonTextOK"      = "OK";
 "CommonTextYes"     = "Yes";
 "CommonTextNo"      = "No";
+
+
+// Alerts
+"AlertErrorTitle"           = "Error";
+"AlertDefaultCancelButton"  = "Cancel";
+"AlertDefaultOKButton"      = "OK";
+"AlertDefaultCloseButton"   = "Close";
+
+"AlertResumePlaybackMessage"        = "Resume playing at %@?";
+"AlertResumePlaybackCancelButton"   = "Restart";
+"AlertResumePlaybackOKButton"       = "Resume";

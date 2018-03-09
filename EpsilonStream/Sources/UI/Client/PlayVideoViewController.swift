@@ -28,6 +28,7 @@ class PlayVideoViewController: BaseViewController, YouTubePlayerDelegate {
         }
     }
     var videoIdToPlay: String?
+    var startSeconds = 0
     var playSafetyCoverSpare: CGFloat!
     
     // MARK: - UI
@@ -75,6 +76,7 @@ class PlayVideoViewController: BaseViewController, YouTubePlayerDelegate {
             "loop"              : "0" as AnyObject, //no loop
             "rel"               : "0" as AnyObject, //no related videos
             "cc_load_policy"    : "0" as AnyObject, //no closed captions
+            "start"             : startSeconds as AnyObject
             // "color": "red" as AnyObject //red color on progress bar
         ]
         view.addSubview(videoPlayer)

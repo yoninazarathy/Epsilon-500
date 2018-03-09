@@ -10,6 +10,7 @@
 		010FF33E1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 010FF33C1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 */; };
 		010FF33F1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */; };
 		01372CF01F97C8F90072F3E3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01372CF21F97C8F90072F3E3 /* Localizable.strings */; };
+		0145FD702052F2B70063348C /* TextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD6F2052F2B70063348C /* TextManager.swift */; };
 		0152C9FB1FDD40F800ADBFA8 /* TermSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E01FDD40F800ADBFA8 /* TermSelectorViewController.swift */; };
 		0152C9FC1FDD40F800ADBFA8 /* URLSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E11FDD40F800ADBFA8 /* URLSelectorViewController.swift */; };
 		0152C9FD1FDD40F800ADBFA8 /* CurateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E21FDD40F800ADBFA8 /* CurateItemViewController.swift */; };
@@ -69,6 +70,8 @@
 		018BAA491FA21FA300F8583A /* VersionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA3A1FA21FA300F8583A /* VersionInfo.swift */; };
 		018BAA4B1FA21FA300F8583A /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA3C1FA21FA300F8583A /* Video.swift */; };
 		018BAA4E1FA2251100F8583A /* BaseCoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA4D1FA2251100F8583A /* BaseCoreDataModel.swift */; };
+		01A83C2E205030350035A503 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A83C2D205030350035A503 /* AlertManager.swift */; };
+		01A83C3020503CD20035A503 /* AlertManager_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A83C2F20503CD20035A503 /* AlertManager_Extension.swift */; };
 		01BBEE1E20360ADA002DA8D6 /* EpsilonStreamGlobals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE1D20360ADA002DA8D6 /* EpsilonStreamGlobals.swift */; };
 		01BBEE2020360AF7002DA8D6 /* EpsilonStreamAdminDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE1F20360AF6002DA8D6 /* EpsilonStreamAdminDataModel.swift */; };
 		01BBEE2220360B18002DA8D6 /* EpsilonStreamDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BBEE2120360B18002DA8D6 /* EpsilonStreamDataModel.swift */; };
@@ -95,6 +98,7 @@
 		010FF33C1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec_Norm_Res.mp4; sourceTree = "<group>"; };
 		010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec_High_Res.mp4; sourceTree = "<group>"; };
 		01372CF11F97C8F90072F3E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		0145FD6F2052F2B70063348C /* TextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextManager.swift; sourceTree = "<group>"; };
 		0152C9E01FDD40F800ADBFA8 /* TermSelectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermSelectorViewController.swift; sourceTree = "<group>"; };
 		0152C9E11FDD40F800ADBFA8 /* URLSelectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSelectorViewController.swift; sourceTree = "<group>"; };
 		0152C9E21FDD40F800ADBFA8 /* CurateItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurateItemViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 		018BAA3A1FA21FA300F8583A /* VersionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionInfo.swift; sourceTree = "<group>"; };
 		018BAA3C1FA21FA300F8583A /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		018BAA4D1FA2251100F8583A /* BaseCoreDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoreDataModel.swift; sourceTree = "<group>"; };
+		01A83C2D205030350035A503 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		01A83C2F20503CD20035A503 /* AlertManager_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager_Extension.swift; sourceTree = "<group>"; };
 		01BBEE1D20360ADA002DA8D6 /* EpsilonStreamGlobals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamGlobals.swift; sourceTree = "<group>"; };
 		01BBEE1F20360AF6002DA8D6 /* EpsilonStreamAdminDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamAdminDataModel.swift; sourceTree = "<group>"; };
 		01BBEE2120360B18002DA8D6 /* EpsilonStreamDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpsilonStreamDataModel.swift; sourceTree = "<group>"; };
@@ -312,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				01746A371FA0F1A7003A3BC2 /* Common.swift */,
+				01A83C2C205030180035A503 /* Alerts */,
 				0157205F1FCF294A0043A828 /* Extensions */,
 				018BAA2A1FA21F2D00F8583A /* FileManager */,
 			);
@@ -381,19 +388,29 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		01A83C2C205030180035A503 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				01A83C2D205030350035A503 /* AlertManager.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
 		01BBEE2720360EF5002DA8D6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				01BBEE2820360EF5002DA8D6 /* YoutubeAPICommunicator.swift */,
-				01BBEE2920360EF5002DA8D6 /* ImageManager.swift */,
-				01BBEE2A20360EF5002DA8D6 /* UserMessageManager.swift */,
+				01A83C2F20503CD20035A503 /* AlertManager_Extension.swift */,
+				01BBEE3020360EF5002DA8D6 /* AutoCompleteTableDelegate.swift */,
 				01BBEE2B20360EF5002DA8D6 /* BrowseStackManager.swift */,
 				01BBEE2C20360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift */,
 				01BBEE2D20360EF5002DA8D6 /* EpsilonStreamLoginManager.swift */,
-				01BBEE2E20360EF5002DA8D6 /* UserDataManager.swift */,
-				01BBEE2F20360EF5002DA8D6 /* WebViewPrefetcher.swift */,
-				01BBEE3020360EF5002DA8D6 /* AutoCompleteTableDelegate.swift */,
+				01BBEE2920360EF5002DA8D6 /* ImageManager.swift */,
 				01BBEE3120360EF5002DA8D6 /* PersistentStorageManager.swift */,
+				0145FD6F2052F2B70063348C /* TextManager.swift */,
+				01BBEE2E20360EF5002DA8D6 /* UserDataManager.swift */,
+				01BBEE2A20360EF5002DA8D6 /* UserMessageManager.swift */,
+				01BBEE2F20360EF5002DA8D6 /* WebViewPrefetcher.swift */,
+				01BBEE2820360EF5002DA8D6 /* YoutubeAPICommunicator.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -626,6 +643,7 @@
 			files = (
 				018BAA431FA21FA300F8583A /* ImageThumbnail.swift in Sources */,
 				018BAA451FA21FA300F8583A /* MathObject.swift in Sources */,
+				01A83C2E205030350035A503 /* AlertManager.swift in Sources */,
 				018BAA401FA21FA300F8583A /* EpsilonStreamDataModel.xcdatamodel in Sources */,
 				0157207E1FCF294A0043A828 /* UIVIew_IKExtensions.swift in Sources */,
 				0152CA0C1FDD40F800ADBFA8 /* PlayVideoViewController.swift in Sources */,
@@ -645,6 +663,7 @@
 				0152CA0B1FDD40F800ADBFA8 /* SplashScreenViewController.swift in Sources */,
 				018BAA491FA21FA300F8583A /* VersionInfo.swift in Sources */,
 				0152CA0E1FDD40F800ADBFA8 /* SpecialItemTableViewCell.swift in Sources */,
+				01A83C3020503CD20035A503 /* AlertManager_Extension.swift in Sources */,
 				015720771FCF294A0043A828 /* CGPoint_IKExtension.swift in Sources */,
 				0152CA0F1FDD40F800ADBFA8 /* AboutViewController.swift in Sources */,
 				0152CA001FDD40F800ADBFA8 /* CurateArticleViewController.swift in Sources */,
@@ -659,6 +678,7 @@
 				018B97EC1FD8652E003EBDCB /* AppDelegate.swift in Sources */,
 				015720831FCF294A0043A828 /* UIImage_IKExtension.swift in Sources */,
 				01BBEE3620360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift in Sources */,
+				0145FD702052F2B70063348C /* TextManager.swift in Sources */,
 				0157207B1FCF294A0043A828 /* CGSize_IKExtension.swift in Sources */,
 				0152CA111FDD40F800ADBFA8 /* BaseViewController.swift in Sources */,
 				0152CA121FDD40F800ADBFA8 /* BaseView.swift in Sources */,
