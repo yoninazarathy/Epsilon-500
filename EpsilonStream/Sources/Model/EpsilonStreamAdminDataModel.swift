@@ -526,42 +526,6 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         }
     }
 
-    class func storeAllImages(){
-        //The code below was used to push all the images stored on file to the cloud
-
-        ImageManager.backgroundImageOn = false //QQQQ
-        
-        let fd = FileManager.default
-        let documentsDirectory = fd.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataPath = documentsDirectory.appendingPathComponent("imageThumbnails")
-        
-        var numSaving = 0
-        var numSaved = 0
-        
-        fd.enumerator(at: dataPath, includingPropertiesForKeys: nil)?.forEach({ (e) in
-            let url = e as! URL
-            let record = CKRecord(recordType: "LightImageThumbNail") //QQQQ LIGHT VS. NOT
-            let asset = CKAsset(fileURL: url)
-            record["imagePic"] = asset
-            record["keyName"] = url.lastPathComponent.replacingOccurrences(of: ".png", with: "") as CKRecordValue
-            
-            numSaving += 1
-            print("\(numSaving): saving image to cloud:\(e)")
-            
-            CKContainer.default().publicCloudDatabase.save(record){
-                record, error in
-                DispatchQueue.main.async{
-                    if let error = error{
-                        print("error on publicCloudDataBase.save: \(error.localizedDescription)")
-                    }else{
-                        numSaved += 1
-                        print("\(numSaved): image Record Saved on public cloud")
-                    }
-                }
-            }
-        })
-    }
-
     class func storeAllFeatures(){
         let request = FeaturedURL.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")

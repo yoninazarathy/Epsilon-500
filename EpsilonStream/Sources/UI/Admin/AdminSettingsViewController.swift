@@ -53,27 +53,6 @@ class AdminSettingsViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
-    @IBAction func updateImagesAction(_ sender: UIButton) {
-        let alert = UIAlertController(title: "One on Epsilon Development", message: "Do you want to push all images to cloud?", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addTextField { (textField : UITextField!) -> Void in
-            textField.placeholder = "Enter Safety Code"
-        }
-        let textField = alert.textFields![0] as UITextField
-        textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
-        
-        
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {_ in
-            EpsilonStreamAdminModel.storeAllImages()
-        }))
-        okAction = alert.actions[0]
-        okAction.isEnabled = false
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {_ in
-        }))
-        self.present(alert, animated: true, completion: nil)
-        
-    }
-    
     @objc func textFieldChange(_ sender: UITextField) {
         if sender.text! == "6955"{
             okAction.isEnabled = true

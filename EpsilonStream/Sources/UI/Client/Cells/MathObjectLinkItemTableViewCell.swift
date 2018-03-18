@@ -11,19 +11,17 @@ import UIKit
 class MathObjectLinkItemTableViewCell: UITableViewCell {
     
     @IBOutlet weak var leftUIImage: UIImageView!
-    
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var detailLabel: UILabel!
-    //@IBOutlet weak var mainImageView: UIImageView!
     
-    //@IBOutlet weak var titleLabel: UILabel!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
     
     func configureWith(mathObjectLinkSearchResult result: MathObjectLinkSearchResultItem){
         
         titleLabel.text = result.title
         detailLabel.text = result.titleDetail
-        
         
         //QQQQ horrible code 
         if result.imageKey == "GMP-Style"{
@@ -55,23 +53,5 @@ class MathObjectLinkItemTableViewCell: UITableViewCell {
             leftUIImage.image = UIImage(named:"eStreamIcon")
         }
 
-        
-        //IMAGE
-        //let image = ImageManager.getImage(forKey: result.imageName, withDefault: "eStreamIcon")
     }
-    
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        //QQQQ articleTitle.lineBreakMode = .byWordWrapping
-        //QQQQ articleTitle.numberOfLines = 0
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
-    
 }

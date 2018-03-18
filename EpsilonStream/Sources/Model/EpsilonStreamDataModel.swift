@@ -666,8 +666,8 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 item.durationString = "\(( Int(round(Float(videos[i].durationSec)/60))) == 0 ? 1 : Int(round(Float(videos[i].durationSec)/60)))" //QQQQ make neat repres
                 item.percentWatched = UserDataManager.getPercentWatched(forKey: videos[i].youtubeVideoId)
                 item.inCollection = videos[i].isInCollection
-                //item.image = ImageManager.getImage(forKey: videos[i].youtubeVideoId, withDefault: "Watch_icon")
                 item.imageName = videos[i].youtubeVideoId
+                item.imageURL = URL(string: videos[i].imageURL)
                 item.hashTagPriorities = videos[i].hashTagPriorities
                 
                 item.rawPriority = videos[i].displaySearchPriority
@@ -691,8 +691,8 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                     item.appId = feature.urlOfItem
                     item.title = feature.ourTitle
                     item.channel = feature.provider
-                    //item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Play_icon")
                     item.imageName = feature.imageKey!
+                    item.imageURL = URL(string: feature.imageURL)
                     item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
                     item.inCollection = feature.isInCollection
                     item.hashTagPriorities = feature.hashTagPriorities
@@ -711,8 +711,8 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                         item.title = feature.ourTitle
                         item.channel = feature.provider
                         item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        //item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Play_icon")
                         item.imageName = feature.imageKey!
+                        item.imageURL = URL(string: feature.imageURL)
                         item.type = SearchResultItemType.gameWebPage
                         item.hashTagPriorities = feature.hashTagPriorities
                         item.rawPriority = feature.displaySearchPriority
@@ -727,8 +727,8 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                         item.title = feature.ourTitle
                         item.channel = feature.provider
                         item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        //item.image = ImageManager.getImage(forKey: feature.imageKey!, withDefault: "Explore_icon")
                         item.imageName = feature.imageKey!
+                        item.imageURL = URL(string: feature.imageURL)
                         item.type = SearchResultItemType.blogWebPage
                         item.hashTagPriorities = feature.hashTagPriorities
                         item.rawPriority = feature.displaySearchPriority

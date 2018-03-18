@@ -11,6 +11,13 @@
 		010FF33F1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */; };
 		01372CF01F97C8F90072F3E3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01372CF21F97C8F90072F3E3 /* Localizable.strings */; };
 		0145FD702052F2B70063348C /* TextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD6F2052F2B70063348C /* TextManager.swift */; };
+		0145FD722058383D0063348C /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD712058383D0063348C /* AssetManager.swift */; };
+		0145FD7D205AA1280063348C /* MathObjectLinkItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD77205AA1270063348C /* MathObjectLinkItemTableViewCell.swift */; };
+		0145FD7E205AA1280063348C /* ArticleItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD78205AA1270063348C /* ArticleItemTableViewCell.swift */; };
+		0145FD7F205AA1280063348C /* GameItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD79205AA1270063348C /* GameItemTableViewCell.swift */; };
+		0145FD80205AA1280063348C /* SpecialItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD7A205AA1280063348C /* SpecialItemTableViewCell.swift */; };
+		0145FD81205AA1280063348C /* VideoItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD7B205AA1280063348C /* VideoItemTableViewCell.swift */; };
+		0145FD82205AA1280063348C /* UserMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD7C205AA1280063348C /* UserMessageTableViewCell.swift */; };
 		0152C9FB1FDD40F800ADBFA8 /* TermSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E01FDD40F800ADBFA8 /* TermSelectorViewController.swift */; };
 		0152C9FC1FDD40F800ADBFA8 /* URLSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E11FDD40F800ADBFA8 /* URLSelectorViewController.swift */; };
 		0152C9FD1FDD40F800ADBFA8 /* CurateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E21FDD40F800ADBFA8 /* CurateItemViewController.swift */; };
@@ -21,16 +28,10 @@
 		0152CA021FDD40F800ADBFA8 /* TermListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E71FDD40F800ADBFA8 /* TermListViewController.swift */; };
 		0152CA031FDD40F800ADBFA8 /* ClientSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9E91FDD40F800ADBFA8 /* ClientSettingsViewController.swift */; };
 		0152CA041FDD40F800ADBFA8 /* ClientSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9EA1FDD40F800ADBFA8 /* ClientSearchViewController.swift */; };
-		0152CA051FDD40F800ADBFA8 /* GameItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9EB1FDD40F800ADBFA8 /* GameItemTableViewCell.swift */; };
-		0152CA061FDD40F800ADBFA8 /* ArticleItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9EC1FDD40F800ADBFA8 /* ArticleItemTableViewCell.swift */; };
-		0152CA071FDD40F800ADBFA8 /* VideoItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9ED1FDD40F800ADBFA8 /* VideoItemTableViewCell.swift */; };
 		0152CA081FDD40F800ADBFA8 /* WebViewingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9EE1FDD40F800ADBFA8 /* WebViewingViewController.swift */; };
 		0152CA091FDD40F800ADBFA8 /* ExternalPageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9EF1FDD40F800ADBFA8 /* ExternalPageViewer.swift */; };
-		0152CA0A1FDD40F800ADBFA8 /* UserMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F01FDD40F800ADBFA8 /* UserMessageTableViewCell.swift */; };
 		0152CA0B1FDD40F800ADBFA8 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F11FDD40F800ADBFA8 /* SplashScreenViewController.swift */; };
 		0152CA0C1FDD40F800ADBFA8 /* PlayVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F21FDD40F800ADBFA8 /* PlayVideoViewController.swift */; };
-		0152CA0D1FDD40F800ADBFA8 /* MathObjectLinkItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F31FDD40F800ADBFA8 /* MathObjectLinkItemTableViewCell.swift */; };
-		0152CA0E1FDD40F800ADBFA8 /* SpecialItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F41FDD40F800ADBFA8 /* SpecialItemTableViewCell.swift */; };
 		0152CA0F1FDD40F800ADBFA8 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F51FDD40F800ADBFA8 /* AboutViewController.swift */; };
 		0152CA101FDD40F800ADBFA8 /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F61FDD40F800ADBFA8 /* CreditsViewController.swift */; };
 		0152CA111FDD40F800ADBFA8 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0152C9F81FDD40F800ADBFA8 /* BaseViewController.swift */; };
@@ -99,6 +100,13 @@
 		010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec_High_Res.mp4; sourceTree = "<group>"; };
 		01372CF11F97C8F90072F3E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0145FD6F2052F2B70063348C /* TextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextManager.swift; sourceTree = "<group>"; };
+		0145FD712058383D0063348C /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
+		0145FD77205AA1270063348C /* MathObjectLinkItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathObjectLinkItemTableViewCell.swift; sourceTree = "<group>"; };
+		0145FD78205AA1270063348C /* ArticleItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleItemTableViewCell.swift; sourceTree = "<group>"; };
+		0145FD79205AA1270063348C /* GameItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameItemTableViewCell.swift; sourceTree = "<group>"; };
+		0145FD7A205AA1280063348C /* SpecialItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecialItemTableViewCell.swift; sourceTree = "<group>"; };
+		0145FD7B205AA1280063348C /* VideoItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoItemTableViewCell.swift; sourceTree = "<group>"; };
+		0145FD7C205AA1280063348C /* UserMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMessageTableViewCell.swift; sourceTree = "<group>"; };
 		0152C9E01FDD40F800ADBFA8 /* TermSelectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermSelectorViewController.swift; sourceTree = "<group>"; };
 		0152C9E11FDD40F800ADBFA8 /* URLSelectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSelectorViewController.swift; sourceTree = "<group>"; };
 		0152C9E21FDD40F800ADBFA8 /* CurateItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurateItemViewController.swift; sourceTree = "<group>"; };
@@ -109,16 +117,10 @@
 		0152C9E71FDD40F800ADBFA8 /* TermListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermListViewController.swift; sourceTree = "<group>"; };
 		0152C9E91FDD40F800ADBFA8 /* ClientSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSettingsViewController.swift; sourceTree = "<group>"; };
 		0152C9EA1FDD40F800ADBFA8 /* ClientSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSearchViewController.swift; sourceTree = "<group>"; };
-		0152C9EB1FDD40F800ADBFA8 /* GameItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameItemTableViewCell.swift; sourceTree = "<group>"; };
-		0152C9EC1FDD40F800ADBFA8 /* ArticleItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleItemTableViewCell.swift; sourceTree = "<group>"; };
-		0152C9ED1FDD40F800ADBFA8 /* VideoItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoItemTableViewCell.swift; sourceTree = "<group>"; };
 		0152C9EE1FDD40F800ADBFA8 /* WebViewingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewingViewController.swift; sourceTree = "<group>"; };
 		0152C9EF1FDD40F800ADBFA8 /* ExternalPageViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalPageViewer.swift; sourceTree = "<group>"; };
-		0152C9F01FDD40F800ADBFA8 /* UserMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMessageTableViewCell.swift; sourceTree = "<group>"; };
 		0152C9F11FDD40F800ADBFA8 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		0152C9F21FDD40F800ADBFA8 /* PlayVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayVideoViewController.swift; sourceTree = "<group>"; };
-		0152C9F31FDD40F800ADBFA8 /* MathObjectLinkItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathObjectLinkItemTableViewCell.swift; sourceTree = "<group>"; };
-		0152C9F41FDD40F800ADBFA8 /* SpecialItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecialItemTableViewCell.swift; sourceTree = "<group>"; };
 		0152C9F51FDD40F800ADBFA8 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		0152C9F61FDD40F800ADBFA8 /* CreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditsViewController.swift; sourceTree = "<group>"; };
 		0152C9F81FDD40F800ADBFA8 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -220,6 +222,19 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		0145FD76205AA0C60063348C /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				0145FD78205AA1270063348C /* ArticleItemTableViewCell.swift */,
+				0145FD79205AA1270063348C /* GameItemTableViewCell.swift */,
+				0145FD77205AA1270063348C /* MathObjectLinkItemTableViewCell.swift */,
+				0145FD7A205AA1280063348C /* SpecialItemTableViewCell.swift */,
+				0145FD7C205AA1280063348C /* UserMessageTableViewCell.swift */,
+				0145FD7B205AA1280063348C /* VideoItemTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		0152C9DE1FDD40F800ADBFA8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -250,18 +265,13 @@
 		0152C9E81FDD40F800ADBFA8 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				0145FD76205AA0C60063348C /* Cells */,
 				0152C9E91FDD40F800ADBFA8 /* ClientSettingsViewController.swift */,
 				0152C9EA1FDD40F800ADBFA8 /* ClientSearchViewController.swift */,
-				0152C9EB1FDD40F800ADBFA8 /* GameItemTableViewCell.swift */,
-				0152C9EC1FDD40F800ADBFA8 /* ArticleItemTableViewCell.swift */,
-				0152C9ED1FDD40F800ADBFA8 /* VideoItemTableViewCell.swift */,
 				0152C9EE1FDD40F800ADBFA8 /* WebViewingViewController.swift */,
 				0152C9EF1FDD40F800ADBFA8 /* ExternalPageViewer.swift */,
-				0152C9F01FDD40F800ADBFA8 /* UserMessageTableViewCell.swift */,
 				0152C9F11FDD40F800ADBFA8 /* SplashScreenViewController.swift */,
 				0152C9F21FDD40F800ADBFA8 /* PlayVideoViewController.swift */,
-				0152C9F31FDD40F800ADBFA8 /* MathObjectLinkItemTableViewCell.swift */,
-				0152C9F41FDD40F800ADBFA8 /* SpecialItemTableViewCell.swift */,
 				0152C9F51FDD40F800ADBFA8 /* AboutViewController.swift */,
 				0152C9F61FDD40F800ADBFA8 /* CreditsViewController.swift */,
 			);
@@ -400,6 +410,7 @@
 			isa = PBXGroup;
 			children = (
 				01A83C2F20503CD20035A503 /* AlertManager_Extension.swift */,
+				0145FD712058383D0063348C /* AssetManager.swift */,
 				01BBEE3020360EF5002DA8D6 /* AutoCompleteTableDelegate.swift */,
 				01BBEE2B20360EF5002DA8D6 /* BrowseStackManager.swift */,
 				01BBEE2C20360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift */,
@@ -652,8 +663,7 @@
 				0152CA031FDD40F800ADBFA8 /* ClientSettingsViewController.swift in Sources */,
 				0157207F1FCF294A0043A828 /* UILabel_IKExtension.swift in Sources */,
 				0152C9FE1FDD40F800ADBFA8 /* AdminSettingsViewController.swift in Sources */,
-				0152CA071FDD40F800ADBFA8 /* VideoItemTableViewCell.swift in Sources */,
-				0152CA051FDD40F800ADBFA8 /* GameItemTableViewCell.swift in Sources */,
+				0145FD722058383D0063348C /* AssetManager.swift in Sources */,
 				0157207D1FCF294A0043A828 /* UIColor_IKExtension.swift in Sources */,
 				015720781FCF294A0043A828 /* CachedURLResponse_IKExtension.swift in Sources */,
 				0157207C1FCF294A0043A828 /* UIViewController_IKExtension.swift in Sources */,
@@ -661,8 +671,8 @@
 				018BAA2C1FA21F2D00F8583A /* IKFileManager.swift in Sources */,
 				01BBEE2220360B18002DA8D6 /* EpsilonStreamDataModel.swift in Sources */,
 				0152CA0B1FDD40F800ADBFA8 /* SplashScreenViewController.swift in Sources */,
+				0145FD7D205AA1280063348C /* MathObjectLinkItemTableViewCell.swift in Sources */,
 				018BAA491FA21FA300F8583A /* VersionInfo.swift in Sources */,
-				0152CA0E1FDD40F800ADBFA8 /* SpecialItemTableViewCell.swift in Sources */,
 				01A83C3020503CD20035A503 /* AlertManager_Extension.swift in Sources */,
 				015720771FCF294A0043A828 /* CGPoint_IKExtension.swift in Sources */,
 				0152CA0F1FDD40F800ADBFA8 /* AboutViewController.swift in Sources */,
@@ -670,12 +680,15 @@
 				018BAA471FA21FA300F8583A /* MathObjectLink.swift in Sources */,
 				0152CA011FDD40F800ADBFA8 /* ViewReportViewController.swift in Sources */,
 				01BBEE2620360CF7002DA8D6 /* EpsilonStreamSearch.swift in Sources */,
+				0145FD7F205AA1280063348C /* GameItemTableViewCell.swift in Sources */,
 				0152CA091FDD40F800ADBFA8 /* ExternalPageViewer.swift in Sources */,
 				018BAA4B1FA21FA300F8583A /* Video.swift in Sources */,
+				0145FD80205AA1280063348C /* SpecialItemTableViewCell.swift in Sources */,
 				015720821FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift in Sources */,
 				015720801FCF294A0043A828 /* Mirror_IKExtension.swift in Sources */,
-				0152CA0D1FDD40F800ADBFA8 /* MathObjectLinkItemTableViewCell.swift in Sources */,
+				0145FD7E205AA1280063348C /* ArticleItemTableViewCell.swift in Sources */,
 				018B97EC1FD8652E003EBDCB /* AppDelegate.swift in Sources */,
+				0145FD81205AA1280063348C /* VideoItemTableViewCell.swift in Sources */,
 				015720831FCF294A0043A828 /* UIImage_IKExtension.swift in Sources */,
 				01BBEE3620360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift in Sources */,
 				0145FD702052F2B70063348C /* TextManager.swift in Sources */,
@@ -699,10 +712,10 @@
 				0152CA101FDD40F800ADBFA8 /* CreditsViewController.swift in Sources */,
 				01BBEE3420360EF5002DA8D6 /* UserMessageManager.swift in Sources */,
 				01BBEE3720360EF5002DA8D6 /* EpsilonStreamLoginManager.swift in Sources */,
+				0145FD82205AA1280063348C /* UserMessageTableViewCell.swift in Sources */,
 				015720761FCF294A0043A828 /* NSObject_IKExtension.swift in Sources */,
 				01BBEE3A20360EF5002DA8D6 /* AutoCompleteTableDelegate.swift in Sources */,
 				018BAA411FA21FA300F8583A /* FeaturedURL.swift in Sources */,
-				0152CA0A1FDD40F800ADBFA8 /* UserMessageTableViewCell.swift in Sources */,
 				0152CA081FDD40F800ADBFA8 /* WebViewingViewController.swift in Sources */,
 				018BAA3E1FA21FA300F8583A /* Channel.swift in Sources */,
 				0152C9FD1FDD40F800ADBFA8 /* CurateItemViewController.swift in Sources */,
@@ -712,7 +725,6 @@
 				015720741FCF294A0043A828 /* CGRect_IKExtension.swift in Sources */,
 				01BBEE3320360EF5002DA8D6 /* ImageManager.swift in Sources */,
 				0157207A1FCF294A0043A828 /* UIAlertController_IKExtension.swift in Sources */,
-				0152CA061FDD40F800ADBFA8 /* ArticleItemTableViewCell.swift in Sources */,
 				015720731FCF294A0043A828 /* Dictionary_IKExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

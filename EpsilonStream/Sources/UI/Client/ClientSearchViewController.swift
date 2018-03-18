@@ -215,10 +215,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     var searchResultItems = [SearchResultItem]()
     
-    func imagesUpdate(){
-        resultsTable.reloadData()
-    }
-    
     var surpriseButton: UIButton! = nil
     
     override func viewDidLoad() {
@@ -597,11 +593,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             return cell
         case SearchResultItemType.iosApp:
             let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(iosAppSearchResult: searchResultItems[indexPath.row] as! IOsAppSearchResultItem)
+            cell.configureWith(searchResult: searchResultItems[indexPath.row])
             return cell
         case SearchResultItemType.gameWebPage:
             let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(gameWebSearchResult: searchResultItems[indexPath.row] as! GameWebPageSearchResultItem)
+            cell.configureWith(searchResult: searchResultItems[indexPath.row])
             return cell
         case SearchResultItemType.blogWebPage:
             let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellBlog", for: indexPath) as! ArticleItemTableViewCell
@@ -944,6 +940,12 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         DLog("safariViewControllerDidFinish")
+    }
+    
+    // MARK: - ImageManagerDelegate
+    
+    func imagesUpdate(){
+        resultsTable.reloadData()
     }
     
     // MARK: - Keyboard

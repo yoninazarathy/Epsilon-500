@@ -154,7 +154,6 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
             DispatchQueue.main.async {
                 //EpsilonStreamDataModel.setUpAutoCompleteLists(withContext: mainContext)
                 EpsilonStreamDataModel.setLatestDates()
-                ImageManager.refreshImageManager()
                 ImageManager.setup()
                 
                 DispatchQueue.global(qos: .background).async{
@@ -204,7 +203,6 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
                 print("refresh images")
                 //QQQQ I am worried that this happens in background thread
                 //If we do it with main.async it freezes with many videos (in curate mode)
-                ImageManager.refreshImageManager()
             case 1:
                 print("clean videos")
                 DispatchQueue.main.async {

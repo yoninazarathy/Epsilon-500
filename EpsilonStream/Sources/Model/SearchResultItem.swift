@@ -19,40 +19,40 @@ enum SearchResultItemType{
     case messageItem
 }
 
-class SearchResultItem{
-    var title: String = ""
-    var channel: String = ""
-    //var image: UIImage? = nil //QQQQ delete
-    var imageName: String = ""
-    var type: SearchResultItemType = SearchResultItemType.video
-    var inCollection: Bool = true
-    var hashTagPriorities: String = ""
-    var rawPriority: Float = -1.0
-    var foundPriority: Float = 0.5
-    var splashKey: String = "none"
+class SearchResultItem {
+    var title = ""
+    var channel = ""
+    var imageName = ""
+    var imageURL: URL?
+    var type = SearchResultItemType.video
+    var inCollection = true
+    var hashTagPriorities = ""
+    var rawPriority = Float(-1.0)
+    var foundPriority = Float(0.5)
+    var splashKey = "none"
 }
 
 class VideoSearchResultItem: SearchResultItem{
-    var youtubeId: String = ""//11 chars base 64 youtube id
-    var durationString: String? = nil
-    var percentWatched: Float = 0.0
+    var youtubeId = ""//11 chars base 64 youtube id
+    var durationString: String?
+    var percentWatched = Float(0.0)
 }
 
 class FeatureSearchResultItem: SearchResultItem{
-    var ourFeaturedURLHashtag: String = ""
-    var isExternal: Bool = false
+    var ourFeaturedURLHashtag = ""
+    var isExternal = false
 }
 
 class IOsAppSearchResultItem: FeatureSearchResultItem{
-    var appId: String = ""
+    var appId = ""
 }
 
 class GameWebPageSearchResultItem: FeatureSearchResultItem{
-    var url: String = ""
+    var url = ""
 }
 
 class BlogWebPageSearchResultItem: FeatureSearchResultItem{
-    var url: String = ""
+    var url = ""
 }
 
 class MathObjectLinkSearchResultItem: SearchResultItem{
