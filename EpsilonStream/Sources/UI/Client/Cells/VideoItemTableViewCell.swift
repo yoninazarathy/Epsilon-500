@@ -23,7 +23,7 @@ class VideoItemTableViewCell: UITableViewCell {
         if isTop { //QQQQ handle this - and move elsewhere
             backgroundView = nil
         } else {
-            backgroundView = UIImageView(image: UIImage(named:"tableCell1"))
+            backgroundView = UIImageView(image: UIImage(named:"CellWhiteWithShadowBackground"))
         }
         
         videoTitle.lineBreakMode = .byWordWrapping

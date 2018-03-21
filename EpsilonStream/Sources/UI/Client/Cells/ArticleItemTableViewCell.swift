@@ -18,23 +18,22 @@ class ArticleItemTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        backgroundView = UIImageView(image: UIImage(named: "tableCell1"))
+        backgroundView = UIImageView(image: UIImage(named: "CellWhiteWithShadowBackground"))
         articleTitle.lineBreakMode = .byWordWrapping
         articleTitle.numberOfLines = 0
     }
     
     func configureWith(articleSearchResult searchResult: BlogWebPageSearchResultItem){
-        //IMAGE
-        let image = ImageManager.image(at: searchResult.imageURL, forKey: searchResult.imageName, withDefaultName: "Explore_icon")
+        // IMAGE
+        let width = UIScreen.main.scale * 100
+        var image = ImageManager.image(at: searchResult.imageURL, forKey: searchResult.imageName, withDefaultName: "Explore_icon")
+        image = Toucan(image: image).resize(CGSize(width: width), fitMode: Toucan.Resize.FitMode.crop).image
+        articleImage.image = Toucan(image: image).maskWithEllipse().image
         
-        //QQQQ too small
-        let img = Toucan(image: image).resize(CGSize(width: 150, height: 150), fitMode: Toucan.Resize.FitMode.crop).image
-        articleImage.image = Toucan(image: img).maskWithEllipse().image
-        
-        //TITLE
+        // TITLE
         articleTitle.text = searchResult.title
         
-        //CHANNEL
+        // CHANNEL
         articleProducer.text = searchResult.channel
         
         if searchResult.inCollection == false {

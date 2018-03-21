@@ -18,7 +18,7 @@ class GameItemTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        backgroundView = UIImageView(image: UIImage(named: "tableCell1"))
+        backgroundView = UIImageView(image: UIImage(named: "CellWhiteWithShadowBackground"))
         gameTitle.lineBreakMode = .byWordWrapping
         gameTitle.numberOfLines = 0
     }

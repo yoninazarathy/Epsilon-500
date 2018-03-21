@@ -14,44 +14,38 @@ class MathObjectLinkItemTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
     
+    static var styles: [String: (backgroundColor: UIColor, backgroundAlpha: CGFloat, backgroundImageName: String?, imageName: String?)] =
+        [ "default"               : (.white,                    1,      nil,                                nil),
+          "GMP-Style"             : (.white,                    1,      "CellGMPBackground",                "CellGMPImage"),
+          "OneOnEpsilon-Style"    : (.white,                    1,      "CellWhiteWithShadowBackground",    "CellOneOnEpsilonImage"),
+          "Youtube-Style"         : (.white,                    1,      "CellWhiteWithShadowBackground",    "CellYoutubeImage"),
+          "play-image"            : (UIColor(rgb: ES_play1),    0.4,    "CellWhiteWithShadowBackground",    "Play_icon"),
+          "explore-image"         : (UIColor(rgb: ES_explore1), 0.4,    "CellWhiteWithShadowBackground",    "Explore_icon"),
+          "watch-image"           : (UIColor(rgb: ES_watch1),   0.4,    "CellWhiteWithShadowBackground",    "Watch_icon") ]
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
-    func configureWith(mathObjectLinkSearchResult result: MathObjectLinkSearchResultItem){
-        
-        titleLabel.text = result.title
-        detailLabel.text = result.titleDetail
-        
-        //QQQQ horrible code 
-        if result.imageKey == "GMP-Style"{
-            backgroundView = UIImageView(image: UIImage(named:"desktop_landscape_backgroundLight"))
-            leftUIImage.image = UIImage(named:"gmp_balloon_gray")
-        }else if result.imageKey == "OneOnEpsilon-Style"{
-            backgroundView = UIImageView(image: UIImage(named:"tableCell1"))
-            leftUIImage.image = UIImage(named:"OneOnEpsilonLogo3")
-        } else if result.imageKey == "Youtube-Style"{
-            backgroundView = UIImageView(image: UIImage(named:"tableCell1"))
-            leftUIImage.image = UIImage(named:"youtubeRound")
-        }else if result.imageKey == "play-image"{
-            backgroundColor = UIColor(rgb: ES_play1)
-            backgroundView = UIImageView(image: UIImage(named:"tableCell1"))
-            backgroundView?.alpha = 0.4
-            leftUIImage.image = UIImage(named:"Play_icon")
-        }else if result.imageKey == "explore-image"{
-            backgroundColor = UIColor(rgb: ES_explore1)
-            backgroundView = UIImageView(image: UIImage(named:"tableCell1"))
-            backgroundView?.alpha = 0.4
-            leftUIImage.image = UIImage(named:"Explore_icon")
-        }else if result.imageKey == "watch-image"{
-            backgroundColor = UIColor(rgb: ES_watch1)
-            backgroundView = UIImageView(image: UIImage(named:"tableCell1"))
-            backgroundView?.alpha = 0.4
-            leftUIImage.image = UIImage(named:"Watch_icon")
-        }else{
-            backgroundView = UIImageView(image: UIImage(named:"tableCell1"))
-            leftUIImage.image = UIImage(named:"eStreamIcon")
+    func configureWith(mathObjectLinkSearchResult searchResult: MathObjectLinkSearchResultItem){
+        //
+        titleLabel.text = searchResult.title
+        detailLabel.text = searchResult.titleDetail
+        //
+        //
+        var style = MathObjectLinkItemTableViewCell.styles[searchResult.imageKey]
+        if style == nil {
+            style = MathObjectLinkItemTableViewCell.styles["default"]
         }
-
+        
+        if style?.backgroundImageName != nil && style?.backgroundImageName?.isEmpty == false {
+            backgroundView = UIImageView(image: UIImage(named: style!.backgroundImageName!) )
+        }
+        if style?.imageName != nil && style?.imageName?.isEmpty == false {
+            leftUIImage.image = UIImage(named: style!.imageName!)
+        }
+        backgroundColor = style!.backgroundColor
+        backgroundView?.alpha = style!.backgroundAlpha
+        //
     }
 }
