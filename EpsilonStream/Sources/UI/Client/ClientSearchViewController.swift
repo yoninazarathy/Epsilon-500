@@ -228,6 +228,12 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         resultsTable.dataSource = self
         resultsTable.separatorStyle = .none
         resultsTable.keyboardDismissMode = .onDrag
+//        resultsTable.register(ArticleItemTableViewCell.self,        forCellReuseIdentifier: "ArticleCell")
+//        resultsTable.register(GameItemTableViewCell.self,           forCellReuseIdentifier: "GameCell")
+//        resultsTable.register(MathObjectLinkItemTableViewCell.self, forCellReuseIdentifier: "MathObjectLinkCell")
+//        resultsTable.register(SpecialItemTableViewCell.self,        forCellReuseIdentifier: "SpecialCell")
+//        resultsTable.register(UserMessageTableViewCell.self,        forCellReuseIdentifier: "UserMeassageCell")
+//        resultsTable.register(VideoItemTableViewCell.self,          forCellReuseIdentifier: "VideoCell")
 
         autoCompleteTable.delegate = autoCompleteTableDelegate
         autoCompleteTable.dataSource = autoCompleteTableDelegate
@@ -572,48 +578,47 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     func tableView(_ tableView: UITableView,cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if searchResultItems.count == 0{// && searchResultItems[0].type == SearchResultItemType.mathObjectLink{
-            if indexPath.row == 0{
-                let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
+        if searchResultItems.count == 0 {
+            if indexPath.row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SpecialCell", for: indexPath) as! SpecialItemTableViewCell
                 cell.mainLabel.text = "No match for \"\(currentSearch.searchString)\""
                 cell.clientSearchViewController = self
                 return cell
-            }else{
-                let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellMathObjectLink", for: indexPath) as! MathObjectLinkItemTableViewCell
-                cell.configureWith(mathObjectLinkSearchResult: searchResultItems[0] as! MathObjectLinkSearchResultItem)
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MathObjectLinkCell", for: indexPath) as! MathObjectLinkItemTableViewCell
+                cell.configureWith(searchResult: searchResultItems[0] as! MathObjectLinkSearchResultItem)
                 return cell
             }
         }
         
         switch searchResultItems[indexPath.row].type{
         case SearchResultItemType.video:
-            let cell = tableView.dequeueReusableCell(withIdentifier:
-                "searchTableCellVideo", for: indexPath) as! VideoItemTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideoItemTableViewCell
             cell.configureWith(videoSearchResult:  searchResultItems[indexPath.row] as! VideoSearchResultItem)
             return cell
         case SearchResultItemType.iosApp:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
             cell.configureWith(searchResult: searchResultItems[indexPath.row])
             return cell
         case SearchResultItemType.gameWebPage:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellApp", for: indexPath) as! GameItemTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
             cell.configureWith(searchResult: searchResultItems[indexPath.row])
             return cell
         case SearchResultItemType.blogWebPage:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellBlog", for: indexPath) as! ArticleItemTableViewCell
-            cell.configureWith(articleSearchResult: searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! ArticleItemTableViewCell
+            cell.configureWith(searchResult: searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem)
             return cell
         case SearchResultItemType.mathObjectLink:
             //QQQQ implement Math ObjectLink Search Result Item
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellMathObjectLink", for: indexPath) as! MathObjectLinkItemTableViewCell
-            cell.configureWith(mathObjectLinkSearchResult: searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MathObjectLinkCell", for: indexPath) as! MathObjectLinkItemTableViewCell
+            cell.configureWith(searchResult: searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem)
             return cell
         case SearchResultItemType.specialItem:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellSpecialItem", for: indexPath) as! SpecialItemTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SpecialCell", for: indexPath) as! SpecialItemTableViewCell
             cell.configureWith(specialSearchResultItem: searchResultItems[indexPath.row] as! SpecialSearchResultItem)
             return cell
         case SearchResultItemType.messageItem:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableCellUserMessage", for: indexPath) as! UserMessageTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserMessageCell", for: indexPath) as! UserMessageTableViewCell
             cell.configureWith(userMessageResultItem: searchResultItems[indexPath.row] as! UserMessageResultItem)
             return cell
             

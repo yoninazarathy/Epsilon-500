@@ -8,11 +8,7 @@
 
 import UIKit
 
-class MathObjectLinkItemTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var leftUIImage: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var detailLabel: UILabel!
+class MathObjectLinkItemTableViewCell: SearchResultCell {
     
     static var styles: [String: (backgroundColor: UIColor, backgroundAlpha: CGFloat, backgroundImageName: String?, imageName: String?)] =
         [ "default"               : (.white,                    1,      nil,                                nil),
@@ -27,10 +23,10 @@ class MathObjectLinkItemTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configureWith(mathObjectLinkSearchResult searchResult: MathObjectLinkSearchResultItem){
+    func configureWith(searchResult: MathObjectLinkSearchResultItem){
         //
         titleLabel.text = searchResult.title
-        detailLabel.text = searchResult.titleDetail
+        subtitleLabel.text = searchResult.titleDetail
         //
         //
         var style = MathObjectLinkItemTableViewCell.styles[searchResult.imageKey]
@@ -42,7 +38,7 @@ class MathObjectLinkItemTableViewCell: UITableViewCell {
             backgroundView = UIImageView(image: UIImage(named: style!.backgroundImageName!) )
         }
         if style?.imageName != nil && style?.imageName?.isEmpty == false {
-            leftUIImage.image = UIImage(named: style!.imageName!)
+            mainImageView.image = UIImage(named: style!.imageName!)
         }
         backgroundColor = style!.backgroundColor
         backgroundView?.alpha = style!.backgroundAlpha
