@@ -39,8 +39,6 @@ var runningCloudRetrieve = true
 var sleepTimeCloudRetrieve: UInt32 = 5
 var sleepTimeCheckForUpdates: UInt32 = 1
 
-var sleepTimeImageRetrieve: UInt32 = 120 //QQQQ currently not used
-
 let maxVideosToShow = 100
 let maxAppsToShow = 100
 let maxBlogsToShow = 100

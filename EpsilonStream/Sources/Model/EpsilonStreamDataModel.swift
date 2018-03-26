@@ -944,11 +944,13 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     }
     
     
-    class func resetDates(){
-        latestVideoDate = Date(timeIntervalSince1970: 0.0)
-        latestMathObjectDate = Date(timeIntervalSince1970: 0.0)
-        latestFeatureDate = Date(timeIntervalSince1970: 0.0)
-        latestMathObjectLinkDate = Date(timeIntervalSince1970: 0.0)
+    class func resetDates() {
+        latestVideoDate             = Date(timeIntervalSince1970: 0.0)
+        latestMathObjectDate        = Date(timeIntervalSince1970: 0.0)
+        latestFeatureDate           = Date(timeIntervalSince1970: 0.0)
+        latestMathObjectLinkDate    = Date(timeIntervalSince1970: 0.0)
+        
+        UserDataManager.lastDatabaseUpdateDate = nil
     }
     
     class func setLatestDates(){

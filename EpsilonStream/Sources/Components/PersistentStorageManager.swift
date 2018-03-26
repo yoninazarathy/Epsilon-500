@@ -15,55 +15,76 @@ class PersistentStorageManager: NSObject {
     
     static public let shared = PersistentStorageManager()
     
-    // MARK: - Database storage
+    private var sotrageFileNamePrefix: String {
+        return "EpsilonStreamDataModel"
+    }
+    
+    private var version: Int {
+        return 2
+    }
+    
+    private var storageDirectoryURL: URL {
+        return IKFileManager.shared.libraryDirectoryURL.appendingPathComponent("Application Support")
+    }
+    
+    private var storageFileName: String {
+        return "EpsilonStreamDataModel_\(version)"
+    }
+    
+    private var storageFileURL: URL {
+        return storageDirectoryURL.appendingPathComponent("\(storageFileName).sqlite")
+    }
+    
+    public func removeOldVersion() {
+        if IKFileManager.shared.fileExists(atURL: storageFileURL) == false {
+            // File with current version doesn't exist - we need to clean data and re-dowload everything.
+            var files = IKFileManager.shared.contentsOfDirectory(atPath: IKFileManager.shared.absolutePath(forPath: storageDirectoryURL.relativePath) )
+            files = files.filter({ (fileName: String) -> Bool in
+                return fileName.starts(with: self.sotrageFileNamePrefix)
+            })
+            
+            for fileName in files {
+                IKFileManager.shared.removeItem(atURL: storageDirectoryURL.appendingPathComponent(fileName))
+            }
+            EpsilonStreamDataModel.resetDates()
+        }
+    }
+    
+    // MARK: - Setup storage iOS 10 and above
     
     @available(iOS 10.0, *) private lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
-        let container = NSPersistentContainer(name: "EpsilonStreamDataModel")
+        let container = NSPersistentContainer(name: storageFileName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
         return container
     }()
     
+    // MARK: - Setup storage iOS 9
+    
     private lazy var managedObjectModel: NSManagedObjectModel = {
-        let modelURL = Bundle.main.url(forResource: "EpsilonStreamDataModel", withExtension: "mom")
-        return NSManagedObjectModel(contentsOf: modelURL!)!
+        var modelURL = Bundle.main.resourceURL!.appendingPathComponent("\(storageFileName).momd")
+        modelURL.appendPathComponent("\(sotrageFileNamePrefix)_ \(version).mom") // For some reason XCode adds "space" symbol before the version in the file name.
+        return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         // Create the coordinator and store
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: PersistentStorageManager.shared.managedObjectModel)
-        var url = IKFileManager.shared.libraryDirectoryURL.appendingPathComponent("Application Support")
-        url = url.appendingPathComponent("EpsilonStreamDataModel.sqlite")
-        
+
         do {
-            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storageFileURL, options: nil)
         } catch let error {
-            NSLog("Add persistent store error \(error)")
+            DLog("Add persistent store error \(error)")
             abort()
         }
         
         return coordinator
     }()
+    
+    // MARK: - Usage
     
     public lazy var mainContext: NSManagedObjectContext = {
         if #available(iOS 10.0, *) {

@@ -75,6 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         FirebaseApp.configure()
         setGlobalsFromUserDefaults()
         //WebViewPrefetcher.setUp()
+        PersistentStorageManager.shared.removeOldVersion()
         EpsilonStreamDataModel.loadAllAutoCompletionDictionaries()
         EpsilonStreamDataModel.setLatestDates()
         loadClient()

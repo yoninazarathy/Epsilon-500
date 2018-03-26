@@ -16,6 +16,7 @@ extension MathObjectLink {
     @NSManaged public var searchTitle: String
     @NSManaged public var hashTags: String
     @NSManaged public var imageKey: String
+    @NSManaged public var imageURL: String
     @NSManaged public var ourTitle: String
     @NSManaged public var ourTitleDetail: String
     @NSManaged public var oneOnEpsilonTimeStamp: Date
@@ -30,6 +31,7 @@ extension MathObjectLink {
         searchTitle = record["searchTitle"] as! String
         hashTags = record["hashTags"] as! String
         imageKey = record["imageKey"] as! String
+        imageURL = record["imageURL"] as? String ?? ""
         ourTitle = record["ourTitle"] as! String
         oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
         isInCollection = record["isInCollection"] as! Bool
