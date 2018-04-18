@@ -16,6 +16,8 @@
 "AlertDefaultOKButton"      = "OK";
 "AlertDefaultCloseButton"   = "Close";
 
+"AlertWaitTitle" = "Please wait...";
+
 "AlertResumePlaybackMessage"        = "Resume playing at %@?";
 "AlertResumePlaybackCancelButton"   = "Restart";
 "AlertResumePlaybackOKButton"       = "Resume";

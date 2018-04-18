@@ -55,6 +55,10 @@
 		015720811FCF294A0043A828 /* DispatchQueue_IKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0157206F1FCF294A0043A828 /* DispatchQueue_IKExtension.swift */; };
 		015720821FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015720701FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift */; };
 		015720831FCF294A0043A828 /* UIImage_IKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015720711FCF294A0043A828 /* UIImage_IKExtension.swift */; };
+		016701672085178D00210EE3 /* MaintenanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016701662085178D00210EE3 /* MaintenanceCell.swift */; };
+		0167016A20863BA700210EE3 /* CellMaintenanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0167016920863BA700210EE3 /* CellMaintenanceView.swift */; };
+		0167016D20864CD800210EE3 /* SurpriseTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0167016C20864CD800210EE3 /* SurpriseTextField.swift */; };
+		0167016F20864DED00210EE3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0167016E20864DED00210EE3 /* Extensions.swift */; };
 		01746A3A1FA0F1A7003A3BC2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01746A371FA0F1A7003A3BC2 /* Common.swift */; };
 		017617BB1FFBE79D002621E4 /* PreloadedThumbnailImages in Resources */ = {isa = PBXBuildFile; fileRef = 017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */; };
 		017617BD1FFBE7EC002621E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 017617BC1FFBE7EC002621E4 /* Assets.xcassets */; };
@@ -146,6 +150,10 @@
 		0157206F1FCF294A0043A828 /* DispatchQueue_IKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue_IKExtension.swift; sourceTree = "<group>"; };
 		015720701FCF294A0043A828 /* NSJSONSerialization_IKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSJSONSerialization_IKExtension.swift; sourceTree = "<group>"; };
 		015720711FCF294A0043A828 /* UIImage_IKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage_IKExtension.swift; sourceTree = "<group>"; };
+		016701662085178D00210EE3 /* MaintenanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceCell.swift; sourceTree = "<group>"; };
+		0167016920863BA700210EE3 /* CellMaintenanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellMaintenanceView.swift; sourceTree = "<group>"; };
+		0167016C20864CD800210EE3 /* SurpriseTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurpriseTextField.swift; sourceTree = "<group>"; };
+		0167016E20864DED00210EE3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		01746A371FA0F1A7003A3BC2 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PreloadedThumbnailImages; sourceTree = "<group>"; };
 		017617BC1FFBE7EC002621E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -256,6 +264,8 @@
 		0152C9DF1FDD40F800ADBFA8 /* Admin */ = {
 			isa = PBXGroup;
 			children = (
+				0167016820863B7200210EE3 /* Views */,
+				016701652085174300210EE3 /* Cells */,
 				0152C9E01FDD40F800ADBFA8 /* TermSelectorViewController.swift */,
 				0152C9E11FDD40F800ADBFA8 /* URLSelectorViewController.swift */,
 				0152C9E21FDD40F800ADBFA8 /* CurateItemViewController.swift */,
@@ -272,8 +282,9 @@
 			isa = PBXGroup;
 			children = (
 				0145FD76205AA0C60063348C /* Cells */,
-				0152C9E91FDD40F800ADBFA8 /* ClientSettingsViewController.swift */,
+				0167016B20864CB800210EE3 /* Views */,
 				0152C9EA1FDD40F800ADBFA8 /* ClientSearchViewController.swift */,
+				0152C9E91FDD40F800ADBFA8 /* ClientSettingsViewController.swift */,
 				0152C9EE1FDD40F800ADBFA8 /* WebViewingViewController.swift */,
 				0152C9EF1FDD40F800ADBFA8 /* ExternalPageViewer.swift */,
 				0152C9F11FDD40F800ADBFA8 /* SplashScreenViewController.swift */,
@@ -316,6 +327,30 @@
 				015720711FCF294A0043A828 /* UIImage_IKExtension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		016701652085174300210EE3 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				016701662085178D00210EE3 /* MaintenanceCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		0167016820863B7200210EE3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0167016920863BA700210EE3 /* CellMaintenanceView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0167016B20864CB800210EE3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0167016C20864CD800210EE3 /* SurpriseTextField.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		01746A351FA0F1A7003A3BC2 /* Sources */ = {
@@ -421,6 +456,7 @@
 				01BBEE2B20360EF5002DA8D6 /* BrowseStackManager.swift */,
 				01BBEE2C20360EF5002DA8D6 /* EpsilonStreamBackgroundFetch.swift */,
 				01BBEE2D20360EF5002DA8D6 /* EpsilonStreamLoginManager.swift */,
+				0167016E20864DED00210EE3 /* Extensions.swift */,
 				01BBEE2920360EF5002DA8D6 /* ImageManager.swift */,
 				01BBEE3120360EF5002DA8D6 /* PersistentStorageManager.swift */,
 				0145FD6F2052F2B70063348C /* TextManager.swift */,
@@ -679,8 +715,10 @@
 				0152C9FE1FDD40F800ADBFA8 /* AdminSettingsViewController.swift in Sources */,
 				0145FD722058383D0063348C /* AssetManager.swift in Sources */,
 				0157207D1FCF294A0043A828 /* UIColor_IKExtension.swift in Sources */,
+				016701672085178D00210EE3 /* MaintenanceCell.swift in Sources */,
 				015720781FCF294A0043A828 /* CachedURLResponse_IKExtension.swift in Sources */,
 				0157207C1FCF294A0043A828 /* UIViewController_IKExtension.swift in Sources */,
+				0167016D20864CD800210EE3 /* SurpriseTextField.swift in Sources */,
 				0152CA021FDD40F800ADBFA8 /* TermListViewController.swift in Sources */,
 				01E69AD4206536DC00681A1E /* EpsilonStreamDataModel_2.xcdatamodeld in Sources */,
 				018BAA2C1FA21F2D00F8583A /* IKFileManager.swift in Sources */,
@@ -712,6 +750,7 @@
 				0152CA111FDD40F800ADBFA8 /* BaseViewController.swift in Sources */,
 				0152CA121FDD40F800ADBFA8 /* BaseView.swift in Sources */,
 				01BBEE2020360AF7002DA8D6 /* EpsilonStreamAdminDataModel.swift in Sources */,
+				0167016A20863BA700210EE3 /* CellMaintenanceView.swift in Sources */,
 				01BBEE3820360EF5002DA8D6 /* UserDataManager.swift in Sources */,
 				015720811FCF294A0043A828 /* DispatchQueue_IKExtension.swift in Sources */,
 				01BBEE2420360C0C002DA8D6 /* SearchResultItem.swift in Sources */,
@@ -739,6 +778,7 @@
 				01BBEE3B20360EF5002DA8D6 /* PersistentStorageManager.swift in Sources */,
 				01BBEE1E20360ADA002DA8D6 /* EpsilonStreamGlobals.swift in Sources */,
 				015720741FCF294A0043A828 /* CGRect_IKExtension.swift in Sources */,
+				0167016F20864DED00210EE3 /* Extensions.swift in Sources */,
 				01BBEE3320360EF5002DA8D6 /* ImageManager.swift in Sources */,
 				0157207A1FCF294A0043A828 /* UIAlertController_IKExtension.swift in Sources */,
 				01E69AC62062A82500681A1E /* BaseCell.swift in Sources */,

@@ -4,6 +4,14 @@ import UIKit
 
 extension AlertManager {
     
+    func showWait() {
+        showAlert(key: "showWait", title: LocalString("AlertWaitTitle"), message: nil, buttonTitles: [])
+    }
+    
+    func closeWait() {
+        closeAlert(key: "showWait")
+    }
+    
     func showResumePlayback(seconds: Int, confirmation: @escaping AlertConfirmation) {
         let message = String(format: LocalString("AlertResumePlaybackMessage"), TextManager.shared.minutesSeconds(fromSeconds: seconds))
         let alert = showAlert(key: "showResumePlayback", message: message, cancelButtonTitle: LocalString("AlertResumePlaybackCancelButton"),

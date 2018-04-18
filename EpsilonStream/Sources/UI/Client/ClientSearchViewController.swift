@@ -8,63 +8,11 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
 import StoreKit
 import YouTubePlayer
 import Firebase
-import Social
-//QQQQ will be back import BetterSegmentedControl
 import AVFoundation
 import SafariServices
-
-//QQQQ see if time efficient
-import Toucan
-
-
-
-//https://stackoverflow.com/questions/27761557/shuffling-a-string-in-swift
-extension Array {
-    var shuffled: Array {
-        var array = self
-        indices.dropLast().forEach {
-            guard case let index = Int(arc4random_uniform(UInt32(count - $0))) + $0, index != $0 else {
-                return
-            }
-            array.swapAt($0, index)
-        }
-        return array
-    }
-    
-    var chooseOne: Element {
-        return self[Int(arc4random_uniform(UInt32(count)))]
-    }
-}
-
-extension String {
-    var jumble: String {
-        return String(Array(self).shuffled)
-    }
-}
-
-
-//from here https://stackoverflow.com/questions/24263007/how-to-use-hex-colour-values-in-swift-ios
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-    }
-    
-    convenience init(rgb: Int) {
-        self.init(
-            red: (rgb >> 16) & 0xFF,
-            green: (rgb >> 8) & 0xFF,
-            blue: rgb & 0xFF
-        )
-    }
-}
 
 
 protocol SearcherUI {
@@ -72,150 +20,32 @@ protocol SearcherUI {
 }
 
 
-class SurpriseTextField: UITextField {
-    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        let gap = CGFloat(3)
-        let size = CGSize(width: bounds.height - 2 * gap)
-        let origin = CGPoint(x: bounds.width - size.width - gap, y: gap)
-        return CGRect(origin: origin, size: size)
-    }
-}
-
-
 class ClientSearchViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
-SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI, ImageLoadedDelegate{
-    
-    var coverImageView: UIImageView! = nil
+SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI, ImageLoadedDelegate {
     
     @IBOutlet weak var mainTopStack: UIStackView!
     @IBOutlet weak var mainSegmentView: UIView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
-    
-    var audioPlayer: AVAudioPlayer!
-    
     @IBOutlet weak var homeButton: UIButton!
     
-    @IBAction func homeButtonAction(_ sender: Any) {
-        UserMessageManager.userDidAnotherAction()
-
-        if let prevText = searchTextField.text{
-            Analytics.logEvent("home_button", parameters: ["prevText" : prevText as NSObject])
-        }else{
-            Analytics.logEvent("home_button", parameters: ["prevText" : "EMPTY" as NSObject])
-        }
-        searchTextField.text = "" //QQQQ or home?
-        BrowseStackManager.reset(withBaseSearch: EpsilonStreamSearch())
-        refreshSearch()
-        showXButton = false
-        //QQQQ duplicated
-        surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
-    }
-    
-    func clearButtonAction() {
-        UserMessageManager.userDidAnotherAction()
-        
-        if let prevText = searchTextField.text{
-            Analytics.logEvent("clear_button", parameters: ["prevText" : prevText as NSObject])
-        }else{
-            Analytics.logEvent("clear_button", parameters: ["prevText" : "EMPTY" as NSObject])
-        }
-        searchTextField.text = "" //QQQQ or home?
-        refreshSearch()
-        showXButton = false
-        //QQQQ duplicated
-            surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
-    }
-
-    
-    @IBAction func backButtonAction(_ sender: UIButton) {
-        UserMessageManager.userDidAnotherAction()
-
-        if let prevText = searchTextField.text{
-            Analytics.logEvent("back_button", parameters: ["prevText" : prevText as NSObject])
-        }else{
-            Analytics.logEvent("back_button", parameters: ["prevText" : "EMPTY" as NSObject])
-        }
-        
-        let newSearchText = BrowseStackManager.moveBack().searchString
-        print(newSearchText)
-        searchTextField.text = newSearchText
-        refreshSearch()
-    }
-    
-    
-    @IBAction func forwardButtonAction(_ sender: UIButton) {
-        UserMessageManager.userDidAnotherAction()
-        if let prevText = searchTextField.text{
-            Analytics.logEvent("forward_button", parameters: ["prevText" : prevText as NSObject])
-        }else{
-            Analytics.logEvent("forward_button", parameters: ["prevText" : "EMPTY" as NSObject])
-        }
-        searchTextField.text = BrowseStackManager.moveForward().searchString
-        refreshSearch()
-    }
-    
-    var textShuffleTimer: Timer! = nil
-    
-    var showXButton = false
-    
-    @IBAction func supriseButtonAction(_ sender: UIButton) {
-        UserMessageManager.userDidAnotherAction()
-        
-        if showXButton{
-            clearButtonAction()
-        }else{
-            surpriseButton.isEnabled = false
-            surpriseButton.imageView!.startAnimating()
-            let newText = EpsilonStreamDataModel.surpriseText()
-            searchTextField.text = newText.lowercased().jumble
-            textShuffleTimer = Timer.every(0.1.seconds) {
-                self.searchTextField.text = newText.lowercased().jumble
-            }
-
-            Timer.after(0.6, {
-                self.surpriseButton.imageView!.stopAnimating()
-                self.surpriseButton.imageView!.isHighlighted = false
-                Analytics.logEvent("surprise_button", parameters: ["newText" : newText as NSObject])
-                self.selected(newText)
-                if let textShuffleTimer = self.textShuffleTimer {
-                    textShuffleTimer.invalidate()
-                }
-                self.surpriseButton.isEnabled = true
-            })
-            let url = ClientSearchViewController.getSoundURL()
-            do{
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer.volume = 0.15
-                audioPlayer.play()
-            }catch{
-                print("error playing sound")
-            }
-        }
-        autoCompleteTable.isHidden = true
-    }
-    
-  
     @IBOutlet weak var whyHowSegmentedControl: UISegmentedControl!
-    @IBAction func settingsButtonAction(_ sender: UIButton) {
-        // IK: Replaced with segue in storyboard.
-//        if let vc = storyboard?.instantiateViewController(withIdentifier: "clientSettingsViewController") as? ClientSettingsViewController{
-//            navigationController?.pushViewController(vc, animated: true)
-//        }
-    }
-    
-    let autoCompleteTableDelegate = AutoCompleteTableDelegate()
-    
     @IBOutlet weak var searchTextField: SurpriseTextField!
     @IBOutlet weak var ageSegmentedControl: UISegmentedControl!
     @IBOutlet weak var resultsTable: UITableView!
     @IBOutlet weak var autoCompleteTable: UITableView!
     
-    // delete QQQQ - var playerBank: [YouTubePlayerView] = []
+    var surpriseButton: UIButton! = nil
+    var coverImageView: UIImageView! = nil
+    
+    var audioPlayer: AVAudioPlayer!
+    
+    var textShuffleTimer: Timer! = nil
+    var showXButton = false
+  
+    let autoCompleteTableDelegate = AutoCompleteTableDelegate()
     
     var searchResultItems = [SearchResultItem]()
-    
-    var surpriseButton: UIButton! = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -539,6 +369,21 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         let resourcePath = Bundle.main.resourcePath
         let url = URL(fileURLWithPath:resourcePath!).appendingPathComponent("click.wav")
         return url
+    }
+    
+    func clearSearchText() {
+        UserMessageManager.userDidAnotherAction()
+        
+        if let prevText = searchTextField.text{
+            Analytics.logEvent("clear_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            Analytics.logEvent("clear_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
+        searchTextField.text = "" //QQQQ or home?
+        refreshSearch()
+        showXButton = false
+        //QQQQ duplicated
+        surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
     }
     
     // MARK: - View controllers
@@ -959,6 +804,84 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     }
     
     // MARK: - Actions
+    
+    @IBAction func homeButtonAction(_ sender: Any) {
+        UserMessageManager.userDidAnotherAction()
+        
+        if let prevText = searchTextField.text{
+            Analytics.logEvent("home_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            Analytics.logEvent("home_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
+        searchTextField.text = "" //QQQQ or home?
+        BrowseStackManager.reset(withBaseSearch: EpsilonStreamSearch())
+        refreshSearch()
+        showXButton = false
+        //QQQQ duplicated
+        surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
+    }
+    
+    @IBAction func backButtonAction(_ sender: UIButton) {
+        UserMessageManager.userDidAnotherAction()
+        
+        if let prevText = searchTextField.text{
+            Analytics.logEvent("back_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            Analytics.logEvent("back_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
+        
+        let newSearchText = BrowseStackManager.moveBack().searchString
+        print(newSearchText)
+        searchTextField.text = newSearchText
+        refreshSearch()
+    }
+    
+    @IBAction func forwardButtonAction(_ sender: UIButton) {
+        UserMessageManager.userDidAnotherAction()
+        if let prevText = searchTextField.text{
+            Analytics.logEvent("forward_button", parameters: ["prevText" : prevText as NSObject])
+        }else{
+            Analytics.logEvent("forward_button", parameters: ["prevText" : "EMPTY" as NSObject])
+        }
+        searchTextField.text = BrowseStackManager.moveForward().searchString
+        refreshSearch()
+    }
+    
+    @IBAction func supriseButtonAction(_ sender: UIButton) {
+        UserMessageManager.userDidAnotherAction()
+        
+        if showXButton{
+            clearSearchText()
+        }else{
+            surpriseButton.isEnabled = false
+            surpriseButton.imageView!.startAnimating()
+            let newText = EpsilonStreamDataModel.surpriseText()
+            searchTextField.text = newText.lowercased().jumble
+            textShuffleTimer = Timer.every(0.1.seconds) {
+                self.searchTextField.text = newText.lowercased().jumble
+            }
+            
+            Timer.after(0.6, {
+                self.surpriseButton.imageView!.stopAnimating()
+                self.surpriseButton.imageView!.isHighlighted = false
+                Analytics.logEvent("surprise_button", parameters: ["newText" : newText as NSObject])
+                self.selected(newText)
+                if let textShuffleTimer = self.textShuffleTimer {
+                    textShuffleTimer.invalidate()
+                }
+                self.surpriseButton.isEnabled = true
+            })
+            let url = ClientSearchViewController.getSoundURL()
+            do{
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer.volume = 0.15
+                audioPlayer.play()
+            }catch{
+                print("error playing sound")
+            }
+        }
+        autoCompleteTable.isHidden = true
+    }
     
     @IBAction func searchFieldEditBegin(_ sender: Any) {
         if searchTextField.text! != ""{
