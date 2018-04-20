@@ -11,7 +11,7 @@ import UIKit
 class MathObjectLinkItemTableViewCell: SearchResultCell {
     
     static var styles: [String: (backgroundColor: UIColor, backgroundAlpha: CGFloat, backgroundImageName: String?, imageName: String?)] =
-        [ "default"               : (.white,                    1,      nil,                                nil),
+        [ "default"               : (.white,                    1,      "CellWhiteWithShadowBackground",    "eStreamIcon"),
           "GMP-Style"             : (.white,                    1,      "CellGMPBackground",                "CellGMPImage"),
           "OneOnEpsilon-Style"    : (.white,                    1,      "CellWhiteWithShadowBackground",    "CellOneOnEpsilonImage"),
           "Youtube-Style"         : (.white,                    1,      "CellWhiteWithShadowBackground",    "CellYoutubeImage"),
@@ -23,7 +23,9 @@ class MathObjectLinkItemTableViewCell: SearchResultCell {
         super.awakeFromNib()
     }
     
-    func configureWith(searchResult: MathObjectLinkSearchResultItem){
+    func configureWith(searchResult: MathObjectLinkSearchResultItem) {
+        //DLog(">>>>>>>>>>>> \(searchResult.title) --------- \(searchResult.imageKey)")
+        
         //
         titleLabel.text = searchResult.title
         subtitleLabel.text = searchResult.titleDetail
