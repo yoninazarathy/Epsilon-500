@@ -752,22 +752,8 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         do{
             let moLinks = try mainContext.fetch(mathObjectLinkRequest)
-            for mol in moLinks{
-                let item = MathObjectLinkSearchResultItem()
-                item.title = mol.ourTitle
-                item.hashTags = mol.hashTags
-                item.channel = "MATH-OBJECT-LINK-CHANNEL"
-                item.type = SearchResultItemType.mathObjectLink
-                item.title = mol.ourTitle
-                item.searchTitle = mol.searchTitle
-                item.imageKey = mol.imageKey
-                item.inCollection = mol.isInCollection
-                item.hashTagPriorities = mol.hashTagPriorities
-                item.rawPriority = mol.displaySearchPriority
-                item.titleDetail = mol.ourTitleDetail
-                item.splashKey = mol.splashKey
-                item.ourMathObjectLinkHashTag = mol.ourMathObjectLinkHashTag
-                mathObjectLinkSearchResult.append(item)
+            for moLink in moLinks{
+                mathObjectLinkSearchResult.append( MathObjectLinkSearchResultItem(mathObjectLink: moLink) )
             }
         }catch{
             print("Fetch failed")

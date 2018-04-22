@@ -214,26 +214,26 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
             case 3:
                 print("clean math objects")
                 break
-            case 3:
+            case 4:
                 print("clean math math object links")
                 break
-            case 4:
+            case 5:
                 print("fetch videos")
                 EpsilonStreamBackgroundFetch.readVideoDataFromCloud(isInAdminMode == false)
                 break
-            case 5:
+            case 6:
                 print("fetch math objects")
                 EpsilonStreamBackgroundFetch.readMathObjectsFromCloud()
                 break
-            case 6:
+            case 7:
                 print("fetch math object links")
                 EpsilonStreamBackgroundFetch.readMathObjectLinksFromCloud()
                 break
-            case 7:
+            case 8:
                 print("fetch epsilon stream info")
 
                 break
-            case 8:
+            case 9:
                 print("fetch features")
                 EpsilonStreamBackgroundFetch.readFeaturedURLsFromCloud()
                 break

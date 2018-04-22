@@ -30,6 +30,7 @@ class MathObjectLinkItemTableViewCell: SearchResultCell {
         titleLabel.text = searchResult.title
         subtitleLabel.text = searchResult.titleDetail
         //
+        
         //
         var style = MathObjectLinkItemTableViewCell.styles[searchResult.imageKey]
         if style == nil {
@@ -44,6 +45,14 @@ class MathObjectLinkItemTableViewCell: SearchResultCell {
         }
         backgroundColor = style!.backgroundColor
         backgroundView?.alpha = style!.backgroundAlpha
+        //
+        
+        //
+        if let imageURL = searchResult.imageURL {
+            mainImageView.image = ImageManager.image(at: imageURL, forKey: searchResult.imageKey) { (image) in
+                self.mainImageView.image = image
+            }
+        }
         //
     }
 }
