@@ -23,6 +23,23 @@ protocol SearcherUI {
 class ClientSearchViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
 SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI, ImageLoadedDelegate {
     
+    // MARK: - Model
+    
+    var audioPlayer: AVAudioPlayer!
+    
+    var textShuffleTimer: Timer! = nil
+    var showXButton = false
+    
+    let autoCompleteTableDelegate = AutoCompleteTableDelegate()
+    
+    var searchResultItems = [SearchResultItem]()
+    
+    var currentSearch = EpsilonStreamSearch()
+    
+    var goingToTop = true
+    
+    // MARK: - UI
+    
     @IBOutlet weak var mainTopStack: UIStackView!
     @IBOutlet weak var mainSegmentView: UIView!
     @IBOutlet weak var backButton: UIButton!
@@ -38,14 +55,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     var surpriseButton: UIButton! = nil
     var coverImageView: UIImageView! = nil
     
-    var audioPlayer: AVAudioPlayer!
+    var okAction: UIAlertAction! = nil
     
-    var textShuffleTimer: Timer! = nil
-    var showXButton = false
-  
-    let autoCompleteTableDelegate = AutoCompleteTableDelegate()
+    var cellMaintenanceView: CellMaintenanceView! = nil
     
-    var searchResultItems = [SearchResultItem]()
+    // MARK: - Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,12 +72,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         resultsTable.dataSource = self
         resultsTable.separatorStyle = .none
         resultsTable.keyboardDismissMode = .onDrag
-//        resultsTable.register(ArticleItemTableViewCell.self,        forCellReuseIdentifier: "ArticleCell")
-//        resultsTable.register(GameItemTableViewCell.self,           forCellReuseIdentifier: "GameCell")
-//        resultsTable.register(MathObjectLinkItemTableViewCell.self, forCellReuseIdentifier: "MathObjectLinkCell")
-//        resultsTable.register(SpecialItemTableViewCell.self,        forCellReuseIdentifier: "SpecialCell")
-//        resultsTable.register(UserMessageTableViewCell.self,        forCellReuseIdentifier: "UserMeassageCell")
-//        resultsTable.register(VideoItemTableViewCell.self,          forCellReuseIdentifier: "VideoCell")
 
         autoCompleteTable.delegate = autoCompleteTableDelegate
         autoCompleteTable.dataSource = autoCompleteTableDelegate
@@ -72,7 +80,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         surpriseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
-        surpriseButton.imageView!.animationImages = [UIImage(named: "Surprise4")!, UIImage(named: "Surprise1")!, UIImage(named: "Surprise2")!, UIImage(named: "Surprise5")!, UIImage(named: "Surprise3")!, UIImage(named: "Surprise6")!]
+        surpriseButton.imageView!.animationImages = [UIImage(named: "Surprise4")!, UIImage(named: "Surprise1")!,
+                                                     UIImage(named: "Surprise2")!, UIImage(named: "Surprise5")!,
+                                                     UIImage(named: "Surprise3")!, UIImage(named: "Surprise6")!]
         surpriseButton.imageView!.animationDuration = 0.4
         surpriseButton.addTarget(self, action: #selector(supriseButtonAction), for: .touchUpInside)
 
@@ -88,30 +98,14 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         EpsilonStreamBackgroundFetch.searcherUI = self
       
+        cellMaintenanceView = CellMaintenanceView()
+        cellMaintenanceView.actions[.cancel] = { [unowned uoself = self] in
+            uoself.closeMaintenanceView()
+        }
+        
         view.backgroundColor = UIColor(rgb: ES_watch1)
         view.alpha = 1.0
  
-        
-        //        mainTopStack.removeArrangedSubview(mainSegmentView)
-        //        mainSegmentView.removeFromSuperview()
-        /*
-        let viewForSegment = mainSegmentView.viewWithTag(1)!
-        
-        let control = BetterSegmentedControl(
-            frame: CGRect(x: 0.0, y: 0, width: viewForSegment.bounds.width, height: viewForSegment.bounds.height),
-            titles: ["Understand Why", "Explore How"],
-            index: 1,
-            backgroundColor: UIColor(rgb: ES_watch2),
-            titleColor: UIColor(rgb: ES_watch3),
-            indicatorViewBackgroundColor: .white,
-            selectedTitleColor: UIColor(rgb: ES_watch1))
-        control.cornerRadius = control.frame.height/2
-        control.titleFont = UIFont(name: "HelveticaNeue", size: 14.0)!
-        control.selectedTitleFont = UIFont(name: "HelveticaNeue-Medium", size: 14.0)!
-        control.addTarget(self, action: #selector(bscValueChanged(_:)), for: .valueChanged)
-        viewForSegment.addSubview(control)
-        //viewForSegment.removeFromSuperview()
-     */
         refreshSearch()
     }
     
@@ -137,7 +131,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         refreshSearch()
     }
     
-    func selected(_ string: String){
+    func updateSearchString(_ string: String){
         var search = EpsilonStreamSearch()
         search.searchString = string
         if string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != ""{//QQQQ user can enter "home"
@@ -147,6 +141,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         autoCompleteTable.isHidden = true
         refreshSearch()
         self.view.endEditing(true)
+        
         Analytics.logEvent("item_selected", parameters: ["string" : string as NSObject])
     }
     
@@ -160,10 +155,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     func refreshAutoCompleteTableView() {
         ViewFactory.shared.refreshScrollViewInsets(scrollView: autoCompleteTable, withKeyboardFrame: keyboardFrame)
     }
-    
-    var currentSearch = EpsilonStreamSearch()
-    
-    var goingToTop = true
     
     func refreshSearch(){
         
@@ -302,8 +293,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 }
             }
     }
-        
-    var okAction: UIAlertAction! = nil
 
     func jumpToWebPage(withURLstring string: String, inSafariMode safariMode: Bool = false,withSplashKey splashKey: String = ""){
         if safariMode{
@@ -384,6 +373,84 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         showXButton = false
         //QQQQ duplicated
         surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
+    }
+    
+    func showMaintenanceView(inCell cell: UITableViewCell) {
+        cellMaintenanceView.alpha = 0
+        cellMaintenanceView.frame = CGRect(origin: CGPoint.zero, size: cell.bounds.size)
+        cell.addSubview(cellMaintenanceView)
+        
+        UIView.animate(withDuration: animationDuration) {
+            self.cellMaintenanceView.alpha = 1
+        }
+    }
+    
+    func closeMaintenanceView() {
+        UIView.animate(withDuration: animationDuration, animations: {
+            self.cellMaintenanceView.alpha = 0
+        }) { (_) in
+            self.cellMaintenanceView.removeFromSuperview()
+        }
+    }
+    
+    func makeActionWithSearchResultItem(_ searchResultItem: SearchResultItem) {
+        switch searchResultItem.type {
+        case SearchResultItemType.video:
+            let videoItem = searchResultItem as! VideoSearchResultItem
+            openVideoItem(videoItem)
+        /////////////////////////
+        case SearchResultItemType.iosApp:
+            Analytics.logEvent("appStore_go", parameters: ["appId" :  (searchResultItem as! IOsAppSearchResultItem).appId as NSObject])
+            jumpToIosApp(withCode: (searchResultItem as! IOsAppSearchResultItem).appId) //QQQQ
+        /////////////////////////
+        case SearchResultItemType.gameWebPage:
+            Analytics.logEvent("gameWeb_go", parameters: ["webURL" :  (searchResultItem as! GameWebPageSearchResultItem).url as NSObject])
+            jumpToWebPage(withURLstring: (searchResultItem as! GameWebPageSearchResultItem).url, withSplashKey: "gameQQQQ")
+        /////////////////////////
+        case SearchResultItemType.blogWebPage:
+            Analytics.logEvent("web_go", parameters: ["webURL" :  (searchResultItem as! BlogWebPageSearchResultItem).url as NSObject])
+            jumpToWebPage(withURLstring: (searchResultItem as! BlogWebPageSearchResultItem).url,
+                          inSafariMode: (searchResultItem as! BlogWebPageSearchResultItem).isExternal,
+                          withSplashKey: searchResultItem.splashKey)
+        /////////////////////////
+        case SearchResultItemType.mathObjectLink:
+            //QQQQ implement math object link search result item
+            let molItem = searchResultItem as! MathObjectLinkSearchResultItem
+            
+            Analytics.logEvent("mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
+            
+            //QQQQ move elsewhere and allow other splashes.
+            if molItem.splashKey == "gmp-splash"{
+                coverImageView = UIImageView(image: UIImage(named: "ed_background1"))
+                coverImageView!.contentMode = .scaleAspectFill
+            }else if molItem.splashKey == "youtube-splash"{
+                coverImageView = UIImageView(image: UIImage(named: "youTubeSplash"))
+                coverImageView!.contentMode = .scaleAspectFill
+            }else if molItem.splashKey == "OoE-splash"{
+                coverImageView = UIImageView(image: UIImage(named: "oneOnEpsilonSplash"))
+                coverImageView!.contentMode = .scaleAspectFill
+            }
+            
+            if let iv = coverImageView{
+                let window = UIApplication.shared.keyWindow!
+                iv.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
+                window.addSubview(iv)
+                UIView.animate(withDuration: 1.5, animations: {
+                    iv.alpha = 0.0
+                }, completion:
+                    {_ in iv.removeFromSuperview()})
+            }
+            
+            updateSearchString(molItem.searchTitle)
+            
+        /////////////////////////
+        case SearchResultItemType.specialItem:
+            DLog("speicalItem click do nothing - QQQQ")
+            
+        /////////////////////////
+        case SearchResultItemType.messageItem:
+            DLog("messageItem click do nothing - QQQQ")
+        }
     }
     
     // MARK: - View controllers
@@ -488,72 +555,36 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         //will be if there is no search.
         //QQQQ fix this so it acts better on the "Let our team known"
-        if searchResultItems.count == 0{
-            if let text = searchTextField.text{
+        if searchResultItems.count == 0 {
+            if let text = searchTextField.text {
                 Analytics.logEvent("no_search", parameters: ["stringSearch" : text as NSObject])
-            }else{
+            } else {
                 Analytics.logEvent("no_search", parameters: ["stringSearch" : "EMPTY" as NSObject])
             }
             return
         }
+        //
         
-        switch searchResultItems[indexPath.row].type{
-        case SearchResultItemType.video:
-            let videoItem = searchResultItems[indexPath.row] as! VideoSearchResultItem
-            openVideoItem(videoItem)
-        /////////////////////////
-        case SearchResultItemType.iosApp:
-            Analytics.logEvent("appStore_go", parameters: ["appId" :  (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId as NSObject])
-            jumpToIosApp(withCode: (searchResultItems[indexPath.row] as! IOsAppSearchResultItem).appId) //QQQQ
-        /////////////////////////
-        case SearchResultItemType.gameWebPage:
-            Analytics.logEvent("gameWeb_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url as NSObject])
-            jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! GameWebPageSearchResultItem).url, withSplashKey: "gameQQQQ")
-        /////////////////////////
-        case SearchResultItemType.blogWebPage:
-            Analytics.logEvent("web_go", parameters: ["webURL" :  (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url as NSObject])
-            jumpToWebPage(withURLstring: (searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem).url,inSafariMode: (searchResultItems[indexPath.row]as! BlogWebPageSearchResultItem).isExternal, withSplashKey: searchResultItems[indexPath.row].splashKey)
-        /////////////////////////
-        case SearchResultItemType.mathObjectLink:
-            //QQQQ implement math object link search result item
-            let molItem = searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem
-            
-            Analytics.logEvent("mathObjectLink_go", parameters: ["link_name" :  molItem.ourMathObjectLinkHashTag as NSObject])
-            
-            //QQQQ move elsewhere and allow other splashes.
-            if molItem.splashKey == "gmp-splash"{
-                coverImageView = UIImageView(image: UIImage(named: "ed_background1"))
-                coverImageView!.contentMode = .scaleAspectFill
-            }else if molItem.splashKey == "youtube-splash"{
-                coverImageView = UIImageView(image: UIImage(named: "youTubeSplash"))
-                coverImageView!.contentMode = .scaleAspectFill
-            }else if molItem.splashKey == "OoE-splash"{
-                coverImageView = UIImageView(image: UIImage(named: "oneOnEpsilonSplash"))
-                coverImageView!.contentMode = .scaleAspectFill
+        //
+        let searchResultItem = searchResultItems[indexPath.row]
+        if isInAdminMode {
+            Common.performOnMainThread(delay: 0.5) {    // Need delay here to animate appearance of maintenace view.
+                let cell = tableView.cellForRow(at: indexPath)
+                self.showMaintenanceView(inCell: cell!)
+                
+                self.cellMaintenanceView.actions[.open] = { [unowned uoself = self] in
+                    uoself.makeActionWithSearchResultItem(searchResultItem)
+                }
             }
-            
-            if let iv = coverImageView{
-                let window = UIApplication.shared.keyWindow!
-                iv.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
-                window.addSubview(iv)
-                UIView.animate(withDuration: 1.5, animations: {
-                    iv.alpha = 0.0
-                }, completion:
-                    {_ in iv.removeFromSuperview()})
-            }
-            
-            selected(molItem.searchTitle)
-            
-        /////////////////////////
-        case SearchResultItemType.specialItem:
-            print("speicalItem click do nothing - QQQQ")
-            
-        /////////////////////////
-        case SearchResultItemType.messageItem:
-            print("messageItem click do nothing - QQQQ")
+            return
         }
+        //
+        
+        makeActionWithSearchResultItem(searchResultItem)
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -865,7 +896,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 self.surpriseButton.imageView!.stopAnimating()
                 self.surpriseButton.imageView!.isHighlighted = false
                 Analytics.logEvent("surprise_button", parameters: ["newText" : newText as NSObject])
-                self.selected(newText)
+                self.updateSearchString(newText)
                 if let textShuffleTimer = self.textShuffleTimer {
                     textShuffleTimer.invalidate()
                 }

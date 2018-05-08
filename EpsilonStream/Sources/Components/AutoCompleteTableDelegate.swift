@@ -9,7 +9,7 @@
 import UIKit
 
 protocol AutoCompleteClientDelegate {
-    func selected(_ string: String)
+    func updateSearchString(_ string: String)
 }
 
 class AutoCompleteTableDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
@@ -35,7 +35,7 @@ class AutoCompleteTableDelegate: NSObject, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let del = delegate{
-            del.selected(autoCompleteOptions[indexPath.row])
+            del.updateSearchString(autoCompleteOptions[indexPath.row])
         }
     }
     

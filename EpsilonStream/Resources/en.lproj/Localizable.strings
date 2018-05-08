@@ -21,3 +21,9 @@
 "AlertResumePlaybackMessage"        = "Resume playing at %@?";
 "AlertResumePlaybackCancelButton"   = "Restart";
 "AlertResumePlaybackOKButton"       = "Resume";
+
+
+// CellMaintenanceView
+"CellMaintenanceViewCancel"         = "Cancel";
+"CellMaintenanceViewOpen"           = "Open";
+"CellMaintenanceViewMathObjectLink" = "Add MOlink";
