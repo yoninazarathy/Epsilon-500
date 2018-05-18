@@ -38,6 +38,8 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     var goingToTop = true
     
+    let mathObjectLinkCreator = MathObjectLinkCreator()
+    
     // MARK: - UI
     
     @IBOutlet weak var mainTopStack: UIStackView!
@@ -57,9 +59,21 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     var okAction: UIAlertAction! = nil
     
-    var cellMaintenanceView: CellMaintenanceView! = nil
+    var maintenanceView: MaintenanceView! = nil
+    var addMOLinkTextActionView: TextActionView! = nil
     
     // MARK: - Methods
+    
+    override func initialize() {
+        super.initialize()
+        
+        mathObjectLinkCreator.didChangeState = {
+            self.refresh()
+        }
+        mathObjectLinkCreator.didChangeSearchString = {
+            self.refresh()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,23 +100,40 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         surpriseButton.imageView!.animationDuration = 0.4
         surpriseButton.addTarget(self, action: #selector(supriseButtonAction), for: .touchUpInside)
 
-        
         searchTextField.rightViewMode = .always
         searchTextField.rightView = surpriseButton
         searchTextField.text = ""
-        var search = EpsilonStreamSearch()
-        search.searchString = ""
 
         autoCompleteTable.isHidden = true
         autoCompleteTable.separatorStyle = .none
         
         EpsilonStreamBackgroundFetch.searcherUI = self
       
-        cellMaintenanceView = CellMaintenanceView()
-        cellMaintenanceView.actions[.cancel] = { [unowned uoself = self] in
-            uoself.closeMaintenanceView()
+        //
+        maintenanceView = MaintenanceView()
+        maintenanceView.actions[.mathObjectLink] = {
+            AlertManager.shared.showStartCreateMathObjectLink(confirmation: { (confirmed, _) in
+                if confirmed {
+                    self.startCreateMathObjectLink()
+                }
+            })
         }
         
+        addMOLinkTextActionView = TextActionView()
+        addMOLinkTextActionView.text = LocalString("CreateMOLinkText")
+        addMOLinkTextActionView.buttonTitle = LocalString("CreateMOLinkActionButton")
+        addMOLinkTextActionView.action = {
+            AlertManager.shared.showFinishCreateMathObjectLink(hashtag: self.mathObjectLinkCreator.hashTag,
+                                                                searchText: self.mathObjectLinkCreator.searchString,
+                                                                confirmation: { (confirmed, _) in
+                                                                    if confirmed {
+                                                                        self.finishCreateMathObjectLink()
+                                                                    }
+                                                                    
+            })
+        }
+        //
+
         view.backgroundColor = UIColor(rgb: ES_watch1)
         view.alpha = 1.0
  
@@ -131,25 +162,30 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         refreshSearch()
     }
     
-    func updateSearchString(_ string: String){
-        var search = EpsilonStreamSearch()
-        search.searchString = string
-        if string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != ""{//QQQQ user can enter "home"
-            BrowseStackManager.pushNew(search: search)
-        }
-        searchTextField.text = string
-        autoCompleteTable.isHidden = true
-        refreshSearch()
-        self.view.endEditing(true)
-        
-        Analytics.logEvent("item_selected", parameters: ["string" : string as NSObject])
-    }
-    
     override func refresh() {
         guard shouldRefresh else {
             return
         }
         refreshAutoCompleteTableView()
+        
+        var origin = CGPoint.zero
+        var size = CGSize(width: resultsTable.bounds.size.width, height: 60)
+        maintenanceView.frame = CGRect(origin: origin, size: size)
+        if isInAdminMode {
+            resultsTable.tableFooterView = maintenanceView
+        } else {
+            resultsTable.tableFooterView = nil
+        }
+        
+        addMOLinkTextActionView.buttonIsEnabled = (mathObjectLinkCreator.state == .enterSearchTerm) && (currentSearch.searchString.isEmpty == false)
+        origin = CGPoint.zero
+        size = CGSize(width: resultsTable.bounds.size.width, height: 60)
+        addMOLinkTextActionView.frame = CGRect(origin: origin, size: size)
+        if isInAdminMode && mathObjectLinkCreator.state == .enterSearchTerm {
+            resultsTable.tableHeaderView = addMOLinkTextActionView
+        } else {
+            resultsTable.tableHeaderView = nil
+        }
     }
     
     func refreshAutoCompleteTableView() {
@@ -173,6 +209,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         
         currentSearch.searchString = searchTextField.text!
+        mathObjectLinkCreator.searchString = currentSearch.searchString
 
         currentSearch.whyHow = 0.5
   /*      switch whyVsHow{ //QQQQ maybe switched???
@@ -254,9 +291,8 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         backButton.isEnabled = BrowseStackManager.canBack()
         
         resultsTable.reloadData()
-        if goingToTop == true{
-            let top = NSIndexPath(row: Foundation.NSNotFound, section: 0)
-            resultsTable.scrollToRow(at: top as IndexPath, at: .top, animated: false)
+        if goingToTop == true {
+            resultsTable.contentOffset = .zero
         }
         goingToTop = true //QQQ super nasty hack
     }
@@ -360,6 +396,21 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         return url
     }
     
+    func updateSearchString(_ string: String){
+        var search = EpsilonStreamSearch()
+        search.searchString = string
+        mathObjectLinkCreator.searchString = string
+        if string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != ""{//QQQQ user can enter "home"
+            BrowseStackManager.pushNew(search: search)
+        }
+        searchTextField.text = string
+        autoCompleteTable.isHidden = true
+        refreshSearch()
+        self.view.endEditing(true)
+        
+        Analytics.logEvent("item_selected", parameters: ["string" : string as NSObject])
+    }
+    
     func clearSearchText() {
         UserMessageManager.userDidAnotherAction()
         
@@ -373,24 +424,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         showXButton = false
         //QQQQ duplicated
         surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
-    }
-    
-    func showMaintenanceView(inCell cell: UITableViewCell) {
-        cellMaintenanceView.alpha = 0
-        cellMaintenanceView.frame = CGRect(origin: CGPoint.zero, size: cell.bounds.size)
-        cell.addSubview(cellMaintenanceView)
-        
-        UIView.animate(withDuration: animationDuration) {
-            self.cellMaintenanceView.alpha = 1
-        }
-    }
-    
-    func closeMaintenanceView() {
-        UIView.animate(withDuration: animationDuration, animations: {
-            self.cellMaintenanceView.alpha = 0
-        }) { (_) in
-            self.cellMaintenanceView.removeFromSuperview()
-        }
     }
     
     func makeActionWithSearchResultItem(_ searchResultItem: SearchResultItem) {
@@ -451,6 +484,17 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         case SearchResultItemType.messageItem:
             DLog("messageItem click do nothing - QQQQ")
         }
+    }
+    
+    func startCreateMathObjectLink() {
+        self.mathObjectLinkCreator.hashTag = EpsilonStreamAdminModel.currentHashTag
+        self.mathObjectLinkCreator.state = .enterSearchTerm
+        self.resultsTable.setContentOffset(.zero, animated: true)
+    }
+    
+    func finishCreateMathObjectLink() {
+        DLog("create MO link here")
+        self.mathObjectLinkCreator.state = .initial
     }
     
     // MARK: - View controllers
@@ -554,8 +598,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        tableView.deselectRow(at: indexPath, animated: true)
+        //tableView.deselectRow(at: indexPath, animated: true)
         
         //will be if there is no search.
         //QQQQ fix this so it acts better on the "Let our team known"
@@ -569,22 +612,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         }
         //
         
-        //
-        let searchResultItem = searchResultItems[indexPath.row]
-        if isInAdminMode {
-            Common.performOnMainThread(delay: 0.5) {    // Need delay here to animate appearance of maintenace view.
-                let cell = tableView.cellForRow(at: indexPath)
-                self.showMaintenanceView(inCell: cell!)
-                
-                self.cellMaintenanceView.actions[.open] = { [unowned uoself = self] in
-                    uoself.makeActionWithSearchResultItem(searchResultItem)
-                }
-            }
-            return
-        }
-        //
-        
-        makeActionWithSearchResultItem(searchResultItem)
+        makeActionWithSearchResultItem(searchResultItems[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -807,6 +835,20 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 125
     }
+    
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        if let footerView = self.tableView(tableView, viewForFooterInSection: section) {
+//            return footerView.bounds.height
+//        }
+//        return 0
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        if tableView == resultsTable && isInAdminMode == true {
+//            return maintenanceView
+//        }
+//        return nil
+//    }
     
     // MARK: - UITextFieldDelegate
     

@@ -16,10 +16,20 @@ class ViewFactory: NSObject {
                     }
                     superview = superview!.superview;
                 }
-                }
+            }
         }
         scrollView.contentInset = UIEdgeInsetsMake(0, 0, bottomInset, 0);
         scrollView.scrollIndicatorInsets = scrollView.contentInset;
+    }
+    
+    func roundedRectButton(withColor color: UIColor) -> UIButton {
+        let button = UIButton()
+        button.setTitleColor(color)
+        button.layer.borderWidth = 2
+        button.layer.borderColor = color.cgColor
+        button.layer.cornerRadius = 5
+        button.registerBorderColorEvents()
+        return button
     }
     
 }

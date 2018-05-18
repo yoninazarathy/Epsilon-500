@@ -22,8 +22,14 @@
 "AlertResumePlaybackCancelButton"   = "Restart";
 "AlertResumePlaybackOKButton"       = "Resume";
 
+"AlertStartCreateMathObjectLinkMessage" = "Create New Math Object Link?";
+"AlertFinishCreateMathObjectLinkMessage" = "Are you sure to link: %@ ---> %@ ?";
 
 // CellMaintenanceView
 "CellMaintenanceViewCancel"         = "Cancel";
 "CellMaintenanceViewOpen"           = "Open";
 "CellMaintenanceViewMathObjectLink" = "Add MOlink";
+
+// Create MO link
+"CreateMOLinkActionButton" = "Create";
+"CreateMOLinkText" = "Finish creation of MO link when ready.";
