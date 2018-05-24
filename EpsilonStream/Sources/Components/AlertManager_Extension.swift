@@ -29,4 +29,29 @@ extension AlertManager {
         showAlert(key: "showFinishtCreateMathObjectLink", message: message,
                   cancelButtonTitle: LocalString("CommonTextNo"), okButtonTitle: LocalString("CommonTextYes"), confirmation: confirmation)
     }
+    
+    func showEditMOLinkTitleAndSubtitle(withSearchString searhString: String, confirmation: @escaping ( (String?, String?) -> () ) ) {
+        var titleTextField: UITextField!
+        var subtitleTextField: UITextField!
+        
+        let configuration = { (alert: UIAlertController) in
+            alert.addTextField { (textField) in
+                textField.placeholder = LocalString("AlertEditMOLinkTitleAndSubtitleTitlePlaceholder")
+                textField.text = "Explore " + searhString
+                titleTextField = textField
+            }
+            alert.addTextField { (textField) in
+                textField.placeholder = LocalString("AlertEditMOLinkTitleAndSubtitleSubtitlePlaceholder")
+                textField.text = "One on Epsilon"
+                subtitleTextField = textField
+            }
+        }
+        
+        showAlert(key: "showEditMOLinkTitleAndSubtitleAlert", message: LocalString("AlertEditMOLinkTitleAndSubtitleMessage"),
+                  okButtonTitle: AlertManager.defaultOKButtonTitle, configuration: configuration, confirmation: { (_, _) in
+                    
+                   confirmation(titleTextField.text, subtitleTextField.text)
+        })
+        
+    }
 }

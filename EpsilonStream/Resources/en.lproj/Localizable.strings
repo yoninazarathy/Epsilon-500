@@ -22,8 +22,11 @@
 "AlertResumePlaybackCancelButton"   = "Restart";
 "AlertResumePlaybackOKButton"       = "Resume";
 
-"AlertStartCreateMathObjectLinkMessage" = "Create New Math Object Link?";
-"AlertFinishCreateMathObjectLinkMessage" = "Are you sure to link: %@ ---> %@ ?";
+"AlertStartCreateMathObjectLinkMessage"     = "Create New Math Object Link?";
+"AlertFinishCreateMathObjectLinkMessage"    = "Are you sure to link: %@ ---> %@ ?";
+"AlertEditMOLinkTitleAndSubtitleMessage"    = "Edit math object link title and subtitle.";
+"AlertEditMOLinkTitleAndSubtitleTitlePlaceholder"       = "Title";
+"AlertEditMOLinkTitleAndSubtitleSubtitlePlaceholder"    = "Subtitle";
 
 // CellMaintenanceView
 "CellMaintenanceViewCancel"         = "Cancel";

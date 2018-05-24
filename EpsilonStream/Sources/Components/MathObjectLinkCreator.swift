@@ -10,6 +10,10 @@ class MathObjectLinkCreator: NSObject {
     var state = MathObjectLinkCreatorState.initial {
         didSet {
             if state != oldValue {
+                if state == .initial {
+                    hashTag = ""
+                    searchString = ""
+                }
                 didChangeState?()
             }
         }

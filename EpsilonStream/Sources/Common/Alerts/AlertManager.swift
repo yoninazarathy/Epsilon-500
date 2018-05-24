@@ -74,7 +74,8 @@ class AlertManager: NSObject {
     }
     
     @discardableResult public func showAlert(key: String, title: String = defaultTitle, message: String? = nil, buttonTitles: [String],
-                                             cancelButtonIndex: Int = 0, confirmation: AlertConfirmation? = nil) -> UIAlertController {
+                                             cancelButtonIndex: Int = 0, configuration: ((UIAlertController)->())? = nil,
+                                             confirmation: AlertConfirmation? = nil) -> UIAlertController {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -85,14 +86,16 @@ class AlertManager: NSObject {
             }))
         }
         
+        configuration?(alert)
         showAlert(alert, key: key, confirmation: confirmation)
         
         return alert
     }
     
     @discardableResult public func showAlert(key: String, title: String = defaultTitle, message: String? = nil,
-                                             cancelButtonTitle: String? = AlertManager.defaultCancelButtonTitle,
-                                             okButtonTitle: String? = nil, confirmation: AlertConfirmation? = nil) -> UIAlertController {
+                                             cancelButtonTitle: String? = nil, okButtonTitle: String? = nil,
+                                             configuration: ((UIAlertController)->())? = nil,
+                                             confirmation: AlertConfirmation? = nil) -> UIAlertController {
         
         var buttonTitles = [String]()
         if cancelButtonTitle?.isEmpty == false {
@@ -102,7 +105,7 @@ class AlertManager: NSObject {
             buttonTitles.append(okButtonTitle!)
         }
         
-        return showAlert(key: key, title: title, message: message, buttonTitles: buttonTitles, confirmation: confirmation)
+        return showAlert(key: key, title: title, message: message, buttonTitles: buttonTitles, configuration: configuration, confirmation: confirmation)
     }
     
     public func showError(message: String, confirmation: AlertConfirmation? = nil) {

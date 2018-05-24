@@ -124,12 +124,17 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         addMOLinkTextActionView.buttonTitle = LocalString("CreateMOLinkActionButton")
         addMOLinkTextActionView.action = {
             AlertManager.shared.showFinishCreateMathObjectLink(hashtag: self.mathObjectLinkCreator.hashTag,
-                                                                searchText: self.mathObjectLinkCreator.searchString,
-                                                                confirmation: { (confirmed, _) in
+                                                               searchText: self.mathObjectLinkCreator.searchString,
+                                                               confirmation: { (confirmed, _) in
                                                                     if confirmed {
                                                                         self.finishCreateMathObjectLink()
                                                                     }
                                                                     
+            })
+        }
+        addMOLinkTextActionView.closeAction = {
+            UIView.animate(withDuration: self.animationDuration, animations: {
+                self.mathObjectLinkCreator.state = .initial
             })
         }
         //
@@ -177,7 +182,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             resultsTable.tableFooterView = nil
         }
         
-        addMOLinkTextActionView.buttonIsEnabled = (mathObjectLinkCreator.state == .enterSearchTerm) && (currentSearch.searchString.isEmpty == false)
+        addMOLinkTextActionView.actionButtonIsEnabled = (mathObjectLinkCreator.state == .enterSearchTerm) && (mathObjectLinkCreator.searchString.isEmpty == false)
         origin = CGPoint.zero
         size = CGSize(width: resultsTable.bounds.size.width, height: 60)
         addMOLinkTextActionView.frame = CGRect(origin: origin, size: size)
@@ -202,7 +207,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         //QQQQ this is duplicated elsewhere
         if  showXButton{
-            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+            surpriseButton.setImage(UIImage(named: "EraseIconSmall"), for: .normal)
         }else{
             surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
         }
@@ -494,7 +499,10 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     func finishCreateMathObjectLink() {
         DLog("create MO link here")
-        self.mathObjectLinkCreator.state = .initial
+        AlertManager.shared.showEditMOLinkTitleAndSubtitle(withSearchString: mathObjectLinkCreator.searchString, confirmation: { (title, subtitle) in
+            //DLog("\(title), \(subtitle)")
+            self.mathObjectLinkCreator.state = .initial
+        })
     }
     
     // MARK: - View controllers
@@ -959,7 +967,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     @IBAction func searchFieldEditBegin(_ sender: Any) {
         if searchTextField.text! != ""{
             showXButton = true
-            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+            surpriseButton.setImage(UIImage(named: "EraseIconSmall"), for: .normal)
         }
     }
     
@@ -973,7 +981,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             surpriseButton.setImage(UIImage(named: "Surprise4"), for: .normal)
         }else{
             showXButton = true
-            surpriseButton.setImage(UIImage(named: "Errase_Icon_Small_Active"), for: .normal)
+            surpriseButton.setImage(UIImage(named: "EraseIconSmall"), for: .normal)
         }
         
         let firstChar = searchString.first
