@@ -12,4 +12,9 @@ public class BaseCoreDataModel: NSManagedObject {
         }
     }
     
+    public override func toDictionary() -> AnyDictionary {
+        let keys = Array(entity.attributesByName.keys)
+        return dictionaryWithValues(forKeys: keys)
+    }
+    
 }

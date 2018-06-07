@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17E202" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Channel" representedClassName="Channel" syncable="YES">
+        <attribute name="channelId" attributeType="String" syncable="YES"/>
+        <attribute name="channelTitle" attributeType="String" syncable="YES"/>
+        <attribute name="channelURL" attributeType="String" syncable="YES"/>
+        <attribute name="imagePic" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isInChannelCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="ourChannelHashtag" attributeType="String" syncable="YES"/>
+        <attribute name="ourChannelStringDescription" attributeType="String" syncable="YES"/>
+        <fetchIndex name="byOurChannelHashtagIndex">
+            <fetchIndexElement property="ourChannelHashtag" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="FeaturedURL" representedClassName="FeaturedURL" syncable="YES">
+        <attribute name="avoidPlatforms" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="displaySearchPriority" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hashTagPriorities" attributeType="String" syncable="YES"/>
+        <attribute name="hashTags" attributeType="String" syncable="YES"/>
+        <attribute name="imageKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageURL" attributeType="String" syncable="YES"/>
+        <attribute name="isAppStoreApp" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isExternal" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="ourDescription" attributeType="String" syncable="YES"/>
+        <attribute name="ourFeaturedURLHashtag" attributeType="String" syncable="YES"/>
+        <attribute name="ourTitle" attributeType="String" syncable="YES"/>
+        <attribute name="provider" attributeType="String" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
+        <attribute name="typeOfFeature" attributeType="String" syncable="YES"/>
+        <attribute name="urlOfItem" attributeType="String" syncable="YES"/>
+        <attribute name="whyVsHow" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <fetchIndex name="byHashTagsIndex">
+            <fetchIndexElement property="hashTags" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byOurFeaturedURLHashtagIndex">
+            <fetchIndexElement property="ourFeaturedURLHashtag" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byOurTitleIndex">
+            <fetchIndexElement property="ourTitle" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ImageThumbnail" representedClassName="ImageThumbnail" syncable="YES">
+        <attribute name="cloudRequestSent" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hasFile" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="imageURL" attributeType="String" syncable="YES"/>
+        <attribute name="keyName" attributeType="String" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="primarySourceIsCloud" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="priority" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="webRequestSent" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <fetchIndex name="byKeyNameIndex">
+            <fetchIndexElement property="keyName" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byOneOnEpsilonTimeStampIndex">
+            <fetchIndexElement property="oneOnEpsilonTimeStamp" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byPriorityIndex">
+            <fetchIndexElement property="priority" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="MathObject" representedClassName="MathObject" syncable="YES">
+        <attribute name="associatedTitles" attributeType="String" syncable="YES"/>
+        <attribute name="curator" attributeType="String" syncable="YES"/>
+        <attribute name="hashTag" attributeType="String" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="reviewer" attributeType="String" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
+        <attribute name="supportsWhyVsHow" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <fetchIndex name="byAssociatedTitlesIndex">
+            <fetchIndexElement property="associatedTitles" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byHashTagIndex">
+            <fetchIndexElement property="hashTag" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="MathObjectLink" representedClassName="MathObjectLink" syncable="YES">
+        <attribute name="avoidPlatforms" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cellImageKey" attributeType="String" syncable="YES"/>
+        <attribute name="contentVersionNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="displaySearchPriority" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hashTagPriorities" attributeType="String" syncable="YES"/>
+        <attribute name="hashTags" attributeType="String" syncable="YES"/>
+        <attribute name="imageKey" attributeType="String" syncable="YES"/>
+        <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="ourMathObjectLinkHashTag" attributeType="String" syncable="YES"/>
+        <attribute name="ourTitle" attributeType="String" syncable="YES"/>
+        <attribute name="ourTitleDetail" attributeType="String" syncable="YES"/>
+        <attribute name="searchTitle" attributeType="String" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
+        <fetchIndex name="byHashTagsIndex">
+            <fetchIndexElement property="hashTags" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="VersionInfo" representedClassName="VersionInfo" syncable="YES">
+        <attribute name="contentVersionNumber" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="featuredURLCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="inProgressContentVersionNumber" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="loaded" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="mathObjectCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="minimalSoftwareVersion" attributeType="String" syncable="YES"/>
+        <attribute name="numberOfTimesLeftToShowMessage" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="numberOfTimesToShowMessage" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="textMessageToShow" attributeType="String" syncable="YES"/>
+        <attribute name="videoCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Video" representedClassName="Video" syncable="YES">
+        <attribute name="age8Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="age10Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="age12Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="age14Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="age16Rating" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="channelKey" attributeType="String" syncable="YES"/>
+        <attribute name="commentAndReview" attributeType="String" syncable="YES"/>
+        <attribute name="displaySearchPriority" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="durationSec" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="exploreVsUnderstand" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hashTagPriorities" attributeType="String" syncable="YES"/>
+        <attribute name="hashTags" attributeType="String" syncable="YES"/>
+        <attribute name="imageURL" attributeType="String" syncable="YES"/>
+        <attribute name="imageURLlocal" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isAwesome" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="ourTitle" attributeType="String" syncable="YES"/>
+        <attribute name="splashKey" attributeType="String" syncable="YES"/>
+        <attribute name="whyVsHow" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="youtubeTitle" attributeType="String" syncable="YES"/>
+        <attribute name="youtubeVideoId" attributeType="String" syncable="YES"/>
+        <fetchIndex name="byChannelKeyIndex">
+            <fetchIndexElement property="channelKey" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byHashTagsIndex">
+            <fetchIndexElement property="hashTags" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byOneOnEpsilonTimeStampIndex">
+            <fetchIndexElement property="oneOnEpsilonTimeStamp" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byYoutubeTitleIndex">
+            <fetchIndexElement property="youtubeTitle" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byYoutubeVideoIdIndex">
+            <fetchIndexElement property="youtubeVideoId" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <elements>
+        <element name="Channel" positionX="-180" positionY="78" width="128" height="180"/>
+        <element name="FeaturedURL" positionX="-29" positionY="108" width="128" height="315"/>
+        <element name="ImageThumbnail" positionX="-108" positionY="-36" width="128" height="165"/>
+        <element name="MathObject" positionX="-173" positionY="-189" width="128" height="165"/>
+        <element name="MathObjectLink" positionX="-108" positionY="-36" width="128" height="285"/>
+        <element name="VersionInfo" positionX="-108" positionY="-36" width="128" height="195"/>
+        <element name="Video" positionX="-29" positionY="-189" width="128" height="375"/>
+    </elements>
+</model>

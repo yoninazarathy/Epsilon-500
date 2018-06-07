@@ -30,19 +30,19 @@ extension AlertManager {
                   cancelButtonTitle: LocalString("CommonTextNo"), okButtonTitle: LocalString("CommonTextYes"), confirmation: confirmation)
     }
     
-    func showEditMOLinkTitleAndSubtitle(withSearchString searhString: String, confirmation: @escaping ( (String?, String?) -> () ) ) {
+    func showEditMOLinkTitleAndSubtitle(withTitle title: String, subtitle: String, confirmation: @escaping ( (String?, String?) -> () ) ) {
         var titleTextField: UITextField!
         var subtitleTextField: UITextField!
         
         let configuration = { (alert: UIAlertController) in
             alert.addTextField { (textField) in
                 textField.placeholder = LocalString("AlertEditMOLinkTitleAndSubtitleTitlePlaceholder")
-                textField.text = "Explore " + searhString
+                textField.text = title
                 titleTextField = textField
             }
             alert.addTextField { (textField) in
                 textField.placeholder = LocalString("AlertEditMOLinkTitleAndSubtitleSubtitlePlaceholder")
-                textField.text = "One on Epsilon"
+                textField.text = subtitle
                 subtitleTextField = textField
             }
         }

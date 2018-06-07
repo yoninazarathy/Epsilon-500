@@ -214,7 +214,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         
         currentSearch.searchString = searchTextField.text!
-        mathObjectLinkCreator.searchString = currentSearch.searchString
+        if (mathObjectLinkCreator.hashTag.isEmpty == false) {
+            mathObjectLinkCreator.searchString = currentSearch.searchString
+        }
 
         currentSearch.whyHow = 0.5
   /*      switch whyVsHow{ //QQQQ maybe switched???
@@ -404,7 +406,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     func updateSearchString(_ string: String){
         var search = EpsilonStreamSearch()
         search.searchString = string
-        mathObjectLinkCreator.searchString = string
+        if (mathObjectLinkCreator.hashTag.isEmpty == false) {
+            mathObjectLinkCreator.searchString = string
+        }
         if string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != ""{//QQQQ user can enter "home"
             BrowseStackManager.pushNew(search: search)
         }
@@ -499,9 +503,21 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     func finishCreateMathObjectLink() {
         DLog("create MO link here")
-        AlertManager.shared.showEditMOLinkTitleAndSubtitle(withSearchString: mathObjectLinkCreator.searchString, confirmation: { (title, subtitle) in
+        
+        let title = mathObjectLinkCreator.defaultTitle
+        let subtitle = mathObjectLinkCreator.defaultSubtitle
+        
+        AlertManager.shared.showEditMOLinkTitleAndSubtitle(withTitle: title, subtitle: subtitle, confirmation: { (title, subtitle) in
             //DLog("\(title), \(subtitle)")
-            self.mathObjectLinkCreator.state = .initial
+            
+            //let moLink = self.mathObjectLinkCreator.mathObjectLink(withTitle: title, subtitle: subtitle)
+            self.mathObjectLinkCreator.submitMathObjectLink(withTitle: title, subtitle: subtitle, completion: { (error) in
+                if (error == nil) {
+                    self.mathObjectLinkCreator.state = .initial
+                } else {
+                    AlertManager.shared.showError(error: error!)
+                }
+            })
         })
     }
     

@@ -8,26 +8,33 @@ public class MathObjectLink: BaseCoreDataModel {
 }
 
 extension MathObjectLink {
+
+    @NSManaged public var avoidPlatforms            : String
+    @NSManaged public var cellImageKey              : String
+    @NSManaged public var contentVersionNumber      : Int
+    @NSManaged public var displaySearchPriority     : Float //QQQQ actualy not used - maybe deleted throughout system
+    @NSManaged public var hashTagPriorities         : String
+    @NSManaged public var hashTags                  : String
+    @NSManaged public var imageKey                  : String
+    @NSManaged public var imageURL                  : String
+    @NSManaged public var isInCollection            : Bool
+    @NSManaged public var oneOnEpsilonTimeStamp     : Date
+    @NSManaged public var ourMathObjectLinkHashTag  : String
+    @NSManaged public var ourTitle                  : String
+    @NSManaged public var ourTitleDetail            : String
+    @NSManaged public var notes                     : String
+    @NSManaged public var searchTitle               : String
+    @NSManaged public var splashKey                 : String
+    
+    // MARK: - Methods
     
     @nonobjc public class func createFetchRequest() -> NSFetchRequest<MathObjectLink> {
         return NSFetchRequest<MathObjectLink>(entityName: "MathObjectLink");
     }
     
-    @NSManaged public var searchTitle: String
-    @NSManaged public var hashTags: String
-    @NSManaged public var imageKey: String
-    @NSManaged public var imageURL: String
-    @NSManaged public var ourTitle: String
-    @NSManaged public var ourTitleDetail: String
-    @NSManaged public var oneOnEpsilonTimeStamp: Date
-    @NSManaged public var isInCollection: Bool
-    @NSManaged public var displaySearchPriority: Float//QQQQ actualy not used - maybe deleted throughout system
-    @NSManaged public var hashTagPriorities: String
-    @NSManaged public var ourMathObjectLinkHashTag: String
-    @NSManaged public var splashKey: String
-    @NSManaged public var cellImageKey: String
-    
     func update(fromCloudRecord record: CKRecord){
+        avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
+        contentVersionNumber = (record["contentVersionNumber"] as? Int) ?? 1
         searchTitle = record["searchTitle"] as! String
         hashTags = record["hashTags"] as! String
         imageKey = record["imageKey"] as! String
@@ -35,6 +42,7 @@ extension MathObjectLink {
         ourTitle = record["ourTitle"] as! String
         oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
         isInCollection = record["isInCollection"] as! Bool
+        notes = (record["notes"] as? String) ?? ""
         
         //QQQQ actually not used maybe deleted
         if let pr = record["displaySearchPriority"] as? Float{

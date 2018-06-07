@@ -26,6 +26,7 @@ class AssetManager: NSObject {
     func downloadFile(at url: URL, to fileURL: URL, completion: AssetManagerCompletion? = nil) -> Bool {
         
         if IKFileManager.shared.fileExists(atURL: fileURL) == true {
+            
             return true
             
         } else {

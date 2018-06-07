@@ -9,10 +9,7 @@ public class FeaturedURL: BaseCoreDataModel {
 
 extension FeaturedURL {
     
-    @nonobjc public class func createFetchRequest() -> NSFetchRequest<FeaturedURL> {
-        return NSFetchRequest<FeaturedURL>(entityName: "FeaturedURL");
-    }
-    
+    @NSManaged public var avoidPlatforms: String
     @NSManaged public var oneOnEpsilonTimeStamp: Date
     @NSManaged public var isAppStoreApp: Bool
     @NSManaged public var urlOfItem: String
@@ -31,8 +28,16 @@ extension FeaturedURL {
     @NSManaged public var splashKey: String
     @NSManaged public var isExternal: Bool
     
+    // MARK: - Methods
+    
+    @nonobjc public class func createFetchRequest() -> NSFetchRequest<FeaturedURL> {
+        return NSFetchRequest<FeaturedURL>(entityName: "FeaturedURL");
+    }
+    
     func update(fromCloudRecord record: CKRecord){
-        if let ts = record["modificationDate"] as? Date{
+        avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
+        
+        if let ts = record["modificationDate"] as? Date{    // ??? Ask Yoni about this field
             oneOnEpsilonTimeStamp = ts
         }else{
             //QQQQ report error

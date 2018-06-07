@@ -11,16 +11,22 @@ extension ManagedObjectContextUserProtocol {
     }
 }
 
+// To add new database version:
+// 1) Select CoreData xcdatamodel file
+// 2) Editor -> Add Model Version
+// 3) Update "version" propety in this class
+// The app should do everything automatically on next app launch.
+
 class PersistentStorageManager: NSObject {
     
     static public let shared = PersistentStorageManager()
     
-    private var sotrageFileNamePrefix: String {
+    private var storageFileNamePrefix: String {
         return "EpsilonStreamDataModel"
     }
     
     private var version: Int {
-        return 2
+        return 3
     }
     
     private var storageDirectoryURL: URL {
@@ -28,7 +34,8 @@ class PersistentStorageManager: NSObject {
     }
     
     private var storageFileName: String {
-        return "EpsilonStreamDataModel_\(version)"
+        return "EpsilonStreamDataModel"
+        //return "EpsilonStreamDataModel_\(version)"
     }
     
     private var storageFileURL: URL {
@@ -40,7 +47,7 @@ class PersistentStorageManager: NSObject {
             // File with current version doesn't exist - we need to clean data and re-dowload everything.
             var files = IKFileManager.shared.contentsOfDirectory(atPath: IKFileManager.shared.absolutePath(forPath: storageDirectoryURL.relativePath) )
             files = files.filter({ (fileName: String) -> Bool in
-                return fileName.starts(with: self.sotrageFileNamePrefix)
+                return fileName.starts(with: self.storageFileNamePrefix)
             })
             
             for fileName in files {
@@ -66,7 +73,7 @@ class PersistentStorageManager: NSObject {
     
     private lazy var managedObjectModel: NSManagedObjectModel = {
         var modelURL = Bundle.main.resourceURL!.appendingPathComponent("\(storageFileName).momd")
-        modelURL.appendPathComponent("\(sotrageFileNamePrefix)_ \(version).mom") // For some reason XCode adds "space" symbol before the version in the file name.
+        modelURL.appendPathComponent("\(storageFileNamePrefix)_ \(version).mom") // For some reason XCode adds "space" symbol before the version in the file name.
         return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     

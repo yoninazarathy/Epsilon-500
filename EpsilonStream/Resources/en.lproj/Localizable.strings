@@ -28,6 +28,10 @@
 "AlertEditMOLinkTitleAndSubtitleTitlePlaceholder"       = "Title";
 "AlertEditMOLinkTitleAndSubtitleSubtitlePlaceholder"    = "Subtitle";
 
+// MathObjectLinkCreator
+"MathObjectLinkCreatorDefaultTitle" = "Explore";
+"MathObjectLinkCreatorDefaultSubtitle" = "One on Epsilon";
+
 // CellMaintenanceView
 "CellMaintenanceViewCancel"         = "Cancel";
 "CellMaintenanceViewOpen"           = "Open";
