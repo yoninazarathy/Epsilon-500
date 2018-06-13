@@ -66,7 +66,7 @@ class MathObjectLinkCreator: NSObject {
         record["hashTags"]                  = hashTag                       as CKRecordValue
         record["imageKey"]                  = ""                            as CKRecordValue
         record["imageURL"]                  = ""                            as CKRecordValue
-        record["isInCollection"]            = false                         as CKRecordValue
+        record["isInCollection"]            = true                          as CKRecordValue
         record["notes"]                     = ""                            as CKRecordValue
         record["ourMathObjectLinkHashTag"]  = hashTag + "MathObjectLink"    as CKRecordValue
         record["ourTitle"]                  = finalTitle!                   as CKRecordValue
