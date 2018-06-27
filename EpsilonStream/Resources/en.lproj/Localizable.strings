@@ -28,6 +28,8 @@
 "AlertEditMOLinkTitleAndSubtitleTitlePlaceholder"       = "Title";
 "AlertEditMOLinkTitleAndSubtitleSubtitlePlaceholder"    = "Subtitle";
 
+"AlertSelectMOLinkImageURLTitle" = "Select image";
+
 // MathObjectLinkCreator
 "MathObjectLinkCreatorDefaultTitle" = "Explore";
 "MathObjectLinkCreatorDefaultSubtitle" = "One on Epsilon";
@@ -40,3 +42,6 @@
 // Create MO link
 "CreateMOLinkActionButton" = "Create";
 "CreateMOLinkText" = "Finish creation of MO link when ready.";
+
+// MathObjectLinkEditViewScreen
+"MathObjectLinkEditViewScreenTitle" = "Edit MO link";

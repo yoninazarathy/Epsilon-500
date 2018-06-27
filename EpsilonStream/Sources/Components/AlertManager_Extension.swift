@@ -54,4 +54,12 @@ extension AlertManager {
         })
         
     }
+    
+    func showSelectMOLinkImageURL(withURLAliases urlAliases: [String], confirmation: @escaping AlertConfirmation) {
+        var buttonTitles = urlAliases
+        buttonTitles.append(AlertManager.defaultCancelButtonTitle)
+        
+        showAlert(key: "showSelectMOLinkImageURL", title: LocalString("AlertSelectMOLinkImageURLTitle"), preferredStyle: .actionSheet,
+                  buttonTitles: buttonTitles, cancelButtonIndex: buttonTitles.count - 1, confirmation: confirmation)
+    }
 }

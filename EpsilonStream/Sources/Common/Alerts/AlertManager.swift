@@ -57,7 +57,7 @@ class AlertManager: NSObject {
             
             let confirmation = alertConfirmations[key]
             if confirmation != nil {
-                let confirmed = (buttonIndex > 0)
+                let confirmed = (alert.actions[buttonIndex].style != .cancel)
                 confirmation?(confirmed, buttonIndex)
                 
                 alertConfirmations[key] = nil
@@ -73,7 +73,8 @@ class AlertManager: NSObject {
         }
     }
     
-    @discardableResult public func showAlert(key: String, title: String = defaultTitle, message: String? = nil, buttonTitles: [String],
+    @discardableResult public func showAlert(key: String, title: String = defaultTitle, message: String? = nil,
+                                             preferredStyle: UIAlertControllerStyle = .alert, buttonTitles: [String],
                                              cancelButtonIndex: Int = 0, configuration: ((UIAlertController)->())? = nil,
                                              confirmation: AlertConfirmation? = nil) -> UIAlertController {
         
@@ -93,6 +94,7 @@ class AlertManager: NSObject {
     }
     
     @discardableResult public func showAlert(key: String, title: String = defaultTitle, message: String? = nil,
+                                             preferredStyle: UIAlertControllerStyle = .alert,
                                              cancelButtonTitle: String? = nil, okButtonTitle: String? = nil,
                                              configuration: ((UIAlertController)->())? = nil,
                                              confirmation: AlertConfirmation? = nil) -> UIAlertController {

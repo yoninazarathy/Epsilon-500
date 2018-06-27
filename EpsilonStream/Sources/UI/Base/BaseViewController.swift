@@ -24,6 +24,10 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
         return (keyboardFrame.size.height > 0 && view.bounds.intersects(keyboardFrame) );
     }
     
+    var showsCustomBackButton: Bool {
+        return true
+    }
+    
 //    var navigationBarIsDisplayed: Bool {
 //        return true
 //    }
@@ -78,6 +82,13 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
         super.loadView()
         
         view.clipsToBounds = true
+        view.backgroundColor = .white
+        
+        if showsCustomBackButton {
+            
+            let barButtonItem = UIBarButtonItem(title: LocalString("CommonTextBack"), style: .plain, target: nil, action: nil)
+            navigationController?.navigationBar.topItem?.backBarButtonItem = barButtonItem
+        }
     }
     
     func refresh() {

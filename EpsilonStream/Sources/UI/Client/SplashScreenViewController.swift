@@ -75,11 +75,12 @@ class SplashScreenViewController: UIViewController {
             //print(url)
             let player = AVPlayer(url: url)
             let playerLayer = AVPlayerLayer(player: player)
-            playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+            playerLayer.videoGravity = .resizeAspectFill
+//            playerLayer.shouldRasterize = true
+//            playerLayer.rasterizationScale = UIScreen.main.scale
             let screenSize = UIScreen.main.bounds
             playerLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
             view.layer.addSublayer(playerLayer)
-            playerLayer.borderWidth = 0.0
             player.play()
             NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(notification:)),
                                                    name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)

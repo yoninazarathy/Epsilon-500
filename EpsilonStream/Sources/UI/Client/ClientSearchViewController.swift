@@ -112,9 +112,9 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         //
         maintenanceView = MaintenanceView()
         maintenanceView.actions[.mathObjectLink] = {
-            AlertManager.shared.showStartCreateMathObjectLink(confirmation: { (confirmed, _) in
-                if confirmed {
-                    self.startCreateMathObjectLink()
+            self.mathObjectLinkCreator.confirmStartCreateMathObjectLink(withHashTag:  EpsilonStreamAdminModel.currentHashTag, confirmation: { (confirmed) in
+                if (confirmed) {
+                    self.resultsTable.setContentOffset(.zero, animated: true)
                 }
             })
         }
@@ -123,18 +123,11 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         addMOLinkTextActionView.text = LocalString("CreateMOLinkText")
         addMOLinkTextActionView.buttonTitle = LocalString("CreateMOLinkActionButton")
         addMOLinkTextActionView.action = {
-            AlertManager.shared.showFinishCreateMathObjectLink(hashtag: self.mathObjectLinkCreator.hashTag,
-                                                               searchText: self.mathObjectLinkCreator.searchString,
-                                                               confirmation: { (confirmed, _) in
-                                                                    if confirmed {
-                                                                        self.finishCreateMathObjectLink()
-                                                                    }
-                                                                    
-            })
+            self.mathObjectLinkCreator.confirmFinishCreateMathObjectLink()
         }
         addMOLinkTextActionView.closeAction = {
             UIView.animate(withDuration: self.animationDuration, animations: {
-                self.mathObjectLinkCreator.state = .initial
+                self.mathObjectLinkCreator.reset()
             })
         }
         //
@@ -495,32 +488,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         }
     }
     
-    func startCreateMathObjectLink() {
-        self.mathObjectLinkCreator.hashTag = EpsilonStreamAdminModel.currentHashTag
-        self.mathObjectLinkCreator.state = .enterSearchTerm
-        self.resultsTable.setContentOffset(.zero, animated: true)
-    }
-    
-    func finishCreateMathObjectLink() {
-        DLog("create MO link here")
-        
-        let title = mathObjectLinkCreator.defaultTitle
-        let subtitle = mathObjectLinkCreator.defaultSubtitle
-        
-        AlertManager.shared.showEditMOLinkTitleAndSubtitle(withTitle: title, subtitle: subtitle, confirmation: { (title, subtitle) in
-            //DLog("\(title), \(subtitle)")
-            
-            //let moLink = self.mathObjectLinkCreator.mathObjectLink(withTitle: title, subtitle: subtitle)
-            self.mathObjectLinkCreator.submitMathObjectLink(withTitle: title, subtitle: subtitle, completion: { (error) in
-                if (error == nil) {
-                    self.mathObjectLinkCreator.state = .initial
-                } else {
-                    AlertManager.shared.showError(error: error!)
-                }
-            })
-        })
-    }
-    
     // MARK: - View controllers
     
     func openVideoItem(_ item: VideoSearchResultItem) {
@@ -732,7 +699,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         
         let edit = UITableViewRowAction(style: .normal, title: "Edit"){(action, index) in
             switch self.searchResultItems[index.row].type{
-            case SearchResultItemType.video:
+            case .video:
                 //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
                 let youTubeIdToEdit = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
                 EpsilonStreamAdminModel.setCurrentVideo(withVideo: youTubeIdToEdit)
@@ -753,17 +720,18 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.mathObjectLink:
-                print("need to implement edit of math object link")
+            case .mathObjectLink:
+                print("need to implement edit")
+                //AppLogic.shared.editMathObjectLink(MathObjectLink())
                 
-                /////////////////////////
             /////////////////////////
-            case SearchResultItemType.specialItem:
+            /////////////////////////
+            case .specialItem:
                 print("need to implement edit (or not)")
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.messageItem:
+            case .messageItem:
                 print("message item")
             }
             //Make it disappear

@@ -8,6 +8,9 @@ enum MathObjectLinkCreatorState {
 }
 
 class MathObjectLinkCreator: NSObject {
+    
+    // MARK: - Properties
+    
     var defaultTitle: String {
         return LocalString("MathObjectLinkCreatorDefaultTitle") + " " + searchString
     }
@@ -16,12 +19,13 @@ class MathObjectLinkCreator: NSObject {
         return LocalString("MathObjectLinkCreatorDefaultSubtitle")
     }
     
-    var state = MathObjectLinkCreatorState.initial {
+    private(set) var state = MathObjectLinkCreatorState.initial {
         didSet {
             if state != oldValue {
                 if state == .initial {
-                    hashTag = ""
-                    searchString = ""
+                    hashTag         = ""
+                    searchString    = ""
+                    imageURL        = ""
                 }
                 didChangeState?()
             }
@@ -47,7 +51,31 @@ class MathObjectLinkCreator: NSObject {
     }
     var didChangeSearchString: (() -> Void)?
     
-    func submitMathObjectLink(withTitle title: String?, subtitle: String?, completion: @escaping ((Error?)->Void) ) {
+    var imageURL = ""
+    let defaultImageURLs = [ "", "http://111", "http://222", "http://333" ]
+    let defaultImageURLsAliases = [ "No image", "Epsilon logo", "Some other image", "Cool potato image" ]
+    
+    // MARK: - Methods
+    
+    public func reset() {
+        state = .initial
+    }
+    
+    private func startCreateMathObjectLink(withHashTag hashTag: String) {
+        self.hashTag = hashTag
+        state = .enterSearchTerm
+    }
+    
+    public func confirmStartCreateMathObjectLink(withHashTag hashTag: String, confirmation: ((Bool) ->())? = nil) {
+        AlertManager.shared.showStartCreateMathObjectLink(confirmation: { (confirmed, _) in
+            if confirmed {
+                self.startCreateMathObjectLink(withHashTag: hashTag)
+            }
+            confirmation?(confirmed)
+        })
+    }
+    
+    private func submitMathObjectLink(withTitle title: String?, subtitle: String?, completion: @escaping ((Error?)->Void) ) {
         var finalTitle = title
         if title == nil || title!.isEmpty {
             finalTitle = defaultTitle
@@ -65,7 +93,7 @@ class MathObjectLinkCreator: NSObject {
         record["hashTagPriorities"]         = ""                            as CKRecordValue
         record["hashTags"]                  = hashTag                       as CKRecordValue
         record["imageKey"]                  = ""                            as CKRecordValue
-        record["imageURL"]                  = ""                            as CKRecordValue
+        record["imageURL"]                  = imageURL                      as CKRecordValue
         record["isInCollection"]            = true                          as CKRecordValue
         record["notes"]                     = ""                            as CKRecordValue
         record["ourMathObjectLinkHashTag"]  = hashTag + "MathObjectLink"    as CKRecordValue
@@ -87,5 +115,38 @@ class MathObjectLinkCreator: NSObject {
                 completion(error)
             }
         }
+    }
+    
+    private func finishCreateMathObjectLink() {
+        let title = defaultTitle
+        let subtitle = defaultSubtitle
+        
+        AlertManager.shared.showEditMOLinkTitleAndSubtitle(withTitle: title, subtitle: subtitle, confirmation: { (title, subtitle) in
+            //DLog("\(title), \(subtitle)")
+            
+            AlertManager.shared.showSelectMOLinkImageURL(withURLAliases: self.defaultImageURLsAliases, confirmation: { (confirmed, buttonIndex) in
+                if confirmed {
+                    self.imageURL = self.defaultImageURLs[buttonIndex]
+
+                    self.submitMathObjectLink(withTitle: title, subtitle: subtitle, completion: { (error) in
+                        if (error == nil) {
+                            self.state = .initial
+                        } else {
+                            AlertManager.shared.showError(error: error!)
+                        }
+                    })
+                }
+            })
+            
+        })
+    }
+    
+    public func confirmFinishCreateMathObjectLink(confirmation: ((Bool) ->())? = nil ) {
+        AlertManager.shared.showFinishCreateMathObjectLink(hashtag: hashTag, searchText: searchString, confirmation: { (confirmed, _) in
+            if confirmed {
+                self.finishCreateMathObjectLink()
+            }
+            confirmation?(confirmed)
+        })
     }
 }
