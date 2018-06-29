@@ -52,8 +52,10 @@ class MathObjectLinkCreator: NSObject {
     var didChangeSearchString: (() -> Void)?
     
     var imageURL = ""
-    let defaultImageURLs = [ "", "http://111", "http://222", "http://333" ]
-    let defaultImageURLsAliases = [ "No image", "Epsilon logo", "Some other image", "Cool potato image" ]
+    let defaultImageURLs =          [ "", "https://es-app.com/assets/eded3c.png", "https://es-app.com/assets/eabs45.png",
+                                      "https://es-app.com/assets/e3DF6h.png", "https://es-app.com/assets/" ]
+    let defaultImageURLsAliases =   [ "No image", "Exploding Dots", "Full Logo", "Bullet Logo", "Custom" ]
+    let customImageIndex = 4
     
     // MARK: - Methods
     
@@ -75,7 +77,7 @@ class MathObjectLinkCreator: NSObject {
         })
     }
     
-    private func submitMathObjectLink(withTitle title: String?, subtitle: String?, completion: @escaping ((Error?)->Void) ) {
+    private func submitMathObjectLink(withTitle title: String?, subtitle: String?) {
         var finalTitle = title
         if title == nil || title!.isEmpty {
             finalTitle = defaultTitle
@@ -112,7 +114,12 @@ class MathObjectLinkCreator: NSObject {
                 }
                 
                 AlertManager.shared.closeWait()
-                completion(error)
+                
+                if (error == nil) {
+                    self.state = .initial
+                } else {
+                    AlertManager.shared.showError(error: error!)
+                }
             }
         }
     }
@@ -127,14 +134,16 @@ class MathObjectLinkCreator: NSObject {
             AlertManager.shared.showSelectMOLinkImageURL(withURLAliases: self.defaultImageURLsAliases, confirmation: { (confirmed, buttonIndex) in
                 if confirmed {
                     self.imageURL = self.defaultImageURLs[buttonIndex]
-
-                    self.submitMathObjectLink(withTitle: title, subtitle: subtitle, completion: { (error) in
-                        if (error == nil) {
-                            self.state = .initial
-                        } else {
-                            AlertManager.shared.showError(error: error!)
-                        }
-                    })
+                    
+                    if buttonIndex == self.customImageIndex {
+                        let message = LocalString("MathObjectLinkCreatorCustomImageURLMessage")
+                        AlertManager.shared.showTextField(withText: "", message: message, confirmation: { (text) in
+                            self.imageURL = (text != nil && text!.count > 0) ? self.imageURL + text! : ""
+                            self.submitMathObjectLink(withTitle: title, subtitle: subtitle)
+                        })
+                    } else {
+                        self.submitMathObjectLink(withTitle: title, subtitle: subtitle)
+                    }
                 }
             })
             

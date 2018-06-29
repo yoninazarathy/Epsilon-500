@@ -12,6 +12,23 @@ extension AlertManager {
         closeAlert(key: "showWait")
     }
     
+    func showTextField(withText text: String, placeholder: String? = nil, message: String?, confirmation: @escaping ( (String?) -> () ) ) {
+        var alertTextField: UITextField!
+        
+        let configuration = { (alert: UIAlertController) in
+            alert.addTextField { (textField) in
+                textField.text = text
+                textField.placeholder = placeholder
+                alertTextField = textField
+            }
+        }
+        
+        showAlert(key: "showTextField", message: message, okButtonTitle: AlertManager.defaultOKButtonTitle, configuration: configuration,
+                  confirmation: { (_, _) in
+                    confirmation(alertTextField.text)
+        })
+    }
+    
     func showResumePlayback(seconds: Int, confirmation: @escaping AlertConfirmation) {
         let message = String(format: LocalString("AlertResumePlaybackMessage"), TextManager.shared.minutesSeconds(fromSeconds: seconds))
         let alert = showAlert(key: "showResumePlayback", message: message, cancelButtonTitle: LocalString("AlertResumePlaybackCancelButton"),

@@ -33,6 +33,7 @@
 // MathObjectLinkCreator
 "MathObjectLinkCreatorDefaultTitle" = "Explore";
 "MathObjectLinkCreatorDefaultSubtitle" = "One on Epsilon";
+"MathObjectLinkCreatorCustomImageURLMessage" = "Enter custom image code in XXXX format.";
 
 // CellMaintenanceView
 "CellMaintenanceViewCancel"         = "Cancel";
