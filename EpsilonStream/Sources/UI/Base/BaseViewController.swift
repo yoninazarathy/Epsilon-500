@@ -116,7 +116,11 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
 //    }
     
     func close() {
-        navigationController?.popViewController(animated: true)
+        if presentedViewController != nil {
+            dismiss(animated: true, completion: nil)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     // MARK: - Keyboard

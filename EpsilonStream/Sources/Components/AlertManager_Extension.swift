@@ -12,7 +12,7 @@ extension AlertManager {
         closeAlert(key: "showWait")
     }
     
-    func showTextField(withText text: String, placeholder: String? = nil, message: String?, confirmation: @escaping ( (String?) -> () ) ) {
+    func showTextField(withText text: String, placeholder: String? = nil, message: String?, confirmation: @escaping ( (Bool, String?) -> () ) ) {
         var alertTextField: UITextField!
         
         let configuration = { (alert: UIAlertController) in
@@ -23,9 +23,9 @@ extension AlertManager {
             }
         }
         
-        showAlert(key: "showTextField", message: message, okButtonTitle: AlertManager.defaultOKButtonTitle, configuration: configuration,
-                  confirmation: { (_, _) in
-                    confirmation(alertTextField.text)
+        showAlert(key: "showTextField", message: message, cancelButtonTitle: AlertManager.defaultCancelButtonTitle,
+                  okButtonTitle: AlertManager.defaultOKButtonTitle, configuration: configuration, confirmation: { (confirmed, _) in
+                    confirmation(confirmed, alertTextField.text)
         })
     }
     

@@ -607,11 +607,14 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let searchResultItem = self.searchResultItems[indexPath.row]
+        
         let share = UITableViewRowAction(style: .normal, title: "Share"){(action, index) in
             
             Analytics.logEvent("share",parameters: nil)
             
-            switch self.searchResultItems[index.row].type{
+            switch searchResultItem.type {
             case SearchResultItemType.video:
                 let video = self.searchResultItems[index.row] as! VideoSearchResultItem
                 
@@ -619,8 +622,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
-                
-                
                 /*
                  //QQQQ not doing this - delte?
                  if let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook){
@@ -629,8 +630,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                  self.present(vc,animated:true)
                  }
                  */
-                
-                
                 /////////////////////////
             /////////////////////////
             case SearchResultItemType.iosApp:
@@ -698,7 +697,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         //if got down to here then allowing admin mode
         
         let edit = UITableViewRowAction(style: .normal, title: "Edit"){(action, index) in
-            switch self.searchResultItems[index.row].type{
+            switch searchResultItem.type {
             case .video:
                 //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
                 let youTubeIdToEdit = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
@@ -721,8 +720,10 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 /////////////////////////
             /////////////////////////
             case .mathObjectLink:
-                print("need to implement edit")
-                //AppLogic.shared.editMathObjectLink(MathObjectLink())
+                //print("need to implement edit")
+                let ourMathObjectLinkHashTag = (searchResultItem as! MathObjectLinkSearchResultItem).ourMathObjectLinkHashTag
+                let moLink = MathObjectLink.findOne(byPropertyWithName: "ourMathObjectLinkHashTag", value: ourMathObjectLinkHashTag) as! MathObjectLink
+                AppLogic.shared.editMathObjectLink(moLink)
                 
             /////////////////////////
             /////////////////////////

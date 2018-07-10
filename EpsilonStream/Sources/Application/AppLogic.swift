@@ -11,6 +11,7 @@ class AppLogic: NSObject {
     
     func editMathObjectLink(_ mathObjectLink: MathObjectLink) {
         let viewController = MathObjectLinkEditViewController()
+        viewController.mathObjectLink = mathObjectLink
         viewControllerManager.openViewController(viewController)
     }
 }

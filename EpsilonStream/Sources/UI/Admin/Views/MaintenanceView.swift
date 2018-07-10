@@ -72,7 +72,7 @@ class MaintenanceView: BaseView {
         return button
     }
     
-    // MARK: - Action
+    // MARK: - Actions
     
     @objc func buttonPressed(sender: UIButton) {
         let action = MaintenanceAction(rawValue: sender.tag)

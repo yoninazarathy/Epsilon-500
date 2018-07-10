@@ -137,9 +137,11 @@ class MathObjectLinkCreator: NSObject {
                     
                     if buttonIndex == self.customImageIndex {
                         let message = LocalString("MathObjectLinkCreatorCustomImageURLMessage")
-                        AlertManager.shared.showTextField(withText: "", message: message, confirmation: { (text) in
-                            self.imageURL = (text != nil && text!.count > 0) ? self.imageURL + text! : ""
-                            self.submitMathObjectLink(withTitle: title, subtitle: subtitle)
+                        AlertManager.shared.showTextField(withText: "", message: message, confirmation: { (confirmed, text) in
+                            if (confirmed == true) {
+                                self.imageURL = (text != nil && text!.count > 0) ? self.imageURL + text! : ""
+                                self.submitMathObjectLink(withTitle: title, subtitle: subtitle)
+                            }
                         })
                     } else {
                         self.submitMathObjectLink(withTitle: title, subtitle: subtitle)
