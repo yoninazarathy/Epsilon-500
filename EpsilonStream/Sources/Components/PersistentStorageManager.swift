@@ -116,11 +116,13 @@ class PersistentStorageManager: NSObject {
     
     public func saveMainContext() {
         let saveContext = {
-            do {
-                try self.mainContext.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            if self.mainContext.hasChanges {
+                do {
+                    try self.mainContext.save()
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
         }
         

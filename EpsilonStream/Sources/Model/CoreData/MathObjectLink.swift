@@ -5,14 +5,24 @@ import CloudKit
 @objc(MathObjectLink)
 public class MathObjectLink: BaseCoreDataModel {
 
+    override public class var cloudTypeName: String {
+        return "MathObjectLinks"
+    }
+    
+    public override func toCKRecordDictionary() -> AnyDictionary {
+        var dictionary = super.toCKRecordDictionary()
+        dictionary["oneOnEpsilonTimeStamp"] = nil
+        
+        return dictionary
+    }
+    
 }
 
 extension MathObjectLink {
-
     @NSManaged public var avoidPlatforms            : String
     @NSManaged public var cellImageKey              : String
     @NSManaged public var contentVersionNumber      : Int
-    @NSManaged public var displaySearchPriority     : Float //QQQQ actualy not used - maybe deleted throughout system
+    @NSManaged public var displaySearchPriority     : Float         //QQQQ actualy not used - maybe deleted throughout system
     @NSManaged public var hashTagPriorities         : String
     @NSManaged public var hashTags                  : String
     @NSManaged public var imageKey                  : String
@@ -33,6 +43,8 @@ extension MathObjectLink {
     }
     
     func update(fromCloudRecord record: CKRecord){
+        recordID = record.recordID
+        
         avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
         contentVersionNumber = (record["contentVersionNumber"] as? Int) ?? 1
         searchTitle = record["searchTitle"] as! String

@@ -561,7 +561,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func readMathObjectsFromCloud() {
         EpsilonStreamBackgroundFetch.setActionStart()
         
-        readRecordsFromCloud(recordTypeName: String(describing: MathObject.self), latestDate: latestMathObjectDate, saveRecordBlock: { (record) in
+        readRecordsFromCloud(recordTypeName: MathObject.cloudTypeName, latestDate: latestMathObjectDate, saveRecordBlock: { (record) in
             createOrUpdateDBMathObject(fromDataSource: record)
         }) {
             finishedMathObjects = true
@@ -573,7 +573,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func readMathObjectLinksFromCloud() {
         EpsilonStreamBackgroundFetch.setActionStart()
         
-        readRecordsFromCloud(recordTypeName: "MathObjectLinks", latestDate: latestMathObjectLinkDate, saveRecordBlock: { (record) in
+        readRecordsFromCloud(recordTypeName: MathObjectLink.cloudTypeName, latestDate: latestMathObjectLinkDate, saveRecordBlock: { (record) in
             createOrUpdateDBMathObjectLinks(fromDataSource: record)
         }) {
             finishedMathObjectLinks = true
@@ -585,7 +585,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func readFeaturedURLsFromCloud() {
         EpsilonStreamBackgroundFetch.setActionStart()
         
-        readRecordsFromCloud(recordTypeName: String(describing: FeaturedURL.self), latestDate: latestFeatureDate, saveRecordBlock: { (record) in
+        readRecordsFromCloud(recordTypeName: FeaturedURL.cloudTypeName, latestDate: latestFeatureDate, saveRecordBlock: { (record) in
             createDBFeaturedURL(fromDataSource: record)
         }) {
             finishedFeaturedURLs = true

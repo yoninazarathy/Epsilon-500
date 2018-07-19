@@ -12,13 +12,15 @@ extension AlertManager {
         closeAlert(key: "showWait")
     }
     
-    func showTextField(withText text: String, placeholder: String? = nil, message: String?, confirmation: @escaping ( (Bool, String?) -> () ) ) {
+    func showTextField(withText text: String, placeholder: String? = nil, message: String?, keyboardType: UIKeyboardType = UIKeyboardType.default,
+                       confirmation: @escaping ( (Bool, String?) -> () ) ) {
         var alertTextField: UITextField!
         
         let configuration = { (alert: UIAlertController) in
             alert.addTextField { (textField) in
                 textField.text = text
                 textField.placeholder = placeholder
+                textField.keyboardType = keyboardType
                 alertTextField = textField
             }
         }
