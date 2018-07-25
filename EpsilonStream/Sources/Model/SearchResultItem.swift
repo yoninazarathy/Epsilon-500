@@ -1,13 +1,6 @@
-//
-//  SearchResultItem.swift
-//  EpsilonStream
-//
-//  Created by Yoni Nazarathy on 29/12/16.
-//  Copyright © 2016 Yoni Nazarathy. All rights reserved.
-//
-
 import Foundation
 import UIKit
+import CloudKit
 
 enum SearchResultItemType {
     case video
@@ -20,6 +13,7 @@ enum SearchResultItemType {
 }
 
 class SearchResultItem {
+    var recordID: CKRecordID!
     var title = ""
     var channel = ""
     var imageName = ""
@@ -41,18 +35,52 @@ class VideoSearchResultItem: SearchResultItem {
 class FeatureSearchResultItem: SearchResultItem {
     var ourFeaturedURLHashtag = ""
     var isExternal = false
+    
+    init(featuredURL: FeaturedURL, itemType: SearchResultItemType) {
+        super.init()
+        
+        recordID               = featuredURL.recordID
+        title                  = featuredURL.ourTitle
+        channel                = featuredURL.provider
+        ourFeaturedURLHashtag  = featuredURL.ourFeaturedURLHashtag
+        imageName              = featuredURL.imageKey!
+        imageURL               = URL(string: featuredURL.imageURL)
+        hashTagPriorities      = featuredURL.hashTagPriorities
+        rawPriority            = featuredURL.displaySearchPriority
+        isExternal             = featuredURL.isExternal
+        splashKey              = featuredURL.splashKey
+        type                   = itemType
+    }
 }
 
 class IOsAppSearchResultItem: FeatureSearchResultItem {
     var appId = ""
+    
+    override init(featuredURL: FeaturedURL, itemType: SearchResultItemType) {
+        super.init(featuredURL: featuredURL, itemType: itemType)
+        
+        appId = featuredURL.urlOfItem
+    }
 }
 
 class GameWebPageSearchResultItem: FeatureSearchResultItem {
     var url = ""
+    
+    override init(featuredURL: FeaturedURL, itemType: SearchResultItemType) {
+        super.init(featuredURL: featuredURL, itemType: itemType)
+        
+        url = featuredURL.urlOfItem
+    }
 }
 
 class BlogWebPageSearchResultItem: FeatureSearchResultItem {
     var url = ""
+    
+    override init(featuredURL: FeaturedURL, itemType: SearchResultItemType) {
+        super.init(featuredURL: featuredURL, itemType: itemType)
+        
+        url = featuredURL.urlOfItem
+    }
 }
 
 class MathObjectLinkSearchResultItem: SearchResultItem {
@@ -62,23 +90,24 @@ class MathObjectLinkSearchResultItem: SearchResultItem {
     var imageKey                    = ""
     var ourMathObjectLinkHashTag    = ""
     
-    convenience init(mathObjectLink: MathObjectLink) {
-        self.init()
+    init(mathObjectLink: MathObjectLink) {
+        super.init()
         
-        title = mathObjectLink.ourTitle
-        hashTags = mathObjectLink.hashTags
-        channel = "MATH-OBJECT-LINK-CHANNEL"
-        type = SearchResultItemType.mathObjectLink
-        title = mathObjectLink.ourTitle
-        searchTitle = mathObjectLink.searchTitle
-        imageKey = mathObjectLink.imageKey
-        imageURL = URL(string: mathObjectLink.imageURL)
-        inCollection = mathObjectLink.isInCollection
-        hashTagPriorities = mathObjectLink.hashTagPriorities
-        rawPriority = mathObjectLink.displaySearchPriority
-        titleDetail = mathObjectLink.ourTitleDetail
-        splashKey = mathObjectLink.splashKey
-        ourMathObjectLinkHashTag = mathObjectLink.ourMathObjectLinkHashTag
+        recordID                    = mathObjectLink.recordID
+        title                       = mathObjectLink.ourTitle
+        hashTags                    = mathObjectLink.hashTags
+        channel                     = "MATH-OBJECT-LINK-CHANNEL"
+        type                        = .mathObjectLink
+        title                       = mathObjectLink.ourTitle
+        searchTitle                 = mathObjectLink.searchTitle
+        imageKey                    = mathObjectLink.imageKey
+        imageURL                    = URL(string: mathObjectLink.imageURL)
+        inCollection                = mathObjectLink.isInCollection
+        hashTagPriorities           = mathObjectLink.hashTagPriorities
+        rawPriority                 = mathObjectLink.displaySearchPriority
+        titleDetail                 = mathObjectLink.ourTitleDetail
+        splashKey                   = mathObjectLink.splashKey
+        ourMathObjectLinkHashTag    = mathObjectLink.ourMathObjectLinkHashTag
     }
 }
 

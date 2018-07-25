@@ -720,13 +720,8 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 /////////////////////////
             /////////////////////////
             case .mathObjectLink:
-                //print("need to implement edit")
-                let ourMathObjectLinkHashTag = (searchResultItem as! MathObjectLinkSearchResultItem).ourMathObjectLinkHashTag
-                let moLink = MathObjectLink.findOne(byPropertyWithName: "ourMathObjectLinkHashTag", value: ourMathObjectLinkHashTag) as! MathObjectLink
+                let moLink = MathObjectLink.findOne(byPropertyWithName: "recordID", value: searchResultItem.recordID) as! MathObjectLink
                 AppLogic.shared.editMathObjectLink(moLink)
-                
-            /////////////////////////
-            /////////////////////////
             case .specialItem:
                 print("need to implement edit (or not)")
                 

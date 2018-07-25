@@ -655,27 +655,26 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
 
         request.fetchLimit = maxVideosToShow //QQQQ not needed below //QQQQ do for features
 
-        do{
+        do {
             let videos = try mainContext.fetch(request)
             
-            for i in 0..<videos.count{
+            for video in videos {
                 let item = VideoSearchResultItem()
-                item.title = videos[i].ourTitle
-                item.youtubeId = videos[i].youtubeVideoId
-                item.channel = videos[i].channelKey
-                item.durationString = "\(( Int(round(Float(videos[i].durationSec)/60))) == 0 ? 1 : Int(round(Float(videos[i].durationSec)/60)))" //QQQQ make neat repres
-                item.percentWatched = UserDataManager.getPercentWatched(forKey: videos[i].youtubeVideoId)
-                item.inCollection = videos[i].isInCollection
-                item.imageName = videos[i].youtubeVideoId
-                item.imageURL = URL(string: videos[i].imageURL)
-                item.hashTagPriorities = videos[i].hashTagPriorities
-                
-                item.rawPriority = videos[i].displaySearchPriority
+                item.recordID = video.recordID
+                item.title = video.ourTitle
+                item.youtubeId = video.youtubeVideoId
+                item.channel = video.channelKey
+                item.durationString = "\(( Int(round(Float(video.durationSec)/60))) == 0 ? 1 : Int(round(Float(video.durationSec)/60)))" //QQQQ make neat repres
+                item.percentWatched = UserDataManager.getPercentWatched(forKey: video.youtubeVideoId)
+                item.inCollection = video.isInCollection
+                item.imageName = video.youtubeVideoId
+                item.imageURL = URL(string: video.imageURL)
+                item.hashTagPriorities = video.hashTagPriorities
+                item.rawPriority = video.displaySearchPriority
                 
                 videoSearchResult.append(item)
-                
             }
-        }catch{
+        } catch {
             print("Fetch failed")
         }
         
@@ -683,68 +682,29 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         featureRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, featuresPredicate])
 
-        do{
+        do {
             let features = try mainContext.fetch(featureRequest)
-            for feature in features{
-                if feature.isAppStoreApp{
-                    let item = IOsAppSearchResultItem()
-                    item.appId = feature.urlOfItem
-                    item.title = feature.ourTitle
-                    item.channel = feature.provider
-                    item.imageName = feature.imageKey!
-                    item.imageURL = URL(string: feature.imageURL)
-                    item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                    item.inCollection = feature.isInCollection
-                    item.hashTagPriorities = feature.hashTagPriorities
-                    item.rawPriority = feature.displaySearchPriority
-                    item.isExternal = feature.isExternal
-                    item.type = SearchResultItemType.iosApp
-                    appSearchResult.append(item)
+            for feature in features {
+                if feature.isAppStoreApp {
+                    
+                    appSearchResult.append(IOsAppSearchResultItem(featuredURL: feature, itemType: .iosApp))
                     
                     //QQQQ assert here type is game and not article
-                    
-                }else{
+                } else {
                     if feature.typeOfFeature == "game" || feature.typeOfFeature == "Game"{//QQQQ cleanup
                         //This is a game on a web-page
-                        let item = GameWebPageSearchResultItem()
-                        item.url = feature.urlOfItem
-                        item.title = feature.ourTitle
-                        item.channel = feature.provider
-                        item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        item.imageName = feature.imageKey!
-                        item.imageURL = URL(string: feature.imageURL)
-                        item.type = SearchResultItemType.gameWebPage
-                        item.hashTagPriorities = feature.hashTagPriorities
-                        item.rawPriority = feature.displaySearchPriority
-                        item.isExternal = feature.isExternal
-                        item.splashKey = feature.splashKey
-                        blogSearchResult.append(item)
+                        blogSearchResult.append(GameWebPageSearchResultItem(featuredURL: feature, itemType: .gameWebPage))
                         //QQQQ continue here
-                    }else{ //is article
+                    } else { //is article
                         //QQQQ the third option is GameWebPageSearchResultItem
-                        let item = BlogWebPageSearchResultItem()
-                        item.url = feature.urlOfItem
-                        item.title = feature.ourTitle
-                        item.channel = feature.provider
-                        item.ourFeaturedURLHashtag = feature.ourFeaturedURLHashtag
-                        item.imageName = feature.imageKey!
-                        item.imageURL = URL(string: feature.imageURL)
-                        item.type = SearchResultItemType.blogWebPage
-                        item.hashTagPriorities = feature.hashTagPriorities
-                        item.rawPriority = feature.displaySearchPriority
-                        item.isExternal = feature.isExternal
-                        item.splashKey = feature.splashKey
-                        blogSearchResult.append(item)
-                        
+                        blogSearchResult.append(BlogWebPageSearchResultItem(featuredURL: feature, itemType: .blogWebPage))
                         //QQQQ assert here type is article
-
                     }
                 }
             }
-        }catch{
+        } catch {
             print("Fetch failed")
         }
-        
         
         let mathObjectLinkRequest = MathObjectLink.createFetchRequest()
         
