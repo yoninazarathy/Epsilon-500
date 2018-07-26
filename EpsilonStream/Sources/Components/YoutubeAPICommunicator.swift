@@ -48,11 +48,11 @@ struct YoutubeResource{
 
 
 class YoutubeAPICommunicator{
-
+    
     static let API_KEY = "AIzaSyAiUytriGKVNStzDJ-0hmSWdcsOfYNnzCc"
-
+    
     static var delegate: YoutubeAPIDelegate!
-
+    
     static let resourceList = [
         YoutubeResource(
             channelName: "mathbff",
@@ -359,7 +359,7 @@ class YoutubeAPICommunicator{
             playListId: "",
             comment: "minutephysics")
         ,
-        YoutubeResource( 
+        YoutubeResource(
             channelName: "singingbanana",
             channelId: "",
             playListId: "",
@@ -565,8 +565,29 @@ class YoutubeAPICommunicator{
             channelName: "MyWhyU",
             channelId: "",
             playListId: "",
-            comment: "MyWhyU")
-        ]
+            comment: "MyWhyU"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCtoBnL9JM0r_ZVXABGFkCyg",
+            playListId: "",
+            comment: "GoldPlatedGoof"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCRGXV1QlxZ8aucmE45tRx8w",
+            playListId: "",
+            comment: "NancyPi"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "UCQytXvP9Z-6flNSCEtdw1dA",
+            playListId: "",
+            comment: "MathsSmart"),
+        YoutubeResource(
+            channelName: "",
+            channelId: "",
+            playListId: "PLl4T6p7km9dbGCsAooT8-ujI9xAQnjsfJ",
+            comment: "Nerdist MathBites")
+        
+    ]
     static func fetchResource(_ resource: YoutubeResource){
         resourceQueryCount += 1
         
@@ -580,7 +601,7 @@ class YoutubeAPICommunicator{
             print("error with resource")
         }
     }
-
+    
     
     
     //////////////
@@ -639,7 +660,7 @@ class YoutubeAPICommunicator{
                     let vidId = json["items"][i]["id"]["videoId"].stringValue
                     pushVideo(vidId, fromResource: resource)
                 }
-
+                
                 if numItems == json["pageInfo"]["resultsPerPage"].int{
                     let nextToken = json["nextPageToken"].stringValue
                     fetchVideosOfChannel(withChannelId: channelId,fromResrouce: resource,withPageToken: nextToken)
@@ -647,13 +668,13 @@ class YoutubeAPICommunicator{
                     //print("got to end")
                     finishedFetch()
                 }
-
+                
             case .failure(let error):
                 print("Request failed with error: \(error)")
             }
         }
     }
-
+    
     
     //////////////
     //////////////
@@ -722,7 +743,7 @@ class YoutubeAPICommunicator{
     //////////////
     //////////////
     static func getYouTubeAPIFeedVideos(_ qVal: String){
-
+        
         
         let YOUTUBE_API_SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
         var params: [String:String] = [:]
@@ -741,7 +762,7 @@ class YoutubeAPICommunicator{
         
         Alamofire.request(YOUTUBE_API_SEARCH_URL,parameters: params).responseJSON{
             response in
-
+            
             var vidInfoList = [YouTubeSearchResultItem]()
             switch response.result {
             case .success(let data):
@@ -775,14 +796,14 @@ class YoutubeAPICommunicator{
             }
         }
     }
-
+    
     
     static var numVidsInGet = 0
     
     //////////////
     //////////////
     static func getYouTubeAPIVideoInfo(_ idString: String){
-
+        
         numVidsInGet += 1
         print("NUM (request): \(numVidsInGet)")
         
@@ -825,7 +846,7 @@ class YoutubeAPICommunicator{
                     break
                 }
                 //print(seconds)
-
+                
                 let item = YouTubeVideoListResultItem()
                 item.durationInt = Int32(seconds)
                 item.durationString = cleanDuration
