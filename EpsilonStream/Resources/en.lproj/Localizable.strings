@@ -32,7 +32,7 @@
 
 // MathObjectLinkCreator
 "MathObjectLinkCreatorDefaultTitle" = "Explore";
-"MathObjectLinkCreatorDefaultSubtitle" = "One on Epsilon";
+"MathObjectLinkCreatorDefaultSubtitle" = "Epsilon Stream";
 "MathObjectLinkCreatorCustomImageURLMessage" = "Enter custom image code in XXXX format.";
 
 // CellMaintenanceView
