@@ -105,6 +105,24 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
+    
+    class func submitNewVideo(withDBVideo dbVideo: Video){
+        let videoRecord = CKRecord(recordType: "Video")
+        dbVideo.populate(cloudRecord: videoRecord)
+        
+        CKContainer.default().publicCloudDatabase.save(videoRecord){
+            record, error in
+            DispatchQueue.main.async{
+                if let error = error{
+                    print("error on publicCloudDataBase.save: \(error.localizedDescription)")
+                }else{
+                    print("pushed: \(dbVideo.channelKey) -- \(dbVideo.ourTitle)")
+                }
+            }
+        }
+    }
+    
+    
     class func submitFeaturedURL(withDBFeature dbFeature: FeaturedURL){
         let featuredURL = CKRecord(recordType: "FeaturedURL")
         
@@ -130,7 +148,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         featuredURL["typeOfFeature"] = EpsilonStreamAdminModel.currentFeature.typeOfFeature as CKRecordValue
         featuredURL["isInCollection"] = EpsilonStreamAdminModel.currentFeature.isInCollection as CKRecordValue
         featuredURL["whyVsHow"] = EpsilonStreamAdminModel.currentFeature.whyVsHow as CKRecordValue
-
+        
         
         //QQQQ do a spinner thing with a dirty .... etc..
         deleteCloudFeaturedURLRecordsAndReplace(withHashTag: dbFeature.ourFeaturedURLHashtag, withNewRecord: featuredURL)
@@ -139,8 +157,8 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     //QQQQ need
     // class func submitMathObjectLink(){
     //}
-
-
+    
+    
     class func submitMathObject(){
         let mathObject = CKRecord(recordType: "MathObject")
         //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
@@ -273,7 +291,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
                     DispatchQueue.main.sync{
                         backgroundActionInProgress = false
                     }
-
+                    
                 }
             }
         }
@@ -456,8 +474,8 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             print("Fetch failed")
         }
     }
-
-
+    
+    
     
     class func setCurrentMathObject(withMathObject hashTag: String){
         let request = MathObject.createFetchRequest()
@@ -477,12 +495,13 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     /////////////////////////////
     // Mass Store to DB
     /////////////////////////////
-
+    
     class func storeAllVideos(){
         EpsilonStreamBackgroundFetch.peekVideoDataFromCloud()
         
         while true{
             sleep(2)
+            print("in busy loop waiting on peek")
             if EpsilonStreamBackgroundFetch.peekVideoDone{
                 print("done here")
                 break
@@ -495,15 +514,14 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             let videos = try mainContext.fetch(request)
             for v in videos{
                 if let cnt =  EpsilonStreamBackgroundFetch.videoCount[v.youtubeVideoId]{
-                    //print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags) -- \(cnt)")
+                    print("NOT SUBMITING VIDEO \(v.ourTitle) -- \(v.hashTags) -- \(cnt)")
                     if cnt > 1{
                         print( "TOO MANY: \(v.youtubeVideoId) -- \(v.ourTitle) -- \(v.hashTags) -- \(cnt)")
                     }
                 }else{//Video not there
                     print("WILL SUBMIT VIDEO \(v.youtubeVideoId) -- \(v.ourTitle)")
-                    //EpsilonStreamAdminModel.currentVideo = v
-                    //QQQQ need here method prior to Nov 2!!!!
-                    //EpsilonStreamAdminModel.submitVideo(withDBVideo: v)
+                    //QQQQ - keep this commented out for safety
+                    EpsilonStreamAdminModel.submitNewVideo(withDBVideo:  v)
                 }
             }
         }catch{
@@ -525,7 +543,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             print("Fetch failed")
         }
     }
-
+    
     class func storeAllFeatures(){
         let request = FeaturedURL.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
@@ -569,7 +587,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             }
         }
     }
-
+    
     class func addVideoToDBIfNot(_ item: YouTubeVideoListResultItem){
         let videos = EpsilonStreamDataModel.videos(ofYoutubeId: item.videoId)
         if videos.count != 0 {
@@ -586,11 +604,11 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
             newVideo.update(withYouTube: item)
         }
     }
-
+    
     
     class func mathObjectReport() -> String{
         var report = "Report on Math Objects as of \(Date())\n\n"
-
+        
         let request = MathObject.createFetchRequest()
         request.predicate = NSPredicate(format:"TRUEPREDICATE")
         request.sortDescriptors = [NSSortDescriptor(key: "hashTag", ascending: true)]
@@ -606,7 +624,7 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         }catch{
             print("Fetch failed")
         }
-
+        
         
         
         return report
