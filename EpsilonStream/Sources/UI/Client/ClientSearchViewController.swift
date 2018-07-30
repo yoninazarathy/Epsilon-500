@@ -21,7 +21,7 @@ protocol SearcherUI {
 
 
 class ClientSearchViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AutoCompleteClientDelegate,
-SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI, ImageLoadedDelegate {
+SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePlayerDelegate, SearcherUI {
     
     // MARK: - Model
     
@@ -78,8 +78,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        ImageManager.imageLoadedDelegate = self
-        
         title = "Search Epsilon Stream"
         searchTextField.delegate = self
         resultsTable.delegate = self
@@ -851,12 +849,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         DLog("safariViewControllerDidFinish")
-    }
-    
-    // MARK: - ImageManagerDelegate
-    
-    func imagesUpdate(){
-        resultsTable.reloadData()
     }
     
     // MARK: - Keyboard

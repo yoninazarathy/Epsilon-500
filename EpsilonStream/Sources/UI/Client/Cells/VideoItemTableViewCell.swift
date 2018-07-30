@@ -31,19 +31,26 @@ class VideoItemTableViewCell: UITableViewCell {
     }
     
     func configureWith(videoSearchResult searchResult: VideoSearchResultItem){
-        //IMAGE
-        let image = ImageManager.image(at: searchResult.imageURL, forKey: searchResult.imageName, withDefaultName: "Explore_icon")
+        // IMAGE
+        let imageCompletion: (UIImage?)->() = { (image) in
+            if let image = image {
+                //QQQQ perfromance: move this resizing offline?
+                let height = image.size.height
+                let width = image.size.width
+                
+                let newHeight = height*0.75 //has to do with black lines on youtube videos QQQQ configure
+                let newWidth = width
+                
+                let img = Toucan(image: image).resize(CGSize(width: newWidth, height: newHeight), fitMode: Toucan.Resize.FitMode.crop).image
+                
+                self.videoImage.image = img
+            }
+        }
+        let image = ImageManager.image(at: searchResult.imageURL, forKey: searchResult.imageName, withDefaultName: "Explore_icon", completion: imageCompletion)
+        imageCompletion(image)
+        //
         
-        //QQQQ perfromance: move this resizing offline?
-        let height = image.size.height
-        let width = image.size.width
         
-        let newHeight = height*0.75 //has to do with black lines on youtube videos QQQQ configure
-        let newWidth = width
-            
-        let img = Toucan(image: image).resize(CGSize(width: newWidth, height: newHeight), fitMode: Toucan.Resize.FitMode.crop).image
-            
-        videoImage.image = img
         
         //TITLE
         videoTitle.text = searchResult.title

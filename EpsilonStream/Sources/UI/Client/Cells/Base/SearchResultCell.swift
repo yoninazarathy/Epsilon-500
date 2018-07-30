@@ -23,13 +23,19 @@ class SearchResultCell: BaseCell {
         //
         if searchResult.imageName.isEmpty == false {
             let width = UIScreen.main.scale * 100
-            var image = ImageManager.image(at: searchResult.imageURL, forKey: searchResult.imageName, withDefaultName: defaultImageName)
-            image = Toucan(image: image).resize(CGSize(width: width), fitMode: Toucan.Resize.FitMode.crop).image
-            mainImageView.image = Toucan(image: image).maskWithEllipse().image
+            let imageCompletion: (UIImage?)->() = { (image) in
+                if let image = image {
+                    let procecedImage = Toucan(image: image).resize(CGSize(width: width), fitMode: Toucan.Resize.FitMode.crop).image
+                    self.mainImageView.image = Toucan(image: procecedImage).maskWithEllipse().image
+                }
+            }
+            let image = ImageManager.image(at: searchResult.imageURL, forKey: searchResult.imageName,
+                                           withDefaultName: defaultImageName, completion: imageCompletion)
+            imageCompletion(image)
+            
         } else {
             mainImageView.image = nil
         }
-        
         //
         //
         titleLabel.text = searchResult.title
