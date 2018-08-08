@@ -319,10 +319,8 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     }
     
     class func createOrUpdateDBMathObjectLinks(fromDataSource cloudSource: CKRecord){
-        let ourMathObjectLinkHashTag = cloudSource["ourMathObjectLinkHashTag"] as! String
-        
         let request = MathObjectLink.createFetchRequest() //QQQQ name of object is singular or plural?
-        request.predicate = NSPredicate(format: "ourMathObjectLinkHashTag == %@", ourMathObjectLinkHashTag)
+        request.predicate = NSPredicate(format: "recordID == %@", cloudSource.recordID)
         do{
             let mol = try mainContext.fetch(request)
             if mol.count == 0{
@@ -331,10 +329,10 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
             }else if mol.count == 1{
                 mol[0].update(fromCloudRecord: cloudSource)
             }else{
-                print("error - too many MathObjectLinks \(ourMathObjectLinkHashTag) -- \(mol.count)")
+                DLog("error - too many MathObjectLinks \(cloudSource.recordID) -- \(mol.count)")
             }
         }catch{
-            print("Fetch failed")
+            DLog("Fetch failed")
         }
     }
     
