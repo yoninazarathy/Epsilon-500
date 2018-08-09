@@ -60,6 +60,7 @@
 		0167016A20863BA700210EE3 /* MaintenanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0167016920863BA700210EE3 /* MaintenanceView.swift */; };
 		0167016D20864CD800210EE3 /* SurpriseTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0167016C20864CD800210EE3 /* SurpriseTextField.swift */; };
 		0167016F20864DED00210EE3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0167016E20864DED00210EE3 /* Extensions.swift */; };
+		017315D6211C7B500048D884 /* SwitchControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017315D5211C7B500048D884 /* SwitchControlCell.swift */; };
 		01746A3A1FA0F1A7003A3BC2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01746A371FA0F1A7003A3BC2 /* Common.swift */; };
 		017617BB1FFBE79D002621E4 /* PreloadedThumbnailImages in Resources */ = {isa = PBXBuildFile; fileRef = 017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */; };
 		017617BD1FFBE7EC002621E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 017617BC1FFBE7EC002621E4 /* Assets.xcassets */; };
@@ -161,6 +162,7 @@
 		0167016920863BA700210EE3 /* MaintenanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceView.swift; sourceTree = "<group>"; };
 		0167016C20864CD800210EE3 /* SurpriseTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurpriseTextField.swift; sourceTree = "<group>"; };
 		0167016E20864DED00210EE3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		017315D5211C7B500048D884 /* SwitchControlCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchControlCell.swift; sourceTree = "<group>"; };
 		01746A371FA0F1A7003A3BC2 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PreloadedThumbnailImages; sourceTree = "<group>"; };
 		017617BC1FFBE7EC002621E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -361,6 +363,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		017315D4211C7B1C0048D884 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				017315D5211C7B500048D884 /* SwitchControlCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		01746A351FA0F1A7003A3BC2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -491,6 +501,7 @@
 		01F5FCEE203F30B4001D90D5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				017315D4211C7B1C0048D884 /* Cells */,
 				01F5FCEF203F30CC001D90D5 /* ViewFactory.swift */,
 			);
 			path = Views;
@@ -720,6 +731,7 @@
 				01A83C2E205030350035A503 /* AlertManager.swift in Sources */,
 				01E9CD3820D2D2D9004370E7 /* ViewControllerManager.swift in Sources */,
 				01571A5720C592BE006E9DA8 /* CGSize_IKExtension.swift in Sources */,
+				017315D6211C7B500048D884 /* SwitchControlCell.swift in Sources */,
 				0152CA0C1FDD40F800ADBFA8 /* PlayVideoViewController.swift in Sources */,
 				01BBEE3920360EF5002DA8D6 /* WebViewPrefetcher.swift in Sources */,
 				018BAA4E1FA2251100F8583A /* BaseCoreDataModel.swift in Sources */,

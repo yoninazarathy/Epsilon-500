@@ -88,7 +88,7 @@ public class BaseCoreDataModel: NSManagedObject {
                     targetRecord!.setValues(fromDictionary: self.toCKRecordDictionary())
                     //DLog("record: %@", targetRecord!)
                     
-                    CKContainer.default().publicCloudDatabase.save( targetRecord!){ record, error in
+                    CKContainer.default().publicCloudDatabase.save(targetRecord!){ record, error in
                         if error == nil {
                             self.save()
                         }

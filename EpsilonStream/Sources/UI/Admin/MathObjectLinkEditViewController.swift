@@ -7,7 +7,7 @@ struct TitleValueModel {
     var value = ""
 }
 
-class MathObjectLinkEditViewController: TextEditViewController {
+class MathObjectLinkEditViewController: TextEditViewController, SwitchControlCellDelegate {
 
     // MARL: - Model
     
@@ -19,11 +19,16 @@ class MathObjectLinkEditViewController: TextEditViewController {
         }
     }
     
+    var generalSection = 0
+    
     var hashTagsRow             = 0
     var searchTitleRow          = 0
     var searchPriorityRow       = 0
     var hashTagPrioritiesRow    = 0
     var imageURLRow             = 0
+    var ourTitleRow             = 0
+    var ourTitleDetailRow       = 0
+    var isInCollectionRow       = 0
     
     override func initialize() {
         super.initialize()
@@ -38,12 +43,17 @@ class MathObjectLinkEditViewController: TextEditViewController {
     override func refreshRowAndSectionIndeces() {
         super.refreshRowAndSectionIndeces()
         
+        generalSection = 0
+        
         hashTagsRow             = 0
         searchTitleRow          = hashTagsRow + 1
         searchPriorityRow       = searchTitleRow + 1
         hashTagPrioritiesRow    = searchPriorityRow + 1
         imageURLRow             = hashTagPrioritiesRow + 1
-        numberOfRowsInSections.append(imageURLRow + 1)
+        ourTitleRow             = imageURLRow + 1
+        ourTitleDetailRow       = ourTitleRow + 1
+        isInCollectionRow       = ourTitleDetailRow + 1
+        numberOfRowsInSections.append(isInCollectionRow + 1)
         
         let searchPriorityString = (mathObjectLink != nil) ? "\(mathObjectLink!.displaySearchPriority)" : ""
         titleValueModels.removeAll()
@@ -52,6 +62,9 @@ class MathObjectLinkEditViewController: TextEditViewController {
         addTitleValueModel(row: searchPriorityRow,      section: 0, title: "Search priority",       value: searchPriorityString)
         addTitleValueModel(row: hashTagPrioritiesRow,   section: 0, title: "Hashtag priorities",    value: mathObjectLink?.hashTagPriorities)
         addTitleValueModel(row: imageURLRow,            section: 0, title: "Image URL",             value: mathObjectLink?.imageURL)
+        addTitleValueModel(row: ourTitleRow,            section: 0, title: "Our title",             value: mathObjectLink?.ourTitle)
+        addTitleValueModel(row: ourTitleDetailRow,      section: 0, title: "Our title detail",      value: mathObjectLink?.ourTitleDetail)
+        addTitleValueModel(row: isInCollectionRow,      section: 0, title: "Is in collection",      value: nil)
     }
     
     override func refresh() {
@@ -62,20 +75,66 @@ class MathObjectLinkEditViewController: TextEditViewController {
         titleValueModels[ IndexPath(row: row, section: section) ] = TitleValueModel(title: title, value: value ?? "")
     }
     
+    func saveText(_ text: String, toPropertyAtIndexPath indexPath: IndexPath) {
+        let section = indexPath.section
+        let row = indexPath.row
+        if (section == generalSection) {
+            if row == hashTagsRow {
+                
+                mathObjectLink?.hashTags = text
+                
+            } else if row == searchTitleRow {
+                
+                mathObjectLink?.searchTitle = text
+                
+            } else if row == searchPriorityRow {
+                
+                mathObjectLink?.displaySearchPriority = Float(text) ?? mathObjectLink!.displaySearchPriority
+                
+            } else if row == hashTagPrioritiesRow {
+                
+                mathObjectLink?.hashTagPriorities = text
+                
+            } else if row == imageURLRow {
+                
+                mathObjectLink?.imageURL = text
+                
+            } else if row == ourTitleRow {
+                
+                mathObjectLink?.ourTitle = text
+                
+            } else if row == ourTitleDetailRow {
+                
+                mathObjectLink?.ourTitleDetail = text
+                
+            }
+        }
+    }
+    
     // MARK: - UITableViewDataSource
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellID = "cellID"
+        var cellClass = UITableViewCell.self
+        if indexPath.section == generalSection && indexPath.row == isInCollectionRow {
+            cellClass = SwitchControlCell.self
+        }
+        
+        let cellID = String(describing: cellClass)
         
         var cell = tableView.dequeueReusableCell(withIdentifier: cellID)
         if cell == nil {
-            cell = UITableViewCell(style: .value1, reuseIdentifier: cellID)
+            cell = cellClass.init(style: .value1, reuseIdentifier: cellID)
         }
         
         let titleValueModel = titleValueModels[indexPath]!
-        
         cell?.textLabel?.text = titleValueModel.title
         cell?.detailTextLabel?.text = titleValueModel.value
+        
+        if indexPath.section == generalSection && indexPath.row == isInCollectionRow {
+            let switchCell = cell as? SwitchControlCell
+            switchCell?.delegate = self
+            switchCell?.isOn = mathObjectLink?.isInCollection
+        }
         
         return cell!
     }
@@ -94,35 +153,23 @@ class MathObjectLinkEditViewController: TextEditViewController {
         }
         AlertManager.shared.showTextField(withText: titleValueModel.value, message: titleValueModel.title, keyboardType: keyboardType) { (confirmed, text) in
             
-            let finalText = text ?? ""
-            
             if confirmed {
-                if row == self.hashTagsRow {
-                    
-                    self.mathObjectLink?.hashTags = finalText
-                    
-                } else if row == self.searchTitleRow {
-                    
-                    self.mathObjectLink?.searchTitle = finalText
-                    
-                } else if row == self.searchPriorityRow {
-                    
-                    self.mathObjectLink?.displaySearchPriority = Float(finalText) ?? self.mathObjectLink!.displaySearchPriority
-                
-                } else if row == self.hashTagPrioritiesRow {
-                    
-                    self.mathObjectLink?.hashTagPriorities = finalText
-                
-                } else if row == self.imageURLRow {
-                    
-                    self.mathObjectLink?.imageURL = finalText
-                    
-                }
-                
+                self.saveText(text ?? "", toPropertyAtIndexPath: indexPath)
                 self.refreshRowAndSectionIndeces()
                 self.tableView.reloadData()
             }
             
+        }
+    }
+    
+    // MARK: - SwitchControlCellDelegate
+    
+    func switchControlCellValueChanged(_ cell: SwitchControlCell) {
+        let indexPath = tableView.indexPath(for: cell)
+        if indexPath?.section == generalSection {
+            if indexPath?.row == isInCollectionRow {
+                mathObjectLink?.isInCollection = cell.isOn!
+            }
         }
     }
     
