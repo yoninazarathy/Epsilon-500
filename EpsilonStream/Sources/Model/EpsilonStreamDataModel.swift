@@ -660,7 +660,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
             
             for video in videos {
                 let item = VideoSearchResultItem()
-                item.recordID = video.recordID
+                item.recordName = video.recordName
                 item.title = video.ourTitle
                 item.youtubeId = video.youtubeVideoId
                 item.channel = video.channelKey

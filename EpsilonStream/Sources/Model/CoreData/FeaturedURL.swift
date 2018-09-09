@@ -35,6 +35,8 @@ extension FeaturedURL {
     }
     
     func update(fromCloudRecord record: CKRecord){
+        recordName = record.recordID.recordName
+        
         avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
         
         if let ts = record["modificationDate"] as? Date{    // ??? Ask Yoni about this field

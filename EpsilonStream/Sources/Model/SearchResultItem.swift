@@ -13,7 +13,7 @@ enum SearchResultItemType {
 }
 
 class SearchResultItem {
-    var recordID: CKRecordID!
+    var recordName: String!
     var title = ""
     var channel = ""
     var imageName = ""
@@ -39,7 +39,7 @@ class FeatureSearchResultItem: SearchResultItem {
     init(featuredURL: FeaturedURL, itemType: SearchResultItemType) {
         super.init()
         
-        recordID               = featuredURL.recordID
+        recordName             = featuredURL.recordName
         title                  = featuredURL.ourTitle
         channel                = featuredURL.provider
         ourFeaturedURLHashtag  = featuredURL.ourFeaturedURLHashtag
@@ -93,7 +93,7 @@ class MathObjectLinkSearchResultItem: SearchResultItem {
     init(mathObjectLink: MathObjectLink) {
         super.init()
         
-        recordID                    = mathObjectLink.recordID
+        recordName                  = mathObjectLink.recordName
         title                       = mathObjectLink.ourTitle
         hashTags                    = mathObjectLink.hashTags
         channel                     = "MATH-OBJECT-LINK-CHANNEL"

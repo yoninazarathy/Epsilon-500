@@ -43,7 +43,7 @@ extension MathObjectLink {
     }
     
     func update(fromCloudRecord record: CKRecord){
-        recordID = record.recordID
+        recordName = record.recordID.recordName
         
         avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
         contentVersionNumber = (record["contentVersionNumber"] as? Int) ?? 1

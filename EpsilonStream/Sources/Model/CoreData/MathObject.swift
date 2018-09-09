@@ -24,6 +24,8 @@ extension MathObject {
     
     
     func update(fromCloudRecord record: CKRecord){
+        recordName = record.recordID.recordName
+        
         oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
         hashTag = record["hashTag"] as! String
         associatedTitles = record["associatedTitles"] as! String

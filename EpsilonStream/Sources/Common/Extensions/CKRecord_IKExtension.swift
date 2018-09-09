@@ -4,7 +4,7 @@ extension CKRecord {//: DictionaryMappingProtocol {
     
     public override func setValues(fromDictionary dictionary: AnyDictionary) {
         for (key, value) in dictionary {
-            if key == "recordID" {
+            if key == "recordID" || key == "recordName" {
                 continue
             }
             

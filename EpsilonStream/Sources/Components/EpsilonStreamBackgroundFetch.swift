@@ -318,18 +318,19 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         }
     }
     
-    class func createOrUpdateDBMathObjectLinks(fromDataSource cloudSource: CKRecord){
+    class func createOrUpdateDBMathObjectLinks(fromCloudRecord cloudRecord: CKRecord){
         let request = MathObjectLink.createFetchRequest() //QQQQ name of object is singular or plural?
-        request.predicate = NSPredicate(format: "recordID == %@", cloudSource.recordID)
+//        request.predicate = NSPredicate(format: "recordID == %@", cloudSource.recordID)
+        request.predicate = NSPredicate(format: "recordName == %@", cloudRecord.recordID.recordName)
         do{
             let mol = try mainContext.fetch(request)
             if mol.count == 0{
                 let newMathObjectLink = MathObjectLink(inContext: mainContext)
-                newMathObjectLink.update(fromCloudRecord: cloudSource)
+                newMathObjectLink.update(fromCloudRecord: cloudRecord)
             }else if mol.count == 1{
-                mol[0].update(fromCloudRecord: cloudSource)
+                mol[0].update(fromCloudRecord: cloudRecord)
             }else{
-                DLog("error - too many MathObjectLinks \(cloudSource.recordID) -- \(mol.count)")
+                DLog("error - too many MathObjectLinks \(cloudRecord.recordID.recordName) -- \(mol.count)")
             }
         }catch{
             DLog("Fetch failed")
@@ -572,7 +573,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         EpsilonStreamBackgroundFetch.setActionStart()
         
         readRecordsFromCloud(recordTypeName: MathObjectLink.cloudTypeName, latestDate: latestMathObjectLinkDate, saveRecordBlock: { (record) in
-            createOrUpdateDBMathObjectLinks(fromDataSource: record)
+            createOrUpdateDBMathObjectLinks(fromCloudRecord: record)
         }) {
             finishedMathObjectLinks = true
             onFinish() //QQQQ should this be in a mutex?

@@ -4,7 +4,7 @@ import CloudKit
 
 public class BaseCoreDataModel: NSManagedObject {
     
-    @NSManaged public var recordID: CKRecordID?
+    @NSManaged public var recordName: String?
     
     public class var cloudTypeName: String {
         return String(describing: self)
@@ -71,7 +71,8 @@ public class BaseCoreDataModel: NSManagedObject {
         }
         
         
-        let predicate = NSPredicate(format: "recordID == %@", recordID!)
+        //let predicate = NSPredicate(format: "recordID == %@", recordID!)
+        let predicate = NSPredicate(format: "recordID == %@", CKRecordID(recordName: recordName!))
         
         var targetRecord: CKRecord?
         let operation = CKQueryOperation(query: CKQuery(recordType: type(of: self).cloudTypeName, predicate: predicate) )
@@ -103,7 +104,7 @@ public class BaseCoreDataModel: NSManagedObject {
                 
             } else {
                 
-                DLog("Query record with ID \(self.recordID!) error: \(error!)")
+                DLog("Query record with ID \(self.recordName!) error: \(error!)")
                 methodCompletion(error)
                 
             }

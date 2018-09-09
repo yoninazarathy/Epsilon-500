@@ -39,6 +39,8 @@ extension Video {
     
     
     func update(fromCloudRecord record: CKRecord){
+        recordName = record.recordID.recordName
+        
         oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
         age8Rating = record["age8Rating"] as! Float
         age10Rating = record["age10Rating"] as! Float

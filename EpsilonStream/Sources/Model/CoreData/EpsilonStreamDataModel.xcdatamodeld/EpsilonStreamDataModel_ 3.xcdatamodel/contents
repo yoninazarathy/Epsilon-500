@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Channel" representedClassName="Channel" syncable="YES">
         <attribute name="channelId" attributeType="String" syncable="YES"/>
         <attribute name="channelTitle" attributeType="String" syncable="YES"/>
@@ -10,7 +10,7 @@
         <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="ourChannelHashtag" attributeType="String" syncable="YES"/>
         <attribute name="ourChannelStringDescription" attributeType="String" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <fetchIndex name="byOurChannelHashtagIndex">
             <fetchIndexElement property="ourChannelHashtag" type="Binary" order="ascending"/>
         </fetchIndex>
@@ -30,7 +30,7 @@
         <attribute name="ourFeaturedURLHashtag" attributeType="String" syncable="YES"/>
         <attribute name="ourTitle" attributeType="String" syncable="YES"/>
         <attribute name="provider" attributeType="String" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="splashKey" attributeType="String" syncable="YES"/>
         <attribute name="typeOfFeature" attributeType="String" syncable="YES"/>
         <attribute name="urlOfItem" attributeType="String" syncable="YES"/>
@@ -53,7 +53,7 @@
         <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="primarySourceIsCloud" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="priority" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="webRequestSent" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <fetchIndex name="byKeyNameIndex">
             <fetchIndexElement property="keyName" type="Binary" order="ascending"/>
@@ -71,7 +71,7 @@
         <attribute name="hashTag" attributeType="String" syncable="YES"/>
         <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="reviewer" attributeType="String" syncable="YES"/>
         <attribute name="splashKey" attributeType="String" syncable="YES"/>
         <attribute name="supportsWhyVsHow" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -97,7 +97,7 @@
         <attribute name="ourMathObjectLinkHashTag" attributeType="String" syncable="YES"/>
         <attribute name="ourTitle" attributeType="String" syncable="YES"/>
         <attribute name="ourTitleDetail" attributeType="String" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="searchTitle" attributeType="String" syncable="YES"/>
         <attribute name="splashKey" attributeType="String" syncable="YES"/>
         <fetchIndex name="byHashTagsIndex">
@@ -113,7 +113,7 @@
         <attribute name="minimalSoftwareVersion" attributeType="String" syncable="YES"/>
         <attribute name="numberOfTimesLeftToShowMessage" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="numberOfTimesToShowMessage" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="textMessageToShow" attributeType="String" syncable="YES"/>
         <attribute name="videoCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
@@ -136,7 +136,7 @@
         <attribute name="isInCollection" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="oneOnEpsilonTimeStamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="ourTitle" attributeType="String" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="splashKey" attributeType="String" syncable="YES"/>
         <attribute name="whyVsHow" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="youtubeTitle" attributeType="String" syncable="YES"/>
