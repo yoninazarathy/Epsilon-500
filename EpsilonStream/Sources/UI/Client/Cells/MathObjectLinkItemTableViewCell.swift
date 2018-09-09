@@ -54,5 +54,10 @@ class MathObjectLinkItemTableViewCell: SearchResultCell {
             }
         }
         //
+        
+        if searchResult.inCollection == false{
+            subtitleLabel.text?.append(" -NIC- ") 
+        }
+
     }
 }
