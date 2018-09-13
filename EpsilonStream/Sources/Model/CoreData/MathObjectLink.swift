@@ -16,6 +16,8 @@ public class MathObjectLink: BaseCoreDataModel {
         return dictionary
     }
     
+    
+    
 }
 
 extension MathObjectLink {
@@ -46,7 +48,8 @@ extension MathObjectLink {
         recordName = record.recordID.recordName
         
         avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
-        contentVersionNumber = (record["contentVersionNumber"] as? Int) ?? 1
+        //contentVersionNumber = (record["contentVersionNumber"] as? Int) ?? 1 For some reason this line crashes on iOS9. So workaround is used below.
+        self.setValue( (record["contentVersionNumber"] as? Int) ?? 1, forKey: "contentVersionNumber")
         searchTitle = record["searchTitle"] as! String
         hashTags = record["hashTags"] as! String
         imageKey = record["imageKey"] as! String
