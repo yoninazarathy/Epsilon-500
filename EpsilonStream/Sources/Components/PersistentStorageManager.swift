@@ -34,8 +34,7 @@ class PersistentStorageManager: NSObject {
     }
     
     private var storageFileName: String {
-        return "EpsilonStreamDataModel"
-        //return "EpsilonStreamDataModel_\(version)"
+        return "EpsilonStreamDataModel_\(version)"
     }
     
     private var storageFileURL: URL {
@@ -44,7 +43,7 @@ class PersistentStorageManager: NSObject {
     
     public func removeOldVersion() {
         if IKFileManager.shared.fileExists(atURL: storageFileURL) == false {
-            // File with current version doesn't exist - we need to clean data and re-dowload everything.
+            // File with current version doesn't exist - we need to clean data and re-download everything.
             var files = IKFileManager.shared.contentsOfDirectory(atPath: IKFileManager.shared.absolutePath(forPath: storageDirectoryURL.relativePath) )
             files = files.filter({ (fileName: String) -> Bool in
                 return fileName.starts(with: self.storageFileNamePrefix)
@@ -57,10 +56,16 @@ class PersistentStorageManager: NSObject {
         }
     }
     
+    private lazy var managedObjectModel: NSManagedObjectModel = {
+        var modelURL = Bundle.main.resourceURL!.appendingPathComponent("\(storageFileNamePrefix).momd")
+        modelURL.appendPathComponent("\(storageFileNamePrefix)_ \(version).mom") // For some reason XCode adds "space" symbol before the version in the file name.
+        return NSManagedObjectModel(contentsOf: modelURL)!
+    }()
+    
     // MARK: - Setup storage iOS 10 and above
     
     @available(iOS 10.0, *) private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: storageFileName)
+        let container = NSPersistentContainer(name: storageFileName, managedObjectModel: managedObjectModel)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -70,12 +75,6 @@ class PersistentStorageManager: NSObject {
     }()
     
     // MARK: - Setup storage iOS 9
-    
-    private lazy var managedObjectModel: NSManagedObjectModel = {
-        var modelURL = Bundle.main.resourceURL!.appendingPathComponent("\(storageFileName).momd")
-        modelURL.appendPathComponent("\(storageFileNamePrefix)_ \(version).mom") // For some reason XCode adds "space" symbol before the version in the file name.
-        return NSManagedObjectModel(contentsOf: modelURL)!
-    }()
     
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         // Create the coordinator and store
