@@ -69,12 +69,35 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: view.frame, configuration: webConfiguration)
         webView.navigationDelegate = self
-        
+
         view.addSubview(webView)
-        
-        let url = URL(string: webURLString)!
-        let urlRequest = URLRequest(url: url)
-        webView.load(urlRequest)
+
+        //QQQQ Igor - this flag is just temporary - true is the normal behaviour - false shows the snippet
+        if true{
+            let url = URL(string: webURLString)!
+            let urlRequest = URLRequest(url: url)
+            webView.load(urlRequest)
+            
+        }else{
+            
+            
+            //QQQQ thse should be based on data (e.g. pulled from CoreData which would be downloaded from CK
+            let snippetString = "There are many ways to convert a [decimal number](decimal) $x^2$![image1]"
+            let snippetImageURLstring = "https://es-app.com/snippet-assets/convertFractionToPercent.svg"
+            let snippetTitle = "How can a fraction be converted to a percent?"
+            
+            if let path = Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "snippetBuild") {
+                let url = URLRequest(url: URL(fileURLWithPath: path))
+                webView.load(url)
+                
+                //QQQQ - Bad.... The proper way is to wait for "load" to finish and the evaluate JS. How?
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
+                    webView.evaluateJavaScript("window.mdBlock.setTitle(\"\(snippetTitle)\")")
+                    webView.evaluateJavaScript("window.mdBlock.setSnippet(\"\(snippetString)\")")
+                    webView.evaluateJavaScript("window.mdBlock.setImage(\"\(snippetImageURLstring)\")")
+                })
+            }
+        }
         
         let window = UIApplication.shared.keyWindow!
         var imageName: String = ""
@@ -85,6 +108,7 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
         }else{
             imageName = "Screen_About_Explore"
         }
+        
         coverImageView = UIImageView(image: UIImage(named: imageName))
         coverImageView.contentMode = .scaleAspectFill
         coverImageView.frame = CGRect(x: window.frame.origin.x, y: window.frame.origin.y, width: window.frame.width, height: window.frame.height)
@@ -93,6 +117,7 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
             self.coverImageView.alpha = 0.2
         }, completion:
             {_ in })//self.coverImageView.removeFromSuperview()})
+
     }
     
     override func viewDidAppear(_ animated: Bool) {

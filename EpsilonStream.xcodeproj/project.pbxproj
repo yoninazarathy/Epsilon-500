@@ -103,6 +103,7 @@
 		01E9CD3C20D2DBBF004370E7 /* MathObjectLinkEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E9CD3B20D2DBBF004370E7 /* MathObjectLinkEditViewController.swift */; };
 		01F5FCF0203F30CC001D90D5 /* ViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F5FCEF203F30CC001D90D5 /* ViewFactory.swift */; };
 		2030B7EC1E10BC1B001E2237 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2030B7EA1E10BC1B001E2237 /* LaunchScreen.storyboard */; };
+		2046A103214CD436002B71F4 /* snippetBuild in Resources */ = {isa = PBXBuildFile; fileRef = 2046A102214CD436002B71F4 /* snippetBuild */; };
 		206992641E3E01C600EBC614 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 206992631E3E01C600EBC614 /* GoogleService-Info.plist */; };
 		20EE413B1E10E502002F78F9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20EE413A1E10E502002F78F9 /* CloudKit.framework */; };
 		8B3D27D8BA516FFBA790A595 /* Pods_EpsilonStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8365442A59822C0F1455CBAB /* Pods_EpsilonStream.framework */; };
@@ -209,6 +210,7 @@
 		2030B7DC1E10BC1B001E2237 /* EpsilonStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpsilonStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2030B7EB1E10BC1B001E2237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2030B7ED1E10BC1B001E2237 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2046A102214CD436002B71F4 /* snippetBuild */ = {isa = PBXFileReference; lastKnownFileType = folder; path = snippetBuild; sourceTree = "<group>"; };
 		206992631E3E01C600EBC614 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		20EE41381E10E4FD002F78F9 /* EpsilonStream.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EpsilonStream.entitlements; sourceTree = "<group>"; };
 		20EE413A1E10E502002F78F9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -242,6 +244,7 @@
 		01372CED1F97C7620072F3E3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2046A102214CD436002B71F4 /* snippetBuild */,
 				017617741FFBE783002621E4 /* Images */,
 				018B97ED1FD86676003EBDCB /* Audio */,
 				010FF33B1FB1A19200619183 /* Video */,
@@ -637,6 +640,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2046A103214CD436002B71F4 /* snippetBuild in Resources */,
 				010FF33F1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 in Resources */,
 				018B97F01FD86676003EBDCB /* Hole_Punch.wav in Resources */,
 				017617BD1FFBE7EC002621E4 /* Assets.xcassets in Resources */,
