@@ -80,6 +80,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         EpsilonStreamDataModel.setLatestDates()
         loadClient()
         
+//        Common.performOnMainThread(delay: 5) {
+//            let viewController = SnippetViewController()
+//            AppLogic.shared.viewControllerManager.openViewController(viewController)
+//        }
+        
         return true
     }
 

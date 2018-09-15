@@ -64,6 +64,7 @@
 		01746A3A1FA0F1A7003A3BC2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01746A371FA0F1A7003A3BC2 /* Common.swift */; };
 		017617BB1FFBE79D002621E4 /* PreloadedThumbnailImages in Resources */ = {isa = PBXBuildFile; fileRef = 017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */; };
 		017617BD1FFBE7EC002621E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 017617BC1FFBE7EC002621E4 /* Assets.xcassets */; };
+		01802C65214D3D7A0073868C /* SnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01802C64214D3D7A0073868C /* SnippetViewController.swift */; };
 		018B97EC1FD8652E003EBDCB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018B97EB1FD8652D003EBDCB /* AppDelegate.swift */; };
 		018B97F01FD86676003EBDCB /* Hole_Punch.wav in Resources */ = {isa = PBXBuildFile; fileRef = 018B97EE1FD86676003EBDCB /* Hole_Punch.wav */; };
 		018B97F11FD86676003EBDCB /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 018B97EF1FD86676003EBDCB /* click.wav */; };
@@ -167,6 +168,7 @@
 		01746A371FA0F1A7003A3BC2 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PreloadedThumbnailImages; sourceTree = "<group>"; };
 		017617BC1FFBE7EC002621E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		01802C64214D3D7A0073868C /* SnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetViewController.swift; sourceTree = "<group>"; };
 		018B97EB1FD8652D003EBDCB /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		018B97EE1FD86676003EBDCB /* Hole_Punch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Hole_Punch.wav; sourceTree = "<group>"; };
 		018B97EF1FD86676003EBDCB /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 				0152C9F21FDD40F800ADBFA8 /* PlayVideoViewController.swift */,
 				0152C9F51FDD40F800ADBFA8 /* AboutViewController.swift */,
 				0152C9F61FDD40F800ADBFA8 /* CreditsViewController.swift */,
+				01802C64214D3D7A0073868C /* SnippetViewController.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -769,6 +772,7 @@
 				01571A5920C592BE006E9DA8 /* UIAlertController_IKExtension.swift in Sources */,
 				0145FD7F205AA1280063348C /* GameItemTableViewCell.swift in Sources */,
 				0152CA091FDD40F800ADBFA8 /* ExternalPageViewer.swift in Sources */,
+				01802C65214D3D7A0073868C /* SnippetViewController.swift in Sources */,
 				018BAA4B1FA21FA300F8583A /* Video.swift in Sources */,
 				0145FD80205AA1280063348C /* SpecialItemTableViewCell.swift in Sources */,
 				0145FD7E205AA1280063348C /* ArticleItemTableViewCell.swift in Sources */,
