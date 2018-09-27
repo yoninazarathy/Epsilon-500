@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		010FF33E1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 010FF33C1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 */; };
 		010FF33F1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */; };
+		011B10C02151746F00D07F92 /* Snippet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011B10BF2151746F00D07F92 /* Snippet.swift */; };
 		01372CF01F97C8F90072F3E3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01372CF21F97C8F90072F3E3 /* Localizable.strings */; };
 		0145FD702052F2B70063348C /* TextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD6F2052F2B70063348C /* TextManager.swift */; };
 		0145FD722058383D0063348C /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0145FD712058383D0063348C /* AssetManager.swift */; };
@@ -65,16 +66,14 @@
 		017617BB1FFBE79D002621E4 /* PreloadedThumbnailImages in Resources */ = {isa = PBXBuildFile; fileRef = 017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */; };
 		017617BD1FFBE7EC002621E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 017617BC1FFBE7EC002621E4 /* Assets.xcassets */; };
 		01802C65214D3D7A0073868C /* SnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01802C64214D3D7A0073868C /* SnippetViewController.swift */; };
+		01807857215D231200790B0F /* NSManagedObject+IKExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01807856215D231200790B0F /* NSManagedObject+IKExtensions.swift */; };
 		018B97EC1FD8652E003EBDCB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018B97EB1FD8652D003EBDCB /* AppDelegate.swift */; };
 		018B97F01FD86676003EBDCB /* Hole_Punch.wav in Resources */ = {isa = PBXBuildFile; fileRef = 018B97EE1FD86676003EBDCB /* Hole_Punch.wav */; };
 		018B97F11FD86676003EBDCB /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 018B97EF1FD86676003EBDCB /* click.wav */; };
 		018BAA2C1FA21F2D00F8583A /* IKFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA2B1FA21F2D00F8583A /* IKFileManager.swift */; };
-		018BAA3E1FA21FA300F8583A /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA2F1FA21FA300F8583A /* Channel.swift */; };
 		018BAA411FA21FA300F8583A /* FeaturedURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA321FA21FA300F8583A /* FeaturedURL.swift */; };
-		018BAA431FA21FA300F8583A /* ImageThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA341FA21FA300F8583A /* ImageThumbnail.swift */; };
 		018BAA451FA21FA300F8583A /* MathObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA361FA21FA300F8583A /* MathObject.swift */; };
 		018BAA471FA21FA300F8583A /* MathObjectLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA381FA21FA300F8583A /* MathObjectLink.swift */; };
-		018BAA491FA21FA300F8583A /* VersionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA3A1FA21FA300F8583A /* VersionInfo.swift */; };
 		018BAA4B1FA21FA300F8583A /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA3C1FA21FA300F8583A /* Video.swift */; };
 		018BAA4E1FA2251100F8583A /* BaseCoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BAA4D1FA2251100F8583A /* BaseCoreDataModel.swift */; };
 		018EE09520A9934E005D9C79 /* TextActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018EE09420A9934E005D9C79 /* TextActionView.swift */; };
@@ -113,6 +112,8 @@
 /* Begin PBXFileReference section */
 		010FF33C1FB1A19200619183 /* LogoAnimationVert_9sec_Norm_Res.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec_Norm_Res.mp4; sourceTree = "<group>"; };
 		010FF33D1FB1A19200619183 /* LogoAnimationVert_9sec_High_Res.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = LogoAnimationVert_9sec_High_Res.mp4; sourceTree = "<group>"; };
+		011B10BC2151678C00D07F92 /* EpsilonStreamDataModel_ 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "EpsilonStreamDataModel_ 4.xcdatamodel"; sourceTree = "<group>"; };
+		011B10BF2151746F00D07F92 /* Snippet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snippet.swift; sourceTree = "<group>"; };
 		01372CF11F97C8F90072F3E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0145FD6F2052F2B70063348C /* TextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextManager.swift; sourceTree = "<group>"; };
 		0145FD712058383D0063348C /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
@@ -169,16 +170,14 @@
 		017617BA1FFBE79D002621E4 /* PreloadedThumbnailImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PreloadedThumbnailImages; sourceTree = "<group>"; };
 		017617BC1FFBE7EC002621E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01802C64214D3D7A0073868C /* SnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetViewController.swift; sourceTree = "<group>"; };
+		01807856215D231200790B0F /* NSManagedObject+IKExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+IKExtensions.swift"; sourceTree = "<group>"; };
 		018B97EB1FD8652D003EBDCB /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		018B97EE1FD86676003EBDCB /* Hole_Punch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Hole_Punch.wav; sourceTree = "<group>"; };
 		018B97EF1FD86676003EBDCB /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 		018BAA2B1FA21F2D00F8583A /* IKFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IKFileManager.swift; sourceTree = "<group>"; };
-		018BAA2F1FA21FA300F8583A /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		018BAA321FA21FA300F8583A /* FeaturedURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedURL.swift; sourceTree = "<group>"; };
-		018BAA341FA21FA300F8583A /* ImageThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageThumbnail.swift; sourceTree = "<group>"; };
 		018BAA361FA21FA300F8583A /* MathObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathObject.swift; sourceTree = "<group>"; };
 		018BAA381FA21FA300F8583A /* MathObjectLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathObjectLink.swift; sourceTree = "<group>"; };
-		018BAA3A1FA21FA300F8583A /* VersionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionInfo.swift; sourceTree = "<group>"; };
 		018BAA3C1FA21FA300F8583A /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		018BAA4D1FA2251100F8583A /* BaseCoreDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoreDataModel.swift; sourceTree = "<group>"; };
 		018EE09420A9934E005D9C79 /* TextActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextActionView.swift; sourceTree = "<group>"; };
@@ -339,6 +338,7 @@
 				01571A4520C592BD006E9DA8 /* DispatchQueue_IKExtension.swift */,
 				01571A4120C592BC006E9DA8 /* Mirror_IKExtension.swift */,
 				01571A4920C592BD006E9DA8 /* NSJSONSerialization_IKExtension.swift */,
+				01807856215D231200790B0F /* NSManagedObject+IKExtensions.swift */,
 				01571A3920C592BA006E9DA8 /* NSObject_IKExtension.swift */,
 				01571A4720C592BD006E9DA8 /* String_IKExtension.swift */,
 				01571A4620C592BD006E9DA8 /* UIAlertController_IKExtension.swift */,
@@ -453,13 +453,11 @@
 			children = (
 				01E69AD1206536DC00681A1E /* EpsilonStreamDataModel.xcdatamodeld */,
 				018BAA4D1FA2251100F8583A /* BaseCoreDataModel.swift */,
-				018BAA2F1FA21FA300F8583A /* Channel.swift */,
 				018BAA321FA21FA300F8583A /* FeaturedURL.swift */,
-				018BAA341FA21FA300F8583A /* ImageThumbnail.swift */,
 				018BAA361FA21FA300F8583A /* MathObject.swift */,
 				018BAA381FA21FA300F8583A /* MathObjectLink.swift */,
-				018BAA3A1FA21FA300F8583A /* VersionInfo.swift */,
 				018BAA3C1FA21FA300F8583A /* Video.swift */,
+				011B10BF2151746F00D07F92 /* Snippet.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -732,7 +730,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				018BAA431FA21FA300F8583A /* ImageThumbnail.swift in Sources */,
 				01571A5320C592BE006E9DA8 /* Dictionary_IKExtensions.swift in Sources */,
 				018BAA451FA21FA300F8583A /* MathObject.swift in Sources */,
 				01A83C2E205030350035A503 /* AlertManager.swift in Sources */,
@@ -742,6 +739,7 @@
 				0152CA0C1FDD40F800ADBFA8 /* PlayVideoViewController.swift in Sources */,
 				01BBEE3920360EF5002DA8D6 /* WebViewPrefetcher.swift in Sources */,
 				018BAA4E1FA2251100F8583A /* BaseCoreDataModel.swift in Sources */,
+				01807857215D231200790B0F /* NSManagedObject+IKExtensions.swift in Sources */,
 				018EE09520A9934E005D9C79 /* TextActionView.swift in Sources */,
 				01E9CD3A20D2D445004370E7 /* AppLogic.swift in Sources */,
 				0152CA031FDD40F800ADBFA8 /* ClientSettingsViewController.swift in Sources */,
@@ -761,7 +759,6 @@
 				01571A5020C592BE006E9DA8 /* Data_IKExtension.swift in Sources */,
 				01E69AC82062A8E000681A1E /* SearchResultCell.swift in Sources */,
 				0145FD7D205AA1280063348C /* MathObjectLinkItemTableViewCell.swift in Sources */,
-				018BAA491FA21FA300F8583A /* VersionInfo.swift in Sources */,
 				01E9CD3C20D2DBBF004370E7 /* MathObjectLinkEditViewController.swift in Sources */,
 				01A83C3020503CD20035A503 /* AlertManager_Extension.swift in Sources */,
 				0152CA0F1FDD40F800ADBFA8 /* AboutViewController.swift in Sources */,
@@ -799,6 +796,7 @@
 				01F5FCF0203F30CC001D90D5 /* ViewFactory.swift in Sources */,
 				0152C9FC1FDD40F800ADBFA8 /* URLSelectorViewController.swift in Sources */,
 				0152CA041FDD40F800ADBFA8 /* ClientSearchViewController.swift in Sources */,
+				011B10C02151746F00D07F92 /* Snippet.swift in Sources */,
 				0152CA101FDD40F800ADBFA8 /* CreditsViewController.swift in Sources */,
 				01BBEE3420360EF5002DA8D6 /* UserMessageManager.swift in Sources */,
 				01BBEE3720360EF5002DA8D6 /* EpsilonStreamLoginManager.swift in Sources */,
@@ -806,7 +804,6 @@
 				01BBEE3A20360EF5002DA8D6 /* AutoCompleteTableDelegate.swift in Sources */,
 				018BAA411FA21FA300F8583A /* FeaturedURL.swift in Sources */,
 				0152CA081FDD40F800ADBFA8 /* WebViewingViewController.swift in Sources */,
-				018BAA3E1FA21FA300F8583A /* Channel.swift in Sources */,
 				01571A4B20C592BE006E9DA8 /* CGPoint_IKExtension.swift in Sources */,
 				0152C9FD1FDD40F800ADBFA8 /* CurateItemViewController.swift in Sources */,
 				01571A5C20C592BE006E9DA8 /* NSJSONSerialization_IKExtension.swift in Sources */,
@@ -1017,11 +1014,12 @@
 		01E69AD1206536DC00681A1E /* EpsilonStreamDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				011B10BC2151678C00D07F92 /* EpsilonStreamDataModel_ 4.xcdatamodel */,
 				019054ED20BD79310033FEBF /* EpsilonStreamDataModel_ 3.xcdatamodel */,
 				01E69AD2206536DC00681A1E /* EpsilonStreamDataModel_ 2.xcdatamodel */,
 				01E69AD3206536DC00681A1E /* EpsilonStreamDataModel.xcdatamodel */,
 			);
-			currentVersion = 019054ED20BD79310033FEBF /* EpsilonStreamDataModel_ 3.xcdatamodel */;
+			currentVersion = 011B10BC2151678C00D07F92 /* EpsilonStreamDataModel_ 4.xcdatamodel */;
 			path = EpsilonStreamDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

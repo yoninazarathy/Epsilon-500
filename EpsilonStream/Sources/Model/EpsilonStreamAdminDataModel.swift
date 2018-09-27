@@ -42,7 +42,6 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     static var currentVideo: Video!
     static var currentMathObject: MathObject!
     static var currentFeature: FeaturedURL!
-    static var currentChannel: Channel!  //QQQQ don't have such an object
     static var currentMathObjectLink: MathObjectLink!
     
     //QQQQ used for term selector view controller
@@ -126,8 +125,6 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     class func submitFeaturedURL(withDBFeature dbFeature: FeaturedURL){
         let featuredURL = CKRecord(recordType: "FeaturedURL")
         
-        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
-        featuredURL["oneOnEpsilonTimeStamp"] = EpsilonStreamAdminModel.currentFeature.oneOnEpsilonTimeStamp as CKRecordValue
         featuredURL["isAppStoreApp"] = EpsilonStreamAdminModel.currentFeature.isAppStoreApp as CKRecordValue
         featuredURL["urlOfItem"] = EpsilonStreamAdminModel.currentFeature.urlOfItem as CKRecordValue
         featuredURL["hashTags"] = EpsilonStreamAdminModel.currentFeature.hashTags as CKRecordValue
@@ -161,8 +158,6 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     
     class func submitMathObject(){
         let mathObject = CKRecord(recordType: "MathObject")
-        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
-        mathObject["oneOnEpsilonTimeStamp"] = EpsilonStreamAdminModel.currentMathObject.oneOnEpsilonTimeStamp as CKRecordValue
         mathObject["hashTag"] = EpsilonStreamAdminModel.currentMathObject.hashTag as CKRecordValue
         mathObject["associatedTitles"] = EpsilonStreamAdminModel.currentMathObject.associatedTitles as CKRecordValue
         
@@ -361,24 +356,9 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     // Make New Objects
     /////////////////////////////
     
-    class func makeNewChannel(_ context: NSManagedObjectContext){
-        let newChannel = Channel(inContext: context)
-        
-        newChannel.channelId = "Channel Id - Fill In"
-        newChannel.channelTitle = "Channel Title - Fill In"
-        newChannel.channelURL = "Channel URL - Fill In"
-        newChannel.isInChannelCollection = true
-        newChannel.ourChannelStringDescription = "Our Channel Description - Fill In"
-        newChannel.imagePic = nil
-        newChannel.imageURL = "Channel URL - fill In"
-        newChannel.ourChannelHashtag = "Our channel HashTag - Fill In"
-        newChannel.oneOnEpsilonTimeStamp = Date()
-    }
-    
     class func makeNewFeaturedURL(_ context: NSManagedObjectContext) -> FeaturedURL{
         let newFeaturedURL = FeaturedURL(inContext: context)
         
-        newFeaturedURL.oneOnEpsilonTimeStamp = Date()
         newFeaturedURL.isAppStoreApp = true
         newFeaturedURL.urlOfItem = "URL OF ITEM - FILL IN"
         newFeaturedURL.hashTags = "#needsTag"
@@ -396,7 +376,6 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
     class func makeNewMathObject(_ context: NSManagedObjectContext){
         let newMathObject = MathObject(inContext: context)
         
-        newMathObject.oneOnEpsilonTimeStamp = Date()
         newMathObject.associatedTitles = "ASSOCIATED TITLES - FILL IN"
         newMathObject.hashTag = "#NEW-MATH-OBJECT"
         newMathObject.reviewer = "guest"
@@ -423,7 +402,6 @@ class EpsilonStreamAdminModel: ManagedObjectContextUserProtocol {
         newVideo.youtubeTitle = "YouTube title - CODE FILL IN"
         newVideo.youtubeVideoId = "NO-YOUTUBE-ID-YET"
         newVideo.hashTags = "#needsTag"
-        newVideo.oneOnEpsilonTimeStamp = Date()
     }
     
     /////////////////////////////

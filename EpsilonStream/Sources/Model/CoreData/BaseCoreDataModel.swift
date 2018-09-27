@@ -4,7 +4,11 @@ import CloudKit
 
 public class BaseCoreDataModel: NSManagedObject {
     
-    @NSManaged public var recordName: String?
+    @NSManaged public var recordName: String
+    @NSManaged public var modificationDate: Date
+    
+    static public let recordNameProperty        = "recordName"
+    static public let modificationDateProperty  = "modificationDate"
     
     public class var cloudTypeName: String {
         return String(describing: self)
@@ -19,14 +23,7 @@ public class BaseCoreDataModel: NSManagedObject {
         }
     }
     
-    public override func toDictionary() -> AnyDictionary {
-        let keys = Array(entity.attributesByName.keys)
-        return dictionaryWithValues(forKeys: keys)
-    }
-    
-    public func toCKRecordDictionary() -> AnyDictionary {
-        return toDictionary()
-    }
+    // MARK: - Save
     
     public func save() {
         PersistentStorageManager.shared.saveMainContext()
@@ -36,32 +33,43 @@ public class BaseCoreDataModel: NSManagedObject {
         managedObjectContext?.refresh(self, mergeChanges: false)
     }
     
-    public class func createFetchRequest<T: BaseCoreDataModel>() -> NSFetchRequest<T> {
-        return NSFetchRequest(entityName: String(describing: self) )
+    // MARK: - Conversion
+    
+    public override func toDictionary() -> AnyDictionary {
+        let keys = Array(entity.attributesByName.keys)
+        return dictionaryWithValues(forKeys: keys)
     }
     
-    public class func findMany<T: BaseCoreDataModel>(byPropertyWithName propertyName: String, value: Any) -> [T] {
+    public func toCKRecordDictionary() -> AnyDictionary {   // return dictioanry that is valid to submit to CloudKit
+        var dictionary = toDictionary()
+        dictionary[BaseCoreDataModel.modificationDateProperty] = nil
+        return dictionary
+    }
+    
+    public func updateFromCloudRecord(record: CKRecord) {
+        recordName = record.recordID.recordName
+        modificationDate = record.modificationDate ?? Date()
+        
+        let dictionary = record.toDictionary()
+        setValues(fromDictionary: dictionary)
+        save()
+    }
+    
+    static public func createOrUpdateFromCloudRecord(record: CKRecord) {
         let request = createFetchRequest()
-        request.predicate = NSPredicate(format: "\(propertyName) == %@", argumentArray: [value])
+        let cloudRecordName = record.recordID.recordName
+        request.predicate = NSPredicate(format: "%K == %@", BaseCoreDataModel.recordNameProperty, cloudRecordName)
         
-        var array = [T]()
-        do {
-            try array.append(contentsOf: (PersistentStorageManager.shared.mainContext.fetch(request) as! [T]) )
-        } catch {
-            print("Fetch failed")
+        if let oldModel = findOne(byPropertyWithName: BaseCoreDataModel.recordNameProperty, value: cloudRecordName) {
+            // Need to test updating!!!
+            oldModel.updateFromCloudRecord(record: record)
+        } else {
+            let newModel = self.init(inContext: PersistentStorageManager.shared.mainContext)
+            newModel.updateFromCloudRecord(record: record)
+            //DLog("Created new record of class \(String(describing: self)) ID: \(newModel.recordName)")
         }
-        
-        return array
+
     }
-    
-    public class func findOne<T: BaseCoreDataModel>(byPropertyWithName propertyName: String, value: CVarArg) -> T? {
-        return findMany(byPropertyWithName: propertyName, value: value).first
-    }
-    
-//    public func updateFromCloudRecord(record: CKRecord) {
-//        let dictionary = record.toDictionary()
-//        DLog("aaa")
-//    }
     
     public func updateCloudRecord(completion: ((Error?) -> ())? ) {
         let methodCompletion = { error in
@@ -72,7 +80,7 @@ public class BaseCoreDataModel: NSManagedObject {
         
         
         //let predicate = NSPredicate(format: "recordID == %@", recordID!)
-        let predicate = NSPredicate(format: "recordID == %@", CKRecordID(recordName: recordName!))
+        let predicate = NSPredicate(format: "recordID == %@", CKRecordID(recordName: recordName))
         
         var targetRecord: CKRecord?
         let operation = CKQueryOperation(query: CKQuery(recordType: type(of: self).cloudTypeName, predicate: predicate) )
@@ -104,7 +112,7 @@ public class BaseCoreDataModel: NSManagedObject {
                 
             } else {
                 
-                DLog("Query record with ID \(self.recordName!) error: \(error!)")
+                DLog("Query record with ID \(self.recordName) error: \(error!)")
                 methodCompletion(error)
                 
             }
@@ -112,5 +120,29 @@ public class BaseCoreDataModel: NSManagedObject {
         }
         
         CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
+    // MARK: - Fetch
+    
+    public class func createFetchRequest<T: BaseCoreDataModel>() -> NSFetchRequest<T> {
+        return NSFetchRequest(entityName: String(describing: self) )
+    }
+    
+    public class func findMany<T: BaseCoreDataModel>(byPropertyWithName propertyName: String, value: Any) -> [T] {
+        let request = createFetchRequest()
+        request.predicate = NSPredicate(format: "\(propertyName) == %@", argumentArray: [value])
+        
+        var array = [T]()
+        do {
+            try array.append(contentsOf: (PersistentStorageManager.shared.mainContext.fetch(request) as! [T]) )
+        } catch {
+            print("Fetch failed")
+        }
+        
+        return array
+    }
+    
+    public class func findOne<T: BaseCoreDataModel>(byPropertyWithName propertyName: String, value: CVarArg) -> T? {
+        return findMany(byPropertyWithName: propertyName, value: value).first
     }
 }

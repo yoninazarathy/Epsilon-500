@@ -47,11 +47,6 @@ class CurateItemViewController: UIViewController, UIImagePickerControllerDelegat
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-
-    
-    
-    
-
     
     @IBAction func submitAction(_ sender: UIButton) {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
@@ -62,7 +57,6 @@ class CurateItemViewController: UIViewController, UIImagePickerControllerDelegat
         backgroundActionInProgress = true
         view.isUserInteractionEnabled = false
 
-        EpsilonStreamAdminModel.currentVideo.oneOnEpsilonTimeStamp = Date() //QQQQ not really used
         EpsilonStreamAdminModel.currentVideo.isInCollection = inCollectionSwitch.isOn
         EpsilonStreamAdminModel.currentVideo.isAwesome = awesomeSwitch.isOn
         
@@ -95,7 +89,6 @@ class CurateItemViewController: UIViewController, UIImagePickerControllerDelegat
     }
 
     func refreshView(){
-        //QQQQ timeStampLabel.text = EpsilonStreamAdminModel.currentVideo.oneOnEpsilonTimeStamp as! String
         videoIdLabel.text = EpsilonStreamAdminModel.currentVideo.youtubeVideoId
         durationLabel.text = "\(EpsilonStreamAdminModel.currentVideo.durationSec)"//QQQQ Display duration better
         youtubeTitleLabel.text = EpsilonStreamAdminModel.currentVideo.youtubeTitle

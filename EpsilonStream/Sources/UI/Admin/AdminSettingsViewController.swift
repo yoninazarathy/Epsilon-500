@@ -124,11 +124,11 @@ class AdminSettingsViewController: UIViewController {
     
 
     func refreshDataView(){
-        versionNumberLabel.text = "version: \(EpsilonStreamDataModel.latestVersion())"
-        numberMathObjectLabel.text = "numMathObjects: \(EpsilonStreamDataModel.numMathObjects()) "
-        numberVideosLabel.text = "numVideos: \(EpsilonStreamDataModel.numVideos()), inColl: \(EpsilonStreamDataModel.numVideos(inCollection: true))"
-        numberFeaturesLabel.text = "numFeatures: \(EpsilonStreamDataModel.numFeaturedURLs())"
-        numImagesFilesLabel.text = "numImages: CD: \(ImageManager.numImagesInCoreData()), F: \(ImageManager.numImagesOnFile()), B: \(ImageManager.numImagesInBundle())"
+        versionNumberLabel.text     = "version: \(Common.appVersion) \(Common.buildVersion)"
+        numberMathObjectLabel.text  = "numMathObjects: \(EpsilonStreamDataModel.numMathObjects()) "
+        numberVideosLabel.text      = "numVideos: \(EpsilonStreamDataModel.numVideos()), inColl: \(EpsilonStreamDataModel.numVideos(inCollection: true))"
+        numberFeaturesLabel.text    = "numFeatures: \(EpsilonStreamDataModel.numFeaturedURLs())"
+        numImagesFilesLabel.text    = "numImages: F: \(ImageManager.numImagesOnFile()), B: \(ImageManager.numImagesInBundle())"
     }
 
     var isInScreen = true

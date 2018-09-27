@@ -13,7 +13,6 @@ extension MathObject {
         return NSFetchRequest<MathObject>(entityName: "MathObject");
     }
     
-    @NSManaged public var oneOnEpsilonTimeStamp: Date
     @NSManaged public var hashTag: String
     @NSManaged public var associatedTitles: String
     @NSManaged public var curator: String
@@ -25,8 +24,8 @@ extension MathObject {
     
     func update(fromCloudRecord record: CKRecord){
         recordName = record.recordID.recordName
+        modificationDate = record[BaseCoreDataModel.modificationDateProperty] as! Date
         
-        oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
         hashTag = record["hashTag"] as! String
         associatedTitles = record["associatedTitles"] as! String
         if let cr = record["curator"]{

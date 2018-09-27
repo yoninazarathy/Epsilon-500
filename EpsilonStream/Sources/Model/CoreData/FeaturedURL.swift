@@ -10,7 +10,6 @@ public class FeaturedURL: BaseCoreDataModel {
 extension FeaturedURL {
     
     @NSManaged public var avoidPlatforms: String
-    @NSManaged public var oneOnEpsilonTimeStamp: Date
     @NSManaged public var isAppStoreApp: Bool
     @NSManaged public var urlOfItem: String
     @NSManaged public var hashTags: String
@@ -36,16 +35,9 @@ extension FeaturedURL {
     
     func update(fromCloudRecord record: CKRecord){
         recordName = record.recordID.recordName
+        modificationDate = record[BaseCoreDataModel.modificationDateProperty] as! Date
         
         avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
-        
-        if let ts = record["modificationDate"] as? Date{    // ??? Ask Yoni about this field
-            oneOnEpsilonTimeStamp = ts
-        }else{
-            //QQQQ report error
-            print("DB error with \(record)")
-            return
-        }
         
         if let ht = record["hashTags"] as? String{
             hashTags = ht

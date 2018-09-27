@@ -1,16 +1,5 @@
-//
-//  EpsilonStreamBackgroundFetch.swift
-//  EpsilonStream
-//
-//  Created by Yoni Nazarathy on 31/12/16.
-//  Copyright © 2016 Yoni Nazarathy. All rights reserved.
-//
-
 import Foundation
 import CloudKit
-import CoreData
-import UIKit
-import Alamofire
 import Firebase
 
 
@@ -28,6 +17,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     static var finishedMathObjects = false
     static var finishedFeaturedURLs = false
     static var finishedMathObjectLinks = false
+    static var finishedSnippets = false
 
     static var readRecordsCount = [String: Int]()
     static var videoNum = 0
@@ -121,19 +111,13 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     }
  */
     
-    class func runUpdate(){
-        finishedMathObjects = false
-        finishedVideos = false
-        finishedFeaturedURLs = false
-
-        //QQQQ delete readAllImagesFromCloud()
+    class func runUpdate() {
         readMathObjectsFromCloud() //QQQQ implement for collection
         readMathObjectLinksFromCloud()
-        
-        //if not in admin mode only read videos in collection
-        //otherwise (inAdminMode) read all videos
+        //if not in admin mode only read videos in collection otherwise (inAdminMode) read all videos
         readVideoDataFromCloud(isInAdminMode == false)
         readFeaturedURLsFromCloud()
+        readSnippetsFromCloud()
     }
     
     //QQQQ This is a patch to make onFinish run only once.
@@ -143,7 +127,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         if didItOnce{
             return
         }
-        let isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedMathObjectLinks
+        let isReady = finishedVideos && finishedFeaturedURLs &&  finishedMathObjects && finishedMathObjectLinks && finishedSnippets
         
         if isReady {
             didItOnce = true
@@ -259,7 +243,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     }
     
     class func modificationDateSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: "modificationDate", ascending: true)
+        return NSSortDescriptor(key: BaseCoreDataModel.modificationDateProperty, ascending: true)
     }
     
     class func defaultSortDescriptors() -> [NSSortDescriptor] {
@@ -296,7 +280,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         }
     }
     
-    class func createDBFeaturedURL(fromDataSource cloudSource: CKRecord){
+    class func createOrUpdateDBFeaturedURL(fromDataSource cloudSource: CKRecord){
         //let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         let ourFeaturedURLHashtag = cloudSource["ourFeaturedURLHashtag"] as! String
@@ -352,7 +336,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
             
             readRecordsCount[recordTypeName] = 0
             
-            let predicate = NSPredicate(format: "modificationDate > %@", latestDate as NSDate)
+            let predicate = NSPredicate(format: "\(BaseCoreDataModel.modificationDateProperty) > %@", latestDate as NSDate)
             let query = CKQuery(recordType: recordTypeName, predicate: predicate)
             query.sortDescriptors = defaultSortDescriptors()
     
@@ -395,12 +379,13 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
         
         EpsilonStreamBackgroundFetch.setActionStart()
         
-        let pred1 = NSPredicate(format: "modificationDate > %@", latestVideoDate! as NSDate)
+        finishedVideos = false
+        let pred1 = NSPredicate(format: "\(BaseCoreDataModel.modificationDateProperty) > %@", latestVideoDate as NSDate)
         let pred2 = NSPredicate(format: "isInVideoCollection = %@", NSNumber(booleanLiteral: inCollection))
         let pred = inCollection ? NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2]) : pred1
         
         let query = CKQuery(recordType: "Video", predicate: pred)
-        query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
+        query.sortDescriptors = defaultSortDescriptors()
         
         let operation = CKQueryOperation(query: query)
         //operation.qualityOfService = .userInteractive //QQQQ this is maybe abusive - but may speed up
@@ -560,6 +545,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func readMathObjectsFromCloud() {
         EpsilonStreamBackgroundFetch.setActionStart()
         
+        finishedMathObjects = false
         readRecordsFromCloud(recordTypeName: MathObject.cloudTypeName, latestDate: latestMathObjectDate, saveRecordBlock: { (record) in
             createOrUpdateDBMathObject(fromDataSource: record)
         }) {
@@ -572,6 +558,7 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func readMathObjectLinksFromCloud() {
         EpsilonStreamBackgroundFetch.setActionStart()
         
+        finishedMathObjectLinks = false
         readRecordsFromCloud(recordTypeName: MathObjectLink.cloudTypeName, latestDate: latestMathObjectLinkDate, saveRecordBlock: { (record) in
             createOrUpdateDBMathObjectLinks(fromCloudRecord: record)
         }) {
@@ -584,10 +571,24 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     class func readFeaturedURLsFromCloud() {
         EpsilonStreamBackgroundFetch.setActionStart()
         
+        finishedFeaturedURLs = false
         readRecordsFromCloud(recordTypeName: FeaturedURL.cloudTypeName, latestDate: latestFeatureDate, saveRecordBlock: { (record) in
-            createDBFeaturedURL(fromDataSource: record)
+            createOrUpdateDBFeaturedURL(fromDataSource: record)
         }) {
             finishedFeaturedURLs = true
+            onFinish() //QQQQ should this be in a mutex?
+            EpsilonStreamBackgroundFetch.setActionFinish()
+        }
+    }
+    
+    class func readSnippetsFromCloud() {
+        EpsilonStreamBackgroundFetch.setActionStart()
+        
+        finishedSnippets = false
+        readRecordsFromCloud(recordTypeName: Snippet.cloudTypeName, latestDate: latestSnippetsDate, saveRecordBlock: { (record) in
+            Snippet.createOrUpdateFromCloudRecord(record: record)
+        }) {
+            finishedSnippets = true
             onFinish() //QQQQ should this be in a mutex?
             EpsilonStreamBackgroundFetch.setActionFinish()
         }

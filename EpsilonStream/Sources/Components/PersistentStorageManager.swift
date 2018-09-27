@@ -26,7 +26,7 @@ class PersistentStorageManager: NSObject {
     }
     
     private var version: Int {
-        return 3
+        return 4
     }
     
     private var storageDirectoryURL: URL {

@@ -13,7 +13,6 @@ extension Video {
         return NSFetchRequest<Video>(entityName: "Video");
     }
     
-    @NSManaged public var oneOnEpsilonTimeStamp: Date
     @NSManaged public var age8Rating: Float
     @NSManaged public var age10Rating: Float
     @NSManaged public var age12Rating: Float
@@ -40,8 +39,8 @@ extension Video {
     
     func update(fromCloudRecord record: CKRecord){
         recordName = record.recordID.recordName
+        modificationDate = record[BaseCoreDataModel.modificationDateProperty] as! Date
         
-        oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
         age8Rating = record["age8Rating"] as! Float
         age10Rating = record["age10Rating"] as! Float
         age12Rating = record["age12Rating"] as! Float
@@ -91,7 +90,6 @@ extension Video {
     }
     
     func update(withYouTube item: YouTubeVideoListResultItem){
-        oneOnEpsilonTimeStamp = Date()
         age8Rating = 0.0
         age10Rating = 0.0
         age12Rating = 0.0
@@ -121,8 +119,6 @@ extension Video {
             video["recordType"] = "Video" as CKRecordValue
         }
         
-        //QQQQ timeStamp isn't really used anymore (moved to modifcationDate - built in cloudkit)
-        video["oneOnEpsilonTimeStamp"] = oneOnEpsilonTimeStamp as CKRecordValue
         video["age8Rating"] = age8Rating as CKRecordValue
         video["age10Rating"] = age10Rating as CKRecordValue
         video["age12Rating"] = age12Rating as CKRecordValue

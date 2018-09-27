@@ -96,19 +96,4 @@ class ImageManager: ManagedObjectContextUserProtocol {
         let result = IKFileManager.shared.contentsOfDirectory(atURL: imagesDirectoryURL).count
         return result
     }
-    
-    class func numImagesInCoreData() -> Int {
-        let request = ImageThumbnail.createFetchRequest()
-        
-        var retVal = -1
-        
-        do {
-            let result = try mainContext.fetch(request)
-            retVal = result.count
-        } catch {
-            DLog("Fetch failed")
-        }
-        
-        return retVal
-    }
 }

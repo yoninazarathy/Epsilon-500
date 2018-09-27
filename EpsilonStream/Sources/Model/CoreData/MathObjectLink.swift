@@ -8,16 +8,6 @@ public class MathObjectLink: BaseCoreDataModel {
     override public class var cloudTypeName: String {
         return "MathObjectLinks"
     }
-    
-    public override func toCKRecordDictionary() -> AnyDictionary {
-        var dictionary = super.toCKRecordDictionary()
-        dictionary["oneOnEpsilonTimeStamp"] = nil
-        
-        return dictionary
-    }
-    
-    
-    
 }
 
 extension MathObjectLink {
@@ -30,7 +20,6 @@ extension MathObjectLink {
     @NSManaged public var imageKey                  : String
     @NSManaged public var imageURL                  : String
     @NSManaged public var isInCollection            : Bool
-    @NSManaged public var oneOnEpsilonTimeStamp     : Date
     @NSManaged public var ourMathObjectLinkHashTag  : String
     @NSManaged public var ourTitle                  : String
     @NSManaged public var ourTitleDetail            : String
@@ -46,6 +35,7 @@ extension MathObjectLink {
     
     func update(fromCloudRecord record: CKRecord){
         recordName = record.recordID.recordName
+        modificationDate = record[BaseCoreDataModel.modificationDateProperty] as! Date
         
         avoidPlatforms = (record["avoidPlatforms"] as? String) ?? ""
         //contentVersionNumber = (record["contentVersionNumber"] as? Int) ?? 1 For some reason this line crashes on iOS9. So workaround is used below.
@@ -55,7 +45,6 @@ extension MathObjectLink {
         imageKey = record["imageKey"] as! String
         imageURL = record["imageURL"] as? String ?? ""
         ourTitle = record["ourTitle"] as! String
-        oneOnEpsilonTimeStamp = record["modificationDate"] as! Date
         isInCollection = record["isInCollection"] as! Bool
         notes = (record["notes"] as? String) ?? ""
         

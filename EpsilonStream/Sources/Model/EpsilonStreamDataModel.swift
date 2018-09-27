@@ -895,88 +895,115 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         latestMathObjectDate        = Date(timeIntervalSince1970: 0.0)
         latestFeatureDate           = Date(timeIntervalSince1970: 0.0)
         latestMathObjectLinkDate    = Date(timeIntervalSince1970: 0.0)
+        latestSnippetsDate          = Date(timeIntervalSince1970: 0.0)
         
         UserDataManager.lastDatabaseUpdateDate = nil
     }
     
-    class func setLatestDates(){
+    class func getLatestDate<T: BaseCoreDataModel>(forCoreDataClass coreDataClass: T.Type) -> Date {
+        var date = Date(timeIntervalSince1970: 0)
         
-        //////////////////////
-        //////////////////////
-        let request = Video.createFetchRequest()
+        let request = coreDataClass.createFetchRequest()
         request.fetchLimit = 1
         
-        request.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: BaseCoreDataModel.modificationDateProperty, ascending: false)]
         
-        do{
-            let videos = try mainContext.fetch(request)
-
-            if videos.count == 0{
-                latestVideoDate = Date(timeIntervalSince1970: 0.0)
-                print("found no videos - setting video date to 1970")
-            }else{
-                latestVideoDate = videos[0].oneOnEpsilonTimeStamp
+        do {
+            let models = try mainContext.fetch(request)
+            if models.count > 0 {
+                date = models[0].modificationDate
             }
-        }catch{
-            print("Fetch failed")
+        } catch {
+            print("Fetch latest date failed for class \(String(describing: T.self))")
         }
+        return date
+    }
+    
+    class func setLatestDates() {
+        latestVideoDate             = getLatestDate(forCoreDataClass: Video.self)
+        latestMathObjectDate        = getLatestDate(forCoreDataClass: MathObject.self)
+        latestFeatureDate           = getLatestDate(forCoreDataClass: FeaturedURL.self)
+        latestMathObjectLinkDate    = getLatestDate(forCoreDataClass: MathObjectLink.self)
+        latestSnippetsDate          = getLatestDate(forCoreDataClass: Snippet.self)
         
         //////////////////////
         //////////////////////
-        let request2 = MathObject.createFetchRequest()
-        request2.fetchLimit = 1
-        request2.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
-        
-        do{
-            let mathObjects = try mainContext.fetch(request2)
-            
-            if mathObjects.count == 0{
-                latestMathObjectDate = Date(timeIntervalSince1970: 0.0)
-                print("found no math objects - setting math object date to 1970")
-            }else{
-                latestMathObjectDate = mathObjects[0].oneOnEpsilonTimeStamp
-            }
-        }catch{
-            print("Fetch failed")
-        }
-        
-        //////////////////////
-        //////////////////////
-        let request3 = FeaturedURL.createFetchRequest()
-        request3.fetchLimit = 1
-        request3.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
-        
-        do{
-            let featuredURLs = try mainContext.fetch(request3)
-            
-            if featuredURLs.count == 0{
-                latestFeatureDate = Date(timeIntervalSince1970: 0.0)
-                print("found no featured urls - setting featured url datedate to 1970")
-            }else{
-                latestFeatureDate = featuredURLs[0].oneOnEpsilonTimeStamp
-            }
-        }catch{
-            print("Fetch failed")
-        }
+//        let request = Video.createFetchRequest()
+//        request.fetchLimit = 1
+//
+//        request.sortDescriptors = [NSSortDescriptor(key: BaseCoreDataModel.modificationDateProperty, ascending: false)]
+//
+//        do{
+//            let videos = try mainContext.fetch(request)
+//
+//            if videos.count == 0{
+//                latestVideoDate = Date(timeIntervalSince1970: 0.0)
+//                print("found no videos - setting video date to 1970")
+//            }else{
+//                latestVideoDate = videos[0].modificationDate
+//            }
+//        }catch{
+//            print("Fetch failed")
+//        }
         
         //////////////////////
         //////////////////////
-        let request4 = MathObjectLink.createFetchRequest()
-        request4.fetchLimit = 1
-        request4.sortDescriptors = [NSSortDescriptor(key: "oneOnEpsilonTimeStamp", ascending: false)]
+//        let request2 = MathObject.createFetchRequest()
+//        request2.fetchLimit = 1
+//        request2.sortDescriptors = [NSSortDescriptor(key: BaseCoreDataModel.modificationDateProperty, ascending: false)]
+//
+//        do{
+//            let mathObjects = try mainContext.fetch(request2)
+//
+//            if mathObjects.count == 0{
+//                latestMathObjectDate = Date(timeIntervalSince1970: 0.0)
+//                print("found no math objects - setting math object date to 1970")
+//            }else{
+//                latestMathObjectDate = mathObjects[0].modificationDate
+//            }
+//        }catch{
+//            print("Fetch failed")
+//        }
         
-        do{
-            let mathObjectLinks = try mainContext.fetch(request4)
-            
-            if mathObjectLinks.count == 0{
-                latestMathObjectLinkDate = Date(timeIntervalSince1970: 0.0)
-                print("found no math object links - setting math object date to 1970")
-            }else{
-                latestMathObjectLinkDate = mathObjectLinks[0].oneOnEpsilonTimeStamp
-            }
-        }catch{
-            print("Fetch failed")
-        }
+        //////////////////////
+        //////////////////////
+//        let request3 = FeaturedURL.createFetchRequest()
+//        request3.fetchLimit = 1
+//        request3.sortDescriptors = [NSSortDescriptor(key: BaseCoreDataModel.modificationDateProperty, ascending: false)]
+//
+//        do{
+//            let featuredURLs = try mainContext.fetch(request3)
+//
+//            if featuredURLs.count == 0{
+//                latestFeatureDate = Date(timeIntervalSince1970: 0.0)
+//                print("found no featured urls - setting featured url datedate to 1970")
+//            }else{
+//                latestFeatureDate = featuredURLs[0].modificationDate
+//            }
+//        }catch{
+//            print("Fetch failed")
+//        }
+        
+        //////////////////////
+        //////////////////////
+//        let request4 = MathObjectLink.createFetchRequest()
+//        request4.fetchLimit = 1
+//        request4.sortDescriptors = [NSSortDescriptor(key: BaseCoreDataModel.modificationDateProperty, ascending: false)]
+//
+//        do{
+//            let mathObjectLinks = try mainContext.fetch(request4)
+//
+//            if mathObjectLinks.count == 0{
+//                latestMathObjectLinkDate = Date(timeIntervalSince1970: 0.0)
+//                print("found no math object links - setting math object date to 1970")
+//            }else{
+//                latestMathObjectLinkDate = mathObjectLinks[0].modificationDate
+//            }
+//        }catch{
+//            print("Fetch failed")
+//        }
+//
+//
      }
     
     static var minimalNextSaveTime: Date = Date()
@@ -1029,44 +1056,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         }
         
         return retVal
-    }
-    
-    
-    
-    class func latestVersion() -> Int64{
-        let request = VersionInfo.createFetchRequest()
-        
-        var max: Int64 = -1
-        
-        do{
-            let versionInfo = try mainContext.fetch(request)
-            for version in versionInfo{
-                if version.contentVersionNumber > max{
-                    max = version.contentVersionNumber
-                }
-            }
-        }catch{
-            print("Fetch failed")
-        }
-        return max
-    }
-    
-    class func latestLoadedVersion() -> Int64{
-        let request = VersionInfo.createFetchRequest()
-        
-        var max: Int64 = -1
-        
-        do{
-            let versionInfo = try mainContext.fetch(request)
-            for version in versionInfo{
-                if version.loaded && version.contentVersionNumber > max{
-                    max = version.contentVersionNumber
-                }
-            }
-        }catch{
-            print("Fetch failed")
-        }
-        return max
     }
 
     class func deleteAllEntities(withName name: String, withPredicate predicate:NSPredicate = NSPredicate(format: "TRUEPREDICATE")){

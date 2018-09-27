@@ -60,7 +60,6 @@ class CurateArticleViewController: UIViewController, UIImagePickerControllerDele
         backgroundActionInProgress = true
         view.isUserInteractionEnabled = false
         
-        EpsilonStreamAdminModel.currentFeature.oneOnEpsilonTimeStamp = Date() //QQQQ not really used
         EpsilonStreamAdminModel.currentFeature.isInCollection = inCollectionSwitch.isOn
         // QQQQ EpsilonStreamAdminModel.currentFeature.isAwesome = awesomeSwitch.isOn
         EpsilonStreamAdminModel.currentFeature.whyVsHow = float4Picker[whyHowSegmentedControl.selectedSegmentIndex]
@@ -83,9 +82,7 @@ class CurateArticleViewController: UIViewController, UIImagePickerControllerDele
         }
     }
 
-    func refreshView(){
-        
-       //QQQQ  timeStampLabel.text = EpsilonStreamAdminModel.currentFeature.oneOnEpsilonTimeStamp
+    func refreshView() {
         imageKeyLabel.text = EpsilonStreamAdminModel.currentFeature.imageKey
         ourFeaturedURLHashtagLabel.text = EpsilonStreamAdminModel.currentFeature.ourFeaturedURLHashtag
         ourTitleTextField.text = EpsilonStreamAdminModel.currentFeature.ourTitle

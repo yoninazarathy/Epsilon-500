@@ -45,10 +45,11 @@ let maxBlogsToShow = 100
 
 let queryOperationResultLimit = 1000 //QQQQ cursor for mathobjects and features.
 
-var latestVideoDate: Date? = nil
-var latestMathObjectDate = Date(timeIntervalSince1970: 0)
-var latestFeatureDate = Date(timeIntervalSince1970: 0)
-var latestMathObjectLinkDate = Date(timeIntervalSince1970: 0)
+var latestVideoDate             = Date(timeIntervalSince1970: 0)
+var latestMathObjectDate        = Date(timeIntervalSince1970: 0)
+var latestFeatureDate           = Date(timeIntervalSince1970: 0)
+var latestMathObjectLinkDate    = Date(timeIntervalSince1970: 0)
+var latestSnippetsDate          = Date(timeIntervalSince1970: 0)
 
 //Red
 let ES_watch1 = 0xFF4646
