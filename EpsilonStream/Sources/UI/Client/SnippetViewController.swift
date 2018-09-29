@@ -4,9 +4,7 @@ import WebKit
 class SnippetViewController: BaseViewController, WKNavigationDelegate {
     // MARK: - Model
     
-    let snippetString = "There are many ways to convert a [decimal number](decimal) $x^2$![image1]"
-    let snippetImageURLstring = "https://es-app.com/snippet-assets/convertFractionToPercent.svg"
-    let snippetTitle = "How can a fraction be converted to a percent?"
+    var snippet: Snippet!
     
     // MARK: - UI
     var webView: WKWebView!
@@ -47,9 +45,17 @@ class SnippetViewController: BaseViewController, WKNavigationDelegate {
     // MARK: - WKNavigationDelegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        webView.evaluateJavaScript(jsString(parameterName: "Title", value: snippetTitle)) { (_, _) in
-            self.webView.evaluateJavaScript(self.jsString(parameterName: "Snippet", value: self.snippetString)) { (_, _) in
-                self.webView.evaluateJavaScript(self.jsString(parameterName: "Image", value: self.snippetImageURLstring))
+//        let title = "How can a fraction be converted to a percent?"
+//        let body = "A cone is a [solid](solid) with a circular base and one [vertex](vertex).\n\nTwo cones are shown below.\n\n![image1]"//"There are many ways to convert a [decimal number](decimal) $x^2$![image1]"
+//        let imageURL = "https://es-app.com/snippet-assets/convertFractionToPercent.svg"
+        
+        let title = snippet.title
+        let body = snippet.body
+        let imageURL = snippet.imageURL
+        
+        webView.evaluateJavaScript(jsString(parameterName: "Title", value: title)) { (_, _) in
+            self.webView.evaluateJavaScript(self.jsString(parameterName: "Snippet", value: body)) { (_, _) in
+                self.webView.evaluateJavaScript(self.jsString(parameterName: "Image", value: imageURL))
             }
         }
     }

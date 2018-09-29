@@ -131,7 +131,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     static var hashTagAutoCompleteList: Array<String> = []
     static var hashTagListSortedByTotalContent: Array<String> = []
     static var titleAutoCompleteList: Array<[String]> = []
-    static var channelAutoCompleteList: Array<String> = []
     
     static var titlesForSurprise: Array<String> = []
     
@@ -247,7 +246,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         fullHashTagList = []
         hashTagAutoCompleteList = []
         titleAutoCompleteList = []
-        channelAutoCompleteList = []
         titlesForSurprise = []
         hashTagOfTitle = [:]
         fullTitles = []
@@ -429,14 +427,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         return autocompleteList.sorted()
     }
     
-    
-    /// Returns an array of strings that starts with the provided text //QQQQ discontinued
-    class func autoCompleteListChannels(_ autocompleteText: String) -> Array<String> {
-        let lowerCaseText = autocompleteText.lowercased()
-        let autocompleteList = EpsilonStreamDataModel.channelAutoCompleteList.filter { $0.hasPrefix(lowerCaseText) }
-        return autocompleteList.sorted()
-    }
-    
     class func surpriseText() -> String{
         if titlesForSurprise.count == 0{
             return "no titles"
@@ -554,6 +544,14 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var videosPredicate: NSPredicate!
         var featuresPredicate: NSPredicate!
         var mathObjectLinksPredicate: NSPredicate!
+        var snippetsPredicate: NSPredicate!
+        
+        let setAllPredicatesFalse = {
+            videosPredicate             = NSPredicate(value: false)
+            featuresPredicate           = NSPredicate(value: false)
+            mathObjectLinksPredicate    = NSPredicate(value: false)
+            snippetsPredicate           = NSPredicate(value: false)
+        }
         
         let showAll = isInAdminMode
         
@@ -562,32 +560,24 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 case ".":
                     if searchString == ".curatelogin"{
                         EpsilonStreamLoginManager.getInstance().loginAdminRequest(withUser:nil)
-                        videosPredicate = NSPredicate(value:false)
-                        featuresPredicate = NSPredicate(value:false)
-                        mathObjectLinksPredicate = NSPredicate(value:false)
+                        setAllPredicatesFalse()
                         break
                     }else if searchString.hasPrefix(".curatelogin."){
                         let user = searchString.substring(from: 13)
                         print(user)
                         EpsilonStreamLoginManager.getInstance().loginAdminRequest(withUser:user)
-                        videosPredicate = NSPredicate(value:false)
-                        featuresPredicate = NSPredicate(value:false)
-                        mathObjectLinksPredicate = NSPredicate(value:false)
+                        setAllPredicatesFalse()
                         break
                     }else if searchString == ".curatelogout"{
                         if isInAdminMode{
                             EpsilonStreamLoginManager.getInstance().logoutAdmin()
                         }
-                        videosPredicate = NSPredicate(value:false)
-                        featuresPredicate = NSPredicate(value:false)
-                        mathObjectLinksPredicate = NSPredicate(value:false)
+                        setAllPredicatesFalse()
                         break
                     }
                     
-                    if isInAdminMode == false{
-                        videosPredicate = NSPredicate(value:false)
-                        featuresPredicate = NSPredicate(value:false)
-                        mathObjectLinksPredicate = NSPredicate(value:false)
+                    if isInAdminMode == false {
+                        setAllPredicatesFalse()
                         break
                     }
                     
@@ -599,20 +589,20 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                     if let predTuple = specialCommands[".\(comps[1])"]{
                         videosPredicate = predTuple.0
                         featuresPredicate = predTuple.1
-                        mathObjectLinksPredicate = NSPredicate(value:false)
+                        mathObjectLinksPredicate = NSPredicate(value: false)
+                        snippetsPredicate = NSPredicate(value: false)
                     }else{
-                        videosPredicate = NSPredicate(value:false)
-                        featuresPredicate = NSPredicate(value:false)
-                        mathObjectLinksPredicate = NSPredicate(value:false)
+                        setAllPredicatesFalse()
                     }
                     if comps.count > 2{
                         let searchTerm = comps[2]
                         videosPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [videosPredicate, NSPredicate(format: "youtubeTitle CONTAINS[cd] %@",searchTerm)])
                         featuresPredicate = NSPredicate(format: "ourTitle CONTAINS[cd] %@",searchTerm)
-                        mathObjectLinksPredicate = NSPredicate(value:false)
+                        mathObjectLinksPredicate = NSPredicate(value: false)
+                        snippetsPredicate = NSPredicate(value: false)
                     }
                 
-              case "#":
+                case "#":
                     if searchString != "#"{//QQQQ temp to avoid searching all
                         videosPredicate = NSPredicate(format: "hashTags CONTAINS[cd] %@", searchString)//QQQQ =[cd]
                         hashTag = searchString
@@ -622,7 +612,8 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 
                     featuresPredicate = videosPredicate
                     mathObjectLinksPredicate = videosPredicate
-
+                    snippetsPredicate = videosPredicate
+                
                 default: //a "normal" search
                     let hts = hashTags(ofString: searchString)
                     var plist: [NSPredicate] = []
@@ -638,8 +629,9 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                     videosPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: plist)
                     featuresPredicate = videosPredicate
                     mathObjectLinksPredicate = videosPredicate
+                    snippetsPredicate = videosPredicate
             }
-        }else{
+        } else {
             return [] //QQQQ return in case of no video
         }
         
@@ -652,6 +644,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         var appSearchResult: [SearchResultItem] = []
         var blogSearchResult: [SearchResultItem] = []
         var mathObjectLinkSearchResult: [SearchResultItem] = []
+        var snippetSearchResult: [SearchResultItem] = []
 
         request.fetchLimit = maxVideosToShow //QQQQ not needed below //QQQQ do for features
 
@@ -706,34 +699,46 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
             print("Fetch failed")
         }
         
+        //
         let mathObjectLinkRequest = MathObjectLink.createFetchRequest()
-        
         mathObjectLinkRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateColl, mathObjectLinksPredicate])
-        
-        do{
+        do {
             let moLinks = try mainContext.fetch(mathObjectLinkRequest)
-            for moLink in moLinks{
+            for moLink in moLinks {
                 mathObjectLinkSearchResult.append( MathObjectLinkSearchResultItem(mathObjectLink: moLink) )
             }
-        }catch{
-            print("Fetch failed")
+        } catch {
+            DLog("MOL fetch failed")
         }
+        //
         
+        //
+        let snippetRequest = Snippet.createFetchRequest()
+        snippetRequest.predicate = snippetsPredicate
+        do {
+            let snippets = try mainContext.fetch(snippetRequest)
+            for snippet in snippets {
+                snippetSearchResult.append( SnippetSearchResultItem(snippet: snippet as! Snippet) )
+            }
+        } catch  {
+            DLog("Snippets fetch failed")
+        }
+        //
         
         //QQQQ not yet handling other max (apps/features etc...)
-        let len = min(videoSearchResult.count,maxVideosToShow)
-        var ret = [SearchResultItem](videoSearchResult[0..<len])
-        ret.append(contentsOf: blogSearchResult)
-//        print(blogSearchResult.count)
-        ret.append(contentsOf: appSearchResult)
-        ret.append(contentsOf: mathObjectLinkSearchResult)
+        let len = min(videoSearchResult.count, maxVideosToShow)
+        var finalResult = [SearchResultItem](videoSearchResult[0..<len])
+        finalResult.append(contentsOf: blogSearchResult)
+        finalResult.append(contentsOf: appSearchResult)
+        finalResult.append(contentsOf: mathObjectLinkSearchResult)
+        finalResult.append(contentsOf: snippetSearchResult)
         
-        var priorityList = [Float](repeating:0.0, count: ret.count)
-        for i in 0..<ret.count{
+        var priorityList = [Float](repeating:0.0, count: finalResult.count)
+        for i in 0..<finalResult.count{
             if hashTag != ""{
-                priorityList[i] = findPriority(inHashTagPriorityString: ret[i].hashTagPriorities, forHashTag: hashTag, withRawPriority: ret[i].rawPriority)
+                priorityList[i] = findPriority(inHashTagPriorityString: finalResult[i].hashTagPriorities, forHashTag: hashTag, withRawPriority: finalResult[i].rawPriority)
             }   
-            ret[i].foundPriority = priorityList[i]
+            finalResult[i].foundPriority = priorityList[i]
         }
         
         
@@ -760,10 +765,10 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         
         
         // use zip to combine the two arrays and sort that based on the first
-        let combined = zip(priorityList, ret).sorted {$0.0 < $1.0}
+        let combined = zip(priorityList, finalResult).sorted {$0.0 < $1.0}
 
         // use map to extract the individual arrays
-        ret = combined.map {$0.1}
+        finalResult = combined.map {$0.1}
 
         
         /*
@@ -777,7 +782,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
             return ret
         }
         */
-        return ret
+        return finalResult
     }
     
     //QQQQ Consolidate with code in newPriorityString

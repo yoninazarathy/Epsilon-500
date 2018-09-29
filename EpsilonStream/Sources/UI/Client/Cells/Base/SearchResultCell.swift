@@ -34,7 +34,11 @@ class SearchResultCell: BaseCell {
             imageCompletion(image)
             
         } else {
-            mainImageView.image = nil
+            if defaultImageName.isEmpty {
+                mainImageView.image = nil
+            } else {
+                mainImageView.image = UIImage(named: defaultImageName)
+            }
         }
         //
         //

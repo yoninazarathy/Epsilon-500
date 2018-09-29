@@ -10,6 +10,7 @@ enum SearchResultItemType {
     case mathObjectLink
     case specialItem
     case messageItem
+    case snippet
 }
 
 class SearchResultItem {
@@ -115,4 +116,14 @@ class SpecialSearchResultItem: SearchResultItem {
 }
 
 class UserMessageResultItem: SearchResultItem {
+}
+
+class SnippetSearchResultItem: SearchResultItem {
+    init(snippet: Snippet) {
+        super.init()
+        
+        recordName  = snippet.recordName
+        type        = .snippet
+        title       = snippet.title
+    }
 }

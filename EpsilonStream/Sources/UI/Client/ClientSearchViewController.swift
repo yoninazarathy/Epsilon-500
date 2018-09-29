@@ -428,25 +428,25 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     
     func makeActionWithSearchResultItem(_ searchResultItem: SearchResultItem) {
         switch searchResultItem.type {
-        case SearchResultItemType.video:
+        case .video:
             let videoItem = searchResultItem as! VideoSearchResultItem
             openVideoItem(videoItem)
         /////////////////////////
-        case SearchResultItemType.iosApp:
+        case .iosApp:
             Analytics.logEvent("appStore_go", parameters: ["appId" :  (searchResultItem as! IOsAppSearchResultItem).appId as NSObject])
             jumpToIosApp(withCode: (searchResultItem as! IOsAppSearchResultItem).appId) //QQQQ
         /////////////////////////
-        case SearchResultItemType.gameWebPage:
+        case .gameWebPage:
             Analytics.logEvent("gameWeb_go", parameters: ["webURL" :  (searchResultItem as! GameWebPageSearchResultItem).url as NSObject])
             jumpToWebPage(withURLstring: (searchResultItem as! GameWebPageSearchResultItem).url, withSplashKey: "gameQQQQ")
         /////////////////////////
-        case SearchResultItemType.blogWebPage:
+        case .blogWebPage:
             Analytics.logEvent("web_go", parameters: ["webURL" :  (searchResultItem as! BlogWebPageSearchResultItem).url as NSObject])
             jumpToWebPage(withURLstring: (searchResultItem as! BlogWebPageSearchResultItem).url,
                           inSafariMode: (searchResultItem as! BlogWebPageSearchResultItem).isExternal,
                           withSplashKey: searchResultItem.splashKey)
         /////////////////////////
-        case SearchResultItemType.mathObjectLink:
+        case .mathObjectLink:
             //QQQQ implement math object link search result item
             let molItem = searchResultItem as! MathObjectLinkSearchResultItem
             
@@ -477,12 +477,18 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             updateSearchString(molItem.searchTitle)
             
         /////////////////////////
-        case SearchResultItemType.specialItem:
+        case .specialItem:
             DLog("speicalItem click do nothing - QQQQ")
             
         /////////////////////////
-        case SearchResultItemType.messageItem:
+        case .messageItem:
             DLog("messageItem click do nothing - QQQQ")
+            
+        /////////////////////////
+        case .snippet:
+            if let snippet = Snippet.findOne(byPropertyWithName: BaseCoreDataModel.recordNameProperty, value: searchResultItem.recordName) {
+                AppLogic.shared.openSnippet(snippet as! Snippet)
+            }
         }
     }
     
@@ -536,37 +542,50 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             }
         }
         
-        switch searchResultItems[indexPath.row].type{
-        case SearchResultItemType.video:
+        let searchResultItem = searchResultItems[indexPath.row]
+        
+        switch searchResultItem.type {
+            
+        case .video:
             let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideoItemTableViewCell
-            cell.configureWith(videoSearchResult:  searchResultItems[indexPath.row] as! VideoSearchResultItem)
-            return cell
-        case SearchResultItemType.iosApp:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(searchResult: searchResultItems[indexPath.row])
-            return cell
-        case SearchResultItemType.gameWebPage:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(searchResult: searchResultItems[indexPath.row])
-            return cell
-        case SearchResultItemType.blogWebPage:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! ArticleItemTableViewCell
-            cell.configureWith(searchResult: searchResultItems[indexPath.row] as! BlogWebPageSearchResultItem)
-            return cell
-        case SearchResultItemType.mathObjectLink:
-            //QQQQ implement Math ObjectLink Search Result Item
-            let cell = tableView.dequeueReusableCell(withIdentifier: "MathObjectLinkCell", for: indexPath) as! MathObjectLinkItemTableViewCell
-            cell.configureWith(searchResult: searchResultItems[indexPath.row] as! MathObjectLinkSearchResultItem)
-            return cell
-        case SearchResultItemType.specialItem:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SpecialCell", for: indexPath) as! SpecialItemTableViewCell
-            cell.configureWith(specialSearchResultItem: searchResultItems[indexPath.row] as! SpecialSearchResultItem)
-            return cell
-        case SearchResultItemType.messageItem:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UserMessageCell", for: indexPath) as! UserMessageTableViewCell
-            cell.configureWith(userMessageResultItem: searchResultItems[indexPath.row] as! UserMessageResultItem)
+            cell.configureWith(videoSearchResult: searchResultItem as! VideoSearchResultItem)
             return cell
             
+        case .iosApp:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
+            cell.configureWith(searchResult: searchResultItem)
+            return cell
+            
+        case .gameWebPage:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
+            cell.configureWith(searchResult: searchResultItem)
+            return cell
+            
+        case .blogWebPage:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! ArticleItemTableViewCell
+            cell.configureWith(searchResult: searchResultItem as! BlogWebPageSearchResultItem)
+            return cell
+            
+        case .mathObjectLink:
+            //QQQQ implement Math ObjectLink Search Result Item
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MathObjectLinkCell", for: indexPath) as! MathObjectLinkItemTableViewCell
+            cell.configureWith(searchResult: searchResultItem as! MathObjectLinkSearchResultItem)
+            return cell
+            
+        case .specialItem:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SpecialCell", for: indexPath) as! SpecialItemTableViewCell
+            cell.configureWith(specialSearchResultItem: searchResultItem as! SpecialSearchResultItem)
+            return cell
+            
+        case .messageItem:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserMessageCell", for: indexPath) as! UserMessageTableViewCell
+            cell.configureWith(userMessageResultItem: searchResultItem as! UserMessageResultItem)
+            return cell
+            
+        case .snippet:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath) as! SnippetItemTableViewCell
+            cell.configureWith(searchResult: searchResultItem)
+            return cell
         }
     }
 
@@ -613,7 +632,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             Analytics.logEvent("share",parameters: nil)
             
             switch searchResultItem.type {
-            case SearchResultItemType.video:
+            case .video:
                 let video = self.searchResultItems[index.row] as! VideoSearchResultItem
                 
                 let shareString = "I saw this great video on Epsilon Stream: https://epsilonstream.com/video/\(video.youtubeId)"
@@ -630,7 +649,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                  */
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.iosApp:
+            case .iosApp:
                 let iosApp = self.searchResultItems[index.row] as! IOsAppSearchResultItem
                 
                 let shareString = "Check this out: https://itunes.apple.com/us/app/id\(iosApp.appId), shared using Epsilon Stream, https://www.epsilonstream.com ."
@@ -641,7 +660,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.gameWebPage:
+            case .gameWebPage:
                 let webPage = self.searchResultItems[index.row] as! GameWebPageSearchResultItem
                 
                 let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
@@ -652,7 +671,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.blogWebPage:
+            case .blogWebPage:
                 let webPage = self.searchResultItems[index.row] as! BlogWebPageSearchResultItem
                 
                 let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
@@ -661,7 +680,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 self.present(vc, animated:  true)
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.mathObjectLink:
+            case .mathObjectLink:
                 let title = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).title
                 
                 let shareString = "Check this out: \(title). Shared using Epsilon Stream, https://www.epsilonstream.com ."
@@ -671,16 +690,16 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.specialItem:
-                //QQQQ do something
-                print("not implemented yet")
+            case .specialItem:
+                DLog("not implemented yet")
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.messageItem:
-                //QQQQ do something
-                print("not implemented yet")
-                
+            case .messageItem:
+                DLog("not implemented yet")
+            
+            case .snippet:
+                DLog("not implemented yet")
             }
             
             //Make it disappear
@@ -721,12 +740,14 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 let moLink = MathObjectLink.findOne(byPropertyWithName: "recordName", value: searchResultItem.recordName) as! MathObjectLink
                 AppLogic.shared.editMathObjectLink(moLink)
             case .specialItem:
-                print("need to implement edit (or not)")
+                DLog("need to implement edit (or not)")
                 
                 /////////////////////////
             /////////////////////////
             case .messageItem:
-                print("message item")
+                DLog("message item")
+            case .snippet:
+                DLog("snippet item")
             }
             //Make it disappear
             tableView.setEditing(false, animated: true)
@@ -759,7 +780,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             }
             
             switch self.searchResultItems[index.row].type{
-            case SearchResultItemType.video:
+            case .video:
                 //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
                 let youTubeIdToPushDown = (self.searchResultItems[index.row] as! VideoSearchResultItem).youtubeId
                 EpsilonStreamAdminModel.setCurrentVideo(withVideo: youTubeIdToPushDown)
@@ -771,7 +792,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.iosApp, SearchResultItemType.gameWebPage, SearchResultItemType.blogWebPage:
+            case .iosApp, .gameWebPage, .blogWebPage:
                 //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
                 let id = (self.searchResultItems[index.row] as! FeatureSearchResultItem).ourFeaturedURLHashtag
                 EpsilonStreamAdminModel.setCurrentFeature(withFeature: id)
@@ -784,7 +805,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.mathObjectLink:
+            case .mathObjectLink:
                 //isInAdminMode = true//QQQQ ?? Maybe this isn't needed here
                 let id = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).ourMathObjectLinkHashTag
                 EpsilonStreamAdminModel.setCurrentMathObjectLink(withHashTag: id)
@@ -797,20 +818,22 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.specialItem:
-                print("need to handle")
+            case .specialItem:
+                DLog("need to handle")
                 
                 /////////////////////////
             /////////////////////////
-            case SearchResultItemType.messageItem:
-                print("need to handle")
+            case .messageItem:
+                DLog("need to handle")
+            case .snippet:
+                DLog("not supported")
                 
             }
+            
             //Make it disappear
             tableView.setEditing(false, animated: true)
             self.goingToTop = false
             self.refreshSearch()
-            
         }
         
         pushDown.backgroundColor = .orange

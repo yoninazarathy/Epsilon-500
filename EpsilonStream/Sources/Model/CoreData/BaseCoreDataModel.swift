@@ -142,6 +142,7 @@ public class BaseCoreDataModel: NSManagedObject {
         return array
     }
     
+    // Need to fix template parameter so that method returns object of caller class (not BaseCoreDataModel class).
     public class func findOne<T: BaseCoreDataModel>(byPropertyWithName propertyName: String, value: CVarArg) -> T? {
         return findMany(byPropertyWithName: propertyName, value: value).first
     }

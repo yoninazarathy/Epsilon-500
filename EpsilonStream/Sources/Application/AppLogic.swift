@@ -14,4 +14,10 @@ class AppLogic: NSObject {
         viewController.mathObjectLink = mathObjectLink
         viewControllerManager.openViewController(viewController)
     }
+    
+    func openSnippet(_ snippet: Snippet) {
+        let viewController = SnippetViewController()
+        viewController.snippet = snippet
+        viewControllerManager.openViewController(viewController)
+    }
 }
