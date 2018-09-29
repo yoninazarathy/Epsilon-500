@@ -123,6 +123,10 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     // MARK: - Keyboard
     
     func keyboardFrameUpdated() {

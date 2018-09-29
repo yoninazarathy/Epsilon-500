@@ -1,10 +1,20 @@
 import UIKit
 
 class ViewControllerManager: NSObject {
-
+    
+    private lazy var navigationBarColor: UIColor = {
+        return UIColor.color(hexString: "FF4646")
+    }()
+    
     private var rootNavigationController: UINavigationController {
         //DLog("\(UIApplication.shared.delegate?.window??.rootViewController?.presentedViewController)")
-        return UIApplication.shared.delegate?.window??.rootViewController?.presentedViewController as! UINavigationController
+        let navigationController = UIApplication.shared.delegate?.window??.rootViewController?.presentedViewController as! UINavigationController
+        navigationController.navigationBar.barStyle = .blackTranslucent // Need this for white status bar.
+        navigationController.navigationBar.barTintColor = navigationBarColor
+        navigationController.navigationBar.isTranslucent = false
+        navigationController.navigationBar.tintColor = .white
+        
+        return navigationController
     }
     
     func openViewController(_ viewController: UIViewController, animated: Bool = true) {

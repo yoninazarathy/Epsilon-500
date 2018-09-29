@@ -42,21 +42,35 @@ class SnippetViewController: BaseViewController, WKNavigationDelegate {
         return "window.mdBlock.set\(parameterName)(\"\(value)\")"
     }
     
-    // MARK: - WKNavigationDelegate
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-//        let title = "How can a fraction be converted to a percent?"
-//        let body = "A cone is a [solid](solid) with a circular base and one [vertex](vertex).\n\nTwo cones are shown below.\n\n![image1]"//"There are many ways to convert a [decimal number](decimal) $x^2$![image1]"
-//        let imageURL = "https://es-app.com/snippet-assets/convertFractionToPercent.svg"
+    func setValuesInWebView() {
+        //        let title = "How can a fraction be converted to a percent?"
+        //        let body = "A cone is a [solid](solid) with a circular base and one [vertex](vertex).\\n\\nTwo cones are shown below.\\n\\n![image1]"//"There are many ways to convert a [decimal number](decimal) $x^2$![image1]"
+        //        let imageURL = "https://es-app.com/snippet-assets/convertFractionToPercent.svg"
         
         let title = snippet.title
-        let body = snippet.body
+        let body = snippet.body.replacingOccurrences(of: "\n", with: "\\n")
         let imageURL = snippet.imageURL
         
         webView.evaluateJavaScript(jsString(parameterName: "Title", value: title)) { (_, _) in
             self.webView.evaluateJavaScript(self.jsString(parameterName: "Snippet", value: body)) { (_, _) in
                 self.webView.evaluateJavaScript(self.jsString(parameterName: "Image", value: imageURL))
             }
+        }
+    }
+    
+    func refreshWebViewAppearance( completion: @escaping () -> Void) {
+        webView.evaluateJavaScript("document.getElementsByClassName(\"App-header\")[0].style.backgroundColor=\"white\"") { (_, _) in
+            self.webView.evaluateJavaScript("document.getElementsByClassName(\"App-header\")[0].style.color=\"black\"", completionHandler: { (_, _) in
+                completion()
+            })
+        }
+    }
+    
+    // MARK: - WKNavigationDelegate
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        refreshWebViewAppearance {
+            self.setValuesInWebView()
         }
     }
 
