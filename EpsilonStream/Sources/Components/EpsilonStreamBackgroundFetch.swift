@@ -24,92 +24,6 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
     static var videoCount = [String: Int]()
     static var peekVideoDone = false
 
-    /*
-    QQQQ - EpsilonStreamInfo not used now
-    class func pullEpsilonStreamInfo(){
-        let predicate = NSPredicate(format: "TRUEPREDICATE")
-        let query = CKQuery(recordType: "EpsilonStreamInfo", predicate: predicate)
-
-        let operation = CKQueryOperation(query: query)
-        operation.resultsLimit = 1
-        
-        operation.recordFetchedBlock = { record in
-       //     DispatchQueue.main.async {//In which context to run it?
-                updateEpsilonStreamInfoInDB(fromDataSource: record)
-       //     }
-        }
-        
-        operation.queryCompletionBlock = { (cursor, error) in
-            //print("readVideoMetaDataFromCloud OPERATION COMPLETE BLOCK")
-        //    DispatchQueue.main.async{
-                if error == nil{
-                    //print("no error")
-                }
-                else{
-                    print("\(error!.localizedDescription)")
-                }
-         //   }
-        }
-        
-        operation.completionBlock = {
-       //     DispatchQueue.main.async {
-                EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress = false
-                infoReadyToGo = true
-         //   }
-        }
-        
-      if EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress == false{
-        EpsilonStreamBackgroundFetch.pullEpsilonStreamInfoInProgress = true
-            CKContainer.default().publicCloudDatabase.add(operation)
-      }else{
-            print("Tried to pull Cloud DB Version info while pull already in progress - aborted")
-      }
-    }
-    
-    class func updateEpsilonStreamInfoInDB(fromDataSource cloudSource: CKRecord){
-        let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        let request = VersionInfo.createFetchRequest()
-        //let otherBuffer = 1-currentDBBuffer
-        request.predicate = NSPredicate(format:"TRUEPREDICATE")//NSPredicate(format: "bufferIndex == %@", otherBuffer as NSNumber)
-        
-        do{
-            let results = try container.viewContext.fetch(request)
-            if results.count > 0{
-                if results.count > 1{
-                    print("Bad error: more than 1 VersionInfo object")
-                }
-                
-                for result in results{ //this should loop only once
-                    container.viewContext.delete(result)
-                }
-            }else{
-                print("No versionInfo entry to delete in DB")
-            }
-        }catch{
-            print("Fetch failed")
-        }
-        
-        let versionInfo = VersionInfo(inContext: container.viewContext)
-        
-        versionInfo.mathObjectCount = cloudSource["mathObjectCount"] as! Int64
-        versionInfo.videoCount = cloudSource["videoCount"] as! Int64
-        versionInfo.featuredURLCount = cloudSource["featuredURLCount"] as!  Int64
-        versionInfo.textMessageToShow = cloudSource["textMessageToShow"] as!  String
-        versionInfo.numberOfTimesToShowMessage = cloudSource["numberOfTimesToShowMessage"] as!  Int64
-        versionInfo.minimalSoftwareVersion = cloudSource["minimalSoftwareVersion"] as!  String
-        versionInfo.contentVersionNumber = cloudSource["contentVersionNumber"] as! Int64
-        
-        versionInfo.inProgressContentVersionNumber = -1
-        
-        versionInfo.loaded = false
-        
-        versionInfo.numberOfTimesLeftToShowMessage = versionInfo.numberOfTimesToShowMessage
-        
-        //versionInfo.bufferIndex = Int64(otherBuffer)
-        
-        EpsilonStreamDataModel.saveViewContext()
-    }
- */
     
     class func runUpdate() {
         readMathObjectsFromCloud() //QQQQ implement for collection
@@ -177,49 +91,49 @@ class EpsilonStreamBackgroundFetch: ManagedObjectContextUserProtocol {
    
         var counter = 0
 
-        while true{
-            sleep(10)
-            if numBackGroundActionsInProgress > 0{
+        while true {
+            sleep(30)
+            if numBackGroundActionsInProgress > 0 {
                 continue;
             }
-            switch counter % 9{
+            switch counter % 9 {
             case 0:
-                print("refresh images")
+                DLog("refresh images")
                 //QQQQ I am worried that this happens in background thread
                 //If we do it with main.async it freezes with many videos (in curate mode)
             case 1:
-                print("clean videos")
+                DLog("clean videos")
                 DispatchQueue.main.async {
                     EpsilonStreamDataModel.videoIntegrityCheck()
                 }
             case 2:
-                print("clean features")
+                DLog("clean features")
                 break
             case 3:
-                print("clean math objects")
+                DLog("clean math objects")
                 break
             case 4:
-                print("clean math math object links")
+                DLog("clean math math object links")
                 break
             case 5:
-                print("fetch videos")
-                EpsilonStreamBackgroundFetch.readVideoDataFromCloud(isInAdminMode == false)
+                DLog("fetch Videos")
+                readVideoDataFromCloud(isInAdminMode == false)
                 break
             case 6:
-                print("fetch math objects")
-                EpsilonStreamBackgroundFetch.readMathObjectsFromCloud()
+                DLog("fetch MathObjects")
+                readMathObjectsFromCloud()
                 break
             case 7:
-                print("fetch math object links")
-                EpsilonStreamBackgroundFetch.readMathObjectLinksFromCloud()
+                DLog("fetch MathObjectLinks")
+                readMathObjectLinksFromCloud()
                 break
             case 8:
-                print("fetch epsilon stream info")
-
+                DLog("fetch Snippets")
+                readSnippetsFromCloud()
                 break
             case 9:
-                print("fetch features")
-                EpsilonStreamBackgroundFetch.readFeaturedURLsFromCloud()
+                DLog("fetch Features")
+                readFeaturedURLsFromCloud()
                 break
             default:
                 break
