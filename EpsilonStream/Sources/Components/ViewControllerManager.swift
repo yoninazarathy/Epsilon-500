@@ -2,6 +2,15 @@ import UIKit
 
 class ViewControllerManager: NSObject {
     
+    override init() {
+        super.init()
+        let navigationBar = UINavigationBar.appearance()
+        navigationBar.barStyle = .blackTranslucent // Need this for white status bar.
+        navigationBar.barTintColor = navigationBarColor
+        navigationBar.isTranslucent = false
+        navigationBar.tintColor = .white
+    }
+    
     private lazy var navigationBarColor: UIColor = {
         return UIColor.color(hexString: "FF4646")
     }()
@@ -9,10 +18,10 @@ class ViewControllerManager: NSObject {
     private var rootNavigationController: UINavigationController {
         //DLog("\(UIApplication.shared.delegate?.window??.rootViewController?.presentedViewController)")
         let navigationController = UIApplication.shared.delegate?.window??.rootViewController?.presentedViewController as! UINavigationController
-        navigationController.navigationBar.barStyle = .blackTranslucent // Need this for white status bar.
-        navigationController.navigationBar.barTintColor = navigationBarColor
-        navigationController.navigationBar.isTranslucent = false
-        navigationController.navigationBar.tintColor = .white
+//        navigationController.navigationBar.barStyle = .blackTranslucent // Need this for white status bar.
+//        navigationController.navigationBar.barTintColor = navigationBarColor
+//        navigationController.navigationBar.isTranslucent = false
+//        navigationController.navigationBar.tintColor = .white
         
         return navigationController
     }

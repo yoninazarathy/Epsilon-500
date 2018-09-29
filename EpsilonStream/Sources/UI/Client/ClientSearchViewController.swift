@@ -606,7 +606,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         //will be if there is no search.
         //QQQQ fix this so it acts better on the "Let our team known"

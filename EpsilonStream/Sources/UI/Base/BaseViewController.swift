@@ -115,8 +115,8 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
 //        return .portrait
 //    }
     
-    func close() {
-        if presentedViewController != nil {
+    @objc func close() {
+        if presentingViewController != nil || navigationController?.presentingViewController != nil {
             dismiss(animated: true, completion: nil)
         } else {
             navigationController?.popViewController(animated: true)

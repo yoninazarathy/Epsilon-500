@@ -18,6 +18,12 @@ class AppLogic: NSObject {
     func openSnippet(_ snippet: Snippet) {
         let viewController = SnippetViewController()
         viewController.snippet = snippet
-        viewControllerManager.openViewController(viewController)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let navigationController = UINavigationController(rootViewController: viewController)
+            navigationController.modalPresentationStyle = .formSheet
+            viewControllerManager.openModalViewController(navigationController)
+        } else {
+            viewControllerManager.openViewController(viewController)
+        }
     }
 }

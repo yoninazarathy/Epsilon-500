@@ -27,6 +27,11 @@ class SnippetViewController: BaseViewController, WKNavigationDelegate {
             let urlRequest = URLRequest(url: URL(fileURLWithPath: path))
             webView.load(urlRequest)
         }
+        
+        if navigationController?.viewControllers.count == 1 {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: LocalString("CommonTextClose"), style: .plain,
+                                                               target: self, action: #selector(close))
+        }
     }
     
     override func refresh() {
@@ -73,5 +78,4 @@ class SnippetViewController: BaseViewController, WKNavigationDelegate {
             self.setValuesInWebView()
         }
     }
-
 }
