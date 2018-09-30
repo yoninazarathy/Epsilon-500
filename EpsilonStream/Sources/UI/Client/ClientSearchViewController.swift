@@ -623,6 +623,18 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         makeActionWithSearchResultItem(searchResultItems[indexPath.row])
     }
     
+    //QQQQ Igor - refactor?
+    static func shareID(of videoID: String) -> String{
+        let modifiedID = videoID.lowercased().replacingOccurrences(of: "_", with: "e").replacingOccurrences(of: "-", with: "e")
+        return String(modifiedID.prefix(11).suffix(6)) //QQQQ how to use strings in swift???
+    }
+    
+    static func shareSnippetID() -> String{
+        let modifiedID = EpsilonStreamAdminModel.currentHashTag.lowercased().dropFirst()
+        return String(modifiedID)
+    }
+    
+    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let searchResultItem = self.searchResultItems[indexPath.row]
@@ -635,7 +647,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             case .video:
                 let video = self.searchResultItems[index.row] as! VideoSearchResultItem
                 
-                let shareString = "I saw this great video on Epsilon Stream: https://epsilonstream.com/video/\(video.youtubeId)"
+                let shareString = "I saw this great mathematics video on Epsilon Stream: https://epsilonstream.com/video/\(ClientSearchViewController.shareID(of: video.youtubeId)) . Check it out!"
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
@@ -652,7 +664,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             case .iosApp:
                 let iosApp = self.searchResultItems[index.row] as! IOsAppSearchResultItem
                 
-                let shareString = "Check this out: https://itunes.apple.com/us/app/id\(iosApp.appId), shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let shareString = "Check this out: https://itunes.apple.com/us/app/id\(iosApp.appId), shared using Epsilon Stream, https://oneonepsilon.com/epsilonstream ."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
@@ -663,7 +675,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             case .gameWebPage:
                 let webPage = self.searchResultItems[index.row] as! GameWebPageSearchResultItem
                 
-                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://oneonepsilon.com/epsilonstream ."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
@@ -674,16 +686,16 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             case .blogWebPage:
                 let webPage = self.searchResultItems[index.row] as! BlogWebPageSearchResultItem
                 
-                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let shareString = "Check this out: \(webPage.url), shared using Epsilon Stream, https://oneonepsilon.com/epsilonstream ."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
                 /////////////////////////
             /////////////////////////
             case .mathObjectLink:
-                let title = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).title
+                //let title = (self.searchResultItems[index.row] as! MathObjectLinkSearchResultItem).title
                 
-                let shareString = "Check this out: \(title). Shared using Epsilon Stream, https://www.epsilonstream.com ."
+                let shareString = "Check out Epsilon Stream, https://oneonepsilon.com/epsilonstream."
                 let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
                 vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
                 self.present(vc, animated:  true)
@@ -699,7 +711,10 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 DLog("not implemented yet")
             
             case .snippet:
-                DLog("not implemented yet")
+                let shareString = "I saw this great mathematical description in Epsilon Stream. Check it out. https://epsilonstream.com/snippet/\(ClientSearchViewController.shareSnippetID())"
+                let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
+                vc.popoverPresentationController?.sourceView = self.resultsTable.cellForRow(at: index) //QQQQ how to make this have the popover on the share button (ipads?)
+                self.present(vc, animated:  true)
             }
             
             //Make it disappear
