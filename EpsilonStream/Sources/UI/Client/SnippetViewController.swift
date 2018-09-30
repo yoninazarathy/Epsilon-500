@@ -53,7 +53,11 @@ class SnippetViewController: BaseViewController, WKNavigationDelegate {
         //        let imageURL = "https://es-app.com/snippet-assets/convertFractionToPercent.svg"
         
         let title = snippet.title
-        let body = snippet.body.replacingOccurrences(of: "\n", with: "\\n")
+        var body = snippet.body
+        body = body.replacingOccurrences(of: "\\", with: "\\\\") //to allow \ inside string passed to JS (latex commands)
+        body = body.replacingOccurrences(of: "\"", with: "\\\"") //to allow " inside string passed to JS
+        body = body.replacingOccurrences(of: "\n", with: "\\n ") //to allow \n inside string passed to JS
+//        print(body)
         let imageURL = snippet.imageURL
         
         webView.evaluateJavaScript(jsString(parameterName: "Title", value: title)) { (_, _) in
