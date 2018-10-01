@@ -232,7 +232,7 @@ class PlayVideoViewController: BaseViewController, YouTubePlayerDelegate {
     }
     
     @objc func shareButtonPressed(sender: UIButton) {
-        let shareString = "Check out this video: https://youtu.be/\(videoIdToPlay!), shared using Epsilon Stream, https://www.epsilonstream.com."
+        let shareString = "I saw this great mathematics video on Epsilon Stream: https://epsilonstream.com/video/\(ClientSearchViewController.shareID(of: videoIdToPlay!)) . Check it out!"
         let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
         vc.popoverPresentationController?.sourceView = shareButton.superview
         present(vc, animated: true)

@@ -21,7 +21,7 @@ class SpecialItemTableViewCell: UITableViewCell {
     @IBAction func suggestAction(_ sender: UIButton) {
         if let vc = clientSearchViewController{
             //QQQQ configure with user suggestion
-            vc.jumpToWebPage(withURLstring: "https://epsilonstream.com/contact_app", withSplashKey: "OoE-splash")
+            vc.jumpToWebPage(withURLstring: "https://oneonepsilon.com/contact", withSplashKey: "OoE-splash")
         }
     }
     

@@ -166,7 +166,7 @@ class ClientSettingsViewController: UIViewController {
     
     @IBAction func epsilonStreamAction(_ sender: Any) {
         Analytics.logEvent("epsilonStreamIcon_action", parameters: nil)
-        jumpToWebPage(withURLstring: "https://www.epsilonstream.com")
+        jumpToWebPage(withURLstring: "https://oneonepsilon.com/epsilonstream")
     }
     
     @IBAction func creditActions(_ sender: Any) {
@@ -246,7 +246,7 @@ class ClientSettingsViewController: UIViewController {
     @IBAction func shareAppAction(_ sender: Any) {
         Analytics.logEvent("shareApp_action", parameters: nil)
         
-        let shareString = "I am exploring mathematics with Epsilon Stream for iOS. Get it and use it for free from https://www.epsilonstream.com ."
+        let shareString = "I am exploring mathematics with Epsilon Stream. Get it and use it for free from https://oneonepsilon.com/epsilonstream ."
         let vc = UIActivityViewController(activityItems: [shareString], applicationActivities: [])
         vc.popoverPresentationController?.sourceView = shareAppButton
         present(vc, animated:  true)
@@ -254,7 +254,7 @@ class ClientSettingsViewController: UIViewController {
     
     @IBAction func registerAction(_ sender: Any) {
         Analytics.logEvent("register_action", parameters: nil)
-        jumpToWebPage(withURLstring: "https://epsilonstream.com/sign-up_app")
+        jumpToWebPage(withURLstring: "https://oneonepsilon.com/register")
     }
     
     @IBAction func resetAllAction(_ sender: Any) {
@@ -281,6 +281,6 @@ class ClientSettingsViewController: UIViewController {
     
     @IBAction func feedbackAction(_ sender: Any) {
         Analytics.logEvent("feedback_action", parameters: nil)
-        jumpToWebPage(withURLstring: "https://epsilonstream.com/contact_app")
+        jumpToWebPage(withURLstring: "https://oneonepsilon.com/contact")
     }
 }
