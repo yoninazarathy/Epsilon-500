@@ -187,12 +187,14 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     }
     
     static func loadAllAutoCompletionDictionaries() {
+        //let date = Date()
         videoIDsForHashTags                          = loadAutoCompletionDictionary(withName: "videoIDsForHashTags")
         videoIDsForHashTagsInCollection              = loadAutoCompletionDictionary(withName: "videoIDsForHashTagsInCollection")
         articleURLHashtagsForHashTags                = loadAutoCompletionDictionary(withName: "articleURLHashtagsForHashTags")
         articleURLHashtagsForHashTagsInCollection    = loadAutoCompletionDictionary(withName: "articleURLHashtagsForHashTagsInCollection")
         gamesURLHashTagsForHashTags                  = loadAutoCompletionDictionary(withName: "gamesURLHashTagsForHashTags")
         gamesURLHashTagsForHashTagsInCollection      = loadAutoCompletionDictionary(withName: "gamesURLHashTagsForHashTagsInCollection")
+        //DLog("loadAllAutoCompletionDictionaries duration: \(Date().timeIntervalSince(date))")
     }
     
     private static func saveAutoCompletionDictionary(_ dictionary: [String: Array<String>], atPath path: String) {

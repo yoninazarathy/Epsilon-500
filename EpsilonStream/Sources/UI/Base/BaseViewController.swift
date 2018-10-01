@@ -116,10 +116,14 @@ class BaseViewController: UIViewController, ViewRefreshProtocol {
 //    }
     
     @objc func close() {
-        if presentingViewController != nil || navigationController?.presentingViewController != nil {
+        //DLog("\(navigationController?.viewControllers)")
+        //DLog("\(presentingViewController)")
+        if navigationController?.presentingViewController != nil && navigationController?.viewControllers.count == 1 {
             dismiss(animated: true, completion: nil)
-        } else {
+        } else if navigationController != nil {
             navigationController?.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
         }
     }
     

@@ -430,7 +430,7 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
         switch searchResultItem.type {
         case .video:
             let videoItem = searchResultItem as! VideoSearchResultItem
-            openVideoItem(videoItem)
+            AppLogic.shared.openVideoItem(videoItem)
         /////////////////////////
         case .iosApp:
             Analytics.logEvent("appStore_go", parameters: ["appId" :  (searchResultItem as! IOsAppSearchResultItem).appId as NSObject])
@@ -490,39 +490,6 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
                 AppLogic.shared.openSnippet(snippet as! Snippet)
             }
         }
-    }
-    
-    // MARK: - View controllers
-    
-    func openVideoItem(_ item: VideoSearchResultItem) {
-        Analytics.logEvent("video_play", parameters: ["videoId" : item.youtubeId as NSObject])
-        
-        let secondsWatched = UserDataManager.getSecondsWatched(forKey: item.youtubeId)
-        
-        let playVideo = { (resumeSeconds: Int) -> Void in
-            let vc = PlayVideoViewController()
-            vc.isExplodingDots = false //QQQQ read type of video display here
-            vc.videoIdToPlay = item.youtubeId
-            vc.startSeconds = resumeSeconds
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        if secondsWatched > 0 {
-        
-            AlertManager.shared.showResumePlayback(seconds: secondsWatched, confirmation: { (confirmed, _) in
-                if confirmed {
-                    playVideo(secondsWatched)
-                } else {
-                    playVideo(0)
-                }
-            })
-            
-        } else {
-            
-            playVideo(0)
-            
-        }
-        
     }
     
     // MARK: - UITableViewDataSource
