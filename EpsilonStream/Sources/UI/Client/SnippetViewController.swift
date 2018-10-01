@@ -57,7 +57,7 @@ class SnippetViewController: BaseViewController, WKNavigationDelegate {
         body = body.replacingOccurrences(of: "\\", with: "\\\\") //to allow \ inside string passed to JS (latex commands)
         body = body.replacingOccurrences(of: "\"", with: "\\\"") //to allow " inside string passed to JS
         body = body.replacingOccurrences(of: "\n", with: "\\n ") //to allow \n inside string passed to JS
-//        print(body)
+        print(body)
         let imageURL = snippet.imageURL
         
         webView.evaluateJavaScript(jsString(parameterName: "Title", value: title)) { (_, _) in
