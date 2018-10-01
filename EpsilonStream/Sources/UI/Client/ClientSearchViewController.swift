@@ -520,12 +520,12 @@ SKStoreProductViewControllerDelegate, SFSafariViewControllerDelegate, YouTubePla
             
         case .iosApp:
             let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(searchResult: searchResultItem)
+            cell.configureWith(searchResult: searchResultItem,withType: 1)
             return cell
             
         case .gameWebPage:
             let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameItemTableViewCell
-            cell.configureWith(searchResult: searchResultItem)
+            cell.configureWith(searchResult: searchResultItem,withType: 1)
             return cell
             
         case .blogWebPage:

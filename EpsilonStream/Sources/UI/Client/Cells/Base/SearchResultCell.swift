@@ -19,14 +19,19 @@ class SearchResultCell: BaseCell {
         titleLabel.numberOfLines = 0
     }
     
-    func configureWith(searchResult: SearchResultItem) {
+    //type = 1 implies rounded corners otherwise 0 is round.
+    func configureWith(searchResult: SearchResultItem,withType type: Int = 0) {
         //
         if searchResult.imageName.isEmpty == false {
             let width = UIScreen.main.scale * 100
             let imageCompletion: (UIImage?)->() = { (image) in
                 if let image = image {
                     let procecedImage = Toucan(image: image).resize(CGSize(width: width), fitMode: Toucan.Resize.FitMode.crop).image
-                    self.mainImageView.image = Toucan(image: procecedImage).maskWithEllipse().image
+                    if type == 1{
+                        self.mainImageView.image = Toucan(image: procecedImage).maskWithRoundedRect(cornerRadius: 35.0).image//maskWithEllipse().image}
+                    }else{
+                        self.mainImageView.image = Toucan(image: procecedImage).maskWithEllipse().image
+                    }
                 }
             }
             let image = ImageManager.image(at: searchResult.imageURL, forKey: searchResult.imageName,
