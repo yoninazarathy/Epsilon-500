@@ -129,14 +129,15 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     //QQQQ these are currently just updated on boot
     static var fullHashTagList: Array<String> = []
     static var hashTagAutoCompleteList: Array<String> = []
-    static var hashTagListSortedByTotalContent: Array<String> = []
     static var titleAutoCompleteList: Array<[String]> = []
-    
     static var titlesForSurprise: Array<String> = []
-    
     static var hashTagOfTitle = [String:String]()
-    static var fullTitles: Array<String> = []
+    static var fullTitles = Array<String>()
     static var rawTitleOfHashTag = [String:String]()
+    
+    static var curatorOfHashTag     = [String: String]()
+    static var reviewerOfHashTag    = [String: String]()
+    static var hashTagInCollection  = [String: Bool]()
     
     static var videoIDsForHashTags                          = [String: Array<String>]()
     static var videoIDsForHashTagsInCollection              = [String: Array<String>]()
@@ -144,11 +145,6 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     static var articleURLHashtagsForHashTagsInCollection    = [String: Array<String>]()
     static var gamesURLHashTagsForHashTags                  = [String: Array<String>]()
     static var gamesURLHashTagsForHashTagsInCollection      = [String: Array<String>]()
-    
-    static var curatorOfHashTag     = [String: String]()
-    static var reviewerOfHashTag    = [String: String]()
-    
-    static var hashTagInCollection = [String: Bool]()
     
     static var searchStack: [EpsilonStreamSearch] = []
     static var searchStackIndex = 0
@@ -164,58 +160,89 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         return path
     }()
     
-    private static func pathForAutoCompletionDictionary(withName name: String) -> String {
+    private static func pathForAutoCompletionCollection(withName name: String) -> String {
         var result = (autoCompletionStorageFilePath as NSString).appendingPathComponent(name)
         result = (result as NSString).appendingPathExtension("json")!
         return result
     }
     
-    private static func loadAutoCompletionDictionary(atPath path: String) -> [String: Array<String>] {
-        var result = [String: Array<String>]()
+    private static func loadAutoCompletionCollection<T: Collection>(atPath path: String) -> T? {
+        var result: T?
         if IKFileManager.shared.fileExists(atPath: path), let data = IKFileManager.shared.dataWithContentsOfFile(atPath: path) {
             do {
-                result = try JSONSerialization.jsonObject(with: data) as! [String: Array<String>]
+                result = try JSONSerialization.jsonObject(with: data) as? T
             } catch {
+                
             }
         }
 
         return result
     }
     
-    private static func loadAutoCompletionDictionary(withName name: String) -> [String: Array<String>] {
-        return loadAutoCompletionDictionary(atPath: pathForAutoCompletionDictionary(withName: name) )
+    private static func loadAutoCompletionCollection<T: Collection>(withName name: String) -> T? {
+        return loadAutoCompletionCollection(atPath: pathForAutoCompletionCollection(withName: name) )
     }
     
     static func loadAllAutoCompletionDictionaries() {
         //let date = Date()
-        videoIDsForHashTags                          = loadAutoCompletionDictionary(withName: "videoIDsForHashTags")
-        videoIDsForHashTagsInCollection              = loadAutoCompletionDictionary(withName: "videoIDsForHashTagsInCollection")
-        articleURLHashtagsForHashTags                = loadAutoCompletionDictionary(withName: "articleURLHashtagsForHashTags")
-        articleURLHashtagsForHashTagsInCollection    = loadAutoCompletionDictionary(withName: "articleURLHashtagsForHashTagsInCollection")
-        gamesURLHashTagsForHashTags                  = loadAutoCompletionDictionary(withName: "gamesURLHashTagsForHashTags")
-        gamesURLHashTagsForHashTagsInCollection      = loadAutoCompletionDictionary(withName: "gamesURLHashTagsForHashTagsInCollection")
+        fullHashTagList             = loadAutoCompletionCollection(withName: "fullHashTagList")         ?? fullHashTagList
+        hashTagAutoCompleteList     = loadAutoCompletionCollection(withName: "hashTagAutoCompleteList") ?? hashTagAutoCompleteList
+        titleAutoCompleteList       = loadAutoCompletionCollection(withName: "titleAutoCompleteList")   ?? titleAutoCompleteList
+        titlesForSurprise           = loadAutoCompletionCollection(withName: "titlesForSurprise")       ?? titlesForSurprise
+        hashTagOfTitle              = loadAutoCompletionCollection(withName: "hashTagOfTitle")          ?? hashTagOfTitle
+        fullTitles                  = loadAutoCompletionCollection(withName: "fullTitles")              ?? fullTitles
+        rawTitleOfHashTag           = loadAutoCompletionCollection(withName: "rawTitleOfHashTag")       ?? rawTitleOfHashTag
+        
+        curatorOfHashTag            = loadAutoCompletionCollection(withName: "curatorOfHashTag")    ?? curatorOfHashTag
+        reviewerOfHashTag           = loadAutoCompletionCollection(withName: "reviewerOfHashTag")   ?? reviewerOfHashTag
+        hashTagInCollection         = loadAutoCompletionCollection(withName: "hashTagInCollection") ?? hashTagInCollection
+        
+        videoIDsForHashTags                          = loadAutoCompletionCollection(withName: "videoIDsForHashTags") ??
+            videoIDsForHashTags
+        videoIDsForHashTagsInCollection              = loadAutoCompletionCollection(withName: "videoIDsForHashTagsInCollection") ??
+            videoIDsForHashTagsInCollection
+        articleURLHashtagsForHashTags                = loadAutoCompletionCollection(withName: "articleURLHashtagsForHashTags") ??
+            articleURLHashtagsForHashTags
+        articleURLHashtagsForHashTagsInCollection    = loadAutoCompletionCollection(withName: "articleURLHashtagsForHashTagsInCollection") ??
+            articleURLHashtagsForHashTagsInCollection
+        gamesURLHashTagsForHashTags                  = loadAutoCompletionCollection(withName: "gamesURLHashTagsForHashTags") ??
+            gamesURLHashTagsForHashTags
+        gamesURLHashTagsForHashTagsInCollection      = loadAutoCompletionCollection(withName: "gamesURLHashTagsForHashTagsInCollection") ??
+            gamesURLHashTagsForHashTagsInCollection
         //DLog("loadAllAutoCompletionDictionaries duration: \(Date().timeIntervalSince(date))")
     }
     
-    private static func saveAutoCompletionDictionary(_ dictionary: [String: Array<String>], atPath path: String) {
+    private static func saveAutoCompletionCollection<T: Collection>(_ collection: T, atPath path: String) {
         do {
-            let data = try JSONSerialization.data(withJSONObject: dictionary)
+            let data = try JSONSerialization.data(withJSONObject: collection)
             IKFileManager.shared.createFile(atPath: path, contents: data)
         } catch {
         }
     }
 
-    private static func saveAutoCompletionDictionary(_ dictionary: [String: Array<String>], withName name: String) {
-        saveAutoCompletionDictionary(dictionary, atPath: pathForAutoCompletionDictionary(withName: name))
+    private static func saveAutoCompletionCollection<T: Collection>(_ collection: T, withName name: String) {
+        saveAutoCompletionCollection(collection, atPath: pathForAutoCompletionCollection(withName: name))
     }
     
-    private static func saveAllAutoCompletionDictionaries() {
-        saveAutoCompletionDictionary(videoIDsForHashTags,                       withName: "videoIDsForHashTags")
-        saveAutoCompletionDictionary(videoIDsForHashTagsInCollection,           withName: "videoIDsForHashTagsInCollection")
-        saveAutoCompletionDictionary(articleURLHashtagsForHashTags,             withName: "articleURLHashtagsForHashTags")
-        saveAutoCompletionDictionary(articleURLHashtagsForHashTagsInCollection, withName: "articleURLHashtagsForHashTagsInCollection")
-        saveAutoCompletionDictionary(gamesURLHashTagsForHashTags,               withName: "gamesURLHashTagsForHashTags")
-        saveAutoCompletionDictionary(gamesURLHashTagsForHashTagsInCollection,   withName: "gamesURLHashTagsForHashTagsInCollection")
+    private static func saveAllAutoCompletionCollections() {
+        saveAutoCompletionCollection(fullHashTagList,           withName: "fullHashTagList")
+        saveAutoCompletionCollection(hashTagAutoCompleteList,   withName: "hashTagAutoCompleteList")
+        saveAutoCompletionCollection(titleAutoCompleteList,     withName: "titleAutoCompleteList")
+        saveAutoCompletionCollection(titlesForSurprise,         withName: "titlesForSurprise")
+        saveAutoCompletionCollection(hashTagOfTitle,            withName: "hashTagOfTitle")
+        saveAutoCompletionCollection(fullTitles,                withName: "fullTitles")
+        saveAutoCompletionCollection(rawTitleOfHashTag,         withName: "rawTitleOfHashTag")
+        
+        saveAutoCompletionCollection(curatorOfHashTag,          withName: "curatorOfHashTag")
+        saveAutoCompletionCollection(reviewerOfHashTag,         withName: "reviewerOfHashTag")
+        saveAutoCompletionCollection(hashTagInCollection,       withName: "hashTagInCollection")
+        
+        saveAutoCompletionCollection(videoIDsForHashTags,                       withName: "videoIDsForHashTags")
+        saveAutoCompletionCollection(videoIDsForHashTagsInCollection,           withName: "videoIDsForHashTagsInCollection")
+        saveAutoCompletionCollection(articleURLHashtagsForHashTags,             withName: "articleURLHashtagsForHashTags")
+        saveAutoCompletionCollection(articleURLHashtagsForHashTagsInCollection, withName: "articleURLHashtagsForHashTagsInCollection")
+        saveAutoCompletionCollection(gamesURLHashTagsForHashTags,               withName: "gamesURLHashTagsForHashTags")
+        saveAutoCompletionCollection(gamesURLHashTagsForHashTagsInCollection,   withName: "gamesURLHashTagsForHashTagsInCollection")
     }
     
     //MARK: - Searching and autocomplete
@@ -244,17 +271,17 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         //QQQQ can improve implementation...
         
 //        let startDate = Date()
+        var tempFullHashTagList                     = Array<String>()
+        var tempHashTagAutoCompleteList             = Array<String>()
+        var tempTitleAutoCompleteList               = Array<[String]>()
+        var tempTitlesForSurprise                   = Array<String>()
+        var tempHashTagOfTitle                      = [String:String]()
+        var tempFullTitles                          = Array<String>()
+        var tempRawTitleOfHashTag                   = [String:String]()
         
-        fullHashTagList = []
-        hashTagAutoCompleteList = []
-        titleAutoCompleteList = []
-        titlesForSurprise = []
-        hashTagOfTitle = [:]
-        fullTitles = []
-        rawTitleOfHashTag = [:]
-        curatorOfHashTag = [:]
-        reviewerOfHashTag = [:]
-        hashTagInCollection = [:]
+        var tempCuratorOfHashTag     = [String: String]()
+        var tempReviewerOfHashTag    = [String: String]()
+        var tempHashTagInCollection  = [String: Bool]()
         
         var tempVideoIDsForHashTags                         = [String: Array<String>]()
         var tempVideoIDsForHashTagsInCollection             = [String: Array<String>]()
@@ -283,12 +310,12 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                 
                 let hashTag = mathObject.hashTag
                 
-                EpsilonStreamDataModel.fullHashTagList.append(hashTag) //QQQQ not lowercased ?
+                tempFullHashTagList.append(hashTag) //QQQQ not lowercased ?
                 if mathObject.isInCollection {
-                    EpsilonStreamDataModel.hashTagAutoCompleteList.append(hashTag)
+                    tempHashTagAutoCompleteList.append(hashTag)
                 }
 
-                rawTitleOfHashTag[hashTag] = mathObject.associatedTitles
+                tempRawTitleOfHashTag[hashTag] = mathObject.associatedTitles
                 
                 // Videos
                 let videos = fetchVideos(withContext: context, hashTag: hashTag)
@@ -335,10 +362,9 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
 //                gamesInCollectionCount      += tempGamesURLHashTagsForHashTagsInCollection[hashTag]!.count
                 //
                 
-                curatorOfHashTag[hashTag] = mathObject.curator
-                reviewerOfHashTag[hashTag] = mathObject.reviewer
-
-                hashTagInCollection[hashTag] = mathObject.isInCollection
+                tempCuratorOfHashTag[hashTag] = mathObject.curator
+                tempReviewerOfHashTag[hashTag] = mathObject.reviewer
+                tempHashTagInCollection[hashTag] = mathObject.isInCollection
                 
                 if mathObject.isInCollection {
                     // IK: Propbably this can be moved to separate method
@@ -357,17 +383,17 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
                                 } else {
                                     //DLog("stripTitle: \(stripTitle)");
                                     titleGroup.append(stripTitle)
-                                    hashTagOfTitle[stripTitle] = hashTag
-                                    fullTitles.append(stripTitle)
+                                    tempHashTagOfTitle[stripTitle] = hashTag
+                                    tempFullTitles.append(stripTitle)
                                     if first && hashTag != "#homePage" && hashTag != "#channels" && hashTag != "#games" && hashTag != "#awesome"{
-                                        titlesForSurprise.append(stripTitle)
+                                        tempTitlesForSurprise.append(stripTitle)
                                     }
                                 }
                             }
                             first = false
                         }
                         if titleGroup.count > 0 {
-                            titleAutoCompleteList.append(titleGroup)
+                            tempTitleAutoCompleteList.append(titleGroup)
                         }
                     }
                 }
@@ -376,7 +402,22 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
             print("Fetch failed")
         }
         
+        tempFullTitles.sort()
+        tempTitlesForSurprise.sort()
+        
         //
+        fullHashTagList         = tempFullHashTagList
+        hashTagAutoCompleteList = tempHashTagAutoCompleteList
+        titleAutoCompleteList   = tempTitleAutoCompleteList
+        titlesForSurprise       = tempTitlesForSurprise
+        hashTagOfTitle          = tempHashTagOfTitle
+        fullTitles              = tempFullTitles
+        rawTitleOfHashTag       = tempRawTitleOfHashTag
+        
+        curatorOfHashTag        = tempCuratorOfHashTag
+        reviewerOfHashTag       = tempReviewerOfHashTag
+        hashTagInCollection     = tempHashTagInCollection
+        
         videoIDsForHashTags                         = tempVideoIDsForHashTags
         videoIDsForHashTagsInCollection             = tempGamesURLHashTagsForHashTagsInCollection
         articleURLHashtagsForHashTags               = tempArticleURLHashtagsForHashTags
@@ -384,11 +425,9 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
         gamesURLHashTagsForHashTags                 = tempGamesURLHashTagsForHashTags
         gamesURLHashTagsForHashTagsInCollection     = tempGamesURLHashTagsForHashTagsInCollection
         
-        saveAllAutoCompletionDictionaries()
+        saveAllAutoCompletionCollections()
         //
         
-        fullTitles.sort()
-        titlesForSurprise.sort()
         
 //        DLog(">>> \(videosCount), \(articlesCount), \(gamesCount)")
 //        DLog(">>> \(videosInCollectionCount), \(articlesInCollectionCount), \(gamesInCollectionCount)")
@@ -416,7 +455,7 @@ class EpsilonStreamDataModel: ManagedObjectContextUserProtocol {
     /// Returns an array of strings that starts with the provided text
     class func autoCompleteListHashTags(_ autocompleteText: String) -> Array<String> {
         let lowerCaseText = autocompleteText.lowercased()
-        let autocompleteList = EpsilonStreamDataModel.hashTagAutoCompleteList.filter { $0.hasPrefix(lowerCaseText) }
+        let autocompleteList = hashTagAutoCompleteList.filter { $0.hasPrefix(lowerCaseText) }
         return autocompleteList.sorted()
     }
 

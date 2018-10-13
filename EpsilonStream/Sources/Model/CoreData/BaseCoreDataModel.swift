@@ -64,8 +64,12 @@ public class BaseCoreDataModel: NSManagedObject {
             // Need to test updating!!!
             oldModel.updateFromCloudRecord(record: record)
         } else {
-            let newModel = self.init(inContext: PersistentStorageManager.shared.mainContext)
-            newModel.updateFromCloudRecord(record: record)
+            //let newModel = self.init(inContext: PersistentStorageManager.shared.mainContext)
+            let context = PersistentStorageManager.shared.mainContext
+            let newModel = NSEntityDescription.insertNewObject(forEntityName: String(describing: self), into: context)
+            if let model = newModel as? BaseCoreDataModel {
+                model.updateFromCloudRecord(record: record)
+            }
             //DLog("Created new record of class \(String(describing: self)) ID: \(newModel.recordName)")
         }
 
