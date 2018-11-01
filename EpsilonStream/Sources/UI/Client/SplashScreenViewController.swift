@@ -13,34 +13,6 @@ import AVKit
 import SwiftyTimer
 
 
-//FROM https://stackoverflow.com/questions/24111770/make-a-simple-fade-in-animation-in-swift
-public extension UIView {
-    
-    /**
-     Fade in a view with a duration
-     
-     - parameter duration: custom animation duration
-     */
-    func fadeIn(withDuration duration: TimeInterval = 1.0) {
-        UIView.animate(withDuration: duration, animations: {
-            self.alpha = 1.0
-        })
-    }
-    
-    /**
-     Fade out a view with a duration
-     
-     - parameter duration: custom animation duration
-     */
-    func fadeOut(withDuration duration: TimeInterval = 1.0) {
-        UIView.animate(withDuration: duration, animations: {
-            self.alpha = 0.0
-        })
-    }
-    
-}
-
-
 class SplashScreenViewController: UIViewController {
 
     var exitProcedureWasCalled = false
@@ -56,6 +28,7 @@ class SplashScreenViewController: UIViewController {
         
         spinner.isHidden = true
         
+        UIApplication.shared.incrementIdleTimerDisabled()
         EpsilonStreamBackgroundFetch.runUpdate()
     }
     
@@ -100,7 +73,9 @@ class SplashScreenViewController: UIViewController {
         AppUtility.lockOrientation(.all)
     }
     
-    func moveOnToClient(){
+    func moveOnToClient() {
+        UIApplication.shared.decrementIdleTimerDisabled()
+        
         spinner.stopAnimating()
         if let vc = storyboard?.instantiateViewController(withIdentifier: "clientNavViewController"){
             vc.modalTransitionStyle = .crossDissolve
