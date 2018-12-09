@@ -23,7 +23,7 @@ class CreditsViewController: UIViewController {
         
         navigationController?.navigationBar.barTintColor = UIColor(rgb: ES_watch1)
         navigationController?.navigationBar.backgroundColor = UIColor(rgb: ES_watch1)
-        navigationController?.navigationBar.alpha = 1.0 //barTintColor = UIColor(rgb: ES_watch2)
+        navigationController?.navigationBar.alpha = 1.0
 
         navigationItem.title = "Credits"
         

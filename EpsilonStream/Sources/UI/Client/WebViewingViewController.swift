@@ -11,7 +11,7 @@ import WebKit
 import Firebase
 import SafariServices
 
-class WebViewingViewController: UIViewController,WKNavigationDelegate {
+class WebViewingViewController: UIViewController, WKNavigationDelegate {
 
     var webView: WKWebView!
     var splashKey: String = ""
@@ -72,32 +72,9 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
 
         view.addSubview(webView)
 
-        //QQQQ Igor - this flag is just temporary - true is the normal behaviour - false shows the snippet
-        if true{
-            let url = URL(string: webURLString)!
-            let urlRequest = URLRequest(url: url)
-            webView.load(urlRequest)
-            
-        }else{
-            
-            
-            //QQQQ thse should be based on data (e.g. pulled from CoreData which would be downloaded from CK
-            let snippetString = "There are many ways to convert a [decimal number](decimal) $x^2$![image1]"
-            let snippetImageURLstring = "https://es-app.com/snippet-assets/convertFractionToPercent.svg"
-            let snippetTitle = "How can a fraction be converted to a percent?"
-            
-            if let path = Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "snippetBuild") {
-                let url = URLRequest(url: URL(fileURLWithPath: path))
-                webView.load(url)
-                
-                //QQQQ - Bad.... The proper way is to wait for "load" to finish and the evaluate JS. How?
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
-                    webView.evaluateJavaScript("window.mdBlock.setTitle(\"\(snippetTitle)\")")
-                    webView.evaluateJavaScript("window.mdBlock.setSnippet(\"\(snippetString)\")")
-                    webView.evaluateJavaScript("window.mdBlock.setImage(\"\(snippetImageURLstring)\")")
-                })
-            }
-        }
+        let url = URL(string: webURLString)!
+        let urlRequest = URLRequest(url: url)
+        webView.load(urlRequest)
         
         let window = UIApplication.shared.keyWindow!
         var imageName: String = ""
@@ -136,6 +113,7 @@ class WebViewingViewController: UIViewController,WKNavigationDelegate {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor :UIColor.white]
             navigationItem.title = "Epsilon Stream"
         }
+        navigationController?.navigationBar.barStyle = .blackTranslucent // To fix status bar color. Need to fing out why it doesn't work correctly.
     }
     
     override func viewDidLoad() {

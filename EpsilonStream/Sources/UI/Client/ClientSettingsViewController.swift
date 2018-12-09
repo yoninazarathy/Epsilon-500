@@ -47,7 +47,6 @@ class ClientSettingsViewController: UIViewController {
 
         //QQQQ doesn't work vw3?.scrollView.setContentOffset(CGPoint.zero, animated: false)
         
-        //view.backgroundColor = UIColor(rgb: ES_watch2)
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor :UIColor.white]
 
 

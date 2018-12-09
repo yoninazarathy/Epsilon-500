@@ -12,7 +12,7 @@ class ViewControllerManager: NSObject {
     }
     
     private lazy var navigationBarColor: UIColor = {
-        return UIColor.color(hexString: "FF4646")
+        return UIColor(rgb: ES_watch1)
     }()
     
     private var rootNavigationController: UINavigationController {
